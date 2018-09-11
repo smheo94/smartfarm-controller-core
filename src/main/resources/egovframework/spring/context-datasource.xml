@@ -30,7 +30,7 @@
      -->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://router.vivans.net:47316/sf_main?characterEncoding=UTF8"/>
+        <property name="url" value="jdbc:mysql://router.vivans.net:47316/sf_main?autoReconnect=true&amp;characterEncoding=UTF8"/>
         <property name="username" value="sf_dev"/>
         <property name="password" value="shddjq01##"/>
    	</bean>
