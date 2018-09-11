@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<!--  mapepr 에서 사용 할 model alias 설정 paging 이 필요없다면 sampleDaefault쪽은 없애면된다. -->
+<configuration>
+	<!-- underscore 형식을 camelCase 형식으로  -->
+	<settings>
+        <setting name="mapUnderscoreToCamelCase" value="true" />
+     </settings>
+    <typeAliases>
+		<typeAlias alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+		<typeAlias alias="searchVO" type="egovframework.customize.service.SampleDefaultVO"/>
+		<typeAlias alias="sampleVO" type="egovframework.customize.service.SampleVO"/>
+		<typeAlias alias="commonEnvVO" type="egovframework.customize.service.CommonEnvVO"/>					
+		<typeAlias alias="controllerEnvVO" type="egovframework.customize.service.ControllerEnvVO" />		
+		<typeAlias alias="deviceEnvVO" type="egovframework.customize.service.DeviceEnvVO"/>		
+		<typeAlias alias="deviceTypeVO" type="egovframework.customize.service.DeviceTypeVO"/>		
+		<typeAlias alias="houseEnvVO" type="egovframework.customize.service.HouseEnvVO"/>		
+		<typeAlias alias="gsmEnvVO" type="egovframework.customize.service.GsmEnvVO"/>
+		
+		<typeAlias alias="productVO" type="egovframework.customize.service.ProductVO"/>
+		<typeAlias alias="productMethodVO" type="egovframework.customize.service.ProductMethodVO"/>
+		
+		<typeAlias alias="categoryEnvVO" type="egovframework.customize.service.CategoryEnvVO"/>
+		<typeAlias alias="controlLogicVO" type="egovframework.customize.service.ControlLogicVO"/>
+		<typeAlias alias="controlLogicDeviceVO" type="egovframework.customize.service.ControlLogicDeviceVO"/>
+		
+		<typeAlias alias="thresholdVO" type="egovframework.customize.service.ThresholdVO"/>
+    </typeAliases>
+</configuration>

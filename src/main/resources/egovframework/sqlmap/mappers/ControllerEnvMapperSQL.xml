@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kt.smartfarm.supervisor.mapper.ControllerEnvMapper">
+	
+	
+	<resultMap id="controllerEnv"
+		type="egovframework.customize.service.ControllerEnvVO">
+		<result property="id" column="id" javaType="Integer"/>		
+		<!-- <association property="controllerInfo" column="controllerInfoId" 
+		select="egovframework.customize.service.ControllerInfoMapper.select"></association>
+		-->
+	</resultMap>
+
+	<insert id="insert" useGeneratedKeys="true" parameterType="controllerEnvVO">
+		INSERT INTO controller
+		(gsm_key, controller_info_id, controller_type, ip, PORT, controller_status,
+		description)
+		VALUES (#{gsmKey}, #{controllerInfoId}, #{controllerType}, #{ip},
+		#{port}, #{controllerStatus}, #{description});
+		<selectKey keyProperty="id" resultType="int">
+		SELECT LAST_INSERT_ID() AS id;
+		</selectKey>
+	</insert>
+	
+	<update id="update" parameterType="controllerEnvVO">
+		UPDATE controller
+		SET
+		<if test="controller_info_id != null">controller_info_id = #{controllerInfoId},</if>
+		,
+		<if test="controller_type != null">controller_type = #{controllerType},</if>
+		,
+		<if test="ip != null">ip = #{ip},</if>
+		,
+		<if test="PORT != null">PORT = #{port},</if>
+		,
+		<if test="controller_status != null">controller_status = #{controllerStatus},</if>
+		,
+		<if test="description != null">description = #{description},</if>
+		WHERE gsm_key = #{gsmKey} AND id = #{id};
+	</update>
+	<delete id="delete">
+		DELETE
+		FROM controller
+		WHERE gsm_key = #{gsmKey} AND id = #{id};
+	</delete>
+	
+	<select id="list" resultMap="controllerEnv" parameterType="map">
+		SELECT id, gsm_key, controller_info_id, controller_type, ip, port,
+		controller_status, description
+		FROM controller
+		<where>
+			AND gsm_key = #{gsm_key}
+			<if test="id != null"> AND id = #{id}</if>
+		</where>
+		;
+	</select>
+	
+	<select id="listType" resultType="map">
+		SELECT 
+			id,
+			model,
+			name,
+			homepage,
+			email,
+			phone,
+			last_update,
+			name_i18n
+		FROM
+			cd_controller_info
+	</select>
+	
+</mapper>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kt.smartfarm.supervisor.mapper.DeviceEnvMapper">
+	
+<!-- 
+	<resultMap id="deviceEnv"
+		type="egovframework.customize.service.DeviceEnvVO">
+		<result column="id" javaType="Integer"/>		
+	</resultMap> -->
+
+
+	<insert id="insert" useGeneratedKeys="true" parameterType="deviceEnvVO">
+		INSERT INTO device (
+			gsm_key, device_type_id, nickname, device_type_nickname, green_house_id, controller_id,  mode, modbus_address1, modbus_address2, modbus_address3) 
+	  	VALUES(
+	  		#{gsmKey}, #{deviceTypeId}, #{nickname}, #{deviceTypeNickname}, 0, #{controllerId}, 1, #{modbusAddress1}, #{modbusAddress2}, #{modbusAddress3})  	
+	 	<selectKey keyProperty="id" resultType ="int"> 
+	   		SELECT LAST_INSERT_ID() AS value;
+	    </selectKey>
+	</insert>
+	
+	<update id="update" parameterType="deviceEnvVO">
+		UPDATE controller
+		SET
+		<if test="controller_info_id != null">controller_info_id = #{controller_info_id},</if>
+		,
+		<if test="controller_type != null">controller_type = #{controller_type},</if>
+		,
+		<if test="ip != null">ip = #{ip},</if>
+		,
+		<if test="PORT != null">PORT = #{PORT},</if>
+		,
+		<if test="controller_status != null">controller_status = #{controller_status},</if>
+		,
+		<if test="description != null">description = #{description},</if>
+		WHERE gsm_key = #{gsm_key} AND id = #{id};
+	</update>
+	
+	<delete id="delete">
+		DELETE
+		FROM device
+		WHERE gsm_key = #{gsm_key} AND id = #{id};
+	</delete>
+	
+	<select id="list" parameterType="map" resultType="deviceEnvVO">
+		SELECT 
+			id, device_type_id, device_type_idx, user_info_id, gsm_key,
+			green_house_id, controller_id, nickname, device_type_nickname,
+			description, setup_date, x_position, y_position, x2_position,
+			y2_position, memo, modbus_address1, modbus_address2, modbus_address3,
+			no_stop_control, MODE, update_date, auto_manual_mode, STATUS
+		FROM device
+		<where>
+			AND gsm_key = #{gsm_key}
+			AND controller_id = #{controller_id}
+		</where>	
+	</select>
+
+	<select id="getDeviceList" resultType="deviceTypeVO">
+		SELECT 
+			id, NAME, description, last_update, device_type,
+			device_type_name, device_type_group, kind, is_physical_device,
+			manufacturer, model_name, model_spec, model_version, is_master,
+			use_house_type, default_address1, default_address2, default_address3,
+			dcac, min_value, MAX_VALUE, description_i18n, device_type_name_i18n,unit
+		FROM cd_device_type
+		WHERE
+			kind = #{kind}
+			AND
+			use_house_type IN
+			<foreach collection="idsList" item="item" index="index" separator=","	open="(" close=")">
+					#{item}
+			</foreach>
+	</select>
+	
+	<select id="getHouseType" resultType="String">
+		SELECT DISTINCT use_house_type  FROM cd_device_type ORDER BY use_house_type
+	</select>
+	
+	<select id="getKind" resultType="String">
+		SELECT DISTINCT kind FROM cd_device_type ORDER BY kind
+	</select>
+	
+	<select id="getDeviceTypeList" resultType="map">
+		SELECT * 
+		FROM cd_device_type
+		ORDER BY kind
+	</select>
+</mapper>

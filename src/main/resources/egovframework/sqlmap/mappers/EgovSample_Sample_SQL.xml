@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kt.smartfarm.supervisor.mapper.CommonEnvMapper">
+
+<!-- 
+	<resultMap id="sample" type="egovframework.customize.service.SampleVO">
+		<result property="id" column="id"/>
+		<result property="name" column="name"/>
+		<result property="description" column="description"/>
+		<result property="useYn" column="use_yn"/>
+		<result property="regUser" column="reg_user"/>
+	</resultMap>
+	 -->
+
+	<update id="updateEnvInfo" parameterType="commonEnvVO">
+		UPDATE 
+			env_setting 
+		SET
+			<if test="env_json_value!=null">
+				env_json_value = #{envJsonValue},
+			</if>
+			<if test="env_json_default!=null">
+				env_json_default = #{envJsonDefault},
+			</if>			
+		WHERE
+			gsm_key = #{gsmKey}
+			AND env_name = #{envName}
+	</update>
+	
+	<select id="getEnvInfo" parameterType="java.util.HashMap" resultType="commonEnvVO">
+		SELECT 
+			gsm_key,
+			env_name,
+			env_json_value,
+			env_json_default,
+			update_time
+		FROM 
+			env_setting
+		WHERE
+			gsm_key = #{gsmKey}
+			env_name = #{envName}		
+	</select>
+	
+	<insert id="insertController" useGeneratedKeys="true" parameterType="java.util.HashMap">
+	  	INSERT INTO controller (green_house_id, controller_info_id, controller_type, ip, description) 
+	  	VALUES(0, #{controller_info_id}, 1, #{ip}, #{description});
+	  
+	   	<selectKey resultType ="int" keyProperty="controller_id">
+	   		SELECT LAST_INSERT_ID() AS controller_id;
+	    </selectKey>
+  	</insert>
+  	
+	<update id="updateController">
+		UPDATE 
+			controller 
+		SET 
+			controller_info_id = #{controller_info_id}
+			, ip = #{ip}
+		WHERE id = #{id};
+	</update>
+	
+	<insert id="insertDeviceStatusUpdate">
+		INSERT IGNORE device_status ( device_id )
+	  	SELECT id FROM device
+		<where>
+		<if test="inserted_Sensor_id != null">
+		  AND id = #{inserted_Sensor_id}
+		</if>
+		<if test="inserted_Nutrient_id != null">
+		  AND id = #{inserted_Nutrient_id}
+		</if>
+		<if test="device_id != null">
+		  AND id = #{device_id}
+		</if>  
+		  </where>
+ 	</insert>
+  
+	<delete id="deleteDeviceOfChangedDeviceType">
+	  	DELETE A FROM 	device A
+		WHERE A.controller_id = #{controller_id}
+			AND A.id = #{device_id} AND A.device_type_id != #{device_type_id}
+		;  
+  	</delete>
+  	
+	 <insert id="updateDeviceList">
+	  	UPDATE device 
+	  	SET device_type_id = #{device_type_id}
+	  		, nickname = #{nickname}
+	  		<if test="device_type_nickname != null">
+	  		, device_type_nickname = #{device_type_nickname}
+	  		</if>
+	  		, modbus_address1 = #{modbus_address1}
+	  		, modbus_address2 = #{modbus_address2}
+	  		, modbus_address3 = #{modbus_address3}
+	  	WHERE id = #{device_id}
+  	</insert>
+	
+	<delete id="deleteDeviceOfRemovedDevice">
+	  	DELETE A FROM device A
+	  	INNER JOIN device_type DA ON DA.id = A.device_type_id	
+		WHERE A.controller_id = #{controller_id}
+			AND DA.is_physical_device = '1'
+			AND A.id NOT IN (
+		 <if test="device_id_list != null">
+	  		<foreach collection="device_id_list" item="device_id_list" index="device_id_list" separator=",">
+				#{device_id_list}
+			</foreach>
+	  	 </if>
+	  	 );  
+  	</delete>
+  	
+  	<delete id="deleteDeviceInfoUsingControllerId">
+	  	DELETE FROM device WHERE controller_id = #{controller_id}  	
+	  	<if test="sensor_device_ids != null">  	 
+		  <foreach collection="sensor_device_ids" item="sensor_device_ids" index="sensor_device_ids" open="AND id NOT IN (" close=")" separator=",">
+		  	#{sensor_device_ids}
+		  </foreach>
+	   </if>
+	</delete>
+  
+   	<delete id="deleteControllerInfo">
+ 	 	DELETE FROM controller WHERE id = #{id}
+ 	</delete>
+ 	
+ 	
+ 	<insert id="insertDeviceList" useGeneratedKeys="true" parameterType="java.util.HashMap">
+	  	INSERT INTO device (device_type_id, nickname, device_type_nickname, green_house_id, controller_id,  mode, modbus_address1, modbus_address2, modbus_address3) 
+	  	VALUES(#{device_type_id}, #{nickname}, #{device_type_nickname}, 0, #{controller_id}, 1, #{modbus_address1}, #{modbus_address2}, #{modbus_address3})  	
+	  	<selectKey resultType ="int" keyProperty="device_id">
+	   		SELECT LAST_INSERT_ID() AS "device_id";
+	    </selectKey>
+  	</insert>
+  
+  
+  
+  
+  
+  <!-- SENSOR --> 
+  
+	<insert id="insertSensorControllerInfo" useGeneratedKeys="true" parameterType="java.util.HashMap" keyProperty="inserted_Sensor_Controller_id">
+		INSERT INTO controller (green_house_id, controller_info_id, ip, controller_type, controller_status, description) 
+		VALUES(0, #{sensorId}, #{ip}, 1, 1, #{controller_description})
+		<selectKey resultType = "int" keyProperty="controller_id" >
+		  		SELECT LAST_INSERT_ID() AS controllerId
+		</selectKey>
+	</insert>
+  
+  <insert id="insertSensorDevice" useGeneratedKeys="true" parameterType="java.util.LinkedHashMap" keyProperty="inserted_Sensor_id">
+   REPLACE INTO device (id, device_type_id, green_house_id,controller_id, nickname, device_type_nickname, setup_date, modbus_address1) 
+   VALUES(#{device_id}, #{device_type_i
+   d}, 0, #{controller_id}, #{nickname}, #{nickname}, #{now}, #{modbus_address1})
+  </insert>  
+  
+  <update id="updateSensorControllerInfo">
+  	UPDATE 
+  		controller 
+  	SET
+  		controller_info_id = #{sensorId}
+  		, ip = #{ip}
+  		, controller_type = 1
+  		, controller_status = 1
+  	WHERE id = #{controller_id} 
+  </update>  
+  
+  
+  
+  <select id="selectedControllerInfo" resultType="java.util.HashMap">
+ 	  
+	SELECT
+  		A.id AS controller_id
+  		,A.ip AS ip  		  		
+		,device_type_id
+		,modbus_address1
+		,GROUP_CONCAT(C.green_house_id) AS green_house_id_map
+		,A.green_house_id
+		,A.description
+		,D.device_type_group
+		,B.device_type_nickname
+		,B.nickname
+		,B.id AS device_id
+    FROM 
+    	controller A    	
+    INNER JOIN device B ON A.id = B.controller_id
+    LEFT JOIN controller_house_map  C ON C.controller_id = B.controller_id
+    LEFT JOIN device_type D ON D.id = B.device_type_id
+    WHERE A.controller_info_id = #{sensorId}
+    	AND A.id = #{controller_id}
+    GROUP BY B.id
+  </select>
+  
+  
+    <select id="selectSensorList" resultType="java.util.HashMap">
+	  	SELECT * 
+ 	 	FROM controller
+  		WHERE controller_info_id = {sensorType}
+	  </select>
+	  
+    <select id="selectControllerListOfControlModule" resultType="java.util.HashMap">
+	  SELECT id, controller_info_id, controller_type, ip, description
+	  FROM controller A
+	  <if test="controller_info_id != null">
+	  <foreach collection="controller_info_id" item="controller_info_id" index="controller_info_id" open="WHERE controller_info_id IN (" close=")" separator=",">
+	  	#{controller_info_id}
+	  </foreach>
+	  </if>
+  	</select>
+  	
+  	 <select id="selectDeviceOfControlModule" resultType="java.util.HashMap">
+	  	SELECT A.id, A.controller_id, A.mode, A.green_house_id, A.device_type_id, B.`device_type`, B.device_type_name,
+	  	A.nickname, A.device_type_nickname, 
+	  	B.description, B.is_physical_device, B.device_type_group
+	  		, A.modbus_address1, A.modbus_address2, A.modbus_address3, B.dcac
+	  		, (SELECT ip FROM controller WHERE id=A.controller_id) ip
+	  	FROM device A
+	  	INNER JOIN device_type B ON A.device_type_id = B.id  AND is_physical_device  = 1
+	  	WHERE B.kind = 'actuator'
+			<if test="controller_id != null">
+			AND A.controller_id = #{controller_id}
+			</if>
+  	</select>
+</mapper>

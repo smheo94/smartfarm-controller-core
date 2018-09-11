@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kt.smartfarm.supervisor.mapper.ControllerInfoMapper">
+
+
+	<resultMap id="controllerInfo"
+		type="egovframework.customize.service.ControllerInfoVO" autoMapping="true">
+	</resultMap>
+
+	<select id="list" resultMap="controllerInfo">		
+		SELECT id, model, NAME, homepage, email, phone, last_update, name_i18n
+		FROM sf_main.cd_controller_info
+		<where>
+		<if test="controller_info_id != null" >
+			id = #{controller_info_id}
+		</if>
+		</where>
+		LIMIT 0, 1000;
+		;
+	</select>
+
+</mapper>

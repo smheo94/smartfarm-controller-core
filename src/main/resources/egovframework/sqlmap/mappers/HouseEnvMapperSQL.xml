@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kt.smartfarm.supervisor.mapper.HouseEnvMapper">
+	
+<!-- 	
+	<resultMap id="controllerEnv"
+		type="egovframework.customize.service.ControllerEnvVO">
+		<result property="id" column="id" javaType="Integer"/>		
+		<association property="controllerInfo" column="controllerInfoId" 
+		select="egovframework.customize.service.ControllerInfoMapper.select"></association>
+		
+	</resultMap>
+
+ -->
+ 
+	<insert id="insert" useGeneratedKeys="true" parameterType="houseEnvVO">
+		INSERT INTO green_house( 
+       		product_method_id, green_house_type_id, house_name, latitude, longitude, description, build_date, last_update, addr_1, addr_2, zip, nutrient_common_id, change_gh, change_temperature, floor_space, house_horizontal, house_vertical, house_height, plant_spacing, crop_cnt, house_direction, select_temp_sensor, select_hum_sensor, gsm_key, house_name_i18n
+		)
+		VALUES (
+			#{productMethodId},#{greenHouseTypeId},#{houseName},#{latitude},#{longitude},#{description},now(),now(),#{addr1},#{addr2},#{zip},1,1,1,#{floorSpace},#{houseHorizontal},#{houseVertical},#{houseHeight},#{plantSpacing},#{cropCnt},#{houseDirection},#{selectTempSensor},#{selectHumSensor},#{gsmKey},#{houseNameI18n}
+		);
+		<selectKey keyProperty="id" resultType="int">
+		SELECT LAST_INSERT_ID() AS id;
+		</selectKey>
+	</insert>
+	
+	<insert id="insertHouseDeviceMap" parameterType="map">		
+		INSERT INTO map_green_house_device
+		            (green_house_id, device_id)
+		VALUES (#{house_id}, #{device_id});
+	</insert>
+	<update id="update" parameterType="houseEnvVO">
+		UPDATE green_house
+		SET
+			<if test="product_method_id != null">	product_method_id = #{product_method_id},</if>
+			<if test="green_house_type_id != null">	green_house_type_id = #{green_house_type_id},</if>
+			<if test="house_name != null">	house_name = #{house_name},</if>
+			<if test="latitude != null">	latitude = #{latitude},</if>,
+			<if test="longitude != null">	longitude = #{longitude},</if>
+			<if test="description !=null"> description =#{description}</if>
+			<if test="build_date != null">	build_date = #{build_date},</if>
+			<if test="last_update != null">	last_update = #{last_update},</if>
+			<if test="addr_1 != null">	addr_1 = #{addr_1},</if>
+			<if test="addr_2 != null">	addr_2 = #{addr_2},</if>
+			<if test="zip != null">	zip = #{zip},</if>
+			<if test="nutrient_common_id!=null"> nutrient_common_id =#{nutrient_common_id},</if> 
+			<if test="change_gh != null">	change_gh = #{change_gh},</if>
+			<if test="change_temperature!=null">change_temperature =#{change_temperature},</if>
+			<if test="floor_space != null">	floor_space = #{floor_space},</if>
+			<if test="house_horizontal!=null"> house_horizontal =#{house_horizontal},</if>
+			<if test="house_vertical != null">	house_vertical = #{house_vertical},</if>
+			<if test="house_height!=null"> house_height=#{house_height},</if>
+			<if test="plant_spacing != null">	plant_spacing = #{plant_spacing},</if>
+			<if test="crop_cnt != null">	crop_cnt = #{crop_cnt},</if>
+			<if test="house_direction != null">	house_direction = #{house_direction},</if>
+			<if test="select_temp_sensor != null">select_temp_sensor = #{select_temp_sensor},</if>
+			<if test="select_hum_sensor != null">select_hum_sensor = #{select_hum_sensor},</if>	
+			<if test="house_name_i18n != null">	house_name_i18n = #{house_name_i18n},</if>	
+		WHERE gsm_key = #{gsmKey} AND id = #{id};
+	</update>
+	
+	<delete id="delete">
+		DELETE
+		FROM green_house
+		WHERE gsm_key = #{gsmKey} AND id = #{id};
+	</delete>
+	
+	<select id="list" parameterType="map" resultType="houseEnvVO">
+		SELECT 
+			id, product_method_id, green_house_type_id, house_name,
+			latitude, longitude, description, build_date, last_update, addr_1,
+			addr_2, zip, nutrient_common_id, change_gh, change_temperature,
+			floor_space, house_horizontal, house_vertical, house_height,
+			plant_spacing, crop_cnt, house_direction, select_temp_sensor,
+			select_hum_sensor, gsm_key, house_name_i18n
+		FROM green_house
+		WHERE
+		 gsm_key = #{gsm_key}
+		;
+	</select>
+
+	<select id="selectHouseTypeList" resultType="map">
+		SELECT 
+			id, type_name, description, last_update, type_name_i18n, house_type, root_type
+		FROM
+			cd_house_type
+	</select>
+
+	<select id="selectProductList" resultType="productVO">
+		SELECT id, product, product_species, product_category, description, input_date, update_date, author, VERSION, product_i18n, product_species_i18n, product_category_i18n
+		FROM cd_product
+	</select>
+	
+	<select id="selectProductMethodList" resultType="productMethodVO">
+		SELECT id,product_id, growth_level, growth_level_description, growth_type, growth_level_i18n, growth_level_description_i18n, growth_type_i18n
+		FROM cd_product_method
+		WHERE product_id = #{productId}
+		ORDER BY growth_level
+	</select>
+	
+	<select id ="selectProductMethod" resultType="map">
+		SELECT     
+	    	cp.id AS productID,
+	    	cp.product_category AS productCategory,
+	    	cpm.growth_level AS productGrowthLevel,
+	    	cpm.id AS productMethodId,
+	    	cpm.growth_type AS growthType
+	    FROM cd_product  AS cp 
+	    INNER JOIN cd_product_method AS cpm ON cpm.product_id = cp.id
+	    WHERE product_species = #{species}
+	    GROUP BY cpm.growth_level
+	    ORDER BY cpm.id
+	</select>
+	
+	<!-- 
+	<select id ="getHouseDetail" parameterType="map" resultType="map">
+		SELECT 
+			id, product_method_id, green_house_type_id, house_name,
+			latitude, longitude, description, build_date, last_update, addr_1,
+			addr_2, zip, nutrient_common_id, change_gh, change_temperature,
+			floor_space, house_horizontal, house_vertical, house_height,
+			plant_spacing, crop_cnt, house_direction, select_temp_sensor,
+			select_hum_sensor, gsm_key, house_name_i18n
+		FROM green_house
+		WHERE
+		 gsm_key = #{gsm_key}
+		 AND id = #{green_house_id}
+	</select>
+	 -->
+	 
+	<select id ="getHouseDetail" parameterType="map" resultType="map">
+		SELECT 
+			id, product_method_id AS productMethodId, green_house_type_id as greenHouseTypeId, house_name as houseName,
+			latitude, longitude, description, build_date as buildDate, last_update as lastUpdate, addr_1 as addr1,
+			addr_2 as addr2, zip, nutrient_common_id as nutrientCommonId, change_gh as changeGh, change_temperature as changeTemperature,
+			floor_space as floorSpace, house_horizontal as houseHorizontal, house_vertical as houseVertical, house_height as houseHeight,
+			plant_spacing as plantSpacing, crop_cnt as cropCnt, house_direction as houseDirection, select_temp_sensor as selectTempSensor,
+			select_hum_sensor as selectHumSensor, gsm_key as gsmKey, house_name_i18n as houseNameI18n
+		FROM green_house
+		WHERE
+		 gsm_key = #{gsm_key}	
+	</select>
+	
+	<select id ="getMappedDevice" resultType="int">
+		SELECT device_id 
+		FROM map_green_house_device AS mghd 
+		INNER JOIN green_house gh ON gh.id = mghd.green_house_id
+		WHERE green_house_id = #{green_house_id} AND gh.gsm_key = #{gsm_key}
+	</select>
+	
+	
+	<select id ="getMappedController" resultType="int">
+		SELECT controller_id 
+			 FROM device
+		 WHERE gsm_key = #{gsm_key}
+		 <if test="deviceIds.size() > 0">
+			AND id IN 
+			<foreach collection="deviceIds" item="item" index="index" separator=","	open="(" close=")">
+						#{item}
+			</foreach>
+		</if>
+		 GROUP BY controller_id;
+	</select>
+	
+	
+</mapper>
