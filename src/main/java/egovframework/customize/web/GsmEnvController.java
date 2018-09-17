@@ -88,7 +88,7 @@ public class GsmEnvController {
 	 */
 	@RequestMapping(value= "/list", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<List<GsmEnvVO>> list(){
+	public Result<List<HashMap<String,Object>>> list(){
 		try {
 			return new Result(gsmEnvService.list());
 		} catch(Exception e) {

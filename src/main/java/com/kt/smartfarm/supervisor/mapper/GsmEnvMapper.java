@@ -15,6 +15,7 @@
  */
 package com.kt.smartfarm.supervisor.mapper;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,9 +24,9 @@ import egovframework.rte.psl.dataaccess.mapper.Mapper;
 
 @Mapper("gsmEnvMapper")
 public interface GsmEnvMapper {
-	GsmEnvVO get(String gsmKey);
+	GsmEnvVO get(Map<String,Object>map);
 	Integer delete(Map<String,Object> map);
 	Integer insert(GsmEnvVO gsmInfo);
 	Integer update(GsmEnvVO gsmInfo);
-	List<GsmEnvVO> list(Map<String,Object> map);	
+	List<HashMap<String,Object>> list(Map<String,Object> map);	
 }

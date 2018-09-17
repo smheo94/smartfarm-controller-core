@@ -46,7 +46,7 @@ public class GsmEnvVO {
 	Integer categoryId;
 
 	ThresholdVO threshold;
-	
+	Integer device_count;
 	public Map<String,Object> toMap() {
 		return ClassUtil.toHashMap(this);
 	}

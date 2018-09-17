@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kt.smartfarm.supervisor.mapper.HouseDiaryMapper">
+
+	<insert id="insertHouseDiary" useGeneratedKeys="true" parameterType="houseDiaryVO">
+		INSERT INTO house_diary
+		(green_house_id,title,content,work,etc,start_date,end_date,crops,harvest,income,spend,content_type,work_time)
+		VALUES 
+		(#{greenHouseId},#{title},#{content},#{work},#{etc},#{startDate},#{endDate},#{crops},#{harvest},#{income},#{spend},#{contentType},#{workTime});
+		<selectKey keyProperty="id" resultType="int">
+		SELECT LAST_INSERT_ID() AS id;
+		</selectKey>
+	</insert>
+	
+	<select id="getHouseDiaryDetail" parameterType="map" resultType="houseDiaryVO">
+		SELECT 
+			id,
+			green_house_id,
+			title,
+			content,
+			work,
+			etc,
+			start_date,
+			end_date,
+			crops,
+			harvest,
+			income,
+			spend,
+			content_type,
+			work_time
+		FROM house_diary
+		WHERE id = #{id}
+	</select>
+	
+	
+	<select id="getMonthlyHouseDiaryList" parameterType="map" resultType="houseDiaryVO">
+		SELECT 
+			id,
+			green_house_id,
+			title,
+			content,
+			work,
+			etc,
+			start_date,
+			end_date,
+			crops,
+			harvest,
+			income,
+			spend,
+			content_type,
+			work_time
+		FROM house_diary 
+		WHERE (
+			START_DATE BETWEEN #{start_date} AND #{end_date} 
+			OR END_DATE between #{start_date} AND #{end_date}
+			AND green_house_id = #{house_id}
+		)
+	</select>
+	
+	<update id="updateHouseDiary" parameterType="houseDiaryVO">
+		UPDATE SET house_diary
+			<if test="title != null"> title =#{title}</if>
+			<if test="content != null">content =#{content}</if>
+			<if test="work != null">work =#{work}</if>
+			<if test="etc != null">etc =#{etc}</if>
+			<if test="start_date != null">start_date =#{startDate}</if>
+			<if test="end_date != null">end_date =#{endDate}</if>
+			<if test="crops != null">crops =#{crops}</if>
+			<if test="harvest != null">harvest =#{harvest}</if>
+			<if test="income != null">income =#{income}</if>
+			<if test="spend != null">spend =#{spend} </if>
+			<if test="content_type != null">content_type=#{contentType} </if>
+			<if test="work_time != null">work_time =#{workTime} </if>
+		WHERE id=#{id} AND green_house_id = #{greenHouseId}
+	</update>
+	
+	<delete id="delete" parameterType="map">
+		DELETE
+		FROM house_diary
+		WHERE id = #{id};
+	</delete>
+	
+	
+	<!-- 
+	**************************************************************************************
+	 -->
+	
+	
+	
+	<insert id="insertCropsDiary" useGeneratedKeys="true" parameterType="cropsDiaryVO">
+		INSERT INTO house_crops_diary
+		(green_house_id, leaf_width, stem, harvest, fruit_set, gether_set, fruit_height, bloom, fruit_number, aver_weight, grow_length, leaf_size, leaf_num, start_date, upload_file, content, title, crops)
+		VALUES 
+		(#{greenHouseId},#{leafWidth},#{stem},#{harvest},#{fruitSet},#{getherSet},#{fruitHeight},#{bloom},#{fruitNumber},#{averWeight},#{growLength},#{leafSize},#{leafNum},#{startDate},#{uploadFile},#{content},#{title},#{crops})
+		<selectKey keyProperty="id" resultType="int">
+		SELECT LAST_INSERT_ID() AS id;
+		</selectKey>
+	</insert>
+
+	
+	
+	<select id="getMonthlyCropsDiaryList" parameterType="map" resultType="cropsDiaryVO">
+		SELECT 
+			id, 
+			green_house_id, 
+			leaf_width, 
+			stem, 
+			harvest, 
+			fruit_set, 
+			gether_set, 
+			fruit_height, 
+			bloom, 
+			fruit_number, 
+			aver_weight, 
+			grow_length, 
+			leaf_size, 
+			leaf_num, 
+			start_date, 
+			upload_file, 
+			content, 
+			title, 
+			crops
+		FROM house_crops_diary 
+		WHERE (
+			START_DATE BETWEEN #{start_date} AND #{end_date}
+			AND green_house_id = #{house_id}
+		)
+	</select>
+	
+	<update id="updateCropsDiary" parameterType="cropsDiaryVO">
+		UPDATE SET house_crops_diary
+			<if test="title != null"> title =#{title}</if>
+			<if test="content != null">content =#{content}</if>
+			<if test="work != null">work =#{work}</if>
+			<if test="etc != null">etc =#{etc}</if>
+			<if test="start_date != null">start_date =#{startDate}</if>
+			<if test="end_date != null">end_date =#{endDate}</if>
+			<if test="crops != null">crops =#{crops}</if>
+			<if test="harvest != null">harvest =#{harvest}</if>
+			<if test="income != null">income =#{income}</if>
+			<if test="spend != null">spend =#{spend} </if>
+			<if test="content_type != null">content_type=#{contentType} </if>
+			<if test="work_time != null">work_time =#{workTime} </if>
+		WHERE id=#{id} AND green_house_id = #{greenHouseId}
+	</update>
+	
+	<delete id="DeleteCropsDiary" parameterType="map">
+		DELETE
+		FROM house_crops_diary
+		WHERE id = #{id};
+	</delete>
+	
+	
+	
+	
+	
+	
+	
+	<select id="getCategoryList22" resultType="map">
+		SELECT 
+			id,category_type,category_name
+		FROM cd_diary_category_info
+		ORDER BY id;
+	</select>
+	
+	
+	
+</mapper>

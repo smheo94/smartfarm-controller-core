@@ -31,9 +31,9 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 	GsmEnvMapper gsmEnvMapper;
 
 	@Override
-	public List<GsmEnvVO> list() {
+	public List<HashMap<String, Object>> list() {
 		Map<String,Object> map = new HashMap<>();
-		map.put("gsm_key", null);
+		map.put("gsm_key", null);		
 		return gsmEnvMapper.list(map);		
 	}
 
@@ -41,7 +41,7 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 	public GsmEnvVO get(String gsmKey) {
 		Map<String,Object> map = new HashMap<>();
 		map.put("gsm_key", gsmKey);
-		return gsmEnvMapper.list(map).stream().findFirst().orElse(null);
+		return gsmEnvMapper.get(map);
 	}
 
 	@Override

@@ -26,5 +26,8 @@
 		<typeAlias alias="controlLogicDeviceVO" type="egovframework.customize.service.ControlLogicDeviceVO"/>
 		
 		<typeAlias alias="thresholdVO" type="egovframework.customize.service.ThresholdVO"/>
+		
+		<typeAlias alias="houseDiaryVO" type="egovframework.customize.service.HouseDiaryVO"/>
+		<typeAlias alias="cropsDiaryVO" type="egovframework.customize.service.HouseCropsDiaryVO"/>
     </typeAliases>
 </configuration>

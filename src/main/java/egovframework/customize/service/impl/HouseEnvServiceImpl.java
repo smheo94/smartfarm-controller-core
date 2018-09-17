@@ -77,7 +77,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 		result.put("controllerList", controllerList);
 		
 		return result;
-
+	}
 */
 	@Override
 	public List<HashMap<String,Object>> list(String gsmKey) {

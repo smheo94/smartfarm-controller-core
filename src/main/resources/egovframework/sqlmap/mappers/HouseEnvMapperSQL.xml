@@ -92,6 +92,7 @@
 		FROM cd_product
 	</select>
 	
+	
 	<select id="selectProductMethodList" resultType="productMethodVO">
 		SELECT id,product_id, growth_level, growth_level_description, growth_type, growth_level_i18n, growth_level_description_i18n, growth_type_i18n
 		FROM cd_product_method

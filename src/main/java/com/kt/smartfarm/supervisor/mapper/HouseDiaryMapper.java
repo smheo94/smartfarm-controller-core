@@ -15,34 +15,33 @@
  */
 package com.kt.smartfarm.supervisor.mapper;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import egovframework.customize.service.CommonEnvVO;
+import egovframework.customize.service.HouseCropsDiaryVO;
+import egovframework.customize.service.HouseDiaryVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 
-/**
- * monitoring에 관한 데이터처리 매퍼 클래스
- *
- * @author  Sean
- * @since 2018.07.23
- * @version 1.0
- * @see <pre>
- *  == 개정이력(Modification Information) ==
- *
- *  수정일          			수정자           	수정내용
- *  -----------    		-----   	---------------------------
- *  2018.07.23        	Sean        최초 생성
- *
- * </pre>
- */
+
 @Mapper("houseDiaryMapper")
 public interface HouseDiaryMapper {
 
-	List<HashMap<String, Object>> getProductList();
-	List<HashMap<String, Object>> getProductSpeciesAndCategory(String productName);
-	List<HashMap<String, Object>> selectDiaryMonthly(HashMap<String, Object> param);
+	/*List<HashMap<String, Object>> getProductList();
+	List<HashMap<String, Object>> getProductSpeciesAndCategory(String productName);*/
+//	List<HashMap<String, Object>> selectDiaryMonthly(HashMap<String, Object> param);
+	
+	Integer insertHouseDiary(HouseDiaryVO houseDiaryVO);
+	HouseDiaryVO getHouseDiaryDetail(HashMap<String, Object> param);
+	List<HashMap<String, Object>> getCategoryList22();
+	List<HouseDiaryVO> getMonthlyHouseDiaryList(HashMap<String, Object> param);
+	Integer updateHouseDiary(HouseDiaryVO houseDiaryVO);
+	Integer delete(HashMap<String,Object> param);
+	
+	void insertCropsDiary(HouseCropsDiaryVO houseCropsVO);
+	void updateCropsDiary(HouseCropsDiaryVO houseCropsVO);
+	Integer DeleteCropsDiary(HashMap<String, Object> param);
+	List<HouseCropsDiaryVO> getMonthlyCropsDiaryList(HashMap<String, Object> param);
+	
 	
 	
 	

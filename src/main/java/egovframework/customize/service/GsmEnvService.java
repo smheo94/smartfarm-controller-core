@@ -1,10 +1,11 @@
 package egovframework.customize.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface GsmEnvService {
 
-	List<GsmEnvVO> list();
+	List<HashMap<String,Object>> list();
 
 	GsmEnvVO get(String gsmKey);
 
