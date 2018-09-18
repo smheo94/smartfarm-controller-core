@@ -85,4 +85,31 @@
 		FROM control_logic;
 	</select>
 	
+	<select id="getLogicProperties" resultType="map" >
+		SELECT
+			id,
+			ui_class_name AS uiClassName,
+			description,
+			ui_help AS uiHelp,
+			properties_json AS propertiesJson,
+			min_value AS minValue,
+			max_value AS `maxValue`,
+			display_unit AS displayUnit,
+			default_value AS defaultValue,
+			default_min_value AS defaultMinValue,
+			default_max_value AS defaultMaxValue,
+			bootstrap_size AS bootstrapSize,
+			dep_class_comp_up AS depClassCompUp,
+			dep_class_comp_down AS depClassCompDown,
+			logic_id AS logicId,
+			properties_id AS propertiesId,
+			is_period AS isPeriod,
+			priority,
+			on_pc AS onPc,
+			on_mobile AS onMobile,
+			on_panel AS onPanel
+		FROM control_properties		
+		INNER JOIN control_logic_property_lnk clpl ON clpl.properties_id = control_properties.id
+	</select>
+	
 </mapper>

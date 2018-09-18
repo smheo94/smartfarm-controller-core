@@ -66,6 +66,12 @@ public class ControlLogicEnvServiceImpl extends EgovAbstractServiceImpl implemen
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	
+	@Override
+	public List<HashMap<String, Object>> getLogicProperties() {
+		return controlLogicMapper.getLogicProperties();
+	}
 	
 	
 }

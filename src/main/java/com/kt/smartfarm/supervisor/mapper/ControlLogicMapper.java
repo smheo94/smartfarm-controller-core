@@ -32,5 +32,6 @@ public interface ControlLogicMapper {
 	List<ControlLogicVO> logicList();
 	List<ControlLogicDeviceVO> logicDeviceList();
 	List<ControlLogicVO> getRegList(HashMap<String,Object> param);
+	List<HashMap<String,Object>> getLogicProperties();
 	
 }

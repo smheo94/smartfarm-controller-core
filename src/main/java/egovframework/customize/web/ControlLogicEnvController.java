@@ -83,6 +83,23 @@ public class ControlLogicEnvController {
 		}
 	}
 	
+	/**
+	 * @description 제어로직 프로퍼티 조회
+	 * @return
+	 */
+	@RequestMapping(value= "/properties", method = RequestMethod.GET)
+	@ResponseBody
+	public Result<HashMap<String,Object>> getLogicProperties(){
+		try {
+			return new Result(controlLogicEnvService.getLogicProperties());
+		} catch(Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		}
+	}
+	
+	
+	
+	
 	@RequestMapping(value= "/{house_id}", method = RequestMethod.GET)
 	@ResponseBody
 	public Result<DeviceEnvVO> get(@PathVariable("gsm_key") String gsmKey, @PathVariable("house_id") String houseId){

@@ -15,5 +15,7 @@ public interface ControlLogicEnvService {
 
 	Object delete(String gsmKey, Integer controllerId);
 
+	List<HashMap<String, Object>> getLogicProperties();
+
 	
 }
