@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface GsmEnvService {
 
-	List<HashMap<String,Object>> list();
+	List<HashMap<String,Object>> gsmOfDeviceList();
 
 	GsmEnvVO get(String gsmKey);
 
@@ -14,6 +14,8 @@ public interface GsmEnvService {
 	Integer insert(GsmEnvVO gsmInfo);
 
 	Integer update(GsmEnvVO gsmInfo);
+
+	List<HashMap<String,Object>> list();
 
 	
 	

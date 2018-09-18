@@ -48,7 +48,7 @@
 	</delete>
 	
 	
-	<select id="list" resultType="map" parameterType="map">
+	<select id="gsmOfDeviceList" resultType="map" parameterType="map">
 		SELECT
 			gsm_info.gsm_key as gsmKey, gsm_info.user_info_id as userInfoId, is_mine as isMine, area_code as areaCode,
  			farm_nickname as farmNickname, gsm_info.update_date as updateDate, owner_user_info_id as ownerUserInfoId, master_system_host as masterSystemHost,
@@ -59,7 +59,7 @@
  			delay_auto_control_start as delayAutoControlStart, package_version as packageVersion, schema_version as schemaVersion, nutrient_monitoring_interval as nutrientMonitoringInterval,
  			farm_nickname_i18n as farmNicknameI18n, user_id as userId, farm_db_id as farmDbId, category_id as categoryId, COUNT(device.id) AS deviceCount
 		FROM gsm_info 
-		INNER JOIN device ON gsm_info.gsm_key = device.gsm_key
+		LEFT OUTER JOIN device ON gsm_info.gsm_key = device.gsm_key
 		GROUP BY gsm_info.gsm_key;
 	</select>
 	
@@ -78,4 +78,29 @@
 			gsm_key = #{gsm_key}
 	</select>
 
+	<select id="getGsmList" resultType="map">
+		SELECT
+			gsm_info.gsm_key as gsmKey, gsm_info.user_info_id as userInfoId, is_mine as isMine, area_code as areaCode,
+ 			farm_nickname as farmNickname, gsm_info.update_date as updateDate, owner_user_info_id as ownerUserInfoId, master_system_host as masterSystemHost,
+ 			master_system_port as masterSystemPort, system_host as systemHost, system_port as systemPort, cropsurl, imsurl,
+ 			mqtt_broker_host as mqttbrokerHost, mqtt_broker_port as mqttBrokerPort, server_read_time as serverReadTime, product_interval as productInterval,
+ 			monitoring_interval as monitoringInterval, history_save_db_interval as historySaveDbInterval, sensor_current_retention_period as sensorCurrentRetentionPeriod,
+ 			debug_stop_event as debugStopEvent, debug_stop_crops as debugStopCrops, debug_stop_device_auto_control as debugStopDeviceAutoContorl, debug_stop_ims as debugStopIms,
+ 			delay_auto_control_start as delayAutoControlStart, package_version as packageVersion, schema_version as schemaVersion, nutrient_monitoring_interval as nutrientMonitoringInterval,
+ 			farm_nickname_i18n as farmNicknameI18n, user_id as userId, farm_db_id as farmDbId, category_id as categoryId
+		FROM gsm_info
+	</select>
+
+	<select id="getHouseList" parameterType="Integer" resultType="houseEnvVO">
+		SELECT 
+			id, product_method_id, green_house_type_id, house_name,
+			latitude, longitude, description, build_date, last_update, addr_1,
+			addr_2, zip, nutrient_common_id, change_gh, change_temperature,
+			floor_space, house_horizontal, house_vertical, house_height,
+			plant_spacing, crop_cnt, house_direction, select_temp_sensor,
+			select_hum_sensor, green_house.gsm_key, house_name_i18n
+		FROM green_house
+		INNER JOIN gsm_info ON green_house.gsm_key = gsm_info.gsm_key
+		WHERE green_house.gsm_key = #{gsmKey}
+	</select>
 </mapper>

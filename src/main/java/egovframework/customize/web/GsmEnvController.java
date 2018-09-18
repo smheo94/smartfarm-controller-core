@@ -82,15 +82,15 @@ public class GsmEnvController {
 	}
 	
 	/**
-	 * @description 제어기 리스트 ( gsm list ) 
+	 * @description 제어기, 제어기에 해당하는 device 의 갯수 
 	 * @param gsmKey
 	 * @return
 	 */
-	@RequestMapping(value= "/list", method = RequestMethod.GET)
+	@RequestMapping(value= "/deviceInfo", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<List<HashMap<String,Object>>> list(){
+	public Result<List<HashMap<String,Object>>> gsmOfDeviceList(){
 		try {
-			return new Result(gsmEnvService.list());
+			return new Result(gsmEnvService.gsmOfDeviceList());
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
@@ -123,6 +123,21 @@ public class GsmEnvController {
 	public Result<GsmEnvVO> delete(@PathVariable("gsmKey") String gsmKey){
 		try {
 			return new Result(gsmEnvService.delete(gsmKey));
+		} catch(Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		}
+	}
+	
+	/**
+	 * @description gsm_info, green_house mapping dataList
+	 * @param gsmKey
+	 * @return
+	 */
+	@RequestMapping(value= "/", method = RequestMethod.GET)
+	@ResponseBody
+	public Result<GsmEnvVO> list(){
+		try {
+			return new Result(gsmEnvService.list());
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}

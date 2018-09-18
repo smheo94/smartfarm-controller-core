@@ -15,6 +15,8 @@ package egovframework.customize.service.impl;
 import egovframework.customize.service.GsmEnvService;
 import egovframework.customize.service.GsmEnvVO;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,10 +33,10 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 	GsmEnvMapper gsmEnvMapper;
 
 	@Override
-	public List<HashMap<String, Object>> list() {
+	public List<HashMap<String, Object>> gsmOfDeviceList() {
 		Map<String,Object> map = new HashMap<>();
 		map.put("gsm_key", null);		
-		return gsmEnvMapper.list(map);		
+		return gsmEnvMapper.gsmOfDeviceList(map);		
 	}
 
 	@Override
@@ -59,6 +61,19 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 	@Override
 	public Integer update(GsmEnvVO gsmInfo) {
 		return gsmEnvMapper.update(gsmInfo);
+	}
+
+	@Override
+	public List<HashMap<String, Object>> list() {
+		List<HashMap<String,Object>> gsmList = new ArrayList<HashMap<String,Object>>();
+		gsmList = gsmEnvMapper.getGsmList();
+		for(HashMap<String,Object> gsm : gsmList){
+			List<HashMap<String,Object>> houseList = new ArrayList<HashMap<String,Object>>();
+			Integer gsmKey = (Integer)gsm.get("gsmKey");
+			houseList = gsmEnvMapper.getHouseList(gsmKey);
+			gsm.put("houseList", houseList);			
+		}
+		return gsmList;
 	}
   
 }

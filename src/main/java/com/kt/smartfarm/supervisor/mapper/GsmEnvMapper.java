@@ -28,5 +28,8 @@ public interface GsmEnvMapper {
 	Integer delete(Map<String,Object> map);
 	Integer insert(GsmEnvVO gsmInfo);
 	Integer update(GsmEnvVO gsmInfo);
-	List<HashMap<String,Object>> list(Map<String,Object> map);	
+	List<HashMap<String,Object>> gsmOfDeviceList(Map<String,Object> map);
+	
+	List<HashMap<String, Object>> getGsmList();
+	List<HashMap<String, Object>> getHouseList(Integer gsmKey);	
 }
