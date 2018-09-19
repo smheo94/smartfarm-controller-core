@@ -90,6 +90,7 @@
 			id,
 			ui_class_name AS uiClassName,
 			description,
+			section,
 			ui_help AS uiHelp,
 			properties_json AS propertiesJson,
 			min_value AS minValue,
