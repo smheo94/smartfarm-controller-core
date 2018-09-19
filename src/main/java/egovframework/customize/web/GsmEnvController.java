@@ -133,9 +133,9 @@ public class GsmEnvController {
 	 * @param gsmKey
 	 * @return
 	 */
-	@RequestMapping(value= "/", method = RequestMethod.GET)
+	@RequestMapping(value= "", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<GsmEnvVO> list(){
+	public Result<GsmEnvVO> list(){ 
 		try {
 			return new Result(gsmEnvService.list());
 		} catch(Exception e) {
