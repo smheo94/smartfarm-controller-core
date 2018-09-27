@@ -20,6 +20,7 @@ public interface HouseDiaryService {
 	HouseCropsDiaryVO updateCropsDiary(HouseCropsDiaryVO houseCropsVO);
 	Integer DeleteCropsDiary(Integer id);
 	List<HouseCropsDiaryVO> MonthlyCropsDiaryList(Integer greenHouseId, String year, String month);
+	HashMap<String,Object> getHouseCropsInfo(Integer greenHouseId);
 	
 
 }

@@ -40,8 +40,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/env/gsm")
 public class GsmEnvController {
 
-	public static final String DEFAULT_SETUP_FILE_PATH = "data/env-default/";
-	private static final String extraUrl = "";
+	public static final String DEFAULT_SETUP_FILE_PATH = "data/env-default/";	
 	
 	@Resource(name = "gsmEnvService")
 	private GsmEnvService gsmEnvService;

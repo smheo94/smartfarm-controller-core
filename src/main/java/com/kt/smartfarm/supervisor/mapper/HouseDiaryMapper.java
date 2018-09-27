@@ -41,6 +41,7 @@ public interface HouseDiaryMapper {
 	void updateCropsDiary(HouseCropsDiaryVO houseCropsVO);
 	Integer DeleteCropsDiary(HashMap<String, Object> param);
 	List<HouseCropsDiaryVO> getMonthlyCropsDiaryList(HashMap<String, Object> param);
+	HashMap<String, Object> getHouseCropsInfo(HashMap<String, Object> param);
 	
 	
 	

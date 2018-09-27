@@ -82,12 +82,29 @@ public class HouseDiaryController {
 	}
 	*/
 	
+	
+	/**
+	 * @description house에 등록되어 있는 작물 정보
+	 * @param greenHouseId 
+	 * @return
+	 */
+	@RequestMapping(value= "/cropsInfo/{green_house_id}", method = RequestMethod.GET)
+	@ResponseBody
+	public Result houseCropsInfo(@PathVariable("green_house_id") Integer greenHouseId){
+		try{
+			return new Result(houseDiaryService.getHouseCropsInfo(greenHouseId));
+		}catch(Exception e){
+			e.printStackTrace();
+			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
+	
 	/**
 	 * @description 작업일지, 가계부 입력
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value= "/", method = RequestMethod.POST)
+	@RequestMapping(value= "", method = RequestMethod.POST)
 	@ResponseBody
 	public Result insert(@RequestBody HouseDiaryVO houseDiaryVO){
 		try{
@@ -123,7 +140,7 @@ public class HouseDiaryController {
 	@RequestMapping(value= "/monthly/{green_house_id}", method = RequestMethod.GET)
 	@ResponseBody
 	public Result MonthlyHouseDiaryList(@PathVariable("green_house_id") Integer greenHouseId, 
-	@RequestParam("year") String year, @RequestParam("month") String month){
+			@RequestParam("year") String year, @RequestParam("month") String month){
 		try{
 			return new Result(houseDiaryService.getMonthlyHouseDiaryList(greenHouseId,year,month));
 		}catch(Exception e){

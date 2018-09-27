@@ -36,6 +36,6 @@ public class HouseCropsDiaryVO {
 	String content;		// 사용안함
 	String title;
 	String crops;		// 작물
-
+	String contentType;
 	
 }

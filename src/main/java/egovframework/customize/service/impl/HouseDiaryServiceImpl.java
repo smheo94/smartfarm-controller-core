@@ -227,6 +227,15 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 		param.put("house_id", greenHouseId);
 		return houseDiaryMapper.getMonthlyCropsDiaryList(param);
 	}
+
+
+
+	@Override
+	public HashMap<String, Object> getHouseCropsInfo(Integer greenHouseId) {
+		HashMap<String,Object> param = new HashMap<>();
+		param.put("green_house_id", greenHouseId);
+		return houseDiaryMapper.getHouseCropsInfo(param);
+	}
    
     
 }

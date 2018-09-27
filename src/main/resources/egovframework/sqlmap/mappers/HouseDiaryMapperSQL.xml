@@ -119,7 +119,8 @@
 			upload_file, 
 			content, 
 			title, 
-			crops
+			crops,
+			content_type
 		FROM house_crops_diary 
 		WHERE (
 			START_DATE BETWEEN #{start_date} AND #{end_date}
@@ -163,6 +164,12 @@
 		ORDER BY id;
 	</select>
 	
+	<select id="getHouseCropsInfo" resultType="map" parameterType="map">
+		SELECT cp.product_species FROM green_house
+		INNER JOIN cd_product_method cpm ON cpm.id = green_house.product_method_id
+		INNER JOIN cd_product cp ON cp.id = cpm.product_id
+		WHERE green_house.id = #{green_house_id} 
+	</select>
 	
 	
 </mapper>
