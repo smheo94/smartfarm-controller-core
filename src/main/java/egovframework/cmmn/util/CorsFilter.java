@@ -23,7 +23,7 @@ public class CorsFilter implements javax.servlet.Filter {
 	        
 	        response.setHeader("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE"); // CRUD
 	        response.setHeader("Access-Control-Max-Age", "3600");
-	        response.setHeader("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, Accept");
+	        response.setHeader("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, Accept, Authorization");
 	        response.setHeader("Access-Control-Allow-Origin", "*");
 
 	        // manual multi domain example

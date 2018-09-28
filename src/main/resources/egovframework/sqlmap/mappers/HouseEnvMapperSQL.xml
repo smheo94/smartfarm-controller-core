@@ -139,8 +139,8 @@
 			plant_spacing as plantSpacing, crop_cnt as cropCnt, house_direction as houseDirection, select_temp_sensor as selectTempSensor,
 			select_hum_sensor as selectHumSensor, gsm_key as gsmKey, house_name_i18n as houseNameI18n
 		FROM green_house
-		WHERE
-		 gsm_key = #{gsm_key}	
+		WHERE 1=1
+		AND  gsm_key = #{gsm_key}	
 	</select>
 	
 	<select id ="getMappedDevice" resultType="int">

@@ -89,9 +89,9 @@
 	
 	<insert id="insertCropsDiary" useGeneratedKeys="true" parameterType="cropsDiaryVO">
 		INSERT INTO house_crops_diary
-		(green_house_id, leaf_width, stem, harvest, fruit_set, gether_set, fruit_height, bloom, fruit_number, aver_weight, grow_length, leaf_size, leaf_num, start_date, upload_file, content, title, crops)
+		(green_house_id, leaf_width, stem, harvest, fruit_set, gether_set, fruit_height, bloom, fruit_number, aver_weight, grow_length, leaf_size, leaf_num, start_date, upload_file, content, title, crops, content_type)
 		VALUES 
-		(#{greenHouseId},#{leafWidth},#{stem},#{harvest},#{fruitSet},#{getherSet},#{fruitHeight},#{bloom},#{fruitNumber},#{averWeight},#{growLength},#{leafSize},#{leafNum},#{startDate},#{uploadFile},#{content},#{title},#{crops})
+		(#{greenHouseId},#{leafWidth},#{stem},#{harvest},#{fruitSet},#{getherSet},#{fruitHeight},#{bloom},#{fruitNumber},#{averWeight},#{growLength},#{leafSize},#{leafNum},#{startDate},#{uploadFile},#{content},#{title},#{crops}, #{contentType})
 		<selectKey keyProperty="id" resultType="int">
 		SELECT LAST_INSERT_ID() AS id;
 		</selectKey>
