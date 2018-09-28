@@ -15,6 +15,8 @@ package egovframework.customize.service.impl;
 import egovframework.customize.service.DeviceEnvService;
 import egovframework.customize.service.DeviceEnvVO;
 import egovframework.customize.service.DeviceTypeVO;
+import egovframework.customize.service.VDeviceEnvVO;
+import egovframework.customize.service.VDeviceInfoVO;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
 import java.util.ArrayList;
@@ -103,6 +105,21 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 	@Override
 	public List<HashMap<String, Object>> getDeviceTypeList() {
 		return deviceEnvMapper.getDeviceTypeList();
+	}
+
+	@Override
+	public List<VDeviceInfoVO> getVDeviceList() {
+		return deviceEnvMapper.getVDeviceList();		
+	}
+
+	@Override
+	public List<VDeviceEnvVO> insertVDeviceEnv(List<VDeviceEnvVO> vo) {
+		try{
+			deviceEnvMapper.insertVDeviceEnv(vo);	
+		}catch(Exception e){
+			e.printStackTrace();
+		}		
+		return vo;
 	}
   
 }

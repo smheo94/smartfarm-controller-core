@@ -29,5 +29,8 @@
 		
 		<typeAlias alias="houseDiaryVO" type="egovframework.customize.service.HouseDiaryVO"/>
 		<typeAlias alias="cropsDiaryVO" type="egovframework.customize.service.HouseCropsDiaryVO"/>
+		<typeAlias alias="vDeviceInfoVO" type="egovframework.customize.service.VDeviceInfoVO"/>
+		<typeAlias alias="vDeviceEnvVO" type="egovframework.customize.service.VDeviceEnvVO"/>
+		
     </typeAliases>
 </configuration>

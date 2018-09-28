@@ -151,12 +151,21 @@
 	</select>
 	
 	
-	<select id ="getMappedController" resultType="int">
-		SELECT controller_id 
-			 FROM device
-		 WHERE gsm_key = #{gsm_key}
+	<select id ="getMappedController" resultType="map">
+		SELECT 
+			controller.id,
+			controller.gsm_key,
+			controller.controller_info_id,
+			controller.controller_type,
+			controller.ip,
+			controller.PORT,
+			controller.controller_status,
+			controller.description
+		FROM device
+		INNER JOIN controller ON controller.id = device.controller_id
+		 WHERE device.gsm_key = #{gsm_key}
 		 <if test="deviceIds.size() > 0">
-			AND id IN 
+			AND device.id IN 
 			<foreach collection="deviceIds" item="item" index="index" separator=","	open="(" close=")">
 						#{item}
 			</foreach>

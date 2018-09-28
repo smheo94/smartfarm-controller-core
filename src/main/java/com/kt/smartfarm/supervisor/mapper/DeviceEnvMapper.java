@@ -21,6 +21,8 @@ import java.util.Map;
 
 import egovframework.customize.service.DeviceEnvVO;
 import egovframework.customize.service.DeviceTypeVO;
+import egovframework.customize.service.VDeviceEnvVO;
+import egovframework.customize.service.VDeviceInfoVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 
 @Mapper("deviceEnvMapper")
@@ -36,4 +38,6 @@ public interface DeviceEnvMapper {
 	String[] getHouseType();
 	String[] getKind();
 	List<HashMap<String, Object>> getDeviceTypeList();
+	List<VDeviceInfoVO> getVDeviceList();
+	Integer insertVDeviceEnv(List<VDeviceEnvVO> vo);
 }

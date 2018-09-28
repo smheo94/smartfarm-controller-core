@@ -14,6 +14,7 @@ package egovframework.customize.service.impl;
 
 import egovframework.customize.service.HouseEnvVO;
 import egovframework.customize.service.ProductVO;
+import egovframework.customize.service.DeviceEnvVO;
 import egovframework.customize.service.HouseEnvService;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
@@ -24,6 +25,8 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.kt.smartfarm.supervisor.mapper.DeviceEnvMapper;
 import com.kt.smartfarm.supervisor.mapper.HouseEnvMapper;
 
 
@@ -32,6 +35,10 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 
 	@Autowired
 	HouseEnvMapper houseEnvMapper;
+	
+	//controllerId 로 device list 가져오는 mapper
+	@Autowired
+	DeviceEnvMapper deviceEnvMapper;
 	
 	@Override
 	public HouseEnvVO insert(HouseEnvVO vo) {				
@@ -82,22 +89,28 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 	@Override
 	public List<HashMap<String,Object>> list(String gsmKey) {
 		List<HashMap<String,Object>> result = new ArrayList<HashMap<String,Object>>();
-		List<Integer> deviceIds = new ArrayList<Integer>();
 		List<HashMap<String,Object>> controllerList = new ArrayList<HashMap<String,Object>>();
+		List<DeviceEnvVO> mappedDeviceList;
+		List<Integer> deviceIds = new ArrayList<Integer>();		
 		Map<String, Object> map = new HashMap<>();
 		
 		map.put("gsm_key",  gsmKey);		
 		result = houseEnvMapper.getHouseDetail(map);
 		
-		for(int j=0; j<result.size(); j++){
-			map.put("green_house_id",result.get(j).get("id"));
-			deviceIds = houseEnvMapper.getMappedDevice(map);
-						
+		for(int i=0; i<result.size(); i++){
+			map.put("green_house_id",result.get(i).get("id"));
+			deviceIds = houseEnvMapper.getMappedDevice(map);						
 			map.put("deviceIds", deviceIds);
 			controllerList = houseEnvMapper.getMappedController(map);
-			result.get(j).put("deviceList", deviceIds);
-			result.get(j).put("controllerList", controllerList);			
-		}		
+			for(int j =0; j<controllerList.size(); j++){
+				HashMap<String,Object> param = new HashMap<>();
+				param.put("controller_id", controllerList.get(j).get("id"));
+				mappedDeviceList = deviceEnvMapper.list(param);
+				controllerList.get(j).put("deviceList",mappedDeviceList);
+			}
+			result.get(i).put("selectedDeviceList", deviceIds);
+			result.get(i).put("controllerList", controllerList);			
+		}
 		
 		return result;
 	}

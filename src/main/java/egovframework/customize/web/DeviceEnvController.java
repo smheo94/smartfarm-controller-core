@@ -21,6 +21,8 @@ import egovframework.cmmn.util.Result;
 import egovframework.customize.service.DeviceEnvService;
 import egovframework.customize.service.DeviceEnvVO;
 import egovframework.customize.service.DeviceTypeVO;
+import egovframework.customize.service.VDeviceEnvVO;
+import egovframework.customize.service.VDeviceInfoVO;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -173,6 +175,37 @@ public class DeviceEnvController {
 	public Result<List<HashMap<String,Object>>> deviceTypeList(){
 		try {
 			return new Result(deviceEnvService.getDeviceTypeList());
+		} catch(Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		}
+	}
+	
+	
+	/**
+	 * @description 가상 장치 리스트
+	 * @return
+	 */
+	@RequestMapping(value= "/vDeviceList", method = RequestMethod.GET)
+	@ResponseBody
+	public Result<List<VDeviceInfoVO>> vDeviceList(){
+		try {
+			return new Result(deviceEnvService.getVDeviceList());
+		} catch(Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		}
+	}
+	
+	
+	/**
+	 * @description 가상장치 등록 
+	 * @param vo
+	 * @return
+	 */
+	@RequestMapping(value= "/vDeviceList", method = RequestMethod.POST)
+	@ResponseBody
+	public Result<List<VDeviceInfoVO>> vDeviceList(@RequestBody List<VDeviceEnvVO> vo){
+		try {
+			return new Result(deviceEnvService.insertVDeviceEnv(vo));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}

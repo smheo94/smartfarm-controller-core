@@ -15,7 +15,7 @@ public interface GsmEnvService {
 
 	Integer update(GsmEnvVO gsmInfo);
 
-	List<HashMap<String,Object>> list();
+	List<HashMap<String,Object>> list(HouseEnvService houseEnvService);
 
 	
 	

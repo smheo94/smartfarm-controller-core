@@ -11,9 +11,9 @@
 
 	<insert id="insert" useGeneratedKeys="true" parameterType="deviceEnvVO">
 		INSERT INTO device (
-			gsm_key, device_type_id, nickname, device_type_nickname, green_house_id, controller_id,  mode, modbus_address1, modbus_address2, modbus_address3) 
+			gsm_key, device_type_id,device_type_idx, nickname, device_type_nickname, green_house_id, controller_id,  mode, modbus_address1, modbus_address2, modbus_address3) 
 	  	VALUES(
-	  		#{gsmKey}, #{deviceTypeId}, #{nickname}, #{deviceTypeNickname}, 0, #{controllerId}, 1, #{modbusAddress1}, #{modbusAddress2}, #{modbusAddress3})  	
+	  		#{gsmKey}, #{deviceTypeId}, #{deviceTypeIdx} ,#{nickname}, #{deviceTypeNickname}, 0, #{controllerId}, 1, #{modbusAddress1}, #{modbusAddress2}, #{modbusAddress3})  	
 	 	<selectKey keyProperty="id" resultType ="int"> 
 	   		SELECT LAST_INSERT_ID() AS value;
 	    </selectKey>
@@ -51,7 +51,7 @@
 			no_stop_control, MODE, update_date, auto_manual_mode, STATUS
 		FROM device
 		<where>
-			AND gsm_key = #{gsm_key}
+			<if test="gsm_key != null">AND gsm_key = #{gsm_key}</if>
 			AND controller_id = #{controller_id}
 		</where>	
 	</select>
@@ -86,4 +86,28 @@
 		FROM cd_device_type
 		ORDER BY kind
 	</select>
+	
+	<select id="getVDeviceList" resultType="vDeviceInfoVO">
+		SELECT 
+			id,
+			device_type_id, 
+			device_num, 
+			device_type_param_name, 
+			required, 
+			able_array, 
+			description, 
+			display_order, 
+			is_used
+		FROM cd_device_type_v_device_dep_device 
+	</select>
+	
+	<insert id="insertVDeviceEnv" useGeneratedKeys="true" parameterType="vDeviceEnvVO">
+		INSERT INTO device_v_dep_device(
+			id, p_device_id, device_num, device_insert_order, device_id
+		)
+		VALUES(
+			#{id}, #{pDeviceId}, #{deviceNum}, #{deviceInsertOrder}, #{deviceId}
+		);
+	</insert>
+	
 </mapper>

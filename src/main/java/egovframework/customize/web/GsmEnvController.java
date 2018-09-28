@@ -20,6 +20,7 @@ import java.util.List;
 import egovframework.cmmn.util.Result;
 import egovframework.customize.service.GsmEnvVO;
 import egovframework.customize.service.GsmEnvService;
+import egovframework.customize.service.HouseEnvService;
 
 import javax.annotation.Resource;
 import org.springframework.http.HttpStatus;
@@ -45,7 +46,8 @@ public class GsmEnvController {
 	@Resource(name = "gsmEnvService")
 	private GsmEnvService gsmEnvService;
 		
-	
+	@Resource(name ="houseEnvService")
+	private HouseEnvService houseEnvService;
 	/**
 	 * 제어모듈 수정
 	 * @param gsmKey
@@ -136,7 +138,7 @@ public class GsmEnvController {
 	@ResponseBody
 	public Result<GsmEnvVO> list(){ 
 		try {
-			return new Result(gsmEnvService.list());
+			return new Result(gsmEnvService.list(houseEnvService));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}

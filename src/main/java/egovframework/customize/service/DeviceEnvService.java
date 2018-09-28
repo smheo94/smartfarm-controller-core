@@ -14,5 +14,8 @@ public interface DeviceEnvService {
 	HashMap<String,Object >gethouseTypeKindInfo();
 	List<HashMap<String,Object>> getDeviceTypeList();
 	
+	List<VDeviceInfoVO> getVDeviceList();
+	List<VDeviceEnvVO> insertVDeviceEnv(List<VDeviceEnvVO> vo);
+	
 	
 }
