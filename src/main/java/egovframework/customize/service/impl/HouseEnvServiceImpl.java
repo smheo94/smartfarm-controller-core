@@ -94,25 +94,30 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 		List<Integer> deviceIds = new ArrayList<Integer>();		
 		Map<String, Object> map = new HashMap<>();
 		
-		map.put("gsm_key",  gsmKey);		
-		result = houseEnvMapper.getHouseDetail(map);
-		
-		for(int i=0; i<result.size(); i++){
-			map.put("green_house_id",result.get(i).get("id"));
-			deviceIds = houseEnvMapper.getMappedDevice(map);						
-			map.put("deviceIds", deviceIds);
-			controllerList = houseEnvMapper.getMappedController(map);
-			for(int j =0; j<controllerList.size(); j++){
-				HashMap<String,Object> param = new HashMap<>();
-				param.put("controller_id", controllerList.get(j).get("id"));
-				mappedDeviceList = deviceEnvMapper.list(param);
-				controllerList.get(j).put("deviceList",mappedDeviceList);
+		if(gsmKey == null){
+			result = houseEnvMapper.getHouseDetail(map);
+			return result;
+		}else{
+			map.put("gsm_key",  gsmKey);		
+			result = houseEnvMapper.getHouseDetail(map);
+			
+			for(int i=0; i<result.size(); i++){
+				map.put("green_house_id",result.get(i).get("id"));
+				deviceIds = houseEnvMapper.getMappedDevice(map);						
+				map.put("deviceIds", deviceIds);
+				controllerList = houseEnvMapper.getMappedController(map);
+				for(int j =0; j<controllerList.size(); j++){
+					HashMap<String,Object> param = new HashMap<>();
+					param.put("controller_id", controllerList.get(j).get("id"));
+					mappedDeviceList = deviceEnvMapper.list(param);
+					controllerList.get(j).put("deviceList",mappedDeviceList);
+				}
+				result.get(i).put("selectedDeviceList", deviceIds);
+				result.get(i).put("controllerList", controllerList);			
 			}
-			result.get(i).put("selectedDeviceList", deviceIds);
-			result.get(i).put("controllerList", controllerList);			
+			
+			return result;
 		}
-		
-		return result;
 	}
 
 	@Override
