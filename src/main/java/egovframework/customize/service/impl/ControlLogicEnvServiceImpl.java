@@ -12,13 +12,13 @@
  */
 package egovframework.customize.service.impl;
 
+import egovframework.customize.service.ControlLogicDeviceVO;
 import egovframework.customize.service.ControlLogicEnvService;
 import egovframework.customize.service.ControlLogicVO;
-import egovframework.customize.service.DeviceEnvVO;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,46 +31,35 @@ public class ControlLogicEnvServiceImpl extends EgovAbstractServiceImpl implemen
 
 	@Autowired
 	ControlLogicMapper controlLogicMapper;
-	
 	@Override
-	public HashMap<String,Object> list() {
-		HashMap<String,Object> result = new HashMap<>();
-		result.put("control_logic", controlLogicMapper.logicList());
-		result.put("control_logic_device", controlLogicMapper.logicDeviceList());
-		return result;
+	public List<ControlLogicVO> getAllLogicList() {
+		final List<ControlLogicVO> logicList = controlLogicMapper.getLogicList();
+		final List<ControlLogicDeviceVO> logicDeviceList = controlLogicMapper.getLogicDeviceList(null);
+		final List<HashMap<String, Object>> logicPropertyList = controlLogicMapper.getLogicPropertyList(null);
+		logicList.forEach( cl ->{
+			cl.setControlDeviceaList( logicDeviceList.stream().filter(d -> d.getLogicId().equals(cl.getId())).collect(Collectors.toList()) );
+			cl.setControlPropertyList( logicPropertyList.stream().filter( m -> m.get("logicId").equals(cl.getId())).collect(Collectors.toList()));
+		});
+		return logicList;
 	}
-
+//	@Override
+//	public HashMap<String,Object> allList() {
+//		HashMap<String,Object> result = new HashMap<>();
+//		result.put("control_logic", controlLogicMapper.getLogicList());
+//		result.put("control_logic_device", controlLogicMapper.getLogicDeviceList(null));
+//		return result;
+//	}
 	@Override
-	public List<ControlLogicVO> getRegList(String gsmKey, String houseId) {
-		HashMap<String,Object> param = new HashMap<>();
-		param.put("gsm_key", gsmKey);
-		param.put("house_id", houseId);
-		return controlLogicMapper.getRegList(param);
+	public List<ControlLogicVO> getLogicList() {
+		return controlLogicMapper.getLogicList();
 	}
-
 	@Override
-	public Object delete(String gsmKey, Integer controllerId) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ControlLogicDeviceVO> getLogicDeviceList(Long logicId) {
+		return controlLogicMapper.getLogicDeviceList(logicId);
 	}
-
-
 	@Override
-	public Object insert(List<DeviceEnvVO> device) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Object update(List<DeviceEnvVO> device) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	
-	@Override
-	public List<HashMap<String, Object>> getLogicProperties() {
-		return controlLogicMapper.getLogicProperties();
+	public List<HashMap<String, Object>> getLogicPropertyList(Long logicId) {
+		return controlLogicMapper.getLogicPropertyList(logicId);
 	}
 	
 	

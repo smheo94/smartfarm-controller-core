@@ -1,56 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kt.smartfarm.supervisor.mapper.ControlLogicMapper">
-
-<!-- 
-	<resultMap type="controlLogicDeviceVO" id="controlLogicDeviceVO">
-	    <result column="id" property="id"/>
-	    <result column="logic_id" property="logicId"/>	    
-	    <result column="device_num" property="deviceNum"/>	    
-	    <result column="device_param_name" property="deviceParamName"/>
-	    <result column="device_type" property="deviceType"/>	    
-	    <result column="is_main" property="isMain"/>
-	    <result column="able_array" property="ableArray"/>
-	    <result column="description" property="description"/>
-	    <result column="display_order" property="displayOrder"/>
-	    <result column="is_used" property="isUsed"/>	    
-	</resultMap>
- -->
-	<insert id="insert" useGeneratedKeys="true" parameterType="controlLogicVO">
-		INSERT INTO controller
-		(gsm_key, controller_info_id, controller_type, ip, PORT, controller_status,
-		description)
-		VALUES (#{gsmKey}, #{controllerInfoId}, #{controllerType}, #{ip},
-		#{port}, #{controllerStatus}, #{description});
-		<selectKey keyProperty="id" resultType="int">
-		SELECT LAST_INSERT_ID() AS id;
-		</selectKey>
-	</insert>
-	
-	<update id="update" parameterType="controlLogicVO">
-		UPDATE controller
-		SET
-		<if test="controller_info_id != null">controller_info_id = #{controllerInfoId},</if>
-		,
-		<if test="controller_type != null">controller_type = #{controllerType},</if>
-		,
-		<if test="ip != null">ip = #{ip},</if>
-		,
-		<if test="PORT != null">PORT = #{port},</if>
-		,
-		<if test="controller_status != null">controller_status = #{controllerStatus},</if>
-		,
-		<if test="description != null">description = #{description},</if>
-		WHERE gsm_key = #{gsmKey} AND id = #{id};
-	</update>
-	
-	<delete id="delete">
-		DELETE
-		FROM controller
-		WHERE gsm_key = #{gsmKey} AND id = #{id};
-	</delete>
-	
-	<select id="logicList" resultType="controlLogicVO">
+	<select id="getLogicList" resultType="controlLogicVO">
 		SELECT 
 			id, 
 			name, 
@@ -60,10 +11,10 @@
 			ui_help AS uiHelp, 
 			can_multi_logic AS canMultiLogic, 
 			default_period_size AS defaultPeriodSize
-		FROM control_logic;
+		FROM control_logic
 	</select>
-	
-	<select id="logicDeviceList" resultType="controlLogicDeviceVO">
+
+	<select id="getLogicDeviceList" resultType="controlLogicDeviceVO">
 		SELECT 
 			id, 
 			logic_id AS logicId,
@@ -76,16 +27,16 @@
 			description, 
 			display_order AS displayOrder, 
 			is_used AS isUsed
-		FROM control_logic_device	
-		ORDER BY logic_id
+		FROM control_logic_device
+		<where>
+			<if test="logicId != null">
+				AND logic_id = #{logicId}
+			</if>
+		</where>
+		ORDER BY logic_id, device_num
 	</select>
-	
-	<select id="getRegList" resultType="controlLogicVO" parameterType="map">
-		SELECT id, name, javaClassName, uiClassName, description, uiHelp, canMultiLogic, defaultPeriodSize
-		FROM control_logic;
-	</select>
-	
-	<select id="getLogicProperties" resultType="map" >
+
+	<select id="getLogicPropertyList" resultType="map" >
 		SELECT
 			id,
 			ui_class_name AS uiClassName,
@@ -108,8 +59,14 @@
 			on_pc AS onPc,
 			on_mobile AS onMobile,
 			on_panel AS onPanel
-		FROM control_properties		
+		FROM control_properties
+		<where>
+			<if test="logicId != null">
+				AND logic_id = #{logicId}
+			</if>
+		</where>
 		INNER JOIN control_logic_property_lnk clpl ON clpl.properties_id = control_properties.id
+		ORDER BY is_period, priority
 	</select>
 	
 </mapper>

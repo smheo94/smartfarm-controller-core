@@ -37,7 +37,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * 센서구성,제어기구성,온실구성,제어로직구성,외부기상대구성,임계치구성
  */
 @Controller
-@RequestMapping("/env/{gsmKey}/controller")
+@RequestMapping("/{gsmKey}/controller")
 public class ControllerEnvController {
 
 	public static final String DEFAULT_SETUP_FILE_PATH = "data/env-default/";
@@ -56,7 +56,7 @@ public class ControllerEnvController {
 	 */
 	@RequestMapping(value= "/{controllerId}", method = RequestMethod.PUT)
 	@ResponseBody
-	public Result<ControllerEnvVO> update(@PathVariable("gsmKey") String gsmKey, @PathVariable("controllerId") String controllerId, @RequestBody ControllerEnvVO controller){		
+	public Result<ControllerEnvVO> update(@PathVariable("gsmKey") Integer gsmKey, @PathVariable("controllerId") String controllerId, @RequestBody ControllerEnvVO controller){
 		try {
 			
 			return new Result(controllerEnvService.update(controller));
@@ -73,7 +73,7 @@ public class ControllerEnvController {
 	 */
 	@RequestMapping(value= "/", method = RequestMethod.POST)
 	@ResponseBody
-	public Result<ControllerEnvVO> insert( @PathVariable("gsmKey") String gsmKey, @RequestBody ControllerEnvVO controller){
+	public Result<ControllerEnvVO> insert( @PathVariable("gsmKey") Integer gsmKey, @RequestBody ControllerEnvVO controller){
 		try {
 			return new Result(controllerEnvService.insert(controller));
 		} catch(Exception e) {
@@ -88,7 +88,7 @@ public class ControllerEnvController {
 	 */
 	@RequestMapping(value= "/", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<List<ControllerEnvVO>> list( @PathVariable("gsmKey") String gsmKey){
+	public Result<List<ControllerEnvVO>> list( @PathVariable("gsmKey") Integer gsmKey){
 		try {
 			return new Result(controllerEnvService.list(gsmKey));
 		} catch(Exception e) {
@@ -103,7 +103,7 @@ public class ControllerEnvController {
 	 */
 	@RequestMapping(value= "/deviceList", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<List<ControllerEnvVO>> controllerDeviceList( @PathVariable("gsmKey") String gsmKey){
+	public Result<List<ControllerEnvVO>> controllerDeviceList( @PathVariable("gsmKey") Integer gsmKey){
 		try {
 			return new Result(controllerEnvService.controllerDeviceList(gsmKey));
 		} catch(Exception e) {
@@ -121,7 +121,7 @@ public class ControllerEnvController {
 	 */
 	@RequestMapping(value= "/{controllerId}", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<ControllerEnvVO> get( @PathVariable("gsmKey") String gsmKey,  @PathVariable("controllerId") Integer controllerId){
+	public Result<ControllerEnvVO> get( @PathVariable("gsmKey") Integer gsmKey,  @PathVariable("controllerId") Integer controllerId){
 		try {
 			return new Result(controllerEnvService.get(gsmKey, controllerId));
 		} catch(Exception e) {
@@ -137,7 +137,7 @@ public class ControllerEnvController {
 	 */
 	@RequestMapping(value= "/{controllerId}", method = RequestMethod.DELETE)
 	@ResponseBody
-	public Result<ControllerEnvVO> delete(@PathVariable("gsmKey") String gsmKey,  @PathVariable("controllerId") Integer controllerId){
+	public Result<ControllerEnvVO> delete(@PathVariable("gsmKey") Integer gsmKey,  @PathVariable("controllerId") Integer controllerId){
 		try {
 			return new Result(controllerEnvService.delete(gsmKey, controllerId));
 		} catch(Exception e) {

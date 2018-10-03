@@ -33,25 +33,30 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 	@Autowired
 	GsmEnvMapper gsmEnvMapper;
 
+	@Autowired
+	HouseEnvService houseEnvService;
+
 	@Override
-	public List<HashMap<String, Object>> gsmOfDeviceList() {
-		Map<String,Object> map = new HashMap<>();
-		map.put("gsm_key", null);		
-		return gsmEnvMapper.gsmOfDeviceList(map);		
+	public List<Map<String, Object>> gsmOfDeviceList(Integer gsmKey) {
+		return gsmEnvMapper.gsmOfDeviceList(gsmKey);
 	}
 
 	@Override
-	public GsmEnvVO get(String gsmKey) {
-		Map<String,Object> map = new HashMap<>();
-		map.put("gsm_key", gsmKey);
-		return gsmEnvMapper.get(map);
+	public GsmEnvVO get(Integer gsmKey) {
+		return gsmEnvMapper.get(gsmKey);
 	}
 
 	@Override
-	public Integer delete(String gsmKey) {
-		Map<String,Object> map = new HashMap<>();
-		map.put("gsm_key", gsmKey);
-		return gsmEnvMapper.delete(map);
+	public Map<String, Object> getAll(Integer gsmKey) {
+		Map<String,Object> gsmMap = gsmEnvMapper.getGsmList(gsmKey).stream().findFirst().orElse(null);
+		List<HashMap<String,Object>> houseList = houseEnvService.list(gsmKey);
+		gsmMap.put("houseList", houseList);
+		return gsmMap;
+	}
+
+	@Override
+	public Integer delete(Integer gsmKey) {
+		return gsmEnvMapper.delete(gsmKey);
 	}
 
 	@Override
@@ -71,7 +76,7 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 		for(HashMap<String,Object> gsm : gsmList){
 			List<HashMap<String,Object>> houseList = new ArrayList<HashMap<String,Object>>();
 //			Integer gsmKey = (Integer)gsm.get("gsmKey");
-			String gsmKey = (String)gsm.get("gsmKey");
+			Integer gsmKey = (String)gsm.get("gsmKey");
 			HouseEnvService.
 			houseList = gsmEnvMapper.getHouseList(gsmKey);
 			gsm.put("houseList", houseList);			
@@ -80,17 +85,14 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 	}
 */
 	@Override
-	public List<HashMap<String, Object>> list(HouseEnvService houseEnvService) {
-		List<HashMap<String,Object>> gsmList = new ArrayList<HashMap<String,Object>>();
-		gsmList = gsmEnvMapper.getGsmList();
-		for(HashMap<String,Object> gsm : gsmList){
-			List<HashMap<String,Object>> houseList = new ArrayList<HashMap<String,Object>>();
-			
+	public List<Map<String, Object>> list() {
+		List<Map<String,Object>> gsmList = new ArrayList<>();
+		gsmList = gsmEnvMapper.getGsmList(null);
+		for(Map<String,Object> gsm : gsmList){
 //			Integer gsmKey = (Integer)gsm.get("gsmKey");
 //			houseList = gsmEnvMapper.getHouseList(gsmKey);
-			String gsmKey = gsm.get("gsmKey").toString();
-			houseList = houseEnvService.list(gsmKey);
-			
+			Integer gsmKey = (Integer)gsm.get("gsmKey");
+			List<HashMap<String,Object>> houseList = houseEnvService.list(gsmKey);
 			gsm.put("houseList", houseList);			
 		}
 		return gsmList;

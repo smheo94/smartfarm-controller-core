@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 
 /**
  * 외부기상대, 임계치 설정 
@@ -40,4 +42,14 @@ public class DeviceEnvVO {
 	String updateDate;
 	Integer autoManualMode;
 	Integer status;
+
+	String deviceType;
+    String deviceTypeGroup;
+    String deviceTypeName;
+    String deviceTypeDescription;
+    String kind;
+    String dcac;
+
+	List<VDeviceEnvVO> relationDeviceList;
+
 }

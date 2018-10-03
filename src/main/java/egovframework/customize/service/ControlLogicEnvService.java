@@ -4,18 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface ControlLogicEnvService {
+	List<ControlLogicVO> getAllLogicList();
+//	HashMap<String,Object> allList();
+	List<ControlLogicVO> getLogicList();
+	List<ControlLogicDeviceVO> getLogicDeviceList(Long logicId);
+	List<HashMap<String, Object>> getLogicPropertyList(Long logicId);
 
-	Object insert(List<DeviceEnvVO> device);
-
-	Object update(List<DeviceEnvVO> device);
-
-	HashMap<String,Object> list();
-
-	List<ControlLogicVO> getRegList(String gsmKey, String houseId);
-
-	Object delete(String gsmKey, Integer controllerId);
-
-	List<HashMap<String, Object>> getLogicProperties();
-
-	
 }

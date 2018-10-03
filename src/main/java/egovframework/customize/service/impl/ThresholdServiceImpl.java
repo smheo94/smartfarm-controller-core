@@ -166,7 +166,7 @@ public class ThresholdServiceImpl extends EgovAbstractServiceImpl implements Thr
 	}
 
 	@Override
-	public ThresholdVO getThreshold(String gsmKey) {
+	public ThresholdVO getThreshold(Integer gsmKey) {
 		return thresholdMapper.getThreshold(gsmKey);
 	}
 	

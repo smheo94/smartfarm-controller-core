@@ -2,20 +2,23 @@ package egovframework.customize.service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public interface GsmEnvService {
 
-	List<HashMap<String,Object>> gsmOfDeviceList();
+	List<Map<String,Object>> gsmOfDeviceList(Integer gsmKey);
 
-	GsmEnvVO get(String gsmKey);
+	GsmEnvVO get(Integer gsmKey);
 
-	Integer delete(String gsmKey);
+	Map<String,Object> getAll(Integer gsmKey);
+
+	Integer delete(Integer gsmKey);
 
 	Integer insert(GsmEnvVO gsmInfo);
 
 	Integer update(GsmEnvVO gsmInfo);
 
-	List<HashMap<String,Object>> list(HouseEnvService houseEnvService);
+	List<Map<String, Object>> list();
 
 	
 	

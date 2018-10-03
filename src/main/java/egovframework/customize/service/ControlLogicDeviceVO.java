@@ -21,7 +21,7 @@ import lombok.Setter;
 @Setter
 public class ControlLogicDeviceVO {
 	Integer id;
-	Integer logicId;
+	Long logicId;
 	Integer deviceNum;
 	String deviceParamName;
 	String deviceType;

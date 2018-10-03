@@ -23,6 +23,8 @@ import egovframework.customize.service.GsmEnvService;
 import egovframework.customize.service.HouseEnvService;
 
 import javax.annotation.Resource;
+
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,7 +40,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * 센서구성,제어기구성,온실구성,제어로직구성,외부기상대구성,임계치구성
  */
 @Controller
-@RequestMapping("/env/gsm")
+@RequestMapping("/gsm")
 public class GsmEnvController {
 
 	public static final String DEFAULT_SETUP_FILE_PATH = "data/env-default/";	
@@ -55,11 +57,14 @@ public class GsmEnvController {
 	 * @param controller
 	 * @return
 	 */
-	@RequestMapping(value= "/", method = RequestMethod.PUT)
+	@RequestMapping(value= "/{gmsKey}", method = RequestMethod.PUT)
+	@ApiOperation("제어기 정보 수정, OLD /")
 	@ResponseBody
-	public Result<GsmEnvVO> update(@RequestBody GsmEnvVO gsmInfo){		
+	public Result<GsmEnvVO> update(@RequestBody GsmEnvVO gsmInfo, @PathVariable("gsmKey") Integer gsmKey){
 		try {
-			
+			if( gsmKey != gsmInfo.getGsmKey()) {
+				return new Result("Unmatched GSM key", HttpStatus.CONFLICT, gsmInfo);
+			}
 			return new Result(gsmEnvService.update(gsmInfo));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, gsmInfo);
@@ -72,7 +77,7 @@ public class GsmEnvController {
 	 * @param controller
 	 * @return
 	 */
-	@RequestMapping(value= "/", method = RequestMethod.POST)
+	@RequestMapping(value= "", method = RequestMethod.POST)
 	@ResponseBody
 	public Result<GsmEnvVO> insert( @RequestBody GsmEnvVO gsmInfo){
 		try {
@@ -87,11 +92,12 @@ public class GsmEnvController {
 	 * @param gsmKey
 	 * @return
 	 */
-	@RequestMapping(value= "/deviceInfo", method = RequestMethod.GET)
+	@RequestMapping(value= "/{gsmKey}/device", method = RequestMethod.GET)
+	@ApiOperation("제어기 정보 수정, OLD /deviceInfo")
 	@ResponseBody
-	public Result<List<HashMap<String,Object>>> gsmOfDeviceList(){
+	public Result<List<HashMap<String,Object>>> gsmOfDeviceList(@PathVariable("gsmKey") Integer gsmKey){
 		try {
-			return new Result(gsmEnvService.gsmOfDeviceList());
+			return new Result(gsmEnvService.gsmOfDeviceList(gsmKey));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
@@ -105,9 +111,26 @@ public class GsmEnvController {
 	 */
 	@RequestMapping(value= "/{gsmKey}", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<GsmEnvVO> get( @PathVariable("gsmKey") String gsmKey){
+	public Result<GsmEnvVO> get( @PathVariable("gsmKey") Integer gsmKey){
 		try {
 			return new Result(gsmEnvService.get(gsmKey));
+		} catch(Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		}
+	}
+
+
+	/**
+	 * @descriptiion 제어기 상세정보
+	 * @param gsmKey
+	 * @param controllerId
+	 * @return
+	 */
+	@RequestMapping(value= "/{gsmKey}/all", method = RequestMethod.GET)
+	@ResponseBody
+	public Result<GsmEnvVO> getAll( @PathVariable("gsmKey") Integer gsmKey){
+		try {
+			return new Result(gsmEnvService.getAll(gsmKey));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
@@ -121,7 +144,7 @@ public class GsmEnvController {
 	 */
 	@RequestMapping(value= "/{gsmKey}", method = RequestMethod.DELETE)
 	@ResponseBody
-	public Result<GsmEnvVO> delete(@PathVariable("gsmKey") String gsmKey){
+	public Result<GsmEnvVO> delete(@PathVariable("gsmKey") Integer gsmKey){
 		try {
 			return new Result(gsmEnvService.delete(gsmKey));
 		} catch(Exception e) {
@@ -135,10 +158,11 @@ public class GsmEnvController {
 	 * @return
 	 */
 	@RequestMapping(value= "", method = RequestMethod.GET)
+	@ApiOperation("GSM List OLD (none) ")
 	@ResponseBody
 	public Result<GsmEnvVO> list(){ 
 		try {
-			return new Result(gsmEnvService.list(houseEnvService));
+			return new Result(gsmEnvService.list());
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}

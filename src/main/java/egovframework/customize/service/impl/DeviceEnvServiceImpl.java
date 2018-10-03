@@ -48,7 +48,7 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 	}
 
 	@Override
-	public Integer delete(String gsmKey, Integer deviceId) {
+	public Integer delete(Integer gsmKey, Integer deviceId) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("gsm_key",  gsmKey);
 		map.put("id",  deviceId);
@@ -64,7 +64,7 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 	}
 
 	@Override
-	public DeviceEnvVO get(String gsmKey, Integer controllerId) {
+	public DeviceEnvVO get(Integer gsmKey, Integer controllerId) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("gsm_key",  gsmKey);
 		map.put("id",  controllerId);
@@ -72,7 +72,7 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 	}
 
 	@Override
-	public List<DeviceEnvVO> list(String gsmKey, Integer controllerId) {
+	public List<DeviceEnvVO> list(Integer gsmKey, Integer controllerId) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("gsm_key",  gsmKey);
 		map.put("controller_id",  controllerId);
@@ -113,13 +113,26 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 	}
 
 	@Override
-	public List<VDeviceEnvVO> insertVDeviceEnv(List<VDeviceEnvVO> vo) {
+	public List<VDeviceEnvVO> insertVDeviceEnv(List<VDeviceEnvVO> voList) {
 		try{
-			deviceEnvMapper.insertVDeviceEnv(vo);	
+			for(VDeviceEnvVO vo :voList){
+				deviceEnvMapper.insertVDeviceEnv(vo);
+			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}		
-		return vo;
+		return voList;
+	}
+
+	@Override
+	public List<VDeviceEnvVO> getVDeviceEnvList(Integer deviceId) {
+		try {
+			return deviceEnvMapper.getVDeviceEnvList(deviceId);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
   
 }

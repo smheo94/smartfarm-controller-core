@@ -20,14 +20,17 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ControlLogicVO {
-	Integer id;
+	Long id;
 	String name;
 	String javaClassName;
 	String uiClassName;
 	String description;
 	String uiHelp;
 	Integer canMultiLogic;
-	Integer defaultPeriodSize;	
+	Integer defaultPeriodSize;
+
+	List<ControlLogicDeviceVO> controlDeviceaList;
+	List<Map<String,Object>> controlPropertyList;
 
 	public Map<String,Object> toMap() {
 		return ClassUtil.toHashMap(this);

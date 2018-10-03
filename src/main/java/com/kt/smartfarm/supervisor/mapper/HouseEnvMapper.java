@@ -29,7 +29,7 @@ public interface HouseEnvMapper {
 	Integer insert(HouseEnvVO map);
 	Integer delete(Map<String,Object> map);
 	Integer update(HouseEnvVO map);	
-	HouseEnvVO get(String gsmKey, Integer greenHouseId);
+	HouseEnvVO get(Integer gsmKey, Integer greenHouseId);
 	List<HouseEnvVO> list(Map<String,Object> map);
 	
 	List<HashMap<String, Object>> selectHouseTypeList();
@@ -39,7 +39,7 @@ public interface HouseEnvMapper {
 	
 	void insertHouseDeviceMap(HashMap<String, Object> map);
 	
-	List<HashMap<String, Object>> getHouseDetail(Map<String,Object> map);	
+    List<HashMap<String, Object>> getHouseDetail(Map<String,Object> map);
 //	List<HashMap<String, Object>> getMappedDevice(Map<String, Object> map);
 	List<Integer> getMappedDevice(Map<String, Object> map);
 	List<HashMap<String, Object>> getMappedController(Map<String, Object> map);

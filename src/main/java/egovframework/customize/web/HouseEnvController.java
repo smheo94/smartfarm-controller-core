@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 @Controller
-@RequestMapping("/env/{gsm_key}/house")
+@RequestMapping("/{gsm_key}/house")
 public class HouseEnvController {
 
 	public static final String DEFAULT_SETUP_FILE_PATH = "data/env-default/";
@@ -56,7 +56,7 @@ public class HouseEnvController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value= "/", method = RequestMethod.POST)
 	@ResponseBody
-	public Result<HouseEnvVO> insert( @PathVariable("gsm_key") String gsmKey, @RequestBody HouseEnvVO house){
+	public Result<HouseEnvVO> insert( @PathVariable("gsm_key") Integer gsmKey, @RequestBody HouseEnvVO house){
 		try {
 			return new Result(houseEnvService.insert(house));
 		} catch(Exception e) {
@@ -72,7 +72,7 @@ public class HouseEnvController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value= "/linkDevice", method = RequestMethod.POST)
 	@ResponseBody
-	public Result<HashMap<String,Object>> HouesMapDevice( @PathVariable("gsm_key") String gsmKey, @RequestBody HashMap<String,Object> map){
+	public Result<HashMap<String,Object>> HouesMapDevice( @PathVariable("gsm_key") Integer gsmKey, @RequestBody HashMap<String,Object> map){
 		try {
 			return new Result(houseEnvService.insertHouseDeviceMap(map));
 		} catch(Exception e) {
@@ -90,7 +90,7 @@ public class HouseEnvController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value= "/", method = RequestMethod.PUT)
 	@ResponseBody
-	public Result<HouseEnvVO> update(@PathVariable("gsm_key") String gsmKey, @RequestBody HouseEnvVO house){		
+	public Result<HouseEnvVO> update(@PathVariable("gsm_key") Integer gsmKey, @RequestBody HouseEnvVO house){
 		try {
 			return new Result(houseEnvService.update(house)); // gsmKey, id기준으로 업데이트
 		} catch(Exception e) {
@@ -102,7 +102,7 @@ public class HouseEnvController {
 	
 	@RequestMapping(value= "/list", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<List<HashMap<String,Object>>> list( @PathVariable("gsm_key") String gsmKey){
+	public Result<List<HashMap<String,Object>>> list( @PathVariable("gsm_key") Integer gsmKey){
 		try {
 			return new Result(houseEnvService.list(gsmKey));
 		} catch(Exception e) {
@@ -113,7 +113,7 @@ public class HouseEnvController {
 	/*
 	@RequestMapping(value= "/{greenHouseId}", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<HouseEnvVO> get( @PathVariable("gsm_key") String gsmKey,  @PathVariable("greenHouseId") Integer greenHouseId){
+	public Result<HouseEnvVO> get( @PathVariable("gsm_key") Integer gsmKey,  @PathVariable("greenHouseId") Integer greenHouseId){
 		try {
 			return new Result(houseEnvService.get(gsmKey, greenHouseId));
 		} catch(Exception e) {
@@ -123,7 +123,7 @@ public class HouseEnvController {
 	*/
 	@RequestMapping(value= "/{greenHouseId}", method = RequestMethod.DELETE)
 	@ResponseBody
-	public Result<HouseEnvVO> delete(@PathVariable("gsm_key") String gsmKey,  @PathVariable("greenHouseId") Integer greenHouseId){
+	public Result<HouseEnvVO> delete(@PathVariable("gsm_key") Integer gsmKey,  @PathVariable("greenHouseId") Integer greenHouseId){
 		try {
 			return new Result(houseEnvService.delete(gsmKey, greenHouseId));
 		} catch(Exception e) {

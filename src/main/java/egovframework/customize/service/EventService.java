@@ -5,10 +5,10 @@ import java.util.List;
 
 public interface EventService {	
 	ControllerEnvVO insert( ControllerEnvVO vo);
-	Integer delete(String gsmKey, Integer controllerId);
+	Integer delete(Integer gsmKey, Integer controllerId);
 	ControllerEnvVO update(ControllerEnvVO vo);
-	ControllerEnvVO get(String gsmKey, Integer controllerId);
-	List<ControllerEnvVO> list(String gsmKey);
+	ControllerEnvVO get(Integer gsmKey, Integer controllerId);
+	List<ControllerEnvVO> list(Integer gsmKey);
 	List<HashMap<String,Object>> listType();
-	List<ControllerEnvVO> controllerDeviceList(String gsmKey);
+	List<ControllerEnvVO> controllerDeviceList(Integer gsmKey);
 }

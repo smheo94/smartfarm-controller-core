@@ -18,14 +18,12 @@ package egovframework.customize.web;
 import java.util.HashMap;
 import java.util.List;
 import egovframework.cmmn.util.Result;
-import egovframework.customize.service.ControlLogicEnvService;
-import egovframework.customize.service.ControlLogicVO;
-import egovframework.customize.service.DeviceEnvService;
-import egovframework.customize.service.DeviceEnvVO;
-import egovframework.customize.service.DeviceTypeVO;
+import egovframework.customize.service.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,7 +35,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 @Controller
-@RequestMapping("/env/{gsm_key}/controlLogic")
+@RequestMapping("/controllogic")
 public class ControlLogicEnvController {
 
 	public static final String DEFAULT_SETUP_FILE_PATH = "data/env-default/";
@@ -46,79 +44,75 @@ public class ControlLogicEnvController {
 	@Resource(name = "controlLogicEnvService")
 	private ControlLogicEnvService controlLogicEnvService;
 
-	@RequestMapping(value= "/", method = RequestMethod.POST)
-	@ResponseBody
-	public Result<List<DeviceEnvVO>> insert( @PathVariable("gsm_key") String gsmKey, @RequestBody List<DeviceEnvVO> device){
-		try {
-			return new Result(controlLogicEnvService.insert(device));
-		} catch(Exception e) {
-			return new Result(e.getMessage(), HttpStatus.CONFLICT, device);
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	@RequestMapping(value= "/{controllerId}", method = RequestMethod.PUT)
-	@ResponseBody
-	public Result<DeviceEnvVO> update(@PathVariable("gsm_key") String gsmKey, @PathVariable("controllerId") String controllerId, @RequestBody List<DeviceEnvVO> device){		
-		try {
-			return new Result(controlLogicEnvService.update(device)); // gsmKey, controllerId, deviceId 기준으로 업데이트
-		} catch(Exception e) {
-			return new Result(e.getMessage(), HttpStatus.CONFLICT, device);
-		}
-	}
-	
 	/**
 	 * 제어로직 전체 list
 	 * @param gsmKey
 	 * @param controllerId
 	 * @return
 	 */
-	@RequestMapping(value= "/list", method = RequestMethod.GET)
+	@RequestMapping(value= "/", method = RequestMethod.GET)
+	@ApiOperation("정의된 제어로직 목록을 조회합니다.")
 	@ResponseBody
-	public Result<HashMap<String,Object>> list(){
+	public Result<List<ControlLogicEnvVO>> list(){
 		try {
-			return new Result(controlLogicEnvService.list());
-		} catch(Exception e) {
-			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
-		}
-	}
-	
-	/**
-	 * @description 제어로직 프로퍼티 조회
-	 * @return
-	 */
-	@RequestMapping(value= "/properties", method = RequestMethod.GET)
-	@ResponseBody
-	public Result<HashMap<String,Object>> getLogicProperties(){
-		try {
-			return new Result(controlLogicEnvService.getLogicProperties());
-		} catch(Exception e) {
-			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
-		}
-	}
-	
-	
-	
-	
-	@RequestMapping(value= "/{house_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Result<DeviceEnvVO> get(@PathVariable("gsm_key") String gsmKey, @PathVariable("house_id") String houseId){
-		try {
-			return new Result(controlLogicEnvService.getRegList(gsmKey,houseId));
+			return new Result(controlLogicEnvService.getAllLogicList());
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
 	}
 
-	@RequestMapping(value= "/{controllerId}", method = RequestMethod.DELETE)
+	/**
+	 * @description 제어로직 프로퍼티 조회
+	 * @return
+	 */
+	@RequestMapping(value= "/{logicId}/controlproperty/", method = RequestMethod.GET)
+	@ApiOperation("특정 제어로직에 사용될 프로퍼티 목록을 조회합니다.")
 	@ResponseBody
-	public Result<DeviceEnvVO> delete(@PathVariable("gsm_key") String gsmKey,  @PathVariable("controllerId") Integer controllerId){
+	public Result<List<HashMap<String,Object>>> getLogicPropertyList(Long logicId){
 		try {
-			return new Result(controlLogicEnvService.delete(gsmKey, controllerId));
+			return new Result(controlLogicEnvService.getLogicPropertyList(logicId));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
 	}
+
+	/**
+	 * @description 제어로직 프로퍼티 조회
+	 * @return
+	 */
+	@RequestMapping(value= "/{logicId}/controldevice/", method = RequestMethod.GET)
+	@ApiOperation("특정 제어로직에 사용될  제어 디바이스 종류를 조회합니다.")
+	@ResponseBody
+	public Result<List<ControlLogicDeviceVO>> getLogicDeviceList(Long logicId){
+		try {
+			return new Result(controlLogicEnvService.getLogicDeviceList(logicId));
+		} catch(Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		}
+	}
+	
+	
+//
+//
+//	@RequestMapping(value= "/{house_id}", method = RequestMethod.GET)
+//	@ResponseBody
+//	public Result<DeviceEnvVO> get(@PathVariable("gsm_key") Integer gsmKey, @PathVariable("house_id") String houseId){
+//		try {
+//			return new Result(controlLogicEnvService.getRegList(gsmKey,houseId));
+//		} catch(Exception e) {
+//			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+//		}
+//	}
+//
+//	@RequestMapping(value= "/{controllerId}", method = RequestMethod.DELETE)
+//	@ResponseBody
+//	public Result<DeviceEnvVO> delete(@PathVariable("gsm_key") Integer gsmKey,  @PathVariable("controllerId") Integer controllerId){
+//		try {
+//			return new Result(controlLogicEnvService.delete(gsmKey, controllerId));
+//		} catch(Exception e) {
+//			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+//		}
+//	}
 
 
 }

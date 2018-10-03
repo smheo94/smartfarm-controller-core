@@ -21,7 +21,7 @@ import lombok.Setter;
 @Setter
 public class ControllerEnvVO {
 	Integer id;
-	String gsmKey;	
+	Integer gsmKey;
 	String controllerInfoId;
 	String ip;
 	String controllerType; // 양액기 = 1 / 구동기 = 0

@@ -4,6 +4,6 @@ public interface ThresholdService {
 
 	ThresholdVO insert(ThresholdVO thresholdVO);
 	ThresholdVO update(ThresholdVO thresholdVO);
-	ThresholdVO getThreshold(String gsmKey);
+	ThresholdVO getThreshold(Integer gsmKey);
 
 }

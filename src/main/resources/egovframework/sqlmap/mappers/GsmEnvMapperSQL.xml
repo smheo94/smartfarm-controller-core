@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kt.smartfarm.supervisor.mapper.GsmEnvMapper">
-	
-
 
 
 	<insert id="insert" parameterType="gsmEnvVO">
@@ -41,14 +39,15 @@
 		WHERE gsm_key = #{gsmKey} AND id = #{id};
 	</update>
 	
-	<delete id="delete">
+	<delete id="delete" >
 		DELETE
 		FROM gsm_info
-		WHERE gsm_key = #{gsm_key};
+		WHERE gsm_key = #{gsmKey};
 	</delete>
+
 	
-	
-	<select id="gsmOfDeviceList" resultType="map" parameterType="map">
+	<select id="gsmOfDeviceList" resultType="map">
+		/*gsmOfDeviceList*/
 		SELECT
 			gsm_info.gsm_key as gsmKey, gsm_info.user_info_id as userInfoId, is_mine as isMine, area_code as areaCode,
  			farm_nickname as farmNickname, gsm_info.update_date as updateDate, owner_user_info_id as ownerUserInfoId, master_system_host as masterSystemHost,
@@ -58,12 +57,16 @@
  			debug_stop_event as debugStopEvent, debug_stop_crops as debugStopCrops, debug_stop_device_auto_control as debugStopDeviceAutoContorl, debug_stop_ims as debugStopIms,
  			delay_auto_control_start as delayAutoControlStart, package_version as packageVersion, schema_version as schemaVersion, nutrient_monitoring_interval as nutrientMonitoringInterval,
  			farm_nickname_i18n as farmNicknameI18n, user_id as userId, farm_db_id as farmDbId, category_id as categoryId, COUNT(device.id) AS deviceCount
-		FROM gsm_info 
+		FROM gsm_info
 		LEFT OUTER JOIN device ON gsm_info.gsm_key = device.gsm_key
+		<where>
+			<if test="gsmKey != null"> AND device.gsm_key = #{gsmKey}</if>
+		</where>
 		GROUP BY gsm_info.gsm_key;
 	</select>
 	
-	<select id="get" resultType="map" parameterType="map">
+	<select id="get" resultType="gsmEnvVO" >
+		/*get*/
 		SELECT
 			gsm_info.gsm_key as gsmKey, gsm_info.user_info_id as userInfoId, is_mine as isMine, area_code as areaCode,
  			farm_nickname as farmNickname, gsm_info.update_date as updateDate, owner_user_info_id as ownerUserInfoId, master_system_host as masterSystemHost,
@@ -75,10 +78,11 @@
  			farm_nickname_i18n as farmNicknameI18n, user_id as userId, farm_db_id as farmDbId, category_id as categoryId
 		FROM gsm_info 
 		WHERE 
-			gsm_key = #{gsm_key}
+			gsm_key = #{gsmKey}
 	</select>
 
-	<select id="getGsmList" resultType="map">
+	<select id="getGsmList" resultType="map" >
+		/*getGsmList*/
 		SELECT
 			gsm_info.gsm_key as gsmKey, gsm_info.user_info_id as userInfoId, is_mine as isMine, area_code as areaCode,
  			farm_nickname as farmNickname, gsm_info.update_date as updateDate, owner_user_info_id as ownerUserInfoId, master_system_host as masterSystemHost,
@@ -89,9 +93,13 @@
  			delay_auto_control_start as delayAutoControlStart, package_version as packageVersion, schema_version as schemaVersion, nutrient_monitoring_interval as nutrientMonitoringInterval,
  			farm_nickname_i18n as farmNicknameI18n, user_id as userId, farm_db_id as farmDbId, category_id as categoryId
 		FROM gsm_info
+		<where>
+			<if test="gsmKey != null"> AND gsm_info.gsm_key = #{gsmKey}</if>
+		</where>
 	</select>
 
-	<select id="getHouseList" parameterType="Integer" resultType="houseEnvVO">
+	<select id="getHouseList" resultType="houseEnvVO">
+		/*getHouseList*/
 		SELECT 
 			id, product_method_id, green_house_type_id, house_name,
 			latitude, longitude, description, build_date, last_update, addr_1,

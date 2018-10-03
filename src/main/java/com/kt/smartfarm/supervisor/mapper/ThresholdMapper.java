@@ -37,5 +37,5 @@ import egovframework.rte.psl.dataaccess.mapper.Mapper;
 public interface ThresholdMapper {
 	Integer insert(ThresholdVO thresholdVO);
 	Integer update(ThresholdVO thresholdVO);
-	ThresholdVO getThreshold(String gsmKey);
+	ThresholdVO getThreshold(Integer gsmKey);
 }

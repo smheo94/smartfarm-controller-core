@@ -60,7 +60,7 @@ public class ControllerEnvServiceImpl extends EgovAbstractServiceImpl implements
 	}
 
 	@Override
-	public Integer delete(String gsmKey, Integer controllerId) {
+	public Integer delete(Integer gsmKey, Integer controllerId) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("gsm_key",  gsmKey);
 		map.put("id",  controllerId);
@@ -74,7 +74,7 @@ public class ControllerEnvServiceImpl extends EgovAbstractServiceImpl implements
 	}
 
 	@Override
-	public ControllerEnvVO get(String gsmKey, Integer controllerId) {
+	public ControllerEnvVO get(Integer gsmKey, Integer controllerId) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("gsm_key",  gsmKey);
 		map.put("id",  controllerId);
@@ -82,7 +82,7 @@ public class ControllerEnvServiceImpl extends EgovAbstractServiceImpl implements
 	}
 
 	@Override
-	public List<ControllerEnvVO> list(String gsmKey) {
+	public List<ControllerEnvVO> list(Integer gsmKey) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("gsm_key",  gsmKey);		
 		return controllerEnvMapper.list(map);
@@ -94,7 +94,7 @@ public class ControllerEnvServiceImpl extends EgovAbstractServiceImpl implements
 	}
 
 	@Override
-	public List<ControllerEnvVO> controllerDeviceList(String gsmKey) {
+	public List<ControllerEnvVO> controllerDeviceList(Integer gsmKey) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("gsm_key",  gsmKey);
 		List<ControllerEnvVO> controllerList = controllerEnvMapper.list(map);
@@ -102,7 +102,10 @@ public class ControllerEnvServiceImpl extends EgovAbstractServiceImpl implements
 			Integer controllerId = controller.getId();
 			map.put("controller_id", controllerId);
 			controller.setDeviceList(deviceEnvMapper.list(map));
-			
+			controller.getDeviceList().forEach( d ->
+			{
+				d.setRelationDeviceList(deviceEnvMapper.getVDeviceEnvList(d.getId()));
+			});
 		}
 		return controllerList;
 

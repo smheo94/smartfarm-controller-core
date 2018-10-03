@@ -1,5 +1,6 @@
 package egovframework.customize.service;
 
+import java.util.List;
 import java.util.Map;
 
 import egovframework.cmmn.util.ClassUtil;
@@ -47,6 +48,9 @@ public class GsmEnvVO {
 
 	ThresholdVO threshold;
 	Integer device_count;
+
+	List<HouseEnvVO> houseList;
+
 	public Map<String,Object> toMap() {
 		return ClassUtil.toHashMap(this);
 	}

@@ -24,13 +24,14 @@ import egovframework.customize.service.DeviceTypeVO;
 import egovframework.customize.service.VDeviceEnvVO;
 import egovframework.customize.service.VDeviceInfoVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper("deviceEnvMapper")
 public interface DeviceEnvMapper {
 	
 	Integer insert( DeviceEnvVO device);
 	Integer update( DeviceEnvVO vo);	
-	DeviceEnvVO get(String gsmKey, Integer controllerId);
+//	DeviceEnvVO get(Integer gsmKey, Integer controllerId);
 	List<DeviceEnvVO> list(Map<String, Object> map);
 	Integer delete(Map<String,Object> map);	
 
@@ -39,5 +40,7 @@ public interface DeviceEnvMapper {
 	String[] getKind();
 	List<HashMap<String, Object>> getDeviceTypeList();
 	List<VDeviceInfoVO> getVDeviceList();
-	Integer insertVDeviceEnv(List<VDeviceEnvVO> vo);
+	Integer insertVDeviceEnv(VDeviceEnvVO vo);
+
+	List<VDeviceEnvVO> getVDeviceEnvList(@Param("deviceId") Integer deviceId);
 }

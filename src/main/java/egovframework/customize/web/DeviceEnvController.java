@@ -26,6 +26,8 @@ import egovframework.customize.service.VDeviceInfoVO;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,7 +39,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 @Controller
-@RequestMapping("/env/{gsm_key}/device")
+@RequestMapping("/gsm/{gsm_key}")
+//@RequestMapping("/env/{gsm_key}/device")
 public class DeviceEnvController {
 
 	public static final String DEFAULT_SETUP_FILE_PATH = "data/env-default/";
@@ -55,9 +58,10 @@ public class DeviceEnvController {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	@RequestMapping(value= "/", method = RequestMethod.POST)
+	@RequestMapping(value= "/device/", method = RequestMethod.POST)
+	@ApiOperation(value = "구동기,센서 등록 : OLD( /gsm/{gsm_key}/")
 	@ResponseBody
-	public Result<List<DeviceEnvVO>> insert( @PathVariable("gsm_key") String gsmKey, @RequestBody List<DeviceEnvVO> device){
+	public Result<List<DeviceEnvVO>> insert( @PathVariable("gsm_key") Integer gsmKey, @RequestBody List<DeviceEnvVO> device){
 		try {
 			return new Result(deviceEnvService.insert(device));
 		} catch(Exception e) {
@@ -73,9 +77,10 @@ public class DeviceEnvController {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	@RequestMapping(value= "/{controllerId}", method = RequestMethod.PUT)
+	@RequestMapping(value= "/controller/{controllerId}/devices/", method = RequestMethod.PUT)
+	@ApiOperation(value = "구동기 모듈에 해당하는 구동기,센서 수정 : OLD( /gsm/{gsm_key}/{controllerId}")
 	@ResponseBody
-	public Result<DeviceEnvVO> update(@PathVariable("gsm_key") String gsmKey, @PathVariable("controllerId") String controllerId, @RequestBody List<DeviceEnvVO> device){		
+	public Result<DeviceEnvVO> update(@PathVariable("gsm_key") Integer gsmKey, @PathVariable("controllerId") String controllerId, @RequestBody List<DeviceEnvVO> device){
 		try {
 			return new Result(deviceEnvService.update(device)); // gsmKey, controllerId, deviceId 기준으로 업데이트
 		} catch(Exception e) {
@@ -89,9 +94,10 @@ public class DeviceEnvController {
 	 * @param controllerId
 	 * @return
 	 */
-	@RequestMapping(value= "/list/{controllerId}", method = RequestMethod.GET)
+	@RequestMapping(value= "/controller/{controllerId}/device/", method = RequestMethod.GET)
+	@ApiOperation(value = "저장된 구동모듈에 해당하는 deviceList 가져오기 : OLD( /gsm/{gsm_key}/list/{controllerId}")
 	@ResponseBody
-	public Result<List<DeviceEnvVO>> list( @PathVariable("gsm_key") String gsmKey, @PathVariable("controllerId") Integer controllerId){
+	public Result<List<DeviceEnvVO>> list( @PathVariable("gsm_key") Integer gsmKey, @PathVariable("controllerId") Integer controllerId){
 		try {
 			return new Result(deviceEnvService.list(gsmKey, controllerId));
 		} catch(Exception e) {
@@ -99,9 +105,11 @@ public class DeviceEnvController {
 		}
 	}
 	
-	@RequestMapping(value= "/{controllerId}", method = RequestMethod.GET)
+	@RequestMapping(value= "/controller/{controllerId}", method = RequestMethod.GET)
+	@ApiOperation(value = "컨트롤러에 등록된 Device동작하나(?): OLD( /gsm/{gsm_key}/{controllerId})")
+	//@RequestMapping(value= "/{controllerId}", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<DeviceEnvVO> get( @PathVariable("gsm_key") String gsmKey,  @PathVariable("controllerId") Integer controllerId){
+	public Result<DeviceEnvVO> get( @PathVariable("gsm_key") Integer gsmKey,  @PathVariable("controllerId") Integer controllerId){
 		try {
 			return new Result(deviceEnvService.get(gsmKey, controllerId));
 		} catch(Exception e) {
@@ -115,9 +123,10 @@ public class DeviceEnvController {
 	 * @param controllerId
 	 * @return
 	 */
-	@RequestMapping(value= "/{controllerId}", method = RequestMethod.DELETE)
+	@RequestMapping(value= "/controller/{controllerId}/device", method = RequestMethod.DELETE)
+	@ApiOperation(value = "구동모듈에 해당하는 Device 삭제: OLD( /gsm/{gsm_key}/{controllerId})")
 	@ResponseBody
-	public Result<DeviceEnvVO> delete(@PathVariable("gsm_key") String gsmKey,  @PathVariable("controllerId") Integer controllerId){
+	public Result<DeviceEnvVO> delete(@PathVariable("gsm_key") Integer gsmKey,  @PathVariable("controllerId") Integer controllerId){
 		try {
 			return new Result(deviceEnvService.delete(gsmKey, controllerId));
 		} catch(Exception e) {
@@ -126,84 +135,14 @@ public class DeviceEnvController {
 	}
 
 	/**
-	 * @description 구동기 타입에 따른 deviceList
-	 * @param request
-	 * @param controllerType
-	 * 		1 : 단동형 Only, 
-	 *		2 : 연동형 Only , 
-	 *		3 : 연동/단동형 Only, 
-	 *		4: 과수원 Only, 
-	 *		7 : 싱글,연동,과수 사용, 
-	 *		8 : 노지 Only, 
-	 *		15 : 단동,연동,과수,노지 사용
-	 * @param kind
-	 * 		sensor_inner
-	 * 		sensor_outer
-	 * 		info
-	 * 		actuator
-	 * 		nutrient
-	 * 		v_device
-	 * @return
-	 */
-	@RequestMapping(value= "/listType/{houseType}/{kind}", method = RequestMethod.GET)
-	@ResponseBody
-	public Result<List<DeviceTypeVO>> getDeviceList(@PathVariable("houseType") String houseType, @PathVariable String kind){
-		try {
-			
-			return new Result(deviceEnvService.getDeviceList(houseType,kind));
-		} catch(Exception e) {
-			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
-		}
-	}
-	
-	/**
-	 *  
-	 * controllerType 하고 kind 가져가는 api 만들어줘
-	 */
-	@RequestMapping(value= "/houseTypeKindInfo", method = RequestMethod.GET)
-	@ResponseBody
-	public Result<HashMap<String,Object>> houseTypeKindInfo(){
-		try {
-			return new Result(deviceEnvService.gethouseTypeKindInfo());
-		} catch(Exception e) {
-			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
-		}
-	}
-	
-	@RequestMapping(value= "/deviceTypeList", method = RequestMethod.GET)
-	@ResponseBody
-	public Result<List<HashMap<String,Object>>> deviceTypeList(){
-		try {
-			return new Result(deviceEnvService.getDeviceTypeList());
-		} catch(Exception e) {
-			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
-		}
-	}
-	
-	
-	/**
-	 * @description 가상 장치 리스트
-	 * @return
-	 */
-	@RequestMapping(value= "/vDeviceList", method = RequestMethod.GET)
-	@ResponseBody
-	public Result<List<VDeviceInfoVO>> vDeviceList(){
-		try {
-			return new Result(deviceEnvService.getVDeviceList());
-		} catch(Exception e) {
-			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
-		}
-	}
-	
-	
-	/**
 	 * @description 가상장치 등록 
 	 * @param vo
 	 * @return
 	 */
-	@RequestMapping(value= "/vDeviceList", method = RequestMethod.POST)
+	@RequestMapping(value= "/device/{deviceId}/realtiondevices", method = RequestMethod.POST)
+	//Device Type 별로 입력 @RequestMapping(value= "/vDeviceList", method = RequestMethod.POST)
 	@ResponseBody
-	public Result<List<VDeviceInfoVO>> vDeviceList(@RequestBody List<VDeviceEnvVO> vo){
+	public Result<List<VDeviceInfoVO>> vDeviceList(@PathVariable("deviceId") Integer deviceId, @RequestBody List<VDeviceEnvVO> vo){
 		try {
 			return new Result(deviceEnvService.insertVDeviceEnv(vo));
 		} catch(Exception e) {

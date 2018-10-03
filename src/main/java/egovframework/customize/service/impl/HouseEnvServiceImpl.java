@@ -47,7 +47,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 	}
 
 	@Override
-	public Integer delete(String gsmKey, Integer greenHouseId) {
+	public Integer delete(Integer gsmKey, Integer greenHouseId) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("gsm_key",  gsmKey);
 		map.put("id",  greenHouseId);
@@ -61,7 +61,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 	}
 /*
 	@Override
-	public HashMap<String,Object> get(String gsmKey, Integer greenHouseId) {
+	public HashMap<String,Object> get(Integer gsmKey, Integer greenHouseId) {
 		
 		HashMap<String,Object> result = new HashMap<String, Object>();
 		List<HashMap<String,Object>> result = new ArrayList<HashMap<String,Object>>();
@@ -87,7 +87,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 	}
 */
 	@Override
-	public List<HashMap<String,Object>> list(String gsmKey) {
+	public List<HashMap<String,Object>> list(Integer gsmKey) {
 		List<HashMap<String,Object>> result = new ArrayList<HashMap<String,Object>>();
 		List<HashMap<String,Object>> controllerList = new ArrayList<HashMap<String,Object>>();
 		List<DeviceEnvVO> mappedDeviceList;

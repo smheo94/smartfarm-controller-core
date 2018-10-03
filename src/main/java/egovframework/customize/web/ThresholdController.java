@@ -38,7 +38,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 @Controller
-@RequestMapping("/env/threshold")
+@RequestMapping("/threshold")
 public class ThresholdController {
 
 	public static final String DEFAULT_SETUP_FILE_PATH = "data/env-default/";
@@ -87,7 +87,7 @@ public class ThresholdController {
 	
 	@RequestMapping(value= "/{gsm_key}", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<ThresholdVO> list( @PathVariable("gsm_key") String gsmKey){
+	public Result<ThresholdVO> list( @PathVariable("gsm_key") Integer gsmKey){
 		try {
 			return new Result(thresholdService.getThreshold(gsmKey));
 		} catch(Exception e) {
@@ -103,7 +103,7 @@ public class ThresholdController {
 /*
 	@RequestMapping(value= "/{greenHouseId}", method = RequestMethod.DELETE)
 	@ResponseBody
-	public Result<ThresholdVO> delete(@PathVariable("gsm_key") String gsmKey,  @PathVariable("greenHouseId") Integer greenHouseId){
+	public Result<ThresholdVO> delete(@PathVariable("gsm_key") Integer gsmKey,  @PathVariable("greenHouseId") Integer greenHouseId){
 		try {
 			return new Result(thresholdService.delete(gsmKey, greenHouseId));
 		} catch(Exception e) {

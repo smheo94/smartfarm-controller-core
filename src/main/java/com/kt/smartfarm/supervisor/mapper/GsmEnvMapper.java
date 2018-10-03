@@ -21,15 +21,16 @@ import java.util.Map;
 
 import egovframework.customize.service.GsmEnvVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper("gsmEnvMapper")
 public interface GsmEnvMapper {
-	GsmEnvVO get(Map<String,Object>map);
-	Integer delete(Map<String,Object> map);
+	GsmEnvVO get(Integer gsmKey);
+	Integer delete(Integer gsmKey);
 	Integer insert(GsmEnvVO gsmInfo);
 	Integer update(GsmEnvVO gsmInfo);
-	List<HashMap<String,Object>> gsmOfDeviceList(Map<String,Object> map);
-	
-	List<HashMap<String, Object>> getGsmList();
-	List<HashMap<String, Object>> getHouseList(Integer gsmKey);	
+	List<Map<String,Object>> gsmOfDeviceList(@Param("gsmKey")Integer gsmKey);
+	List<Map<String, Object>> getGsmList(@Param("gsmKey") Integer gsmKey);
+	List<Map<String, Object>> getHouseList(@Param("gsmKey") Integer gsmKey);
+
 }

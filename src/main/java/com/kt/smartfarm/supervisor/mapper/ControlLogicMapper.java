@@ -25,13 +25,7 @@ import egovframework.rte.psl.dataaccess.mapper.Mapper;
 
 @Mapper("controlLogicMapper")
 public interface ControlLogicMapper {
-	
-	Integer insert(ControlLogicVO map);
-	Integer delete(Map<String,Object> map);
-	Integer update(ControlLogicVO map);	
-	List<ControlLogicVO> logicList();
-	List<ControlLogicDeviceVO> logicDeviceList();
-	List<ControlLogicVO> getRegList(HashMap<String,Object> param);
-	List<HashMap<String,Object>> getLogicProperties();
-	
+	List<ControlLogicVO> getLogicList();
+	List<ControlLogicDeviceVO> getLogicDeviceList(Long logicId);
+	List<HashMap<String,Object>> getLogicPropertyList(Long logicId);
 }

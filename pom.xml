@@ -2,11 +2,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>egov</groupId>
-	<artifactId>web.default</artifactId>
+    <groupId>smartfarm.kt.com</groupId>
+	<artifactId>smartfarm-mgr-env</artifactId>
 	<packaging>war</packaging>
 	<version>3.7.0</version>
-	<name>egov3.7_web_default</name>
+	<name>smartfarm-mgr-env</name>
 	<url>http://www.egovframe.go.kr</url>
 
 	<licenses>
@@ -61,6 +61,8 @@
 	</repositories>
 
 	<dependencies>
+
+
 		<!-- 표준프레임워크 실행환경 -->
         <dependency>
 		    <groupId>egovframework.rte</groupId>
@@ -119,7 +121,8 @@
 		    <groupId>org.projectlombok</groupId>
 		    <artifactId>lombok</artifactId>
 		    <version>1.16.18</version>
-		    <scope>provided</scope>
+		    <!-- <scope>provided</scope>
+		    -->
 		</dependency>
    		
    		
@@ -201,7 +204,23 @@
 		        <artifactId>joda-time</artifactId>
 		        <version>2.9.9</version>
 		</dependency>
-        
+
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>2.6.1</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>2.6.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>4.2.4.RELEASE</version>
+        </dependency>
+
 	</dependencies>
 
 	<build>

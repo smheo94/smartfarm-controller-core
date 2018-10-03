@@ -17,8 +17,9 @@ import lombok.Setter;
 @Setter
 public class VDeviceEnvVO {
 	Integer id;
-	Integer pDeviceId;
+	Integer parentDeviceId;
 	Integer deviceNum;
 	Integer deviceInsertOrder;
 	Integer deviceId;
+	DeviceEnvVO deviceInfo;
 }

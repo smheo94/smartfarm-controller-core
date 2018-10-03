@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 
 /**
  * 외부기상대, 임계치 설정 
@@ -43,5 +45,4 @@ public class HouseEnvVO {
 	Double selectHumSensor;
 	Integer gsmKey;
 	String houseNameI18n;
-	
 }
