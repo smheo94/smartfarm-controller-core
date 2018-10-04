@@ -62,7 +62,7 @@ public class CodeDataController {
 	public Result<List<DeviceTypeVO>> getDeviceList(@PathVariable("houseType") String houseType, @PathVariable String kind){
 		try {
 
-			return new Result(deviceEnvService.getDeviceList(houseType,kind));
+			return new Result(deviceEnvService.getDeviceTypeByHouseType(houseType,kind));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}

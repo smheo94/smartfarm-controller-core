@@ -63,24 +63,41 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 		return device;
 	}
 
+//	@Override
+//	public DeviceEnvVO getDevice(Integer gsmKey, Integer controllerId) {
+//		Map<String, Object> map = new HashMap<>();
+//		map.put("gsm_key",  gsmKey);
+//		map.put("id",  controllerId);
+//		return deviceEnvMapper.list(map).stream().findFirst().orElse(null);
+//	}
+
 	@Override
-	public DeviceEnvVO get(Integer gsmKey, Integer controllerId) {
+	public List<DeviceEnvVO> list(Integer gsmKey, Integer controllerId, Boolean withVDeviceList) {
 		Map<String, Object> map = new HashMap<>();
-		map.put("gsm_key",  gsmKey);
-		map.put("id",  controllerId);
-		return deviceEnvMapper.list(map).stream().findFirst().orElse(null);
+		map.put("gsm_key", gsmKey);
+		map.put("controller_id", controllerId);
+		final List<DeviceEnvVO> deviceList = deviceEnvMapper.list(map);
+		if (withVDeviceList) {
+			for (DeviceEnvVO vo : deviceList) {
+				vo.setRelationDeviceList(getVDeviceEnvList(vo.getId()));
+			}
+		}
+		return deviceList;
 	}
 
 	@Override
-	public List<DeviceEnvVO> list(Integer gsmKey, Integer controllerId) {
+	public DeviceEnvVO getDevice(Integer deviceId, Boolean withVDeviceList) {
 		Map<String, Object> map = new HashMap<>();
-		map.put("gsm_key",  gsmKey);
-		map.put("controller_id",  controllerId);
-		return deviceEnvMapper.list(map);
+		map.put("device_id",  deviceId);
+		DeviceEnvVO device = deviceEnvMapper.list(map).stream().findFirst().orElse(null);
+		if( withVDeviceList ) {
+			device.setRelationDeviceList(getVDeviceEnvList(deviceId));
+		}
+		return device;
 	}
 
 	@Override
-	public List<DeviceTypeVO> getDeviceList(String houseType, String kind) {
+	public List<DeviceTypeVO> getDeviceTypeByHouseType(String houseType, String kind) {
 		String [] controllerTypeArr = houseType.split(",");
 		Integer [] controllerTypeList =new Integer[controllerTypeArr.length];
 		List<Integer> idsList = new ArrayList<>();	
@@ -90,7 +107,7 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 		HashMap<String,Object> param = new HashMap<>();
 		param.put("kind", kind);
 		param.put("idsList", idsList);
-		return deviceEnvMapper.getDeviceList(param);		
+		return deviceEnvMapper.getDeviceTypeByHouseType(param);
 	}
 
 	@Override
@@ -104,7 +121,7 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 
 	@Override
 	public List<HashMap<String, Object>> getDeviceTypeList() {
-		return deviceEnvMapper.getDeviceTypeList();
+		return deviceEnvMapper.getDeviceTypeByHouseType();
 	}
 
 	@Override

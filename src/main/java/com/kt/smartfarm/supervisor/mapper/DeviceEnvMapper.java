@@ -31,16 +31,19 @@ public interface DeviceEnvMapper {
 	
 	Integer insert( DeviceEnvVO device);
 	Integer update( DeviceEnvVO vo);	
-//	DeviceEnvVO get(Integer gsmKey, Integer controllerId);
+//	DeviceEnvVO getDevice(Integer gsmKey, Integer controllerId);
 	List<DeviceEnvVO> list(Map<String, Object> map);
-	Integer delete(Map<String,Object> map);	
+	Integer delete(Map<String,Object> map);
 
-	List<DeviceTypeVO> getDeviceList(HashMap<String, Object> param);
+
+	List<DeviceTypeVO> getDeviceTypeByHouseType(HashMap<String, Object> param);
 	String[] getHouseType();
 	String[] getKind();
-	List<HashMap<String, Object>> getDeviceTypeList();
+	List<HashMap<String, Object>> getDeviceTypeByHouseType();
 	List<VDeviceInfoVO> getVDeviceList();
+
 	Integer insertVDeviceEnv(VDeviceEnvVO vo);
 
 	List<VDeviceEnvVO> getVDeviceEnvList(@Param("deviceId") Integer deviceId);
+
 }

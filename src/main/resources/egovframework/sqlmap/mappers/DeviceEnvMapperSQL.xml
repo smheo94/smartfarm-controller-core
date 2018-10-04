@@ -41,7 +41,7 @@
 		FROM device
 		WHERE gsm_key = #{gsm_key} AND id = #{id};
 	</delete>
-	
+
 	<select id="list" parameterType="map" resultType="deviceEnvVO">
 		SELECT 
 			device.id, device_type_id, device_type_idx, user_info_id, gsm_key,
@@ -54,11 +54,12 @@
 		INNER JOIN cd_device_type CDT ON CDT.id = device.device_type_id
 		<where>
 			<if test="gsm_key != null">AND gsm_key = #{gsm_key}</if>
-			AND controller_id = #{controller_id}
+			<if test="controller_id != null">AND controller_id = #{controller_id}</if>
+			<if test="device_id != null">AND device.id = #{device_id}</if>
 		</where>	
 	</select>
 
-	<select id="getDeviceList" resultType="deviceTypeVO">
+	<select id="getDeviceTypeByHouseType" resultType="deviceTypeVO">
 		SELECT 
 			id, NAME, description, last_update, device_type,
 			device_type_name, device_type_group, kind, is_physical_device,
