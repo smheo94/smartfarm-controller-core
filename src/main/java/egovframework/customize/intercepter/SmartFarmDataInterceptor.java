@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
     public  final String SYSTEM_TYPE_SMARTFARM = "Smartfarm";
-    public final String X_HEADER_GSM_KEY = "x-smartfarm-gsm-key";
+    public final String X_HEADER_GSM_KEY = "X-Smartfarm-Gsm-Key";
     String systemType;
     String myGSMKey;
     public SmartFarmDataInterceptor(String config, String myGSMKey) {
