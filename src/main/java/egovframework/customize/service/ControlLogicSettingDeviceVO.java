@@ -19,18 +19,14 @@ import lombok.Setter;
 @Data
 @Getter
 @Setter
-public class ControlSettingDeviceVO {
+public class ControlLogicSettingDeviceVO {
 	Integer id;
 	Integer  controllerSettingId;	
 	Integer logicId;
 	Integer deviceNum;
 	String deviceInsertOrder;
 	String deviceId;
-
-
 	public Map<String,Object> toMap() {
 		return ClassUtil.toHashMap(this);
 	}
-
-
 }

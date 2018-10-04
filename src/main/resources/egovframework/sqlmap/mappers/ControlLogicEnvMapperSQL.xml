@@ -5,28 +5,28 @@
 		SELECT 
 			id, 
 			name, 
-			java_class_name AS javaClassName, 
-			ui_class_name AS uiClassName, 
+			java_class_name,
+			ui_class_name,
 			description, 
-			ui_help AS uiHelp, 
-			can_multi_logic AS canMultiLogic, 
-			default_period_size AS defaultPeriodSize
+			ui_help,
+			can_multi_logic,
+			default_period_size
 		FROM control_logic
 	</select>
 
 	<select id="getLogicDeviceList" resultType="controlLogicDeviceVO">
 		SELECT 
 			id, 
-			logic_id AS logicId,
-			device_num AS deviceNum,
-			device_param_name AS deviceParamName,
-			device_type AS deviceType,
-			is_main AS isMain,
+			logic_id,
+			device_num,
+			device_param_name,
+			device_type,
+			is_main,
 			required, 
-			able_array AS ableArray, 
+			able_array,
 			description, 
-			display_order AS displayOrder, 
-			is_used AS isUsed
+			display_order,
+			is_used
 		FROM control_logic_device
 		<where>
 			<if test="logicId != null">
@@ -39,33 +39,33 @@
 	<select id="getLogicPropertyList" resultType="map" >
 		SELECT
 			id,
-			ui_class_name AS uiClassName,
+			ui_class_name,
 			description,
-			ui_help AS uiHelp,
-			properties_json AS propertiesJson,
-			min_value AS minValue,
-			max_value AS `maxValue`,
-			display_unit AS displayUnit,
-			default_value AS defaultValue,
-			default_min_value AS defaultMinValue,
-			default_max_value AS defaultMaxValue,
-			bootstrap_size AS bootstrapSize,
-			dep_class_comp_up AS depClassCompUp,
-			dep_class_comp_down AS depClassCompDown,
-			logic_id AS logicId,
-			properties_id AS propertiesId,
-			is_period AS isPeriod,
+			ui_help,
+			properties_json,
+			min_value,
+			max_value,
+			display_unit,
+			default_value,
+			default_min_value,
+			default_max_value,
+			bootstrap_size,
+			dep_class_comp_up,
+			dep_class_comp_down,
+			logic_id,
+			properties_id,
+			is_period,
 			priority,
-			on_pc AS onPc,
-			on_mobile AS onMobile,
-			on_panel AS onPanel
+			on_pc,
+			on_mobile,
+			on_panel
 		FROM control_properties
+		INNER JOIN control_logic_property_lnk clpl ON clpl.properties_id = control_properties.id
 		<where>
 			<if test="logicId != null">
-				AND logic_id = #{logicId}
+				AND control_properties.logic_id = #{logicId}
 			</if>
 		</where>
-		INNER JOIN control_logic_property_lnk clpl ON clpl.properties_id = control_properties.id
 		ORDER BY is_period, priority
 	</select>
 	

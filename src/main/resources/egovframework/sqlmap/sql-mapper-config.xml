@@ -31,6 +31,11 @@
 		<typeAlias alias="cropsDiaryVO" type="egovframework.customize.service.HouseCropsDiaryVO"/>
 		<typeAlias alias="vDeviceInfoVO" type="egovframework.customize.service.VDeviceInfoVO"/>
 		<typeAlias alias="vDeviceEnvVO" type="egovframework.customize.service.VDeviceEnvVO"/>
+
+		<typeAlias alias="controlLogicSettingVO" type="egovframework.customize.service.ControlLogicSettingVO"/>
+		<typeAlias alias="controlLogicSettingDeviceVO" type="egovframework.customize.service.ControlLogicSettingDeviceVO"/>
+
+		<typeAlias alias="controlLogicSettingCheckConditionVO" type="egovframework.customize.service.ControlLogicSettingCheckConditionVO"/>
 		
     </typeAliases>
 </configuration>

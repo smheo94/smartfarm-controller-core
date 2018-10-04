@@ -3,6 +3,7 @@ package egovframework.customize.service;
 import java.util.HashMap;
 import java.util.List;
 
+
 public interface ControlLogicEnvService {
 	List<ControlLogicVO> getAllLogicList();
 //	HashMap<String,Object> allList();

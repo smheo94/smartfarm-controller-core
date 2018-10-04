@@ -15,16 +15,36 @@
  */                                                               
 package com.kt.smartfarm.supervisor.mapper;
 
-import egovframework.customize.service.ControlLogicDeviceVO;
-import egovframework.customize.service.ControlLogicVO;
+import egovframework.customize.service.ControlLogicSettingCheckConditionVO;
+import egovframework.customize.service.ControlLogicSettingDeviceVO;
+import egovframework.customize.service.ControlLogicSettingVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
+import org.apache.ibatis.annotations.Param;
 
-import java.util.HashMap;
 import java.util.List;
 
 @Mapper("controlLogicSettingMapper")
 public interface ControlLogicSettingMapper {
-	List<ControlLogicVO> getLogicList();
-	List<ControlLogicDeviceVO> getLogicDeviceList(Long logicId);
-	List<HashMap<String,Object>> getLogicPropertyList(Long logicId);
+	List<ControlLogicSettingVO> getControlLogicSetting();
+	List<ControlLogicSettingDeviceVO> getControlDevices(Long logicId);
+	List<ControlLogicSettingCheckConditionVO> getCheckConditions(Long logicId);
+
+	Integer insertControlSettingChkConditionDevice(ControlLogicSettingCheckConditionVO vo);
+	Integer deleteControlSettingChkConditionDevice(@Param("id") Integer id);
+
+	Integer insertControlSettingChkCondition(ControlLogicSettingCheckConditionVO vo);
+	Integer updateControlSettingChkCondition(ControlLogicSettingCheckConditionVO vo);
+	Integer deleteControlSettingChkCondition(@Param("id") Integer id,@Param("control_setting_id") Integer controlSettingId);
+
+	Integer insertControlSettingDevice(ControlLogicSettingDeviceVO vo);
+	Integer updateControlSettingDevice(ControlLogicSettingDeviceVO vo);
+	Integer deleteControlSettingDevice(@Param("id") Integer id,@Param("control_setting_id") Integer controlSettingId);
+
+	Integer insertControlSettingPreOrder(ControlLogicSettingVO vo);
+	Integer updateControlSettingPreOrder(ControlLogicSettingVO vo);
+	Integer deleteControlSettingPreOrder(@Param("id") Integer id,@Param("control_setting_id") Integer controlSettingId);
+
+	Integer insertControlSetting(ControlLogicSettingVO vo);
+	Integer updateControlSetting(ControlLogicSettingVO vo);
+	Integer deleteControlSetting(@Param("id") Integer id,@Param("logic_setting_id") Integer logicSettingId);
 }

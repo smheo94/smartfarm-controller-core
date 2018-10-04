@@ -22,10 +22,11 @@ import java.util.Map;
 import egovframework.customize.service.ControlLogicDeviceVO;
 import egovframework.customize.service.ControlLogicVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper("controlLogicMapper")
 public interface ControlLogicMapper {
 	List<ControlLogicVO> getLogicList();
-	List<ControlLogicDeviceVO> getLogicDeviceList(Long logicId);
-	List<HashMap<String,Object>> getLogicPropertyList(Long logicId);
+	List<ControlLogicDeviceVO> getLogicDeviceList(@Param("logicId") Long logicId);
+	List<HashMap<String,Object>> getLogicPropertyList(@Param("logicId") Long logicId);
 }
