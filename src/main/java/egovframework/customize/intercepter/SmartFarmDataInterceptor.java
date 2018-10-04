@@ -25,11 +25,11 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
         String headerGsmKey = request.getHeader(X_HEADER_GSM_KEY);
         if( SYSTEM_TYPE_SMARTFARM.equals(systemType) ) {
             if( headerGsmKey == null || headerGsmKey != myGSMKey) {
-                return true;
+                return false;
             }
             return false;
         } else if( headerGsmKey == null) {
-                return false;
+                return true;
         }
         startTran = false;
         if( handler instanceof HandlerMethod) {
@@ -44,7 +44,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
                 if( callResult == false  ) {
                     System.out.printf( "데이터 롤백을 진행 합니다.");
                     //TODO: 더이상 진행하지 않고 오류를 Response에 셋팅합니다.
-                    return true;
+                    return false;
                 }
             } else if( handlerMethod.getMethod().getAnnotation(InterceptPre.class) != null ) {
                 System.out.printf( "DB 트렌젝션을 시작하세요. 롤백을 할 수 있어야 합니다.");
@@ -55,7 +55,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
             actionName = handlerMethod.getMethod().getName();
             System.out.printf( "==================== c %s, a %s\r\n", controllerName, actionName);
         }
-        return false;
+        return true;
     }
 
 
