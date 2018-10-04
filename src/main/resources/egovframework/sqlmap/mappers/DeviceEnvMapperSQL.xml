@@ -67,13 +67,16 @@
 			use_house_type, default_address1, default_address2, default_address3,
 			dcac, min_value, MAX_VALUE, description_i18n, device_type_name_i18n,unit
 		FROM cd_device_type
-		WHERE
-			kind = #{kind}
+		<where>
+		<if test="kind != null" >
+			AND kind = #{kind}
 			AND
 			use_house_type IN
 			<foreach collection="idsList" item="item" index="index" separator=","	open="(" close=")">
 					#{item}
 			</foreach>
+		</if>	
+		</where>
 	</select>
 	
 	<select id="getHouseType" resultType="String">
@@ -85,9 +88,10 @@
 	</select>
 	
 	<select id="getDeviceTypeList" resultType="map">
-		SELECT * 
-		FROM cd_device_type
-		ORDER BY kind
+	SELECT *
+	FROM
+	cd_device_type
+	ORDER BY kind
 	</select>
 	
 	<select id=",getVDeviceList" resultType="vDeviceInfoVO">
