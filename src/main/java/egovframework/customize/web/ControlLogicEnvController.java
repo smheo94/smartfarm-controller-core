@@ -50,7 +50,7 @@ public class ControlLogicEnvController {
 	 * @param controllerId
 	 * @return
 	 */
-	@RequestMapping(value= "/", method = RequestMethod.GET)
+	@RequestMapping(value= "", method = RequestMethod.GET)
 	@ApiOperation("정의된 제어로직 목록을 조회합니다.")
 	@ResponseBody
 	public Result<List<ControlLogicEnvVO>> list(){
@@ -65,7 +65,7 @@ public class ControlLogicEnvController {
 	 * @description 제어로직 프로퍼티 조회
 	 * @return
 	 */
-	@RequestMapping(value= "/{logicId}/controlproperty/", method = RequestMethod.GET)
+	@RequestMapping(value= "/{logicId}/controlproperty", method = RequestMethod.GET)
 	@ApiOperation("특정 제어로직에 사용될 프로퍼티 목록을 조회합니다.")
 	@ResponseBody
 	public Result<List<HashMap<String,Object>>> getLogicPropertyList(Long logicId){
@@ -80,7 +80,7 @@ public class ControlLogicEnvController {
 	 * @description 제어로직 프로퍼티 조회
 	 * @return
 	 */
-	@RequestMapping(value= "/{logicId}/controldevice/", method = RequestMethod.GET)
+	@RequestMapping(value= "/{logicId}/controldevice", method = RequestMethod.GET)
 	@ApiOperation("특정 제어로직에 사용될  제어 디바이스 종류를 조회합니다.")
 	@ResponseBody
 	public Result<List<ControlLogicDeviceVO>> getLogicDeviceList(Long logicId){

@@ -58,7 +58,7 @@ public class DeviceEnvController {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	@RequestMapping(value= "/device/", method = RequestMethod.POST)
+	@RequestMapping(value= "/device", method = RequestMethod.POST)
 	@ApiOperation(value = "구동기,센서 등록 : OLD( /gsm/{gsm_key}/")
 	@ResponseBody
 	public Result<List<DeviceEnvVO>> insert( @PathVariable("gsm_key") Integer gsmKey, @RequestBody List<DeviceEnvVO> device){
@@ -77,7 +77,7 @@ public class DeviceEnvController {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	@RequestMapping(value= "/controller/{controllerId}/devices/", method = RequestMethod.PUT)
+	@RequestMapping(value= "/controller/{controllerId}/devices", method = RequestMethod.PUT)
 	@ApiOperation(value = "구동기 모듈에 해당하는 구동기,센서 수정 : OLD( /gsm/{gsm_key}/{controllerId}")
 	@ResponseBody
 	public Result<DeviceEnvVO> update(@PathVariable("gsm_key") Integer gsmKey, @PathVariable("controllerId") String controllerId, @RequestBody List<DeviceEnvVO> device){
@@ -94,7 +94,7 @@ public class DeviceEnvController {
 	 * @param controllerId
 	 * @return
 	 */
-	@RequestMapping(value= "/controller/{controllerId}/device/", method = RequestMethod.GET)
+	@RequestMapping(value= "/controller/{controllerId}/device", method = RequestMethod.GET)
 	@ApiOperation(value = "저장된 구동모듈에 해당하는 deviceList 가져오기 : OLD( /gsm/{gsm_key}/list/{controllerId}")
 	@ResponseBody
 	public Result<List<DeviceEnvVO>> list( @PathVariable("gsm_key") Integer gsmKey, @PathVariable("controllerId") Integer controllerId){
@@ -139,7 +139,7 @@ public class DeviceEnvController {
 	 * @param vo
 	 * @return
 	 */
-	@RequestMapping(value= "/device/{deviceId}/realtiondevices", method = RequestMethod.POST)
+	@RequestMapping(value= "/device/{deviceId}/relationdevices", method = RequestMethod.POST)
 	//Device Type 별로 입력 @RequestMapping(value= "/vDeviceList", method = RequestMethod.POST)
 	@ResponseBody
 	public Result<List<VDeviceInfoVO>> vDeviceList(@PathVariable("deviceId") Integer deviceId, @RequestBody List<VDeviceEnvVO> vo){
