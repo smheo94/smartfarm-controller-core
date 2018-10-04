@@ -108,7 +108,7 @@
 		SELECT
 			id, p_device_id, device_num, device_insert_order, device_id
 		FROM device_v_dep_device
-		WHERE p_device_id = #{device_id}
+		WHERE p_device_id = #{deviceId}
 	</select>
 
 	<insert id="insertVDeviceEnv" useGeneratedKeys="true" parameterType="vDeviceEnvVO">
