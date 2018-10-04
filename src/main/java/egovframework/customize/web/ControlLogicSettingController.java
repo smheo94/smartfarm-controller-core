@@ -17,6 +17,8 @@ package egovframework.customize.web;
 
 import egovframework.cmmn.util.Result;
 import egovframework.customize.service.ControlLogicEnvService;
+import egovframework.customize.service.ControlLogicSettingService;
+import egovframework.customize.service.ControlLogicSettingVO;
 import egovframework.customize.service.DeviceEnvVO;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -28,24 +30,36 @@ import java.util.List;
 
 
 @Controller
-@RequestMapping("/{gsm_key}/controlLogic")
+@RequestMapping("/control_logic_setting")
 public class ControlLogicSettingController {
 
 	public static final String DEFAULT_SETUP_FILE_PATH = "data/env-default/";
 	private static final String extraUrl = "";
 	
-	@Resource(name = "controlLogicEnvService")
-	private ControlLogicEnvService controlLogicEnvService;
+	@Resource(name = "controlLogicSettingService")
+	private ControlLogicSettingService service;
 
-//	@RequestMapping(value= "/", method = RequestMethod.POST)
-//	@ResponseBody
-//	public Result<List<DeviceEnvVO>> insert( @PathVariable("gsm_key") Integer gsmKey, @RequestBody List<DeviceEnvVO> device){
-//		try {
-//			return new Result(controlLogicEnvService.insert(device));
-//		} catch(Exception e) {
-//			return new Result(e.getMessage(), HttpStatus.CONFLICT, device);
-//		}
-//	}
+	@RequestMapping(value= "/gsm/{gsmKey}/house/{houseId}", method = RequestMethod.GET)
+	@ResponseBody
+	public Result<List<ControlLogicSettingVO>> list(@PathVariable("gsmKey") Integer gsmKey, @PathVariable("houseId") Integer houseId){
+		try {
+			return new Result(service.getLogicSetting(gsmKey, houseId));
+		} catch(Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		}
+	}
+
+
+
+	@RequestMapping(value= "/", method = RequestMethod.POST)
+	@ResponseBody
+	public Result<List<DeviceEnvVO>> insert(@RequestBody ControlLogicSettingVO vo){
+		try {
+			return new Result(service.setLogicSetting(vo));
+		} catch(Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, vo);
+		}
+	}
 //
 //	@SuppressWarnings("unchecked")
 //	@RequestMapping(value= "/{controllerId}", method = RequestMethod.PUT)

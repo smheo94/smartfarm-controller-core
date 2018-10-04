@@ -7,7 +7,7 @@
 			name, 
 			java_class_name,
 			ui_class_name,
-			description, 
+			description,
 			ui_help,
 			can_multi_logic,
 			default_period_size
@@ -15,18 +15,18 @@
 	</select>
 
 	<select id="getLogicDeviceList" resultType="controlLogicDeviceVO">
-		SELECT 
-			id, 
-			logic_id,
-			device_num,
-			device_param_name,
-			device_type,
-			is_main,
-			required, 
-			able_array,
-			description, 
-			display_order,
-			is_used
+		SELECT
+		id,
+		logic_id,
+		device_num,
+		device_param_name,
+		device_type,
+		is_main,
+		required,
+		able_array,
+		description,
+		display_order,
+		is_used
 		FROM control_logic_device
 		<where>
 			<if test="logicId != null">
@@ -39,26 +39,26 @@
 	<select id="getLogicPropertyList" resultType="map" >
 		SELECT
 			id,
-			ui_class_name,
+			ui_class_name AS uiClassName,
 			description,
-			ui_help,
-			properties_json,
-			min_value,
-			max_value,
-			display_unit,
-			default_value,
-			default_min_value,
-			default_max_value,
-			bootstrap_size,
-			dep_class_comp_up,
-			dep_class_comp_down,
-			logic_id,
-			properties_id,
-			is_period,
+			ui_help AS uiHelp,
+			properties_json AS propertiesJson,
+			min_value AS minValue,
+			max_value AS `maxValue`,
+			display_unit AS displayUnit,
+			default_value AS defaultValue,
+			default_min_value AS defaultMinValue,
+			default_max_value AS defaultMaxValue,
+			bootstrap_size AS bootstrapSize,
+			dep_class_comp_up AS depClassCompUp,
+			dep_class_comp_down AS depClassCompDown,
+			logic_id AS logicId,
+			properties_id AS propertiesId,
+			is_period AS isPeriod,
 			priority,
-			on_pc,
-			on_mobile,
-			on_panel
+			on_pc AS onPc,
+			on_mobile AS onMobile,
+			on_panel AS onPanel
 		FROM control_properties
 		INNER JOIN control_logic_property_lnk clpl ON clpl.properties_id = control_properties.id
 		<where>
