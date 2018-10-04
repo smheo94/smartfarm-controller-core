@@ -1,5 +1,6 @@
 package egovframework.customize.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -31,8 +32,8 @@ public class ControlSettingVO {
 	String updateDt;
 	String autoManualMode;
 	String javaClassName;
-		
-
+	public List<ControlSettingDeviceVO> deviceList = new ArrayList<>();
+	public List<ControlSettingCheckConditionVO>   checkConditionList = new ArrayList<>();
 	public Map<String,Object> toMap() {
 		return ClassUtil.toHashMap(this);
 	}

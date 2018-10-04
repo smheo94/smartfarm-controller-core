@@ -1,10 +1,12 @@
 package egovframework.customize.config;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import egovframework.customize.intercepter.SmartFarmDataInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.*;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.annotation.Order;
+import org.springframework.web.servlet.config.annotation.*;
 
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -14,7 +16,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableSwagger2
-public class SwaggerConfig{
+@ComponentScan("egovframework.customize.config")
+public class SwaggerConfig {
 
     @Bean
     public Docket api() {
@@ -26,10 +29,7 @@ public class SwaggerConfig{
                 .build();
 
     }
-
 }
-
-
 
 
 @Configuration

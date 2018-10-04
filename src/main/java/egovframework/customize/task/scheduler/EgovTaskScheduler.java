@@ -47,7 +47,7 @@ public class EgovTaskScheduler {
 		DateUtil dateUtil = new DateUtil();
 		String regDay = dateUtil.getCurrentDateString();
 		String regTimeString   = new java.text.SimpleDateFormat("HH").format(new java.util.Date());
-		houseList = houseEnvService.list(null);
+		houseList = houseEnvService.list(null, true);
 		for(int i=0; i<houseList.size(); i++){
 			Double latitude = Double.parseDouble(houseList.get(i).get("latitude").toString());
 			Double longitude = Double.parseDouble(houseList.get(i).get("longitude").toString());

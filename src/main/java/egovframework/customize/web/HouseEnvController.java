@@ -104,7 +104,7 @@ public class HouseEnvController {
 	@ResponseBody
 	public Result<List<HashMap<String,Object>>> list( @PathVariable("gsm_key") Integer gsmKey){
 		try {
-			return new Result(houseEnvService.list(gsmKey));
+			return new Result(houseEnvService.list(gsmKey, true));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}

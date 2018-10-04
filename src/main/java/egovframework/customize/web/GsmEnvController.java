@@ -18,6 +18,8 @@ package egovframework.customize.web;
 import java.util.HashMap;
 import java.util.List;
 import egovframework.cmmn.util.Result;
+import egovframework.cmmn.util.InterceptPre;
+import egovframework.cmmn.util.InterceptPost;
 import egovframework.customize.service.GsmEnvVO;
 import egovframework.customize.service.GsmEnvService;
 import egovframework.customize.service.HouseEnvService;
@@ -53,13 +55,13 @@ public class GsmEnvController {
 	/**
 	 * 제어모듈 수정
 	 * @param gsmKey
-	 * @param controllerId
-	 * @param controller
+	 * @param gsmInfo	 *
 	 * @return
 	 */
 	@RequestMapping(value= "/{gmsKey}", method = RequestMethod.PUT)
 	@ApiOperation("제어기 정보 수정, OLD /")
 	@ResponseBody
+	@InterceptPre
 	public Result<GsmEnvVO> update(@RequestBody GsmEnvVO gsmInfo, @PathVariable("gsmKey") Integer gsmKey){
 		try {
 			if( gsmKey != gsmInfo.getGsmKey()) {
@@ -73,12 +75,12 @@ public class GsmEnvController {
 	
 	/**
 	 * @description 제어모듈 등록
-	 * @param gsmKey
-	 * @param controller
+	 * @param gsmInfo
 	 * @return
 	 */
 	@RequestMapping(value= "", method = RequestMethod.POST)
 	@ResponseBody
+	@InterceptPost
 	public Result<GsmEnvVO> insert( @RequestBody GsmEnvVO gsmInfo){
 		try {
 			return new Result(gsmEnvService.insert(gsmInfo));
@@ -102,35 +104,19 @@ public class GsmEnvController {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
 	}
-	
+
 	/**
 	 * @descriptiion 제어기 상세정보
 	 * @param gsmKey
-	 * @param controllerId
 	 * @return
 	 */
 	@RequestMapping(value= "/{gsmKey}", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<GsmEnvVO> get( @PathVariable("gsmKey") Integer gsmKey){
+	public Result<GsmEnvVO> getAll( @PathVariable("gsmKey") Integer gsmKey, @RequestParam(value = "all", required = false) Boolean all){
 		try {
-			return new Result(gsmEnvService.get(gsmKey));
-		} catch(Exception e) {
-			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
-		}
-	}
-
-
-	/**
-	 * @descriptiion 제어기 상세정보
-	 * @param gsmKey
-	 * @param controllerId
-	 * @return
-	 */
-	@RequestMapping(value= "/{gsmKey}/all", method = RequestMethod.GET)
-	@ResponseBody
-	public Result<GsmEnvVO> getAll( @PathVariable("gsmKey") Integer gsmKey){
-		try {
-			return new Result(gsmEnvService.getAll(gsmKey));
+			if(all == null )
+				all = true;
+			return new Result(gsmEnvService.get(gsmKey, all));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
@@ -139,11 +125,11 @@ public class GsmEnvController {
 	/**
 	 * 제어모듈 삭제
 	 * @param gsmKey
-	 * @param controllerId
 	 * @return
 	 */
 	@RequestMapping(value= "/{gsmKey}", method = RequestMethod.DELETE)
 	@ResponseBody
+	@InterceptPre
 	public Result<GsmEnvVO> delete(@PathVariable("gsmKey") Integer gsmKey){
 		try {
 			return new Result(gsmEnvService.delete(gsmKey));
@@ -154,15 +140,17 @@ public class GsmEnvController {
 	
 	/**
 	 * @description gsm_info, green_house mapping dataList
-	 * @param gsmKey
 	 * @return
 	 */
 	@RequestMapping(value= "", method = RequestMethod.GET)
 	@ApiOperation("GSM List OLD (none) ")
 	@ResponseBody
-	public Result<GsmEnvVO> list(){ 
+	public Result<List<HashMap<String,Object>>> list(@RequestParam(value = "all", required = false) Boolean all){
 		try {
-			return new Result(gsmEnvService.list());
+		    if( all == null ) {
+                all = true;
+            }
+			return new Result(gsmEnvService.list(all));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
