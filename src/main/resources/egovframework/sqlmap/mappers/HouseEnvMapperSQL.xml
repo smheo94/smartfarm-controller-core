@@ -147,7 +147,7 @@
 		SELECT device_id 
 		FROM map_green_house_device AS mghd 
 		INNER JOIN green_house gh ON gh.id = mghd.green_house_id
-		WHERE green_house_id = #{green_house_id} AND gh.gsm_key = #{gsm_key}
+		WHERE gh.id = #{green_house_id} AND gh.gsm_key = #{gsm_key}
 	</select>
 	
 	
@@ -164,9 +164,11 @@
 		FROM device
 		INNER JOIN controller ON controller.id = device.controller_id
 		 WHERE device.gsm_key = #{gsm_key}
-		 <if test="deviceIds.size() > 0">
-			AND device.id IN 
-			<foreach collection="deviceIds" item="item" index="index" separator=","	open="(" close=")">
+		 <if test="deviceIds != null">
+			<if test="deviceIds.size() == 0">
+				AND FALSE
+			</if>
+			<foreach collection="deviceIds" item="item"  index="index" separator=","	open="AND device.id IN (" close=")">
 						#{item}
 			</foreach>
 		</if>

@@ -42,7 +42,7 @@
 			</list>
 		</property>
     </bean>
-    
+
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
         <property name="interceptors">
             <list>
@@ -68,8 +68,11 @@
             </props>
         </property>
     </bean>
-    
-    
+
+
+
+
+
     <!-- 스케쥴러 설정 -->
     
     <bean id="batchExcuetor" class="egovframework.customize.task.scheduler.EgovTaskScheduler" />

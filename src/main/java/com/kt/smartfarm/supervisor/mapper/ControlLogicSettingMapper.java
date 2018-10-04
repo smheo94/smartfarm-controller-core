@@ -12,25 +12,19 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ */                                                               
 package com.kt.smartfarm.supervisor.mapper;
+
+import egovframework.customize.service.ControlLogicDeviceVO;
+import egovframework.customize.service.ControlLogicVO;
+import egovframework.rte.psl.dataaccess.mapper.Mapper;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import egovframework.customize.service.GsmEnvVO;
-import egovframework.rte.psl.dataaccess.mapper.Mapper;
-import org.apache.ibatis.annotations.Param;
-
-@Mapper("gsmEnvMapper")
-public interface GsmEnvMapper {
-	//GsmEnvVO get(Integer gsmKey);
-	Integer delete(Integer gsmKey);
-	Integer insert(GsmEnvVO gsmInfo);
-	Integer update(GsmEnvVO gsmInfo);
-	List<Map<String,Object>> gsmOfDeviceList(@Param("gsmKey")Integer gsmKey);
-	List<Map<String, Object>> getGsmList(@Param("gsmKey") Integer gsmKey);
-	List<Map<String, Object>> getHouseList(@Param("gsmKey") Integer gsmKey);
-
+@Mapper("controlLogicSettingMapper")
+public interface ControlLogicSettingMapper {
+	List<ControlLogicVO> getLogicList();
+	List<ControlLogicDeviceVO> getLogicDeviceList(Long logicId);
+	List<HashMap<String,Object>> getLogicPropertyList(Long logicId);
 }

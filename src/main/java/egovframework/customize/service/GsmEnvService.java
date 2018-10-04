@@ -8,9 +8,9 @@ public interface GsmEnvService {
 
 	List<Map<String,Object>> gsmOfDeviceList(Integer gsmKey);
 
-	GsmEnvVO get(Integer gsmKey);
+	//GsmEnvVO get(Integer gsmKey);
 
-	Map<String,Object> getAll(Integer gsmKey);
+	Map<String,Object> get(Integer gsmKey, boolean  all);
 
 	Integer delete(Integer gsmKey);
 
@@ -18,7 +18,7 @@ public interface GsmEnvService {
 
 	Integer update(GsmEnvVO gsmInfo);
 
-	List<Map<String, Object>> list();
+	List<Map<String, Object>> list(boolean all);
 
 	
 	

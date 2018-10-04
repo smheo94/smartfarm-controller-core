@@ -26,8 +26,11 @@ public class ControlSettingDeviceVO {
 	Integer deviceNum;
 	String deviceInsertOrder;
 	String deviceId;
-	
+
+
 	public Map<String,Object> toMap() {
 		return ClassUtil.toHashMap(this);
 	}
+
+
 }

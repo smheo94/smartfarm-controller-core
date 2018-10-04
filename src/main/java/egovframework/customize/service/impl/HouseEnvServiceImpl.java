@@ -86,36 +86,40 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 		return result;
 	}
 */
-	@Override
-	public List<HashMap<String,Object>> list(Integer gsmKey) {
+	public List<HashMap<String, Object>> list(Integer gsmKey, boolean all) {
 		List<HashMap<String,Object>> result = new ArrayList<HashMap<String,Object>>();
 		List<HashMap<String,Object>> controllerList = new ArrayList<HashMap<String,Object>>();
 		List<DeviceEnvVO> mappedDeviceList;
-		List<Integer> deviceIds = new ArrayList<Integer>();		
+		List<Integer> deviceIds = new ArrayList<Integer>();
 		Map<String, Object> map = new HashMap<>();
-		
+
 		if(gsmKey == null){
 			result = houseEnvMapper.getHouseDetail(map);
 			return result;
 		}else{
-			map.put("gsm_key",  gsmKey);		
+			map.put("gsm_key",  gsmKey);
 			result = houseEnvMapper.getHouseDetail(map);
-			
+
 			for(int i=0; i<result.size(); i++){
-				map.put("green_house_id",result.get(i).get("id"));
-				deviceIds = houseEnvMapper.getMappedDevice(map);						
-				map.put("deviceIds", deviceIds);
-				controllerList = houseEnvMapper.getMappedController(map);
-				for(int j =0; j<controllerList.size(); j++){
-					HashMap<String,Object> param = new HashMap<>();
-					param.put("controller_id", controllerList.get(j).get("id"));
-					mappedDeviceList = deviceEnvMapper.list(param);
-					controllerList.get(j).put("deviceList",mappedDeviceList);
+				final HashMap<String, Object> houseMap = result.get(i);
+				map.put("green_house_id",houseMap.get("id"));
+				deviceIds = houseEnvMapper.getMappedDevice(map);
+				houseMap.put("selectedDeviceList", deviceIds);
+				if( all ) {
+					map.put("deviceIds", deviceIds);
+					if( deviceIds.size() > 0 ) {
+						controllerList = houseEnvMapper.getMappedController(map);
+						for (int j = 0; j < controllerList.size(); j++) {
+							HashMap<String, Object> param = new HashMap<>();
+							param.put("controller_id", controllerList.get(j).get("id"));
+							mappedDeviceList = deviceEnvMapper.list(param);
+							controllerList.get(j).put("deviceList", mappedDeviceList);
+						}
+					}
+					houseMap.put("controllerList", controllerList);
 				}
-				result.get(i).put("selectedDeviceList", deviceIds);
-				result.get(i).put("controllerList", controllerList);			
 			}
-			
+
 			return result;
 		}
 	}
