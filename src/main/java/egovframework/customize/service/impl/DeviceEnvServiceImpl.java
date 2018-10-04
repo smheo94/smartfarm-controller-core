@@ -121,7 +121,8 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 
 	@Override
 	public List<HashMap<String, Object>> getDeviceTypeList() {
-		return deviceEnvMapper.getDeviceTypeByHouseType();
+//		return deviceEnvMapper.getDeviceTypeByHouseType();
+		return deviceEnvMapper.getDeviceTypeList();
 	}
 
 	@Override

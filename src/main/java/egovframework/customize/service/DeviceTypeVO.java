@@ -13,25 +13,45 @@ public class DeviceTypeVO {
 	String name;
 	String description;
 	String last_update;
-	String device_type;
-	String device_type_name;
-	String device_type_group;
+//	String device_type;
+//	String device_type_name;
+//	String device_type_group;
 	String kind;
-	Integer is_physical_device; 
+//	Integer is_physical_device; 
 	String manufacturer;
-	String model_name;
-	String model_spec;
-	String model_version;
-	Integer is_master;
-	Integer use_house_type;
-	String default_address1;
-	String default_address2;
-	String default_address3;
+//	String model_name;
+//	String model_spec;
+//	String model_version;
+//	Integer is_master;
+//	Integer use_house_type;
+//	String default_address1;
+//	String default_address2;
+//	String default_address3;
 	String dcac;
-	double min_value;
-	double max_value;
-	String description_i18n;
-	String device_type_name_i18n;
+//	double min_value;
+//	double max_value;
+//	String description_i18n;
+//	String device_type_name_i18n;
 	String unit;
+	
+	
+	String lastUpdate;
+	String deviceType;
+	String deviceTypeName;
+	String deviceTypeGroup;
+	Integer isPhysicalDevice; 
+	String modelName;
+	String modelSpec;
+	String modelVersion;
+	Integer isMaster;
+	Integer useHouseType;
+	String defaultAddress1;
+	String defaultAddress2;
+	String defaultAddress3;
+	double minValue;
+	double maxValue;
+	String descriptionI18n;
+	String deviceTypeNameI18n;
+	
 	
 }

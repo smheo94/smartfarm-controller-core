@@ -40,10 +40,10 @@ public interface DeviceEnvMapper {
 	String[] getHouseType();
 	String[] getKind();
 	List<HashMap<String, Object>> getDeviceTypeByHouseType();
+	List<HashMap<String, Object>> getDeviceTypeList();
 	List<VDeviceInfoVO> getVDeviceList();
 
 	Integer insertVDeviceEnv(VDeviceEnvVO vo);
 
 	List<VDeviceEnvVO> getVDeviceEnvList(@Param("deviceId") Integer deviceId);
-
 }
