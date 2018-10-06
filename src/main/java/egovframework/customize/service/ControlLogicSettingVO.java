@@ -26,13 +26,13 @@ public class ControlLogicSettingVO {
 
 	public Integer logicSettingId;
 	public Integer greenHouseId;
-	public Integer defLogicId;
+	public Integer logicId;
 	public String defLogicName;
 	public String javaClassName;
 	public String logicName;
 	public String logicEnv;
 	public String logicPeriodEnv;
-	public String logicPeriodSize;
+	public Integer logicPeriodSize;
 	public String autoManualMode;
 	public Date createDt;
 	public Date updateDt;

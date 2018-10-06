@@ -54,7 +54,8 @@ public class CommonEnvServiceImpl extends EgovAbstractServiceImpl implements Com
 	@Override
 	public CommonEnvVO getThreshold(int gsmKey) throws Exception {
 		CommonEnvVO commonEnvVO = commonEnvMapper.getThreshold(gsmKey);
-		return commonEnvVO;		
+
+		return commonEnvVO;
 	}
 
 

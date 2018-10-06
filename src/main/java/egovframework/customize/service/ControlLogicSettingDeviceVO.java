@@ -21,11 +21,11 @@ import lombok.Setter;
 @Setter
 public class ControlLogicSettingDeviceVO {
 	Integer id;
-	Integer  controllerSettingId;	
+	Integer  controlSettingId;
 	Integer logicId;
 	Integer deviceNum;
-	String deviceInsertOrder;
-	String deviceId;
+	Integer deviceInsertOrder;
+	Integer deviceId;
 	public Map<String,Object> toMap() {
 		return ClassUtil.toHashMap(this);
 	}

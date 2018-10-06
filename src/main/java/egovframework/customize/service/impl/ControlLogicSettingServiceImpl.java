@@ -16,6 +16,7 @@ import com.kt.smartfarm.supervisor.mapper.ControlLogicMapper;
 import com.kt.smartfarm.supervisor.mapper.ControlLogicSettingMapper;
 import egovframework.customize.service.*;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,18 +29,83 @@ import java.util.stream.Collectors;
 public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl implements ControlLogicSettingService {
 
 	@Autowired
-	ControlLogicSettingMapper controlLogicSettingMapper;
+	ControlLogicSettingMapper mapper;
 
 	@Override
 	public List<ControlLogicSettingVO> getLogicSetting(Integer gsmKey, Integer houseId){
-		return null;
+		return mapper.getControlLogicSetting(gsmKey, houseId, null);
 	}
 	@Override
-	public 	ControlLogicSettingVO setLogicSetting(ControlLogicSettingVO vo){
-		return null;
+	public 	ControlLogicSettingVO insertLogicSetting(ControlLogicSettingVO vo){
+		mapper.insertControlSetting(vo);
+		if( vo.getLogicSettingId() == null )  {
+			return vo;
+		}
+		if( vo.getPreOrderSettingId() != null ) {
+			mapper.insertControlSettingPreOrder(vo);
+		}
+		if( vo.getCheckConditionList() != null ) {
+			vo.getCheckConditionList().stream().forEach( checkList ->{
+				checkList.setControlSettingId(vo.logicSettingId);
+				mapper.insertControlSettingChkCondition(checkList);
+				if( checkList.getId() != null )
+				{
+					mapper.insertControlSettingChkConditionDevice(checkList);
+				}
+			});
+		}
+		if( vo.getDeviceList() != null ) {
+			vo.getDeviceList().stream().forEach( device ->{
+				device.setControlSettingId(vo.logicSettingId);
+				mapper.insertControlSettingDevice(device);
+			});
+		}
+		return vo;
 	}
 	@Override
-	public ControlLogicSettingVO delLogicSetting(Integer logicSettingId){
-		return null;
+	public Integer delLogicSetting(Integer logicSettingId){
+		List<ControlLogicSettingVO> logicSettingVOList = mapper.getControlLogicSetting(null, null, logicSettingId);
+		if( logicSettingVOList == null || logicSettingVOList.size() ==0 || logicSettingVOList.get(0) ==null) {
+			return 0;
+		}
+		final ControlLogicSettingVO logicSettingVO = logicSettingVOList.get(0);
+		return	mapper.deleteControlSetting(logicSettingVO.logicSettingId);
+//		if( logicSettingVO.getDeviceList() != null ) {
+//			mapper.deleteControlSettingDevice(null, logicSettingVO.logicSettingId);
+//		}
+//		if( logicSettingVO.getCheckConditionList() != null ) {
+//			mapper.deleteControlSettingChkCondition(null, logicSettingVO.logicSettingId);
+//		}
+//		if( logicSettingVO.getPreOrderSettingId() != null ) {
+//
+//		}
+// 		return null;
+	}
+
+	@Override
+	public ControlLogicSettingVO updateLogicSetting(ControlLogicSettingVO vo) {
+		if( vo.getLogicSettingId() == null )  {
+			return vo;
+		}
+		mapper.updateControlSetting(vo);
+		if( vo.getPreOrderSettingId() != null ) {
+			mapper.updateControlSettingPreOrder(vo);
+		}
+		if( vo.getCheckConditionList() != null ) {
+			vo.getCheckConditionList().stream().forEach( checkList ->{
+				mapper.updateControlSettingChkCondition(checkList);
+				if( checkList.getId() != null )
+				{
+					mapper.deleteControlSettingChkConditionDevice(checkList.getId());
+					mapper.insertControlSettingChkConditionDevice(checkList);
+				}
+			});
+		}
+		if( vo.getDeviceList() != null ) {
+			vo.getDeviceList().stream().forEach( device ->{
+				mapper.updateControlSettingDevice(device);
+			});
+		}
+		return vo;
 	}
 }

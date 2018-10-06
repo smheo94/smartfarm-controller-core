@@ -10,11 +10,11 @@ import java.util.List;
 @Setter
 public class ControlLogicSettingCheckConditionVO {
     Integer id;
-    Integer  controllerSettingId;
+    Integer  controlSettingId;
     Integer logicId;
     String operatorCode;
     String operatorCondition;
     String action;
-    String value;
+    Double value;
     List<Integer> deviceIdList;
 }

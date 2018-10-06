@@ -94,7 +94,7 @@
 	ORDER BY kind
 	</select>
 	
-	<select id=",getVDeviceList" resultType="vDeviceInfoVO">
+	<select id="getVDeviceList" resultType="vDeviceInfoVO">
 		SELECT 
 			id,
 			device_type_id, 

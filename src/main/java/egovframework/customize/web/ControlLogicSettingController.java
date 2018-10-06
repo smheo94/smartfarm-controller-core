@@ -16,7 +16,6 @@
 package egovframework.customize.web;
 
 import egovframework.cmmn.util.Result;
-import egovframework.customize.service.ControlLogicEnvService;
 import egovframework.customize.service.ControlLogicSettingService;
 import egovframework.customize.service.ControlLogicSettingVO;
 import egovframework.customize.service.DeviceEnvVO;
@@ -25,7 +24,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -55,11 +53,32 @@ public class ControlLogicSettingController {
 	@ResponseBody
 	public Result<List<DeviceEnvVO>> insert(@RequestBody ControlLogicSettingVO vo){
 		try {
-			return new Result(service.setLogicSetting(vo));
+			return new Result(service.insertLogicSetting(vo));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, vo);
 		}
 	}
+
+	@RequestMapping(value= "/{logicSettingId}", method = RequestMethod.PUT)
+	@ResponseBody
+	public Result<List<DeviceEnvVO>> insert(@PathVariable("logicSettingId") Integer logicSettingId, @RequestBody ControlLogicSettingVO vo){
+		try {
+			return new Result(service.updateLogicSetting(vo));
+		} catch(Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, vo);
+		}
+	}
+
+	@RequestMapping(value= "/{logicSettingId}", method = RequestMethod.DELETE)
+	@ResponseBody
+	public Result<Integer> insert(@PathVariable("logicSettingId") Integer logicSettingId){
+		try {
+			return new Result(service.delLogicSetting(logicSettingId));
+		} catch(Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, logicSettingId);
+		}
+	}
+
 //
 //	@SuppressWarnings("unchecked")
 //	@RequestMapping(value= "/{controllerId}", method = RequestMethod.PUT)

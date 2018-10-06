@@ -63,7 +63,7 @@
 		INNER JOIN control_logic_property_lnk clpl ON clpl.properties_id = control_properties.id
 		<where>
 			<if test="logicId != null">
-				AND control_properties.logic_id = #{logicId}
+				AND clpl.logic_id = #{logicId}
 			</if>
 		</where>
 		ORDER BY is_period, priority

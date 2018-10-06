@@ -10,7 +10,22 @@
   </component>
   <component name="FacetManager">
     <facet type="Spring" name="Spring">
-      <configuration />
+      <configuration>
+        <fileset id="fileset" name="Spring Application Context" removed="false">
+          <file>file://$MODULE_DIR$/src/main/resources/egovframework/spring/context-transaction.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/egovframework/spring/context-mapper.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/egovframework/spring/context-properties.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/egovframework/spring/context-validator.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/egovframework/spring/context-common.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/egovframework/spring/context-idgen.xml</file>
+          <file>file://$MODULE_DIR$/src/main/webapp/WEB-INF/config/egovframework/springmvc/dispatcher-servlet.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/egovframework/spring/context-aspect.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/egovframework/spring/context-datasource.xml</file>
+          <file>file://$MODULE_DIR$/src/main/java/egovframework/customize/config/SwaggerConfig.java</file>
+          <file>file://$MODULE_DIR$/src/main/java/egovframework/customize/config/SmartfarmInterceptorConfig.java</file>
+          <file>file://$MODULE_DIR$/src/main/java/egovframework/customize/config/EnvironmentConfig.java</file>
+        </fileset>
+      </configuration>
     </facet>
     <facet type="web" name="Web">
       <configuration>

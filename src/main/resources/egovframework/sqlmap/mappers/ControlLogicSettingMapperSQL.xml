@@ -2,70 +2,81 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kt.smartfarm.supervisor.mapper.ControlLogicSettingMapper">
 
-	<resultMap id="ControlCheckConditionMap" type="controlLogicSettingCheckConditionVO">
-		<id property="id" column="id" />
-		<collection   property="deviceIdList" javaType="java.util.ArrayList"  ofType="Integer" >
-			<result column="device_id"></result>
-		</collection>
-	</resultMap>
-	<resultMap id="ControlDeviceMap" type="controlLogicSettingDeviceVO">
-		<!--<id property="deviceNum"  column="device_num"  />-->
-		<!--<result column="is_main" property="isMain" />-->
-		<!--<result column="able_array" property="ableArray" />-->
-		<!--<result column="is_used" property="isUsed" />-->
-		<!--<result column="required" property="required" />-->
-		<!--<collection   property="deviceIdList" javaType="java.util.ArrayList"  ofType="Integer" >-->
-			<!--<result column="device_id"></result>-->
-		<!--</collection>-->
-	</resultMap>
+    <resultMap id="ControlCheckConditionMap" type="controlLogicSettingCheckConditionVO">
+        <id property="id" column="id"/>
+        <collection property="deviceIdList" javaType="java.util.ArrayList" ofType="Integer">
+            <result column="device_id"></result>
+        </collection>
+    </resultMap>
+    <resultMap id="ControlDeviceMap" type="controlLogicSettingDeviceVO">
+        <!--<id property="deviceNum"  column="device_num"  />-->
+        <!--<result column="is_main" property="isMain" />-->
+        <!--<result column="able_array" property="ableArray" />-->
+        <!--<result column="is_used" property="isUsed" />-->
+        <!--<result column="required" property="required" />-->
+        <!--<collection   property="deviceIdList" javaType="java.util.ArrayList"  ofType="Integer" >-->
+        <!--<result column="device_id"></result>-->
+        <!--</collection>-->
+    </resultMap>
 
-	<resultMap id="ControlLogicSettingMap" type="controlLogicSettingVO">
-		<id column="logic_setting_id" property="logicSettingId" />
-		<result column="green_house_id" property="greenHouseId" />
-		<result column="def_logic_id" property="defLogicId" />
-		<result column="def_logic_name" property="defLogicName" />
-		<result column="java_class_name" property="javaClassName" />
-		<result column="logic_name" property="logicName" />
-		<result column="logic_env" property="logicEnv" />
-		<result column="logic_period_env" property="logicPeriodEnv" />
-		<result column="logic_period_size" property="logicPeriodSize" />
-		<result column="auto_manual_mode" property="autoManualMode" />
-		<result column="create_dt" property="createDt" />
-		<result column="update_dt" property="updateDt" />
-		<result column="pre_order_setting_id" property="preOrderSettingId" />
-		<collection  property="checkConditionList" javaType="java.util.ArrayList"
-					 ofType="controlLogicSettingCheckConditionVO" column="logic_setting_id"
-					 select="getCheckConditions"  />
-		<collection  property="deviceList" javaType="java.util.ArrayList"
-					 ofType="controlLogicSettingDeviceVO"
-					 column="logic_setting_id" select="getControlDevices"/>
-	</resultMap>
+    <resultMap id="ControlLogicSettingMap" type="controlLogicSettingVO">
+        <id column="logic_setting_id" property="logicSettingId"/>
+        <result column="green_house_id" property="greenHouseId"/>
+        <result column="def_logic_id" property="logicId"/>
+        <result column="def_logic_name" property="defLogicName"/>
+        <result column="java_class_name" property="javaClassName"/>
+        <result column="logic_name" property="logicName"/>
+        <result column="logic_env" property="logicEnv"/>
+        <result column="logic_period_env" property="logicPeriodEnv"/>
+        <result column="logic_period_size" property="logicPeriodSize"/>
+        <result column="auto_manual_mode" property="autoManualMode"/>
+        <result column="create_dt" property="createDt"/>
+        <result column="update_dt" property="updateDt"/>
+        <result column="pre_order_setting_id" property="preOrderSettingId"/>
+        <collection property="checkConditionList" javaType="java.util.ArrayList"
+                    ofType="controlLogicSettingCheckConditionVO" column="logic_setting_id"
+                    select="getCheckConditions"/>
+        <collection property="deviceList" javaType="java.util.ArrayList"
+                    ofType="controlLogicSettingDeviceVO"
+                    column="logic_setting_id" select="getControlDevices"/>
+    </resultMap>
 
-	<select id="getControlLogicSetting" resultMap="ControlLogicSettingMap">
-		/* 설정된 제어로직을 조회 , 선행 제어로직 포함 */
-		SELECT CL.id AS def_logic_id, CL.name AS def_logic_name, CL.java_class_name,
-		CS.id AS logic_setting_id,  CS.green_house_id, CS.logic_name, CS.logic_env, CS.logic_period_env, CS.logic_period_size, CS.auto_manual_mode, CS.update_dt,
-		CS.create_dt,CSPO.pre_order_setting_id
-		FROM control_logic CL
-		INNER JOIN control_setting CS ON CL.id = CS.logic_id
-		LEFT JOIN control_setting_pre_order CSPO ON CSPO.control_setting_id = CS.id
-		<if test="green_house_id != null">
-			WHERE CS.green_house_id = #{green_house_id};
-		</if>
-	</select>
+    <select id="getControlLogicSetting" resultMap="ControlLogicSettingMap">
+        /* 설정된 제어로직을 조회 , 선행 제어로직 포함 */
+        SELECT CL.id AS def_logic_id, CL.name AS def_logic_name, CL.java_class_name,
+        CS.id AS logic_setting_id, CS.green_house_id, CS.logic_name, CS.logic_env, CS.logic_period_env, CS.logic_period_size, CS.auto_manual_mode, CS.update_dt,
+        CS.create_dt,CSPO.pre_order_setting_id,
+        GH.gsm_key
+        FROM control_logic CL
+        INNER JOIN control_setting CS ON CL.id = CS.logic_id
+        INNER JOIN green_house GH ON GH.id = CS.green_house_id
+        LEFT JOIN control_setting_pre_order CSPO ON CSPO.control_setting_id = CS.id
+        <where>
+            <if test="gsm_key != null">
+                AND GH.gsm_key = #{gsm_key};
+            </if>
+            <if test="green_house_id != null">
+                AND GH.id = #{green_house_id};
+            </if>
+
+            <if test="logic_setting_id != null">
+                AND CS.id = #{logic_setting_id};
+            </if>
+        </where>
+    </select>
 
 
-	<select id="getControlDevices" resultMap="ControlDeviceMap">
+    <select id="getControlDevices" resultMap="ControlDeviceMap">
     /* 제어로직에 사용될 목록 조회 */
-    SELECT CSD.id, CSD.controller_setting_id, CSD.logic_id, CSD.device_num, CSD.device_insert_order, CSD.device_id
+    SELECT CSD.id, CSD.control_setting_id, CSD.logic_id, CSD.device_num, CSD.device_insert_order, CSD.device_id
     , CLD.is_main, CLD.able_array, CLD.required, CLD.is_used
     FROM control_setting_device CSD
     INNER JOIN control_logic_device CLD ON CLD.logic_id = CSD.logic_id AND CLD.device_num = CSD.device_num
-    WHERE CSD.controller_setting_id = #{logic_setting_id}
+    WHERE CSD.control_setting_id = #{logic_setting_id}
     ORDER BY CSD.device_num, CSD.device_insert_order;
     </select>
 
-	<select id="getCheckConditions" resultMap="ControlCheckConditionMap">
+    <select id="getCheckConditions" resultMap="ControlCheckConditionMap">
     /* 선행 확인 조건 조회 */
     SELECT  CSCC.id, CSCC.control_setting_id,
     CSCC.operator_code, CSCC.operator_condition, CSCC.action, CSCC.value, CSCCD.device_id
@@ -74,104 +85,103 @@
     WHERE CSCC.control_setting_id = #{logic_setting_id}
     </select>
 
-	<insert id="insertControlSettingChkConditionDevice" parameterType="controlLogicSettingCheckConditionVO">
-	INSERT INTO control_setting_chk_condition_device (control_setting_chk_condition_id, device_id)
-		<foreach collection="deviceIdList" item="deviceIdList" index="deviceIdList" separator="," open=" VALUES ">
-			( #{id}, #{device_id} )
-		</foreach>
-	</insert>
-	<delete id="deleteControlSettingChkConditionDevice">
-	DELETE FROM
+    <insert id="insertControlSettingChkConditionDevice" parameterType="controlLogicSettingCheckConditionVO">
+        INSERT INTO control_setting_chk_condition_device (control_setting_chk_condition_id, device_id)
+        <foreach collection="deviceIdList" item="deviceIdList" index="deviceIdList" separator="," open=" VALUES ">
+            ( #{id}, #{deviceIdList} )
+        </foreach>
+    </insert>
+    <delete id="deleteControlSettingChkConditionDevice">
+	DELETE FROMControlLogicSettingVO
 	control_setting_chk_condition_device
 	WHERE control_setting_chk_condition_id = #{id}
 	</delete>
 
 
-	<insert id="insertControlSettingChkCondition" parameterType="controlLogicSettingCheckConditionVO"  useGeneratedKeys="true">
-	INSERT INTO control_setting_chk_condition (control_setting_id, operator_code, operator_condition, value, action)
-	VALUES( #{control_setting_id}, #{operator_code}, #{operator_condition}, #{value}, #{action});
-		<selectKey keyProperty="id" resultType="Integer" keyColumn="id">
-			SELECT LAST_INSERT_ID() AS id;
-		</selectKey>
-	</insert>
-	<update id="updateControlSettingChkCondition" parameterType="controlLogicSettingCheckConditionVO">
+    <insert id="insertControlSettingChkCondition" parameterType="controlLogicSettingCheckConditionVO" useGeneratedKeys="true">
+        INSERT INTO control_setting_chk_condition (control_setting_id, operator_code, operator_condition, value, action)
+        VALUES( #{controlSettingId}, #{operatorCode}, #{operatorCondition}, #{value}, #{action});
+        <selectKey keyProperty="id" resultType="Integer" keyColumn="id">
+            SELECT LAST_INSERT_ID() AS id;
+        </selectKey>
+    </insert>
+    <update id="updateControlSettingChkCondition" parameterType="controlLogicSettingCheckConditionVO">
 	update
 	control_setting_chk_condition
-	set control_setting_id = #{control_setting_id}, operator_code = #{operator_code}, operator_condition = #{operator_condition}, value = #{value}, action = #{action}
+	set control_setting_id = #{controlSettingId}, operator_code = #{operatorCode}, operator_condition = #{operatorCondition}, value = #{value}, action = #{action}
 	where id = #{id};
 	</update>
-	<delete id="deleteControlSettingChkCondition">
-	DELETE FROM
-	control_setting_chk_condition
-	<where>
-		<if test="id != null">AND id = #{id};</if>
-		<if test="control_setting_id != null">AND control_setting_id = #{control_setting_id};</if>
-	</where>
-	</delete>
+    <delete id="deleteControlSettingChkCondition">
+        DELETE FROM
+        control_setting_chk_condition
+        <where>
+            <if test="id != null">AND id = #{id};</if>
+            <if test="control_setting_id != null">AND control_setting_id = #{control_setting_id};</if>
+        </where>
+    </delete>
 
 
-	<insert id="insertControlSettingDevice" parameterType="controlLogicSettingDeviceVO"  useGeneratedKeys="true">
-	INSERT INTO control_setting_device ( controller_setting_id, logic_id, device_num, device_insert_order, device_id)
-	VALUES( #{controller_setting_id}, #{logic_id}, #{device_num}, #{device_insert_order}, #{device_id}');
-		<selectKey keyProperty="id" resultType="Integer" keyColumn="id">
-			SELECT LAST_INSERT_ID() AS id;
-		</selectKey>
-	</insert>
-	<update id="updateControlSettingDevice" parameterType="controlLogicSettingDeviceVO">
+    <insert id="insertControlSettingDevice" parameterType="controlLogicSettingDeviceVO" useGeneratedKeys="true">
+        INSERT INTO control_setting_device ( control_setting_id, logic_id, device_num, device_insert_order, device_id)
+        VALUES( #{controlSettingId}, #{logicId}, #{deviceNum}, #{deviceInsertOrder}, #{deviceId});
+        <selectKey keyProperty="id" resultType="Integer" keyColumn="id">
+            SELECT LAST_INSERT_ID() AS id;
+        </selectKey>
+    </insert>
+    <update id="updateControlSettingDevice" parameterType="controlLogicSettingDeviceVO">
 	update
 	control_setting_device
-	set controller_setting_id = #{controller_setting_id}, logic_id = #{logic_id}, device_num = #{device_num}, device_insert_order = #{device_insert_order},
-	device_id = #{device_id}
+	set control_setting_id = #{controlSettingId}, logic_id = #{logicId}, device_num = #{deviceNum}, device_insert_order = #{deviceInsertOrder},
+	device_id = #{deviceId}
 	where id = #{id};
 	</update>
-	<delete id="deleteControlSettingDevice">
-		DELETE FROM
-		control_setting_device
-		<where>
-			<if test="id != null">AND id = #{id};</if>
-			<if test="control_setting_id != null">AND control_setting_id = #{control_setting_id};</if>
-		</where>
-	</delete>
+    <delete id="deleteControlSettingDevice">
+        DELETE FROM
+        control_setting_device
+        <where>
+            <if test="id != null">AND id = #{id};</if>
+            <if test="control_setting_id != null">AND control_setting_id = #{control_setting_id};</if>
+        </where>
+    </delete>
 
 
-	<insert id="insertControlSettingPreOrder" parameterType="controlLogicSettingVO"  useGeneratedKeys="true">
-	INSERT INTO control_setting_pre_order (control_setting_id, pre_order_setting_id)
-	VALUES( #{control_setting_id}, #{pre_order_setting_id}');
-		<selectKey keyProperty="id" resultType="Integer" keyColumn="id">
-			SELECT LAST_INSERT_ID() AS id;
-		</selectKey>
-	</insert>
-	<update id="updateControlSettingPreOrder" parameterType="controlLogicSettingVO">
+    <insert id="insertControlSettingPreOrder" parameterType="controlLogicSettingVO" useGeneratedKeys="true">
+        INSERT INTO control_setting_pre_order (control_setting_id, pre_order_setting_id)
+        VALUES( #{logicSettingId}, #{preOrderSettingId});
+    </insert>
+    <update id="updateControlSettingPreOrder" parameterType="controlLogicSettingVO">
 	update
 	control_setting_pre_order
-	set control_setting_id = #{logic_setting_id}, pre_order_setting_id = #{pre_order_setting_id}
+	set control_setting_id = #{logicSettingId}, pre_order_setting_id = #{preOrderSettingId}
 	where id = #{id};
 	</update>
-	<delete id="deleteControlSettingPreOrder">
-		DELETE FROM
-		control_setting_pre_order
-		<where>
-			<if test="id != null">AND id = #{id};</if>
-			<if test="control_setting_id != null">AND control_setting_id = #{logic_setting_id};</if>
-		</where>
-	</delete>
+    <delete id="deleteControlSettingPreOrder">
+        DELETE FROM
+        control_setting_pre_order
+        <where>
+            <if test="id != null">AND id = #{id};</if>
+            <if test="control_setting_id != null">AND control_setting_id = #{logic_setting_id};</if>
+        </where>
+    </delete>
 
-	<insert id="insertControlSetting" parameterType="controlLogicSettingVO" useGeneratedKeys="true">
-	INSERT INTO control_setting ( green_house_id, logic_name, logic_id, logic_period_size, logic_env, logic_period_env, create_dt, update_dt, auto_manual_mode, java_class_name)
-	VALUES(#{green_house_id}, #{logic_name}, #{logic_id}, #{logic_period_size}, #{logic_env}, #{logic_period_env}, #{create_dt}, #{update_dt},
-	#{auto_manual_mode}, #{java_class_name}');
-		<selectKey keyProperty="logic_setting_id" resultType="Integer" keyColumn="id">
-			SELECT LAST_INSERT_ID() AS id;
-		</selectKey>
-	</insert>
-	<update id="updateControlSetting" parameterType="controlLogicSettingVO">
+    <insert id="insertControlSetting" parameterType="controlLogicSettingVO" useGeneratedKeys="true">
+        INSERT INTO control_setting ( green_house_id, logic_name, logic_id, logic_period_size, logic_env, logic_period_env, create_dt, update_dt,
+        auto_manual_mode, java_class_name)
+        VALUES(#{greenHouseId}, #{logicName}, #{logicId}, #{logicPeriodSize}, #{logicEnv}, #{logicPeriodEnv}, #{createDt}, #{updateDt},
+        #{autoManualMode}, #{javaClassName});
+        <selectKey keyProperty="logicSettingId" resultType="Integer" keyColumn="id">
+            SELECT LAST_INSERT_ID() AS id;
+        </selectKey>
+    </insert>
+    <update id="updateControlSetting" parameterType="controlLogicSettingVO">
 	update
 	control_setting
 	set
-	green_house_id = #{green_house_id}, logic_name = #{logic_name}, logic_id = #{logic_id}, logic_period_size = #{logic_period_size}, logic_env = #{logic_env}, logic_period_env = #{logic_period_env}, create_dt = #{create_dt}, update_dt = #{update_dt}, auto_manual_mode = #{auto_manual_mode}, java_class_name = #{java_class_name}
-	where id = #{logic_setting_id};
+	green_house_id = #{greenHouseId}, logic_name = #{logicName}, logic_id = #{logicId}, logic_period_size = #{logicPeriodSize}, logic_env = #{logicEnv}
+	, logic_period_env = #{logicPeriodEnv}, create_dt = #{createDt}, update_dt = #{updateDt}, auto_manual_mode = #{autoManualMode}, java_class_name = #{javaClassName}
+	where id = #{logicSettingId};
 	</update>
-	<delete id="deleteControlSetting" parameterType="controlLogicSettingVO">
+    <delete id="deleteControlSetting">
 		DELETE FROM
 		control_setting
 		WHERE id = #{logic_setting_id}
