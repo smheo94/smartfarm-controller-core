@@ -28,21 +28,21 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 	ControlLogicSettingMapper mapper;
 
 	@Override
-	public List<ControlLogicSettingVO> getLogicSetting(Integer gsmKey, Integer houseId, Integer logicSettingId){
-		return mapper.getControlLogicSetting(gsmKey, houseId, logicSettingId);
+	public List<ControlLogicSettingVO> getLogicSetting(Integer gsmKey, Integer houseId, Integer controlSettingId){
+		return mapper.getControlLogicSetting(gsmKey, houseId, controlSettingId);
 	}
 	@Override
 	public 	ControlLogicSettingVO insertLogicSetting(ControlLogicSettingVO vo){
 		mapper.insertControlSetting(vo);
-		if( vo.getLogicSettingId() == null )  {
+		if( vo.getControlSettingId() == null )  {
 			return vo;
 		}
 		if( vo.getPreOrderSettingId() != null ) {
 			mapper.insertControlSettingPreOrder(vo);
 		}
 		if( vo.getCheckConditionList() != null ) {
-			vo.getCheckConditionList().stream().forEach( checkList ->{
-				checkList.setControlSettingId(vo.logicSettingId);
+			vo.getCheckConditionList().forEach( checkList ->{
+				checkList.setControlSettingId(vo.controlSettingId);
 				mapper.insertControlSettingChkCondition(checkList);
 				if( checkList.getId() != null )
 				{
@@ -51,26 +51,26 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 			});
 		}
 		if( vo.getDeviceList() != null ) {
-			vo.getDeviceList().stream().forEach( device ->{
-				device.setControlSettingId(vo.logicSettingId);
+			vo.getDeviceList().forEach( device ->{
+				device.setControlSettingId(vo.controlSettingId);
 				mapper.insertControlSettingDevice(device);
 			});
 		}
 		return vo;
 	}
 	@Override
-	public Integer delLogicSetting(Integer logicSettingId){
-		List<ControlLogicSettingVO> logicSettingVOList = mapper.getControlLogicSetting(null, null, logicSettingId);
+	public Integer delLogicSetting(Integer controlSettingId){
+		List<ControlLogicSettingVO> logicSettingVOList = mapper.getControlLogicSetting(null, null, controlSettingId);
 		if( logicSettingVOList == null || logicSettingVOList.size() ==0 || logicSettingVOList.get(0) ==null) {
 			return 0;
 		}
 		final ControlLogicSettingVO logicSettingVO = logicSettingVOList.get(0);
-		return	mapper.deleteControlSetting(logicSettingVO.logicSettingId);
+		return	mapper.deleteControlSetting(logicSettingVO.controlSettingId);
 //		if( logicSettingVO.getDeviceList() != null ) {
-//			mapper.deleteControlSettingDevice(null, logicSettingVO.logicSettingId);
+//			mapper.deleteControlSettingDevice(null, logicSettingVO.controlSettingId);
 //		}
 //		if( logicSettingVO.getCheckConditionList() != null ) {
-//			mapper.deleteControlSettingChkCondition(null, logicSettingVO.logicSettingId);
+//			mapper.deleteControlSettingChkCondition(null, logicSettingVO.controlSettingId);
 //		}
 //		if( logicSettingVO.getPreOrderSettingId() != null ) {
 //
@@ -80,16 +80,16 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 
 	@Override
 	public ControlLogicSettingVO updateLogicSetting(ControlLogicSettingVO vo) {
-		if( vo.getLogicSettingId() == null )  {
+		if( vo.getControlSettingId() == null )  {
 			return vo;
 		}
 		mapper.updateControlSetting(vo);
 		if( vo.getPreOrderSettingId() != null ) {
-			mapper.deleteControlSettingPreOrder(null, vo.logicSettingId);
+			mapper.deleteControlSettingPreOrder(null, vo.controlSettingId);
             mapper.insertControlSettingPreOrder(vo);
 		}
 		if( vo.getCheckConditionList() != null ) {
-			vo.getCheckConditionList().stream().forEach( checkList ->{
+			vo.getCheckConditionList().forEach( checkList ->{
 				mapper.updateControlSettingChkCondition(checkList);
 				if( checkList.getId() != null )
 				{
@@ -99,9 +99,7 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 			});
 		}
 		if( vo.getDeviceList() != null ) {
-			vo.getDeviceList().stream().forEach( device ->{
-				mapper.updateControlSettingDevice(device);
-			});
+			vo.getDeviceList().forEach( device -> mapper.updateControlSettingDevice(device));
 		}
 		return vo;
 	}

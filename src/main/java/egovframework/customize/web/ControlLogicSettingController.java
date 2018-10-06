@@ -49,11 +49,11 @@ public class ControlLogicSettingController {
 	}
 
 
-	@RequestMapping(value= "/{logicSettingId}", method = RequestMethod.GET)
+	@RequestMapping(value= "/{controlSettingId}", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<List<ControlLogicSettingVO>> get(@PathVariable("logicSettingId") Integer logicSettingId){
+	public Result<List<ControlLogicSettingVO>> get(@PathVariable("controlSettingId") Integer controlSettingId){
 		try {
-			final List<ControlLogicSettingVO> logicSettingList = service.getLogicSetting(null, null, logicSettingId);
+			final List<ControlLogicSettingVO> logicSettingList = service.getLogicSetting(null, null, controlSettingId);
 			if( logicSettingList == null || logicSettingList.size() ==0 ){
 				return new Result(HttpStatus.NOT_FOUND.name(), HttpStatus.NOT_FOUND, null);
 			}
@@ -74,9 +74,9 @@ public class ControlLogicSettingController {
 		}
 	}
 
-	@RequestMapping(value= "/{logicSettingId}", method = RequestMethod.PUT)
+	@RequestMapping(value= "/{controlSettingId}", method = RequestMethod.PUT)
 	@ResponseBody
-	public Result<List<DeviceEnvVO>> update(@PathVariable("logicSettingId") Integer logicSettingId, @RequestBody ControlLogicSettingVO vo){
+	public Result<List<DeviceEnvVO>> update(@PathVariable("controlSettingId") Integer controlSettingId, @RequestBody ControlLogicSettingVO vo){
 		try {
 			return new Result(service.updateLogicSetting(vo));
 		} catch(Exception e) {
@@ -84,13 +84,13 @@ public class ControlLogicSettingController {
 		}
 	}
 
-	@RequestMapping(value= "/{logicSettingId}", method = RequestMethod.DELETE)
+	@RequestMapping(value= "/{controlSettingId}", method = RequestMethod.DELETE)
 	@ResponseBody
-	public Result<Integer> delete(@PathVariable("logicSettingId") Integer logicSettingId){
+	public Result<Integer> delete(@PathVariable("controlSettingId") Integer controlSettingId){
 		try {
-			return new Result(service.delLogicSetting(logicSettingId));
+			return new Result(service.delLogicSetting(controlSettingId));
 		} catch(Exception e) {
-			return new Result(e.getMessage(), HttpStatus.CONFLICT, logicSettingId);
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, controlSettingId);
 		}
 	}
 

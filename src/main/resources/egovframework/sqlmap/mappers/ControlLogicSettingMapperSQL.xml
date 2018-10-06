@@ -20,7 +20,7 @@
     </resultMap>
 
     <resultMap id="ControlLogicSettingMap" type="controlLogicSettingVO">
-        <id column="logic_setting_id" property="logicSettingId"/>
+        <id column="control_setting_id" property="controlSettingId"/>
         <result column="green_house_id" property="greenHouseId"/>
         <result column="def_logic_id" property="logicId"/>
         <result column="def_logic_name" property="defLogicName"/>
@@ -34,17 +34,17 @@
         <result column="update_dt" property="updateDt"/>
         <result column="pre_order_setting_id" property="preOrderSettingId"/>
         <collection property="checkConditionList" javaType="java.util.ArrayList"
-                    ofType="controlLogicSettingCheckConditionVO" column="logic_setting_id"
+                    ofType="controlLogicSettingCheckConditionVO" column="control_setting_id"
                     select="getCheckConditions"/>
         <collection property="deviceList" javaType="java.util.ArrayList"
                     ofType="controlLogicSettingDeviceVO"
-                    column="logic_setting_id" select="getControlDevices"/>
+                    column="control_setting_id" select="getControlDevices"/>
     </resultMap>
 
     <select id="getControlLogicSetting" resultMap="ControlLogicSettingMap">
         /* 설정된 제어로직을 조회 , 선행 제어로직 포함 */
         SELECT CL.id AS def_logic_id, CL.name AS def_logic_name, CL.java_class_name,
-        CS.id AS logic_setting_id, CS.green_house_id, CS.logic_name, CS.logic_env, CS.logic_period_env, CS.logic_period_size, CS.auto_manual_mode, CS.update_dt,
+        CS.id AS control_setting_id, CS.green_house_id, CS.logic_name, CS.logic_env, CS.logic_period_env, CS.logic_period_size, CS.auto_manual_mode, CS.update_dt,
         CS.create_dt,CSPO.pre_order_setting_id,
         GH.gsm_key
         FROM control_logic CL
@@ -59,8 +59,8 @@
                 AND GH.id = #{green_house_id}
             </if>
 
-            <if test="logic_setting_id != null">
-                AND CS.id = #{logic_setting_id}
+            <if test="control_setting_id != null">
+                AND CS.id = #{control_setting_id}
             </if>
         </where>
     </select>
@@ -72,7 +72,7 @@
     , CLD.is_main, CLD.able_array, CLD.required, CLD.is_used
     FROM control_setting_device CSD
     INNER JOIN control_logic_device CLD ON CLD.logic_id = CSD.logic_id AND CLD.device_num = CSD.device_num
-    WHERE CSD.control_setting_id = #{logic_setting_id}
+    WHERE CSD.control_setting_id = #{control_setting_id}
     ORDER BY CSD.device_num, CSD.device_insert_order;
     </select>
 
@@ -82,7 +82,7 @@
     CSCC.operator_code, CSCC.operator_condition, CSCC.action, CSCC.value, CSCCD.device_id
     FROM control_setting_chk_condition CSCC
     INNER JOIN control_setting_chk_condition_device CSCCD ON CSCC.id = CSCCD.control_setting_chk_condition_id
-    WHERE CSCC.control_setting_id = #{logic_setting_id}
+    WHERE CSCC.control_setting_id = #{control_setting_id}
     </select>
 
     <insert id="insertControlSettingChkConditionDevice" parameterType="controlLogicSettingCheckConditionVO">
@@ -146,14 +146,14 @@
 
     <insert id="insertControlSettingPreOrder" parameterType="controlLogicSettingVO" useGeneratedKeys="true">
         INSERT INTO control_setting_pre_order (control_setting_id, pre_order_setting_id)
-        VALUES( #{logicSettingId}, #{preOrderSettingId});
+        VALUES( #{controlSettingId}, #{preOrderSettingId});
     </insert>
     <delete id="deleteControlSettingPreOrder">
         DELETE FROM
         control_setting_pre_order
         <where>
             <if test="id != null">AND id = #{id};</if>
-            <if test="control_setting_id != null">AND control_setting_id = #{logic_setting_id};</if>
+            <if test="control_setting_id != null">AND control_setting_id = #{control_setting_id};</if>
         </where>
     </delete>
 
@@ -162,7 +162,7 @@
         auto_manual_mode, java_class_name)
         VALUES(#{greenHouseId}, #{logicName}, #{logicId}, #{logicPeriodSize}, #{logicEnv}, #{logicPeriodEnv}, NOW(), NOW(),
         #{autoManualMode}, (SELECT java_class_name FROM control_logic WHERE id = #{logicId} ) );
-        <selectKey keyProperty="logicSettingId" resultType="Integer" keyColumn="id">
+        <selectKey keyProperty="controlSettingId" resultType="Integer" keyColumn="id">
             SELECT LAST_INSERT_ID() AS id;
         </selectKey>
     </insert>
@@ -171,12 +171,12 @@
 	control_setting
 	set logic_name = #{logicName}, logic_id = #{logicId}, logic_period_size = #{logicPeriodSize}, logic_env = #{logicEnv}
 	, logic_period_env = #{logicPeriodEnv},  update_dt = NOW(), auto_manual_mode = #{autoManualMode}
-	where id = #{logicSettingId};
+	where id = #{controlSettingId};
 	</update>
     <delete id="deleteControlSetting">
 		DELETE FROM
 		control_setting
-		WHERE id = #{logic_setting_id}
+		WHERE id = #{control_setting_id}
 	</delete>
 
 </mapper>

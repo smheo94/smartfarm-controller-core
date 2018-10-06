@@ -24,7 +24,7 @@ import lombok.Setter;
 @Setter
 public class ControlLogicSettingVO {
 
-	public Integer logicSettingId;
+	public Integer controlSettingId;
 	public Integer greenHouseId;
 	public Integer logicId;
 	public String defLogicName;

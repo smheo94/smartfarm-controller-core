@@ -27,7 +27,7 @@ import java.util.List;
 @Mapper("controlLogicSettingMapper")
 public interface ControlLogicSettingMapper {
 	List<ControlLogicSettingVO> getControlLogicSetting(@Param("gsm_key") Integer gsmKey, @Param("green_house_id") Integer greenHouseId,
-													   @Param("logic_setting_id") Integer logicSettingId);
+													   @Param("control_setting_id") Integer controlSettingId);
 	List<ControlLogicSettingDeviceVO> getControlDevices(Long logicId);
 	List<ControlLogicSettingCheckConditionVO> getCheckConditions(Long logicId);
 
@@ -47,5 +47,5 @@ public interface ControlLogicSettingMapper {
 
 	Integer insertControlSetting(ControlLogicSettingVO vo);
 	Integer updateControlSetting(ControlLogicSettingVO vo);
-	Integer deleteControlSetting(@Param("logic_setting_id") Integer logicSettingId);
+	Integer deleteControlSetting(@Param("control_setting_id") Integer controlSettingId);
 }
