@@ -20,9 +20,10 @@ import egovframework.customize.service.ControlLogicSettingDeviceVO;
 import egovframework.customize.service.ControlLogicSettingVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
+@Repository
 @Mapper("controlLogicSettingMapper")
 public interface ControlLogicSettingMapper {
 	List<ControlLogicSettingVO> getControlLogicSetting(@Param("gsm_key") Integer gsmKey, @Param("green_house_id") Integer greenHouseId,
@@ -42,7 +43,6 @@ public interface ControlLogicSettingMapper {
 	Integer deleteControlSettingDevice(@Param("id") Integer id,@Param("control_setting_id") Integer controlSettingId);
 
 	Integer insertControlSettingPreOrder(ControlLogicSettingVO vo);
-	Integer updateControlSettingPreOrder(ControlLogicSettingVO vo);
 	Integer deleteControlSettingPreOrder(@Param("id") Integer id,@Param("control_setting_id") Integer controlSettingId);
 
 	Integer insertControlSetting(ControlLogicSettingVO vo);

@@ -19,7 +19,9 @@ import java.util.HashMap;
 import java.util.List;
 import egovframework.customize.service.CategoryEnvVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
+import org.springframework.stereotype.Repository;
 
+@Repository
 @Mapper("categoryEnvMapper")
 public interface CategoryEnvMapper {
 	

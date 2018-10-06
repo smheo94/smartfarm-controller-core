@@ -21,8 +21,9 @@ import java.util.List;
 import egovframework.customize.service.HouseCropsDiaryVO;
 import egovframework.customize.service.HouseDiaryVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
+import org.springframework.stereotype.Repository;
 
-
+@Repository
 @Mapper("houseDiaryMapper")
 public interface HouseDiaryMapper {
 

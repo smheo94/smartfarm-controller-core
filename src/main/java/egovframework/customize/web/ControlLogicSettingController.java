@@ -24,6 +24,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 
@@ -41,15 +42,29 @@ public class ControlLogicSettingController {
 	@ResponseBody
 	public Result<List<ControlLogicSettingVO>> list(@PathVariable("gsmKey") Integer gsmKey, @PathVariable("houseId") Integer houseId){
 		try {
-			return new Result(service.getLogicSetting(gsmKey, houseId));
+			return new Result(service.getLogicSetting(gsmKey, houseId, null));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
 	}
 
 
+	@RequestMapping(value= "/{logicSettingId}", method = RequestMethod.GET)
+	@ResponseBody
+	public Result<List<ControlLogicSettingVO>> get(@PathVariable("logicSettingId") Integer logicSettingId){
+		try {
+			final List<ControlLogicSettingVO> logicSettingList = service.getLogicSetting(null, null, logicSettingId);
+			if( logicSettingList == null || logicSettingList.size() ==0 ){
+				return new Result(HttpStatus.NOT_FOUND.name(), HttpStatus.NOT_FOUND, null);
+			}
+			return new Result(logicSettingList.get(0));
+		} catch(Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		}
+	}
 
-	@RequestMapping(value= "/", method = RequestMethod.POST)
+
+	@RequestMapping(value= "", method = RequestMethod.POST)
 	@ResponseBody
 	public Result<List<DeviceEnvVO>> insert(@RequestBody ControlLogicSettingVO vo){
 		try {
@@ -61,7 +76,7 @@ public class ControlLogicSettingController {
 
 	@RequestMapping(value= "/{logicSettingId}", method = RequestMethod.PUT)
 	@ResponseBody
-	public Result<List<DeviceEnvVO>> insert(@PathVariable("logicSettingId") Integer logicSettingId, @RequestBody ControlLogicSettingVO vo){
+	public Result<List<DeviceEnvVO>> update(@PathVariable("logicSettingId") Integer logicSettingId, @RequestBody ControlLogicSettingVO vo){
 		try {
 			return new Result(service.updateLogicSetting(vo));
 		} catch(Exception e) {
@@ -71,7 +86,7 @@ public class ControlLogicSettingController {
 
 	@RequestMapping(value= "/{logicSettingId}", method = RequestMethod.DELETE)
 	@ResponseBody
-	public Result<Integer> insert(@PathVariable("logicSettingId") Integer logicSettingId){
+	public Result<Integer> delete(@PathVariable("logicSettingId") Integer logicSettingId){
 		try {
 			return new Result(service.delLogicSetting(logicSettingId));
 		} catch(Exception e) {

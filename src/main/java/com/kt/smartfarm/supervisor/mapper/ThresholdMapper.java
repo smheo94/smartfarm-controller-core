@@ -17,6 +17,7 @@ package com.kt.smartfarm.supervisor.mapper;
 
 import egovframework.customize.service.ThresholdVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
+import org.springframework.stereotype.Repository;
 
 /**
  * monitoring에 관한 데이터처리 매퍼 클래스
@@ -33,6 +34,7 @@ import egovframework.rte.psl.dataaccess.mapper.Mapper;
  *
  * </pre>
  */
+@Repository
 @Mapper("thresholdMapper")
 public interface ThresholdMapper {
 	Integer insert(ThresholdVO thresholdVO);

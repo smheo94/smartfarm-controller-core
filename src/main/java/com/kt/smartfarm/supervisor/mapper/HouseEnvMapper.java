@@ -23,7 +23,9 @@ import egovframework.customize.service.HouseEnvVO;
 import egovframework.customize.service.ProductMethodVO;
 import egovframework.customize.service.ProductVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
+import org.springframework.stereotype.Repository;
 
+@Repository
 @Mapper("houesEnvMapper")
 public interface HouseEnvMapper {	
 	Integer insert(HouseEnvVO map);

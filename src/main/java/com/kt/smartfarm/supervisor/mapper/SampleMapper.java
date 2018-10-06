@@ -22,6 +22,7 @@ import egovframework.customize.service.SampleDefaultVO;
 import egovframework.customize.service.SampleVO;
 
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
+import org.springframework.stereotype.Repository;
 
 /**
  * sample에 관한 데이터처리 매퍼 클래스
@@ -38,6 +39,7 @@ import egovframework.rte.psl.dataaccess.mapper.Mapper;
  *
  * </pre>
  */
+@Repository
 @Mapper("sampleMapper")
 public interface SampleMapper {
 

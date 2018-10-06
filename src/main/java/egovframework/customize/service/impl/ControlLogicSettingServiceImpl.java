@@ -12,17 +12,13 @@
  */
 package egovframework.customize.service.impl;
 
-import com.kt.smartfarm.supervisor.mapper.ControlLogicMapper;
 import com.kt.smartfarm.supervisor.mapper.ControlLogicSettingMapper;
 import egovframework.customize.service.*;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Service("controlLogicSettingService")
@@ -32,8 +28,8 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 	ControlLogicSettingMapper mapper;
 
 	@Override
-	public List<ControlLogicSettingVO> getLogicSetting(Integer gsmKey, Integer houseId){
-		return mapper.getControlLogicSetting(gsmKey, houseId, null);
+	public List<ControlLogicSettingVO> getLogicSetting(Integer gsmKey, Integer houseId, Integer logicSettingId){
+		return mapper.getControlLogicSetting(gsmKey, houseId, logicSettingId);
 	}
 	@Override
 	public 	ControlLogicSettingVO insertLogicSetting(ControlLogicSettingVO vo){
@@ -89,7 +85,8 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 		}
 		mapper.updateControlSetting(vo);
 		if( vo.getPreOrderSettingId() != null ) {
-			mapper.updateControlSettingPreOrder(vo);
+			mapper.deleteControlSettingPreOrder(null, vo.logicSettingId);
+            mapper.insertControlSettingPreOrder(vo);
 		}
 		if( vo.getCheckConditionList() != null ) {
 			vo.getCheckConditionList().stream().forEach( checkList ->{

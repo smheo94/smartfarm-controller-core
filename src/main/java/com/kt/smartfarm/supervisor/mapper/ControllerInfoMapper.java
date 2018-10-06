@@ -21,6 +21,7 @@ import java.util.Map;
 
 import egovframework.customize.service.ControllerInfoVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
+import org.springframework.stereotype.Repository;
 
 /**
  * monitoring에 관한 데이터처리 매퍼 클래스
@@ -37,6 +38,7 @@ import egovframework.rte.psl.dataaccess.mapper.Mapper;
  *
  * </pre>
  */
+@Repository
 @Mapper("controllerInfoMapper")
 public interface ControllerInfoMapper {	
 	List<ControllerInfoVO> list(Map<String,Object> map);	

@@ -22,7 +22,9 @@ import java.util.Map;
 import egovframework.customize.service.ArrayDeviceVO;
 import egovframework.customize.service.ControllerEnvVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
+import org.springframework.stereotype.Repository;
 
+@Repository
 @Mapper("controllerEnvMapper")
 public interface ControllerEnvMapper {
 	
