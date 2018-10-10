@@ -58,19 +58,21 @@
 	</select>
 	
 	<update id="updateHouseDiary" parameterType="houseDiaryVO">
-		UPDATE SET house_diary
-			<if test="title != null"> title =#{title}</if>
-			<if test="content != null">content =#{content}</if>
-			<if test="work != null">work =#{work}</if>
-			<if test="etc != null">etc =#{etc}</if>
-			<if test="start_date != null">start_date =#{startDate}</if>
-			<if test="end_date != null">end_date =#{endDate}</if>
-			<if test="crops != null">crops =#{crops}</if>
-			<if test="harvest != null">harvest =#{harvest}</if>
-			<if test="income != null">income =#{income}</if>
-			<if test="spend != null">spend =#{spend} </if>
-			<if test="content_type != null">content_type=#{contentType} </if>
-			<if test="work_time != null">work_time =#{workTime} </if>
+		UPDATE house_diary
+		<set>
+			<if test="title != null">title =#{title},</if>
+			<if test="content != null">content =#{content},</if>
+			<if test="work != null">work =#{work},</if>
+			<if test="etc != null">etc =#{etc},</if>
+			<if test="startDate != null">start_date =#{startDate},</if>
+			<if test="endDate != null">end_date =#{endDate},</if>
+			<if test="crops != null">crops =#{crops},</if>
+			<if test="harvest != null">harvest =#{harvest},</if>
+			<if test="income != null">income =#{income},</if>
+			<if test="spend != null">spend =#{spend},</if>
+			<if test="contentType != null">content_type=#{contentType},</if>
+			<if test="workTime != null">work_time =#{work_time}</if>
+		</set>
 		WHERE id=#{id} AND green_house_id = #{greenHouseId}
 	</update>
 	
@@ -129,20 +131,29 @@
 	</select>
 	
 	<update id="updateCropsDiary" parameterType="cropsDiaryVO">
-		UPDATE SET house_crops_diary
-			<if test="title != null"> title =#{title}</if>
-			<if test="content != null">content =#{content}</if>
-			<if test="work != null">work =#{work}</if>
-			<if test="etc != null">etc =#{etc}</if>
-			<if test="start_date != null">start_date =#{startDate}</if>
-			<if test="end_date != null">end_date =#{endDate}</if>
-			<if test="crops != null">crops =#{crops}</if>
-			<if test="harvest != null">harvest =#{harvest}</if>
-			<if test="income != null">income =#{income}</if>
-			<if test="spend != null">spend =#{spend} </if>
-			<if test="content_type != null">content_type=#{contentType} </if>
-			<if test="work_time != null">work_time =#{workTime} </if>
-		WHERE id=#{id} AND green_house_id = #{greenHouseId}
+		UPDATE
+		house_crops_diary
+		<set>
+		<if test="leafWidth != null">leaf_width = #{leafWidth},</if>
+		<if test="stem != null">stem = #{stem},</if>
+		<if test="harvest != null">harvest = #{harvest},</if>
+		<if test="fruitSet != null">fruit_set = #{fruitSet},</if>
+		<if test="getherSet != null">gether_set = #{getherSet},</if>
+		<if test="fruitHeight != null">fruit_height = #{fruitHeight},</if>
+		<if test="bloom != null">bloom = #{bloom},</if>
+		<if test="fruitNumber != null">fruit_number = #{fruitNumber},</if>
+		<if test="averWeight != null">aver_weight = #{averWeight},</if>
+		<if test="growLength != null">grow_length = #{growLength},</if>
+		<if test="leafSize != null">leaf_size = #{leafSize},</if>
+		<if test="leafNum != null">leaf_num = #{leafNum},</if>
+		<if test="startDate != null">start_date = #{startDate},</if>
+		<if test="uploadFile != null">upload_file = #{uploadFile},</if>
+		<if test="content != null">content = #{content},</if>
+		<if test="title != null">title = #{title},</if>
+		<if test="crops != null">crops = #{crops},</if>
+		<if test="contentType != null">content_type = #{contentType}</if>
+		</set>
+		WHERE id = #{id} AND green_house_id = #{greenHouseId};
 	</update>
 	
 	<delete id="DeleteCropsDiary" parameterType="map">
