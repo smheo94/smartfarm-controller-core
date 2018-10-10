@@ -4,6 +4,12 @@
 
     <resultMap id="ControlCheckConditionMap" type="controlLogicSettingCheckConditionVO">
         <id property="id" column="id"/>
+        <result column="control_setting_id" property="controlSettingId"/>
+        <result column="operator_code" property="operatorCode"/>
+        <result column="operator_condition" property="operatorCondition"/>
+        <result column="action" property="action"/>
+        <result column="value" property="value"/>
+        <result column="device_id" property="deviceId"/>
         <collection property="deviceIdList" javaType="java.util.ArrayList" ofType="Integer">
             <result column="device_id"></result>
         </collection>
