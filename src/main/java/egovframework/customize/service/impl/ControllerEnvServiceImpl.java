@@ -62,7 +62,7 @@ public class ControllerEnvServiceImpl extends EgovAbstractServiceImpl implements
 	@Override
 	public Integer delete(Integer gsmKey, Integer controllerId) {
 		Map<String, Object> map = new HashMap<>();
-		map.put("gsm_key",  gsmKey);
+		map.put("gsmKey",  gsmKey);
 		map.put("id",  controllerId);
 		return controllerEnvMapper.delete(map);
 	}
