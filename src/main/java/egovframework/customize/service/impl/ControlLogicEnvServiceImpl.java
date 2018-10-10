@@ -40,7 +40,7 @@ public class ControlLogicEnvServiceImpl extends EgovAbstractServiceImpl implemen
 		final List<HashMap<String, Object>> logicPropertyList = controlLogicMapper.getLogicPropertyList(null);
 		logicList.forEach( cl ->{
 			try {
-				cl.setControlDeviceaList(logicDeviceList.stream().filter(d -> d.getLogicId().equals(cl.getId())).collect(Collectors.toList()));
+				cl.setControlDeviceList(logicDeviceList.stream().filter(d -> d.getLogicId().equals(cl.getId())).collect(Collectors.toList()));
 				cl.setControlPropertyList(logicPropertyList.stream().filter(m -> m.get("logicId").equals(cl.getId())).collect(Collectors.toList()));
 			} catch (Exception e) {
 				e.printStackTrace();

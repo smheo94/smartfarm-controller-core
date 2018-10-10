@@ -29,7 +29,7 @@ public class ControlLogicVO {
 	Integer canMultiLogic;
 	Integer defaultPeriodSize;
 
-	List<ControlLogicDeviceVO> controlDeviceaList;
+	List<ControlLogicDeviceVO> controlDeviceList;
 	List<Map<String,Object>> controlPropertyList;
 
 	public Map<String,Object> toMap() {

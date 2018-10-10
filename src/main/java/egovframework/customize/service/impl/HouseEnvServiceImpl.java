@@ -51,7 +51,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 	@Override
 	public Integer delete(Integer gsmKey, Integer greenHouseId) {
 		Map<String, Object> map = new HashMap<>();
-		map.put("gsm_key",  gsmKey);
+		map.put("gsmKey",  gsmKey);
 		map.put("id",  greenHouseId);
 		return houseEnvMapper.delete(map);
 	}
