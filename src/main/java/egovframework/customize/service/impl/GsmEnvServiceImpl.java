@@ -26,14 +26,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.kt.smartfarm.supervisor.mapper.GsmEnvMapper;
 
+import javax.annotation.Resource;
+
 
 @Service("gsmEnvService")
 public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnvService {
 
-	@Autowired
+
+	@Resource(name="gsmEnvMapper")
 	GsmEnvMapper gsmEnvMapper;
 
-	@Autowired
+	@Resource(name="houseEnvService")
 	HouseEnvService houseEnvService;
 
 	@Override

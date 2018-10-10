@@ -23,6 +23,8 @@ import egovframework.customize.service.CategoryEnvService;
 import egovframework.customize.service.CategoryEnvVO;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,7 +39,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/category")
 public class CategoryEnvController {
 
-	@Resource(name = "categoryEnvService")
+	//@Resource(name = "categoryEnvService")
+	@Autowired
 	private CategoryEnvService categoryEnvService;
 
 	

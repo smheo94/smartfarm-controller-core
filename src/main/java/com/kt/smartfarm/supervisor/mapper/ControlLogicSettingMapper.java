@@ -18,6 +18,7 @@ package com.kt.smartfarm.supervisor.mapper;
 import egovframework.customize.service.ControlLogicSettingCheckConditionVO;
 import egovframework.customize.service.ControlLogicSettingDeviceVO;
 import egovframework.customize.service.ControlLogicSettingVO;
+import egovframework.customize.service.ControlSettingOperatorVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -30,6 +31,8 @@ public interface ControlLogicSettingMapper {
 													   @Param("control_setting_id") Integer controlSettingId);
 	List<ControlLogicSettingDeviceVO> getControlDevices(Long logicId);
 	List<ControlLogicSettingCheckConditionVO> getCheckConditions(Long logicId);
+
+	List<ControlSettingOperatorVO> listControlSettingOperator();
 
 	Integer insertControlSettingChkConditionDevice(ControlLogicSettingCheckConditionVO vo);
 	Integer deleteControlSettingChkConditionDevice(@Param("id") Integer id);
@@ -48,4 +51,6 @@ public interface ControlLogicSettingMapper {
 	Integer insertControlSetting(ControlLogicSettingVO vo);
 	Integer updateControlSetting(ControlLogicSettingVO vo);
 	Integer deleteControlSetting(@Param("control_setting_id") Integer controlSettingId);
+
+
 }

@@ -9,4 +9,6 @@ public interface ControlLogicSettingService {
 	Integer delLogicSetting(Integer controlSettingId);
 
 	ControlLogicSettingVO updateLogicSetting(ControlLogicSettingVO vo);
+
+	List<ControlSettingOperatorVO> listControlSettingOperation();
 }

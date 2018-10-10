@@ -15,16 +15,16 @@ package egovframework.customize.service.impl;
 import com.kt.smartfarm.supervisor.mapper.ControlLogicSettingMapper;
 import egovframework.customize.service.*;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 
 @Service("controlLogicSettingService")
 public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl implements ControlLogicSettingService {
 
-	@Autowired
+	@Resource(name="controlLogicSettingMapper")
 	ControlLogicSettingMapper mapper;
 
 	@Override
@@ -103,4 +103,10 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 		}
 		return vo;
 	}
+
+	@Override
+	public List<ControlSettingOperatorVO> listControlSettingOperation() {
+		return mapper.listControlSettingOperator();
+	}
+
 }

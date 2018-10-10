@@ -49,7 +49,7 @@ import com.kt.smartfarm.supervisor.mapper.HouseDiaryMapper;
 public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements HouseDiaryService {
     private static final Logger log = LoggerFactory.getLogger(HouseDiaryServiceImpl.class);
 
-    @Autowired
+	@Resource(name="houseDiaryMapper")
     private HouseDiaryMapper	houseDiaryMapper;
 
     

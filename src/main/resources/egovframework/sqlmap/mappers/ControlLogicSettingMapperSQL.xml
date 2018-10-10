@@ -179,4 +179,10 @@
 		WHERE id = #{control_setting_id}
 	</delete>
 
+
+    <select id="listControlSettingOperator" resultType="controlSettingOperatorVO">
+        SELECT operator_code, operator_group, name, display_order
+        FROM cd_control_setting_operator
+    </select>
+
 </mapper>

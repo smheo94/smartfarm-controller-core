@@ -22,11 +22,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.kt.smartfarm.supervisor.mapper.CategoryEnvMapper;
 
+import javax.annotation.Resource;
+
 
 @Service("categoryEnvService")
 public class CategoryEnvServiceImpl extends EgovAbstractServiceImpl implements CategoryEnvService {
 
-	@Autowired
+
+	//@Autowired
+	@Resource(name = "categoryEnvMapper")
 	CategoryEnvMapper categoryEnvMapper;
 		
 	@Override

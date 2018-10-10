@@ -25,11 +25,13 @@ import org.springframework.stereotype.Service;
 
 import com.kt.smartfarm.supervisor.mapper.ControlLogicMapper;
 
+import javax.annotation.Resource;
+
 
 @Service("controlLogicEnvService")
 public class ControlLogicEnvServiceImpl extends EgovAbstractServiceImpl implements ControlLogicEnvService {
 
-	@Autowired
+	@Resource(name="controlLogicMapper")
 	ControlLogicMapper controlLogicMapper;
 	@Override
 	public List<ControlLogicVO> getAllLogicList() {

@@ -26,7 +26,7 @@ import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@Mapper("houesEnvMapper")
+@Mapper("houseEnvMapper")
 public interface HouseEnvMapper {	
 	Integer insert(HouseEnvVO map);
 	Integer delete(Map<String,Object> map);

@@ -46,10 +46,10 @@ import com.kt.smartfarm.supervisor.mapper.DeviceEnvMapper;
 @Service("controllerEnvService")
 public class ControllerEnvServiceImpl extends EgovAbstractServiceImpl implements ControllerEnvService {
 
-	@Autowired
+	@Resource(name="controllerEnvMapper")
 	ControllerEnvMapper controllerEnvMapper;
-	
-	@Autowired
+
+	@Resource(name="deviceEnvMapper")
 	DeviceEnvMapper deviceEnvMapper;
 	
 	@Override

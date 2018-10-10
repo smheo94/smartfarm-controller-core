@@ -59,7 +59,7 @@ import com.kt.smartfarm.supervisor.mapper.ThresholdMapper;
 public class ThresholdServiceImpl extends EgovAbstractServiceImpl implements ThresholdService {
     private static final Logger log = LoggerFactory.getLogger(ThresholdServiceImpl.class);
 
-    @Resource(name = "thresholdMapper")
+    @Resource(name="thresholdMapper")
     private ThresholdMapper	thresholdMapper;
 	
 /*

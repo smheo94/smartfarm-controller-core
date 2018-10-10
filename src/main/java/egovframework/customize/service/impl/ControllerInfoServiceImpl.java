@@ -44,7 +44,7 @@ import com.kt.smartfarm.supervisor.mapper.ControllerInfoMapper;
 @Service("controllerInfoService")
 public class ControllerInfoServiceImpl extends EgovAbstractServiceImpl implements ControllerInfoService {
 
-	@Autowired
+	@Resource(name="controllerInfoMapper")
 	ControllerInfoMapper controllerInfoMapper;
 		
 

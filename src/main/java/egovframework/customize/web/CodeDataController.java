@@ -35,6 +35,11 @@ public class CodeDataController {
 	private DeviceEnvService deviceEnvService;
 
 
+	@Resource(name = "controlLogicSettingService")
+	private ControlLogicSettingService controlLogicSettingService;
+
+
+
 	/**
 	 * @description 구동기 타입에 따른 deviceList
 	 * @param request
@@ -110,5 +115,20 @@ public class CodeDataController {
 		}
 	}
 
+
+	/**
+	 * @description 컨트롤 셋팅 오퍼레이터 리스트
+	 * @return
+	 */
+	@RequestMapping(value= "/control_setting_operator", method = RequestMethod.GET)
+	@ApiOperation(value = "컨트롤 셋팅 오퍼레이터 리스트")
+	@ResponseBody
+	public Result<List<ControlSettingOperatorVO>> listControlSettingOperator(){
+		try {
+			return new Result(controlLogicSettingService.listControlSettingOperation());
+		} catch(Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		}
+	}
 
 }

@@ -36,6 +36,7 @@
 		<typeAlias alias="controlLogicSettingDeviceVO" type="egovframework.customize.service.ControlLogicSettingDeviceVO"/>
 
 		<typeAlias alias="controlLogicSettingCheckConditionVO" type="egovframework.customize.service.ControlLogicSettingCheckConditionVO"/>
-		
+		<typeAlias alias="controlSettingOperatorVO" type="egovframework.customize.service.ControlSettingOperatorVO"/>
+
     </typeAliases>
 </configuration>

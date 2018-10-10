@@ -28,11 +28,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.kt.smartfarm.supervisor.mapper.DeviceEnvMapper;
 
+import javax.annotation.Resource;
+
 
 @Service("deviceEnvService")
 public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements DeviceEnvService {
 
-	@Autowired
+	@Resource(name="deviceEnvMapper")
 	DeviceEnvMapper deviceEnvMapper;
 	
 	@Override

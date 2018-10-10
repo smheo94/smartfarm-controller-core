@@ -29,15 +29,17 @@ import org.springframework.stereotype.Service;
 import com.kt.smartfarm.supervisor.mapper.DeviceEnvMapper;
 import com.kt.smartfarm.supervisor.mapper.HouseEnvMapper;
 
+import javax.annotation.Resource;
+
 
 @Service("houseEnvService")
 public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements HouseEnvService {
 
-	@Autowired
+	@Resource(name="houseEnvMapper")
 	HouseEnvMapper houseEnvMapper;
 	
 	//controllerId 로 device list 가져오는 mapper
-	@Autowired
+	@Resource(name="deviceEnvMapper")
 	DeviceEnvMapper deviceEnvMapper;
 	
 	@Override
