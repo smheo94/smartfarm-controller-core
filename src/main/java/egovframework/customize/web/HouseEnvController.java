@@ -54,7 +54,7 @@ public class HouseEnvController {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	@RequestMapping(value= "/", method = RequestMethod.POST)
+	@RequestMapping(value= "", method = RequestMethod.POST)
 	@ResponseBody
 	public Result<HouseEnvVO> insert( @PathVariable("gsm_key") Integer gsmKey, @RequestBody HouseEnvVO house){
 		try {
@@ -88,7 +88,7 @@ public class HouseEnvController {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	@RequestMapping(value= "/", method = RequestMethod.PUT)
+	@RequestMapping(value= "", method = RequestMethod.PUT)
 	@ResponseBody
 	public Result<HouseEnvVO> update(@PathVariable("gsm_key") Integer gsmKey, @RequestBody HouseEnvVO house){
 		try {
