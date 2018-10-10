@@ -43,14 +43,14 @@ public class DeviceEnvController {
 
 	/**
 	 * 구동기,센서 등록
-	 * @param withVDeviceList
-	 * @param gsmKey
+	 * @param device	 *
 	 * @return
+	 **/
 	@SuppressWarnings("unchecked")
-	@RequestMapping(value= "/device", method = RequestMethod.POST)
+	@RequestMapping(value= "", method = RequestMethod.POST)
 	@ApiOperation(value = "구동기,센서 등록 : OLD( /gsm/{gsm_key}/")
 	@ResponseBody
-	public Result<List<DeviceEnvVO>> insert( @PathVariable("gsm_key") Integer gsmKey, @RequestBody List<DeviceEnvVO> device){
+	public Result<List<DeviceEnvVO>> insert(@RequestBody List<DeviceEnvVO> device){
 		try {
 			return new Result(deviceEnvService.insert(device));
 		} catch(Exception e) {
