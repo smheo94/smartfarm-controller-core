@@ -16,8 +16,10 @@
 package egovframework.customize.web;
 
 import egovframework.cmmn.util.Result;
+import egovframework.customize.config.SmartfarmInterceptorConfig;
 import egovframework.customize.service.*;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +40,8 @@ public class CodeDataController {
 	@Resource(name = "controlLogicSettingService")
 	private ControlLogicSettingService controlLogicSettingService;
 
-
+	@Autowired
+    SmartfarmInterceptorConfig smartfarmInterceptorConfig;
 
 	/**
 	 * @description 구동기 타입에 따른 deviceList
@@ -130,5 +133,23 @@ public class CodeDataController {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
 	}
+
+
+    /**
+     * @description 컨트롤 셋팅 오퍼레이터 리스트
+     * @return
+     */
+    @RequestMapping(value= "/server_type", method = RequestMethod.GET)
+    @ApiOperation(value = "컨트롤 셋팅 오퍼레이터 리스트")
+    @ResponseBody
+    public Result<String> serverType(){
+        try {
+            return new Result(smartfarmInterceptorConfig.SYSTEM_TYPE);
+        } catch(Exception e) {
+            return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+        }
+    }
+
+
 
 }

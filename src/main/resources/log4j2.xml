@@ -16,11 +16,11 @@
 		<Logger name="jdbc.sqltiming" level="INFO" additivity="false">
 			<AppenderRef ref="console" />
 		</Logger>
-		<Logger name="org.springframework" level="INFO "
+		<Logger name="org.springframework" level="INFO"
 			additivity="false">
 			<AppenderRef ref="console" />
 		</Logger>
-		<Root level="DEBUG">
+		<Root level="INFO">
 			<AppenderRef ref="console" />
 		</Root>
 	</Loggers>
