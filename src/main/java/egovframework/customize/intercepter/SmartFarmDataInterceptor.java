@@ -38,13 +38,13 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String headerGsmKey = request.getHeader(X_HEADER_GSM_KEY);
-        if( SYSTEM_TYPE_SMARTFARM.equals(systemType) ) {
+        if( SYSTEM_TYPE_SMARTFARM.equalsIgnoreCase(systemType) ) {
             if( headerGsmKey == null || headerGsmKey != myGSMKey) {
                 return false;
             }
             return false;
         } else if( headerGsmKey == null) {
-                return true;
+            return true;
         }
         startTran = false;
         if( handler instanceof HandlerMethod) {

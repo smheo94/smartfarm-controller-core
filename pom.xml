@@ -15,8 +15,25 @@
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
-    
+    <profiles>
+        <profile>
+            <id>dev-center</id>
+            <properties>
+                <env>dev-center</env>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>dev-smartfarm</id>
+            <properties>
+                <env>dev-smartfarm</env>
+            </properties>
+        </profile>
+    </profiles>
 	<properties>
+        <env>dev-center</env>
 		<!-- 컨텍스트 루트 지정 -->
 		<wtpContextName>/</wtpContextName>
 		<m2eclipse.wtp.contextRoot>/</m2eclipse.wtp.contextRoot>
@@ -212,9 +229,17 @@
     </dependencies>
 
 	<build>
+        <resources>
+            <resource>
+                <directory>src/main/resources/</directory>
+            </resource>
+            <resource>
+                <directory>env/${env}/</directory>
+            </resource>
+        </resources>
         <defaultGoal>install</defaultGoal>
         <directory>${basedir}/target</directory>
-        <finalName>${artifactId}-${version}</finalName>
+        <finalName>${artifactId}-${version}-${env}</finalName>
         <pluginManagement>
             <plugins>
                 <plugin>

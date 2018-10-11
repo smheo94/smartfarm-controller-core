@@ -21,6 +21,8 @@ public class SmartfarmInterceptorConfig extends WebMvcConfigurerAdapter {
     @Override
     @DependsOn( {"propertyConfig"})
     public void addInterceptors(InterceptorRegistry registry) {
+        System.out.printf("Load Config : %s , %s\t\n", GSM_KEY, SYSTEM_TYPE);
         registry.addInterceptor(new SmartFarmDataInterceptor(SYSTEM_TYPE, GSM_KEY)).addPathPatterns("/**");
+
     }
 }
