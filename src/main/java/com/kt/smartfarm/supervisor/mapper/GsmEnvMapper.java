@@ -27,8 +27,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 @Mapper("gsmEnvMapper")
 public interface GsmEnvMapper {
-	//GsmEnvVO get(Integer gsmKey);
-	Integer delete(Integer gsmKey);
+	GsmEnvVO get(@Param("gsmKey") Integer gsmKey);
+	Integer delete(@Param("gsmKey") Integer gsmKey);
 	Integer insert(GsmEnvVO gsmInfo);
 	Integer update(GsmEnvVO gsmInfo);
 	List<Map<String,Object>> gsmOfDeviceList(@Param("gsmKey")Integer gsmKey);
