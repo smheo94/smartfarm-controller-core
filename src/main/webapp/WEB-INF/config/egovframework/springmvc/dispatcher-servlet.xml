@@ -79,8 +79,8 @@
 
  	<task:scheduler id="taskScheduler"/>
  	<task:scheduled-tasks>
- 		<!-- <task:scheduled ref="batchExcuetor" method="runWeatherSchedule" cron="0 31 2,5,8,11,14,20,23 * * *"/> -->
- 		<task:scheduled ref="batchExcuetor" method="runWeatherSchedule" cron="* 1 * * * *"/>
+ 		<task:scheduled ref="batchExcuetor" method="runWeatherSchedule" cron="0 31 2,5,8,11,14,20,23 * * *"/>
+ 		<!-- <task:scheduled ref="batchExcuetor" method="runWeatherSchedule" cron="* 1 * * * *"/> -->
  	</task:scheduled-tasks>
  		
  	<!-- 스케쥴러 설정 END -->

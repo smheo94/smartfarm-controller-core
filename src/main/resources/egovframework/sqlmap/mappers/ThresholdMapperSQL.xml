@@ -3,7 +3,7 @@
 <mapper namespace="com.kt.smartfarm.supervisor.mapper.ThresholdMapper">
 
 	 
-	<select id ="getThreshold" parameterType="string" resultType="thresholdVO">
+	<select id ="getThreshold" parameterType="Integer" resultType="thresholdVO">
 		SELECT 
 			gsm_key AS gsmKey ,
 			update_date AS updateDate ,
