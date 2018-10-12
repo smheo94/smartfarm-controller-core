@@ -15,38 +15,15 @@
  */
 package egovframework.customize.web;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
-
 import egovframework.cmmn.util.Result;
-import egovframework.customize.service.CommonEnvService;
-import egovframework.customize.service.CommonEnvVO;
-import egovframework.customize.service.DeviceService;
-import egovframework.customize.service.EgovSampleService;
 import egovframework.customize.service.HouseCropsDiaryVO;
 import egovframework.customize.service.HouseDiaryService;
 import egovframework.customize.service.HouseDiaryVO;
-import egovframework.customize.service.SampleDefaultVO;
-import egovframework.customize.service.SampleVO;
-import egovframework.rte.fdl.property.EgovPropertyService;
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.springmodules.validation.commons.DefaultBeanValidator;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
 
 /*
  * mgrEnv
@@ -101,7 +78,7 @@ public class HouseDiaryController {
 	
 	/**
 	 * @description 작업일지, 가계부 입력
-	 * @param request
+	 * @param houseDiaryVO
 	 * @return
 	 */
 	@RequestMapping(value= "", method = RequestMethod.POST)
@@ -117,7 +94,7 @@ public class HouseDiaryController {
 	
 	/**
 	 * @description 작업일지, 가계부 입력
-	 * @param request
+	 * @param houseDiaryVO
 	 * @return
 	 */
 	@RequestMapping(value= "/{id}", method = RequestMethod.PUT)
@@ -134,13 +111,13 @@ public class HouseDiaryController {
 	
 	/**
 	 * @description 작업일지, 가계부 월별 리스트 
-	 * @param request
+	 * @param greenHouseId
 	 * @return
 	 */
-	@RequestMapping(value= "/monthly/{green_house_id}", method = RequestMethod.GET)
+	@RequestMapping(value= "/monthly/{greenHouseId}", method = RequestMethod.GET)
 	@ResponseBody
-	public Result MonthlyHouseDiaryList(@PathVariable("green_house_id") Integer greenHouseId, 
-			@RequestParam("year") String year, @RequestParam("month") String month){
+	public Result MonthlyHouseDiaryList(@PathVariable("greenHouseId") Integer greenHouseId,
+			@RequestParam("year") Integer year, @RequestParam("month") Integer month){
 		try{
 			return new Result(houseDiaryService.getMonthlyHouseDiaryList(greenHouseId,year,month));
 		}catch(Exception e){
@@ -168,7 +145,7 @@ public class HouseDiaryController {
 	
 	/**
 	 * @description 작업일지, 가계부 월별 리스트 
-	 * @param request
+	 * @param id
 	 * @return
 	 */
 	@RequestMapping(value= "/{id}", method = RequestMethod.DELETE)
@@ -198,32 +175,6 @@ public class HouseDiaryController {
 		}
 	}
 
-	/**
-	 * 
-	 */
-	
-	
-	
-	/**
-	 * @description 생육정보 월별 리스트
-	 * @param year = 2018
-	 * @param month = 08
-	 * 
-	 **/
-	/*
-	@RequestMapping(value="/monthlyDiaryList/{year}/{month}", method = RequestMethod.GET)
-	@ResponseBody
-	public Result selectMonthlyDiaryList(@PathVariable String year, @PathVariable String month){
-		try{
-			List<HashMap<String,Object>> diaryList = houseDiaryService.getMonthlyDiary(year,month);
-			return new Result<List<HashMap<String,Object>>>("OK", HttpStatus.OK, diaryList);
-		}catch(Exception e){
-			e.printStackTrace();
-			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-		}		
-	}
-*/
-	
 	
 	
 	@RequestMapping(value= "/cropsDiary", method = RequestMethod.POST)
@@ -239,7 +190,7 @@ public class HouseDiaryController {
 	
 	/**
 	 * @description 작업일지, 가계부 입력
-	 * @param request
+	 * @param houseCropsVO
 	 * @return
 	 */
 	@RequestMapping(value= "/cropsDiary/{id}", method = RequestMethod.PUT)
@@ -256,13 +207,13 @@ public class HouseDiaryController {
 	
 	/**
 	 * @description 작업일지, 가계부 월별 리스트 
-	 * @param request
+	 * @param greenHouseId
 	 * @return
 	 */
 	@RequestMapping(value= "/cropsDiary/monthly/{green_house_id}", method = RequestMethod.GET)
 	@ResponseBody
 	public Result MonthlyCropsDiaryList(@PathVariable("green_house_id") Integer greenHouseId, 
-	@RequestParam("year") String year, @RequestParam("month") String month){
+	@RequestParam("year") Integer year, @RequestParam("month") Integer month){
 		try{
 			return new Result(houseDiaryService.MonthlyCropsDiaryList(greenHouseId,year,month));
 		}catch(Exception e){
@@ -273,7 +224,7 @@ public class HouseDiaryController {
 	
 	/**
 	 * @description 작업일지, 가계부 월별 리스트 
-	 * @param request
+	 * @param id
 	 * @return
 	 */
 	@RequestMapping(value= "/cropsDiary/{id}", method = RequestMethod.DELETE)

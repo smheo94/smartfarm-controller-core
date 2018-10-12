@@ -71,7 +71,7 @@
 			<if test="income != null">income =#{income},</if>
 			<if test="spend != null">spend =#{spend},</if>
 			<if test="contentType != null">content_type=#{contentType},</if>
-			<if test="workTime != null">work_time =#{work_time}</if>
+			<if test="workTime != null">work_time =#{workTime}</if>
 		</set>
 		WHERE id=#{id} AND green_house_id = #{greenHouseId}
 	</update>

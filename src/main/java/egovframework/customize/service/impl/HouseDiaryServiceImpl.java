@@ -52,72 +52,6 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 	@Resource(name="houseDiaryMapper")
     private HouseDiaryMapper	houseDiaryMapper;
 
-    
-    /*
-	@Override
-	public HashMap<String, Object> selectAllCategory() {
-		HashMap<String, Object> dataMap = new HashMap<String, Object>();
-		HashMap<String, ArrayList<String>> productMap = new HashMap<String, ArrayList<String>>();		
-		List<HashMap<String, Object>> productList;
-		try {
-			productList = houseDiaryMapper.getProductList();
-			for(HashMap<String, Object> product : productList) {
-				
-				String productName = (String)product.get("product");
-	
-				List<HashMap<String, Object>> productSpeciesAndCategoryList = houseDiaryMapper.getProductSpeciesAndCategory(productName);
-				for(HashMap<String, Object> productSpeciesAndCategory : productSpeciesAndCategoryList) {
-					String species = (String) productSpeciesAndCategory.get("product_species");
-					String category = (String) productSpeciesAndCategory.get("product_category");
-					
-					ArrayList<String> categoryList = productMap.get(species);
-					if(categoryList == null) {
-						categoryList = new ArrayList<String>();
-					}					
-					categoryList.add(category);
-					productMap.put(species, categoryList);
-				}
-			}			
-			dataMap.put("product_map", productMap);
-		} catch (Exception e) {
-			log.error("[Exception]", e);
-		}		
-		return dataMap;
-	}
-*/
-
-/*
-	@Override
-	public List<HashMap<String, Object>> getMonthlyDiary(String year, String month) {
-		HashMap<String,Object> param = new HashMap<>();
-		// 년/월 셋팅 + 1일로 셋팅		
-		Calendar startDateCal = Calendar.getInstance();
-		startDateCal.set(Calendar.YEAR, Integer.parseInt(year));
-		startDateCal.set(Calendar.MONTH, Integer.parseInt(month) - 1);
-		startDateCal.set(Calendar.DAY_OF_MONTH, 1);
-		startDateCal.set(Calendar.HOUR_OF_DAY, 0);
-		startDateCal.set(Calendar.MINUTE, 0);
-		startDateCal.set(Calendar.SECOND, 0);
-		startDateCal.set(Calendar.MILLISECOND, 0);
-		
-		// 종료날을 다음달 1일로 셋팅
-		Calendar endDateCal = (Calendar)startDateCal.clone();
-		endDateCal.add(Calendar.MONTH, 1);
-		endDateCal.add(Calendar.MILLISECOND, -1);
-		
-		Date startDate = startDateCal.getTime();
-		Date endDate = endDateCal.getTime();		
-		param.put("start_date", startDate);
-		param.put("end_date", endDate);
-		try {			
-			return houseDiaryMapper.selectDiaryMonthly(param);
-		} catch (Exception e) {
-			log.error("getMonthlyDiary", e);
-			return null;
-		}
-	}
-*/
-
 
 	@Override
 	public HouseDiaryVO insertHouseDiary(HouseDiaryVO houseDiaryVO) {
@@ -137,7 +71,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 
 
 	@Override
-	public List<HouseDiaryVO> getMonthlyHouseDiaryList(Integer houseId,String year, String month) {
+	public List<HouseDiaryVO> getMonthlyHouseDiaryList(Integer houseId,Integer year, Integer month) {
 		HashMap<String,Object> param = new HashMap<>();
 		param = getMonthDate(year,month);
 		param.put("house_id", houseId);
@@ -149,11 +83,11 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 		return houseDiaryMapper.getCategoryList22();		
 	}
     
-	public HashMap<String,Object> getMonthDate(String year,String month){
+	public HashMap<String,Object> getMonthDate(Integer year,Integer month){
 		HashMap<String,Object> result = new HashMap<>();
 		Calendar startDateCal = Calendar.getInstance();
-		startDateCal.set(Calendar.YEAR, Integer.parseInt(year));
-		startDateCal.set(Calendar.MONTH, Integer.parseInt(month) - 1);
+		startDateCal.set(Calendar.YEAR, year);
+		startDateCal.set(Calendar.MONTH, month - 1);
 		startDateCal.set(Calendar.DAY_OF_MONTH, 1);
 		startDateCal.set(Calendar.HOUR_OF_DAY, 0);
 		startDateCal.set(Calendar.MINUTE, 0);
@@ -221,7 +155,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 
 
 	@Override
-	public List<HouseCropsDiaryVO> MonthlyCropsDiaryList(Integer greenHouseId, String year, String month) {
+	public List<HouseCropsDiaryVO> MonthlyCropsDiaryList(Integer greenHouseId, Integer year, Integer month) {
 	 	HashMap<String,Object> param = new HashMap<>();
 		param = getMonthDate(year,month);
 		param.put("house_id", greenHouseId);

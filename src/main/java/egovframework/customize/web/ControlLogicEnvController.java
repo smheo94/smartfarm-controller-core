@@ -96,7 +96,7 @@ public class ControlLogicEnvController {
 //
 //	@RequestMapping(value= "/{house_id}", method = RequestMethod.GET)
 //	@ResponseBody
-//	public Result<DeviceEnvVO> get(@PathVariable("gsm_key") Integer gsmKey, @PathVariable("house_id") String houseId){
+//	public Result<DeviceEnvVO> get(@PathVariable("gsm_key") Integer gsmKey, @PathVariable("house_id") Integer houseId){
 //		try {
 //			return new Result(controlLogicEnvService.getRegList(gsmKey,houseId));
 //		} catch(Exception e) {
