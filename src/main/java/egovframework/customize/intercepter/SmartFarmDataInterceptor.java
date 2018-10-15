@@ -8,33 +8,40 @@ import egovframework.cmmn.util.InterceptPre;
 import egovframework.cmmn.util.Result;
 import egovframework.customize.message.ApplicationMessage;
 import egovframework.customize.service.GsmEnvVO;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import org.springframework.web.util.ContentCachingRequestWrapper;
+import org.springframework.web.util.ContentCachingResponseWrapper;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.util.WebUtils;
 
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.WriteListener;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import javax.servlet.http.HttpServletResponseWrapper;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.text.MessageFormat;
 import java.util.Enumeration;
 
 import static egovframework.customize.message.ApplicationMessage.NOT_FOUND_GSM_INFO;
 
 public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
+    private static final Log LOG = LogFactory.getLog( SmartFarmDataInterceptor.class );
+
+
     public  final String SYSTEM_TYPE_SMARTFARM = "Smartfarm";
     public final String X_HEADER_GSM_KEY = "X-Smartfarm-Gsm-Key";
     String systemType;
@@ -47,6 +54,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
     }
 
     public boolean startTran = false;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String headerGsmKey = request.getHeader(X_HEADER_GSM_KEY);
@@ -72,7 +80,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
                 System.out.printf( "제어기 연동이 필요 합니다.");
                 //TODO : 제어기에 데이터를 보낸다.
                 Integer gsmKey = Integer.valueOf(headerGsmKey);
-                ResponseEntity<Result> result = sendProxyRequest(gsmKey, request);
+                ResponseEntity<Result> result = sendProxyRequest(gsmKey, InterceptPre.class, request, response);
                 boolean callResult = isSuccessResult(result);
                 if(  callResult == false  ) {
                     //System.out.printf( "데이터 롤백을 진행 합니다.");
@@ -106,6 +114,10 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
     }
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws  Exception {
+        HttpStatus responseStatus = HttpStatus.valueOf(response.getStatus());
+        if( responseStatus.is4xxClientError() || responseStatus.is5xxServerError() ) {
+            return;
+        }
         String headerGsmKey = request.getHeader(X_HEADER_GSM_KEY);
         if( SYSTEM_TYPE_SMARTFARM.equals(systemType) ) {
             //스마트팜에서 Post 필터가 필요 없음
@@ -122,7 +134,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
             if( handlerMethod.getMethod().getAnnotation(InterceptPost.class) != null ) {
                 System.out.printf( "제어기에 데이터를 보냅니다.");
                 Integer gsmKey = Integer.valueOf(headerGsmKey);
-                ResponseEntity<Result> result = sendProxyRequest(gsmKey, request);
+                ResponseEntity<Result> result = sendProxyRequest(gsmKey, InterceptPost.class, request, response);
                 boolean callResult = isSuccessResult(result);
                 //TODO : 제어기에 데이터를 보냅니다.
                 if( callResult == false && startTran  ) {
@@ -138,19 +150,76 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
         }
     }
 
-
-
-    public String readBody(HttpServletRequest request) throws IOException {
-        BufferedReader input = new BufferedReader(new InputStreamReader(request.getInputStream()));
-        StringBuilder builder = new StringBuilder();
-        String buffer;
-        while ((buffer = input.readLine()) != null) {
-            if (builder.length() > 0) {
-                builder.append("\n");
-            }
-            builder.append(buffer);
+    public HttpEntity getHttpEntiry(Class annotationClass, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        if( annotationClass.equals(InterceptPre.class) ) {
+            return getHttpPreEntiry(request, response);
+        } else {
+            return getHttpPostEntiry(request, response);
         }
-        return builder.toString();
+    }
+
+    public HttpEntity getHttpPostEntiry(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpHeaders headers = new HttpHeaders();
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String headerName = headerNames.nextElement();
+            headers.set(headerName, request.getHeader(headerName));
+        }
+        ContentCachingResponseWrapper wrapper = WebUtils.getNativeResponse(response, ContentCachingResponseWrapper.class);
+        if( wrapper != null ) {
+            byte [] responseData = wrapper.getContentAsByteArray();
+            ResponseResult result = new ObjectMapper().readValue(responseData, ResponseResult.class);
+            if( result.status == HttpStatus.OK.value() ) {
+                wrapper.copyBodyToResponse();
+                return new HttpEntity<byte[]>(responseData, headers);
+            } else  {
+                return null;
+            }
+        }
+        return null;
+//        } else {
+//            BufferedReader input = new BufferedReader(new InputStreamReader(request.getInputStream()));
+//
+//            StringBuilder builder = new StringBuilder();
+//            String buffer;
+//            while ((buffer = input.readLine()) != null) {
+//                if (builder.length() > 0) {
+//                    builder.append("\n");
+//                }
+//                builder.append(buffer);
+//            }
+//            return  new HttpEntity<String>(builder.toString(),headers) ;
+//        }
+    }
+
+
+    public HttpEntity getHttpPreEntiry(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpHeaders headers = new HttpHeaders();
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String headerName = headerNames.nextElement();
+            headers.set(headerName, request.getHeader(headerName));
+        }
+
+        ContentCachingRequestWrapper wrapper = WebUtils.getNativeRequest(request, ContentCachingRequestWrapper.class);
+        if( wrapper != null ) {
+            byte [] requestData = wrapper.getContentAsByteArray();
+            return new HttpEntity<byte[]>(requestData, headers);
+        }
+        return null;
+//        } else {
+//            BufferedReader input = new BufferedReader(new InputStreamReader(request.getInputStream()));
+//
+//            StringBuilder builder = new StringBuilder();
+//            String buffer;
+//            while ((buffer = input.readLine()) != null) {
+//                if (builder.length() > 0) {
+//                    builder.append("\n");
+//                }
+//                builder.append(buffer);
+//            }
+//            return  new HttpEntity<String>(builder.toString(),headers) ;
+//        }
     }
 
     public boolean isSuccessResult(ResponseEntity<Result> result) {
@@ -167,7 +236,10 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
         }
         return true;
     }
-    public ResponseEntity<Result> sendProxyRequest(Integer gsmKey, HttpServletRequest request) throws URISyntaxException, IOException, HttpStatusCodeException {
+
+    public ResponseEntity<Result> sendProxyRequest(Integer gsmKey, Class annotationClass, HttpServletRequest request, HttpServletResponse response) throws URISyntaxException,
+            IOException,
+            HttpStatusCodeException {
 
         final GsmEnvVO gsmEnvVO = this.gsmEnvMapper.get(gsmKey);
         if( gsmEnvVO == null ) {
@@ -179,20 +251,11 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
         URI uri = new URI("http", null, server, port, null, null, null);
         uri = UriComponentsBuilder.fromUri(uri).path(requestUrl)
                 .query(request.getQueryString()).build(true).toUri();
-
-        HttpHeaders headers = new HttpHeaders();
-        Enumeration<String> headerNames = request.getHeaderNames();
-        while (headerNames.hasMoreElements()) {
-            String headerName = headerNames.nextElement();
-            headers.set(headerName, request.getHeader(headerName));
+        HttpEntity httpEntity = getHttpEntiry(annotationClass, request, response);
+        if( httpEntity == null ) {
+               return null;
         }
-
-        HttpEntity<String> httpEntity = new HttpEntity<>(readBody(request), headers);
-
         RestTemplate restTemplate = new RestTemplate();
         return restTemplate.exchange(uri, org.springframework.http.HttpMethod.valueOf(request.getMethod()) , httpEntity, Result.class);
     }
-
-
-
 }
