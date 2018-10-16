@@ -163,4 +163,10 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 		
 		return map;
 	}
+
+	@Override
+	public List<DeviceEnvVO> houseDeviceList(Integer houseId) {
+		return houseEnvMapper.getHouseDeviceList(houseId);
+		
+	}
 }

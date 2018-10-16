@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import egovframework.customize.service.DeviceEnvVO;
 import egovframework.customize.service.HouseEnvVO;
 import egovframework.customize.service.ProductMethodVO;
 import egovframework.customize.service.ProductVO;
@@ -45,6 +46,7 @@ public interface HouseEnvMapper {
 //	List<HashMap<String, Object>> getMappedDevice(Map<String, Object> map);
 	List<Integer> getMappedDevice(Map<String, Object> map);
 	List<HashMap<String, Object>> getMappedController(Map<String, Object> map);
+	List<DeviceEnvVO> getHouseDeviceList(Integer houseId);
 	
 //	List<ProductMethodVO> selectProductMethodList(HashMap<String, Object> product);
 //	List<HashMap<String, Object>> getProductSpeciesAndCategory(String productName);

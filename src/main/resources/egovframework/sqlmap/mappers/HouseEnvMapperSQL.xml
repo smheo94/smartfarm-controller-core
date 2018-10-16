@@ -175,5 +175,11 @@
 		 GROUP BY controller_id;
 	</select>
 	
+	<select id="getHouseDeviceList" parameterType="Integer" resultType="deviceEnvVO">
+		SELECT device.* 
+		FROM map_green_house_device  AS mghd
+		INNER JOIN device ON device.id = mghd.device_id
+		WHERE mghd.green_house_id = #{houseId}			
+	</select>
 	
 </mapper>
