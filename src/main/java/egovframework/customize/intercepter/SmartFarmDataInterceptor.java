@@ -77,7 +77,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
                 System.out.printf( "제어기 연동이 필요 합니다.");
                 //TODO : 제어기에 데이터를 보낸다.
                 Integer gsmKey = Integer.valueOf(headerGsmKey);
-                ResponseEntity<Result> result = sendProxyRequest(gsmKey, InterceptPre.class, request, response);
+                ResponseEntity<ResponseResult> result = sendProxyRequest(gsmKey, InterceptPre.class, request, response);
                 boolean callResult = isSuccessResult(result);
                 if(  callResult == false  ) {
                     //System.out.printf( "데이터 롤백을 진행 합니다.");
@@ -129,7 +129,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
                 if (handlerMethod.getMethod().getAnnotation(InterceptPost.class) != null) {
                     System.out.printf("제어기에 데이터를 보냅니다.");
                     Integer gsmKey = Integer.valueOf(headerGsmKey);
-                    ResponseEntity<Result> result = sendProxyRequest(gsmKey, InterceptPost.class, request, wrapper);
+                    ResponseEntity<ResponseResult> result = sendProxyRequest(gsmKey, InterceptPost.class, request, wrapper);
                     boolean callResult = isSuccessResult(result);
                     //TODO : 제어기에 데이터를 보냅니다.
                     if (!callResult && startTran) {
@@ -194,12 +194,12 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
         return null;
     }
 
-    public boolean isSuccessResult(ResponseEntity<Result> result) {
+    public boolean isSuccessResult(ResponseEntity<ResponseResult> result) {
 
         if( result == null || result.getStatusCode().is5xxServerError() || result.getStatusCode().is4xxClientError() ) {
             return false;
         }
-        final Result body = result.getBody();
+        final ResponseResult body = result.getBody();
         if( body != null ) {
             final HttpStatus resultStatus = HttpStatus.valueOf(body.status);
             if( resultStatus.is4xxClientError() || resultStatus.is5xxServerError() ) {
@@ -209,7 +209,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
         return true;
     }
 
-    public ResponseEntity<Result> sendProxyRequest(Integer gsmKey, Class annotationClass, HttpServletRequest request, HttpServletResponse response) throws URISyntaxException,
+    public ResponseEntity<ResponseResult> sendProxyRequest(Integer gsmKey, Class annotationClass, HttpServletRequest request, HttpServletResponse response) throws URISyntaxException,
             IOException,
             HttpStatusCodeException {
 
@@ -228,7 +228,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
                return null;
         }
         RestTemplate restTemplate = new RestTemplate();
-        final ResponseEntity<Result> returnValue = restTemplate.exchange(uri, HttpMethod.valueOf(request.getMethod()), httpEntity, Result.class);
+        final ResponseEntity<ResponseResult> returnValue = restTemplate.exchange(uri, HttpMethod.valueOf(request.getMethod()), httpEntity, ResponseResult.class);
         return returnValue;
     }
 }
