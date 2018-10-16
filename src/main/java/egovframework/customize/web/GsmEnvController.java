@@ -20,21 +20,19 @@ import java.util.List;
 import egovframework.cmmn.util.Result;
 import egovframework.cmmn.util.InterceptPre;
 import egovframework.cmmn.util.InterceptPost;
+import egovframework.customize.intercepter.SmartFarmDataInterceptor;
 import egovframework.customize.service.GsmEnvVO;
 import egovframework.customize.service.GsmEnvService;
 import egovframework.customize.service.HouseEnvService;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /*
  * mgrEnv
@@ -67,7 +65,8 @@ public class GsmEnvController {
 			if( gsmKey != gsmInfo.getGsmKey()) {
 				return new Result("Unmatched GSM key", HttpStatus.CONFLICT, gsmInfo);
 			}
-			return new Result(gsmEnvService.update(gsmInfo));
+			gsmEnvService.update(gsmInfo);
+			return new Result(gsmInfo);
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, gsmInfo);
 		}
@@ -81,9 +80,11 @@ public class GsmEnvController {
 	@RequestMapping(value= "", method = RequestMethod.POST)
 	@ResponseBody
 	@InterceptPost
-	public Result<GsmEnvVO> insert( @RequestBody GsmEnvVO gsmInfo){
+	public Result<GsmEnvVO> insert(HttpServletResponse response, @RequestBody GsmEnvVO gsmInfo){
 		try {
-			return new Result(gsmEnvService.insert(gsmInfo));
+			Integer result = gsmEnvService.insert(gsmInfo);
+			response.setHeader(SmartFarmDataInterceptor.X_HEADER_GSM_KEY, gsmInfo.getGsmKey().toString());
+			return new Result(gsmInfo);
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, gsmInfo);
 		}
@@ -130,9 +131,10 @@ public class GsmEnvController {
 	@RequestMapping(value= "/{gsmKey}", method = RequestMethod.DELETE)
 	@ResponseBody
 	@InterceptPre
-	public Result<GsmEnvVO> delete(@PathVariable("gsmKey") Integer gsmKey){
+	public Result<String> delete(@PathVariable("gsmKey") Integer gsmKey){
 		try {
-			return new Result(gsmEnvService.delete(gsmKey));
+			gsmEnvService.delete(gsmKey);
+			return new Result("");
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}

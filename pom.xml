@@ -237,7 +237,7 @@
                 <directory>env/${env}/</directory>
             </resource>
         </resources>
-        <defaultGoal>install</defaultGoal>
+        <defaultGoal>package</defaultGoal>
         <directory>${basedir}/target</directory>
         <finalName>${artifactId}-${version}-${env}</finalName>
         <pluginManagement>
@@ -295,9 +295,30 @@
                     <artifactId>maven-pmd-plugin</artifactId>
                     <version>3.1</version>
                 </plugin>
+
             </plugins>
         </pluginManagement>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <delete file="${project.build.outputDirectory}/application.properties" />
+                                <delete
+                                        file="${project.build.outputDirectory}/log4j2.xml" />
+                            </tasks>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <!-- EMMA -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -334,7 +355,7 @@
                 <executions>
                  <execution>
                      <id>build-image</id>
-                     <phase>package</phase>
+                     <phase>install</phase>
                      <goals>
                          <goal>build</goal>
                      </goals>
@@ -358,6 +379,29 @@
 
                 </configuration>
             </plugin>
+
+            <!---->
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-antrun-plugin</artifactId>-->
+                <!--<version>1.8</version>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<phase>package</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>run</goal>-->
+                        <!--</goals>-->
+                        <!--<configuration>-->
+                            <!--<tasks>-->
+                                <!--<delete>-->
+                                    <!--<fileset dir="${project.build.outputDirectory}/classes" includes="application.properties" />-->
+                                    <!--<fileset dir="${project.build.outputDirectory}/classes" includes="log4j.xml" />-->
+                                <!--</delete>-->
+                            <!--</tasks>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
         </plugins>
     </build>
     <reporting>

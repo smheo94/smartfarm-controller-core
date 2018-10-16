@@ -1,5 +1,6 @@
 package egovframework.customize.intercepter;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kt.smartfarm.supervisor.mapper.GsmEnvMapper;
 import egovframework.cmmn.util.InterceptPost;
@@ -10,10 +11,7 @@ import egovframework.customize.message.ApplicationMessage;
 import egovframework.customize.service.GsmEnvVO;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
@@ -43,7 +41,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
 
 
     public  final String SYSTEM_TYPE_SMARTFARM = "Smartfarm";
-    public final String X_HEADER_GSM_KEY = "X-Smartfarm-Gsm-Key";
+    public static final String X_HEADER_GSM_KEY = "X-Smartfarm-Gsm-Key";
     String systemType;
     String myGSMKey;
     GsmEnvMapper gsmEnvMapper;
@@ -72,8 +70,6 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
         }
         startTran = false;
         if( handler instanceof HandlerMethod) {
-            String controllerName = "";
-            String actionName = "";
             // there are cases where this handler isn't an instance of HandlerMethod, so the cast fails.
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             if( handlerMethod.getMethod().getAnnotation(InterceptPre.class) != null ) {
@@ -96,9 +92,6 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
                 //TODO : DB 트렌젝션을 시작하세요. 롤백을 할 수 있어야 합니다.
                 startTran =true;
             }
-            controllerName = handlerMethod.getBean().getClass().getSimpleName().replace("Controller", "");
-            actionName = handlerMethod.getMethod().getName();
-            System.out.printf( "==================== c %s, a %s\r\n", controllerName, actionName);
         }
         return true;
     }
@@ -126,14 +119,18 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
             //헤더가 없는경우 제어기로 내릴 수 없음
             return;
         }
-        String controllerName = "";
-        String actionName = "";
         if( handler instanceof HandlerMethod) {
             // there are cases where this handler isn't an instance of HandlerMethod, so the cast fails.
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             if( handlerMethod.getMethod().getAnnotation(InterceptPost.class) != null ) {
                 System.out.printf( "제어기에 데이터를 보냅니다.");
                 Integer gsmKey = Integer.valueOf(headerGsmKey);
+//                if( gsmKey == 0 ) {
+//                    headerGsmKey = response.getHeader(X_HEADER_GSM_KEY);
+//                    if( headerGsmKey != null && headerGsmKey.length() > 0 ) {
+//                        gsmKey = Integer.valueOf(headerGsmKey);
+//                    }
+//                }
                 ResponseEntity<Result> result = sendProxyRequest(gsmKey, InterceptPost.class, request, response);
                 boolean callResult = isSuccessResult(result);
                 //TODO : 제어기에 데이터를 보냅니다.
@@ -144,9 +141,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
                     //Commit()
                 }
             }
-            controllerName = handlerMethod.getBean().getClass().getSimpleName().replace("Controller", "");
-            actionName = handlerMethod.getMethod().getName();
-            System.out.printf( "==================== postHandle c %s, a %s\r\n", controllerName, actionName);
+
         }
     }
 
@@ -157,7 +152,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
             return getHttpPostEntiry(request, response);
         }
     }
-
+    private ObjectMapper objMapper =  new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     public HttpEntity getHttpPostEntiry(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpHeaders headers = new HttpHeaders();
         Enumeration<String> headerNames = request.getHeaderNames();
@@ -168,10 +163,10 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
         ContentCachingResponseWrapper wrapper = WebUtils.getNativeResponse(response, ContentCachingResponseWrapper.class);
         if( wrapper != null ) {
             byte [] responseData = wrapper.getContentAsByteArray();
-            ResponseResult result = new ObjectMapper().readValue(responseData, ResponseResult.class);
+            ResponseResult result = objMapper.readValue(responseData, ResponseResult.class);
             if( result.status == HttpStatus.OK.value() ) {
-                wrapper.copyBodyToResponse();
-                return new HttpEntity<byte[]>(responseData, headers);
+                String data  = objMapper.writeValueAsString(result.data);
+                return new HttpEntity<String>(data, headers);
             } else  {
                 return null;
             }
@@ -256,6 +251,16 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
                return null;
         }
         RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.exchange(uri, org.springframework.http.HttpMethod.valueOf(request.getMethod()) , httpEntity, Result.class);
+        final ResponseEntity<Result> returnValue = restTemplate.exchange(uri, HttpMethod.valueOf(request.getMethod()), httpEntity, Result.class);
+        ContentCachingResponseWrapper wrapper = WebUtils.getNativeResponse(response, ContentCachingResponseWrapper.class);
+        if( wrapper != null ) {
+            byte[] responseData = wrapper.getContentAsByteArray();
+            ResponseResult result = objMapper.readValue(responseData, ResponseResult.class);
+            if (result.status == HttpStatus.OK.value()) {
+
+                wrapper.copyBodyToResponse();
+            }
+        }
+        return returnValue;
     }
 }
