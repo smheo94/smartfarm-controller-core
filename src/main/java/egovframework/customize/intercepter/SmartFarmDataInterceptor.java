@@ -115,7 +115,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
                 return;
             }
             String headerGsmKey = request.getHeader(X_HEADER_GSM_KEY);
-            if( SYSTEM_TYPE_SMARTFARM.equals(systemType) ) {
+            if( SYSTEM_TYPE_SMARTFARM.equalsIgnoreCase(systemType) ) {
                 //스마트팜에서 Post 필터가 필요 없음
                 return;
             } else if( headerGsmKey == null) {
