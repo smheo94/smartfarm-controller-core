@@ -39,7 +39,7 @@
 			green_house_id,
 			title,
 			content,
-			work,
+			WORK,
 			etc,
 			start_date,
 			end_date,
@@ -49,12 +49,11 @@
 			spend,
 			content_type,
 			work_time
-		FROM house_diary 
-		WHERE (
-			START_DATE BETWEEN #{start_date} AND #{end_date} 
-			OR END_DATE between #{start_date} AND #{end_date}
-			AND green_house_id = #{house_id}
-		)
+		FROM house_diary
+		WHERE green_house_id = #{green_house_id}
+			AND START_DATE BETWEEN #{start_date} AND #{end_date} 
+			AND END_DATE BETWEEN #{start_date} AND #{end_date}
+			
 	</select>
 	
 	<update id="updateHouseDiary" parameterType="houseDiaryVO">

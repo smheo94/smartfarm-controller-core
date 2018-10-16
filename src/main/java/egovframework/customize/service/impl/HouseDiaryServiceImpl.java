@@ -74,8 +74,9 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 	public List<HouseDiaryVO> getMonthlyHouseDiaryList(Integer houseId,Integer year, Integer month) {
 		HashMap<String,Object> param = new HashMap<>();
 		param = getMonthDate(year,month);
-		param.put("house_id", houseId);
+		param.put("green_house_id", houseId);
 		return houseDiaryMapper.getMonthlyHouseDiaryList(param);
+		
 	}
 
 	@Override
