@@ -33,6 +33,7 @@ import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Enumeration;
+import java.util.Objects;
 
 import static egovframework.customize.message.ApplicationMessage.NOT_FOUND_GSM_INFO;
 
@@ -57,7 +58,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String headerGsmKey = request.getHeader(X_HEADER_GSM_KEY);
         if( SYSTEM_TYPE_SMARTFARM.equalsIgnoreCase(systemType) ) {
-            if( headerGsmKey == null || headerGsmKey != myGSMKey) {
+            if( headerGsmKey == null || !Objects.equals(headerGsmKey, myGSMKey)) {
                 setErrorResult(response, String.format(ApplicationMessage.MISS_MATCHING_GSM_KEY, headerGsmKey),
                         HttpStatus.FORBIDDEN);
                 return false;
@@ -107,60 +108,62 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
     }
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws  Exception {
+        ContentCachingResponseWrapper wrapper = WebUtils.getNativeResponse(response, ContentCachingResponseWrapper.class);
         HttpStatus responseStatus = HttpStatus.valueOf(response.getStatus());
-        if( responseStatus.is4xxClientError() || responseStatus.is5xxServerError() ) {
-            return;
-        }
-        String headerGsmKey = request.getHeader(X_HEADER_GSM_KEY);
-        if( SYSTEM_TYPE_SMARTFARM.equals(systemType) ) {
-            //스마트팜에서 Post 필터가 필요 없음
-            return;
-        } else if( headerGsmKey == null) {
-            //헤더가 없는경우 제어기로 내릴 수 없음
-            return;
-        }
-        if( handler instanceof HandlerMethod) {
-            // there are cases where this handler isn't an instance of HandlerMethod, so the cast fails.
-            HandlerMethod handlerMethod = (HandlerMethod) handler;
-            if( handlerMethod.getMethod().getAnnotation(InterceptPost.class) != null ) {
-                System.out.printf( "제어기에 데이터를 보냅니다.");
-                Integer gsmKey = Integer.valueOf(headerGsmKey);
-//                if( gsmKey == 0 ) {
-//                    headerGsmKey = response.getHeader(X_HEADER_GSM_KEY);
-//                    if( headerGsmKey != null && headerGsmKey.length() > 0 ) {
-//                        gsmKey = Integer.valueOf(headerGsmKey);
-//                    }
-//                }
-                ResponseEntity<Result> result = sendProxyRequest(gsmKey, InterceptPost.class, request, response);
-                boolean callResult = isSuccessResult(result);
-                //TODO : 제어기에 데이터를 보냅니다.
-                if( callResult == false && startTran  ) {
-                    System.out.printf( "데이터 롤백을 진행 합니다.");
-                    //TODO: 데이터 롤백을 진행 합니다.
-                } else {
-                    //Commit()
-                }
+        try {
+            if( responseStatus.is4xxClientError() || responseStatus.is5xxServerError() ) {
+                return;
+            }
+            String headerGsmKey = request.getHeader(X_HEADER_GSM_KEY);
+            if( SYSTEM_TYPE_SMARTFARM.equals(systemType) ) {
+                //스마트팜에서 Post 필터가 필요 없음
+                return;
+            } else if( headerGsmKey == null) {
+                //헤더가 없는경우 제어기로 내릴 수 없음
+                return;
             }
 
+            if (handler instanceof HandlerMethod) {
+                // there are cases where this handler isn't an instance of HandlerMethod, so the cast fails.
+                HandlerMethod handlerMethod = (HandlerMethod) handler;
+                if (handlerMethod.getMethod().getAnnotation(InterceptPost.class) != null) {
+                    System.out.printf("제어기에 데이터를 보냅니다.");
+                    Integer gsmKey = Integer.valueOf(headerGsmKey);
+                    ResponseEntity<Result> result = sendProxyRequest(gsmKey, InterceptPost.class, request, wrapper);
+                    boolean callResult = isSuccessResult(result);
+                    //TODO : 제어기에 데이터를 보냅니다.
+                    if (!callResult && startTran) {
+                        System.out.printf("데이터 롤백을 진행 합니다.");
+                        //TODO: 데이터 롤백을 진행 합니다.
+                    } else {
+                        //Commit()
+                    }
+                }
+
+            }
+        } finally {
+
+            wrapper.copyBodyToResponse();
         }
+
     }
 
-    public HttpEntity getHttpEntiry(Class annotationClass, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private HttpEntity getHttpEntity(Class annotationClass, HttpServletRequest request, HttpServletResponse response) throws IOException {
         if( annotationClass.equals(InterceptPre.class) ) {
-            return getHttpPreEntiry(request, response);
+            return getHttpPreEntity(request, response);
         } else {
-            return getHttpPostEntiry(request, response);
+            return getHttpPostEntity(request, response);
         }
     }
     private ObjectMapper objMapper =  new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    public HttpEntity getHttpPostEntiry(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private HttpEntity getHttpPostEntity(HttpServletRequest request, HttpServletResponse respone) throws IOException {
         HttpHeaders headers = new HttpHeaders();
         Enumeration<String> headerNames = request.getHeaderNames();
         while (headerNames.hasMoreElements()) {
             String headerName = headerNames.nextElement();
             headers.set(headerName, request.getHeader(headerName));
         }
-        ContentCachingResponseWrapper wrapper = WebUtils.getNativeResponse(response, ContentCachingResponseWrapper.class);
+        ContentCachingResponseWrapper wrapper = (ContentCachingResponseWrapper)respone;
         if( wrapper != null ) {
             byte [] responseData = wrapper.getContentAsByteArray();
             ResponseResult result = objMapper.readValue(responseData, ResponseResult.class);
@@ -172,23 +175,10 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
             }
         }
         return null;
-//        } else {
-//            BufferedReader input = new BufferedReader(new InputStreamReader(request.getInputStream()));
-//
-//            StringBuilder builder = new StringBuilder();
-//            String buffer;
-//            while ((buffer = input.readLine()) != null) {
-//                if (builder.length() > 0) {
-//                    builder.append("\n");
-//                }
-//                builder.append(buffer);
-//            }
-//            return  new HttpEntity<String>(builder.toString(),headers) ;
-//        }
     }
 
 
-    public HttpEntity getHttpPreEntiry(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private HttpEntity getHttpPreEntity(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpHeaders headers = new HttpHeaders();
         Enumeration<String> headerNames = request.getHeaderNames();
         while (headerNames.hasMoreElements()) {
@@ -202,19 +192,6 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
             return new HttpEntity<byte[]>(requestData, headers);
         }
         return null;
-//        } else {
-//            BufferedReader input = new BufferedReader(new InputStreamReader(request.getInputStream()));
-//
-//            StringBuilder builder = new StringBuilder();
-//            String buffer;
-//            while ((buffer = input.readLine()) != null) {
-//                if (builder.length() > 0) {
-//                    builder.append("\n");
-//                }
-//                builder.append(buffer);
-//            }
-//            return  new HttpEntity<String>(builder.toString(),headers) ;
-//        }
     }
 
     public boolean isSuccessResult(ResponseEntity<Result> result) {
@@ -246,21 +223,12 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
         URI uri = new URI("http", null, server, port, null, null, null);
         uri = UriComponentsBuilder.fromUri(uri).path(requestUrl)
                 .query(request.getQueryString()).build(true).toUri();
-        HttpEntity httpEntity = getHttpEntiry(annotationClass, request, response);
+        HttpEntity httpEntity = getHttpEntity(annotationClass, request, response);
         if( httpEntity == null ) {
                return null;
         }
         RestTemplate restTemplate = new RestTemplate();
         final ResponseEntity<Result> returnValue = restTemplate.exchange(uri, HttpMethod.valueOf(request.getMethod()), httpEntity, Result.class);
-        ContentCachingResponseWrapper wrapper = WebUtils.getNativeResponse(response, ContentCachingResponseWrapper.class);
-        if( wrapper != null ) {
-            byte[] responseData = wrapper.getContentAsByteArray();
-            ResponseResult result = objMapper.readValue(responseData, ResponseResult.class);
-            if (result.status == HttpStatus.OK.value()) {
-
-                wrapper.copyBodyToResponse();
-            }
-        }
         return returnValue;
     }
 }
