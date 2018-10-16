@@ -68,7 +68,7 @@ public class ControlLogicEnvController {
 	@RequestMapping(value= "/{logicId}/controlproperty", method = RequestMethod.GET)
 	@ApiOperation("특정 제어로직에 사용될 프로퍼티 목록을 조회합니다.")
 	@ResponseBody
-	public Result<List<HashMap<String,Object>>> getLogicPropertyList(Long logicId){
+	public Result<List<HashMap<String,Object>>> getLogicPropertyList(@PathVariable("logicId") Long logicId){
 		try {
 			return new Result(controlLogicEnvService.getLogicPropertyList(logicId));
 		} catch(Exception e) {
@@ -83,7 +83,7 @@ public class ControlLogicEnvController {
 	@RequestMapping(value= "/{logicId}/controldevice", method = RequestMethod.GET)
 	@ApiOperation("특정 제어로직에 사용될  제어 디바이스 종류를 조회합니다.")
 	@ResponseBody
-	public Result<List<ControlLogicDeviceVO>> getLogicDeviceList(Long logicId){
+	public Result<List<ControlLogicDeviceVO>> getLogicDeviceList(@PathVariable("logicId") Long logicId){
 		try {
 			return new Result(controlLogicEnvService.getLogicDeviceList(logicId));
 		} catch(Exception e) {
