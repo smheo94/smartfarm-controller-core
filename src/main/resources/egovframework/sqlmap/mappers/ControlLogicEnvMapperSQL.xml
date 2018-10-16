@@ -66,7 +66,7 @@
 				AND clpl.logic_id = #{logicId}
 			</if>
 		</where>
-		ORDER BY is_period, priority
+		ORDER BY control_properties.id,is_period, priority
 	</select>
 	
 </mapper>
