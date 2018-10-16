@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import egovframework.cmmn.util.Result;
 import egovframework.customize.service.DeviceEnvService;
+import egovframework.customize.service.DeviceEnvVO;
 import egovframework.customize.service.HouseEnvVO;
 import egovframework.customize.service.ProductVO;
 import egovframework.customize.service.DeviceTypeVO;
@@ -161,6 +162,16 @@ public class HouseEnvController {
 	public Result<List<ProductVO>> selectProductList(){
 		try {			
 			return new Result(houseEnvService.selectProductList());
+		} catch(Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		}
+	}
+	
+	@RequestMapping(value= "/{houseId}/deviceList", method = RequestMethod.GET)
+	@ResponseBody
+	public Result<List<DeviceEnvVO>> houseDeviceList(@PathVariable("houseId") Integer houseId){
+		try {			
+			return new Result(houseEnvService.houseDeviceList(houseId));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
