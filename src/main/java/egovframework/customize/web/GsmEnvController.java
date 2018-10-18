@@ -56,7 +56,7 @@ public class GsmEnvController {
 	 * @param gsmInfo	 *
 	 * @return
 	 */
-	@RequestMapping(value= "/{gmsKey}", method = RequestMethod.PUT)
+	@RequestMapping(value= "/{gsmKey}", method = RequestMethod.PUT)
 	@ApiOperation("제어기 정보 수정, OLD /")
 	@ResponseBody
 	@InterceptPre
