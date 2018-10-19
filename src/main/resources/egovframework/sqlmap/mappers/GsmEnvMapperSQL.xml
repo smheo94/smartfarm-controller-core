@@ -23,20 +23,45 @@
 	</insert>
 	
 	<update id="update" parameterType="gsmEnvVO">
-		UPDATE controller
-		SET
-		<if test="controller_info_id != null">controller_info_id = #{controllerInfoId},</if>
-		,
-		<if test="controller_type != null">controller_type = #{controllerType},</if>
-		,
-		<if test="ip != null">ip = #{ip},</if>
-		,
-		<if test="PORT != null">PORT = #{port},</if>
-		,
-		<if test="controller_status != null">controller_status = #{controllerStatus},</if>
-		,
-		<if test="description != null">description = #{description},</if>
-		WHERE gsm_key = #{gsmKey} AND id = #{id};
+	
+		UPDATE gsm_info
+		SET 
+			<if test="gsm_key != null"> #{gsm_key},</if>
+			<if test="user_info_id != null"> #{user_info_id},</if>
+			<if test="is_mine != null"> #{is_mine},</if>
+			<if test="area_code != null"> #{area_code},</if>
+			<if test="farm_nickname != null"> #{farm_nickname},</if>
+			<if test="update_date != null"> #{update_date},</if>
+			<if test="owner_user_info_id != null"> #{owner_user_info_id},</if>
+			<if test="master_system_host != null"> #{master_system_host},</if>
+			<if test="master_system_port != null"> #{master_system_port},</if>
+			<if test="system_host != null"> #{system_host},</if>
+			<if test="system_port != null"> #{system_port},</if>
+			<if test="vpn_system_host != null"> #{vpn_system_host},</if>
+			<if test="vpn_system_port != null"> #{vpn_system_port},</if>
+			<if test="cropsurl != null"> #{cropsurl},</if>
+			<if test="imsurl != null"> #{imsurl},</if>
+			<if test="mqtt_broker_host != null"> #{mqtt_broker_host},</if>
+			<if test="mqtt_broker_port != null"> #{mqtt_broker_port},</if>
+			<if test="server_read_time != null"> #{server_read_time},</if>
+			<if test="product_interval != null"> #{product_interval},</if>
+			<if test="monitoring_interval != null"> #{monitoring_interval},</if>
+			<if test="history_save_db_interval != null"> #{history_save_db_interval},</if>
+			<if test="sensor_current_retention_period != null"> #{sensor_current_retention_period},</if>
+			<if test="debug_stop_event != null"> #{debug_stop_event},</if>
+			<if test="debug_stop_crops != null"> #{debug_stop_crops},</if>
+			<if test="debug_stop_device_auto_control != null"> #{debug_stop_device_auto_control},</if>
+			<if test="debug_stop_ims != null"> #{debug_stop_ims},</if>
+			<if test="delay_auto_control_start != null"> #{delay_auto_control_start},</if>
+			<if test="package_version != null"> #{package_version},</if>
+			<if test="schema_version != null"> #{schema_version},</if>
+			<if test="nutrient_monitoring_interval != null"> #{nutrient_monitoring_interval},</if>
+			<if test="farm_nickname_i18n != null"> #{farm_nickname_i18n},</if>
+			<if test="user_id != null"> #{user_id},</if>
+			<if test="farm_db_id != null"> #{farm_db_id},</if>
+			<if test="category_id != null"> #{category_id},</if>
+			<if test="monitoring_process_interval != null"> #{monitoring_process_interval}</if>
+		WHERE gsm_key = #{gsm_key};
 	</update>
 	
 	<delete id="delete" >
