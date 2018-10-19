@@ -40,12 +40,14 @@ public class GsmEnvVO {
 	Integer delayAutoControlStart;
 	String packageVersion;
 	String schemaVersion;
+	String vpnSystemHost;
+	String vpnSystemPort;
 	Integer nutrientMonitoringInterval;
 	String farmNicknameI18n;
 	String userId;
 	Integer farmDbId;
 	Integer categoryId;
-
+	Integer monitoringProcessInterval;
 	ThresholdVO threshold;
 	Integer device_count;
 

@@ -22,46 +22,45 @@
 		);
 	</insert>
 	
-	<update id="update" parameterType="gsmEnvVO">
-	
+	<update id="update" parameterType="gsmEnvVO">	
 		UPDATE gsm_info
 		SET 
-			<if test="gsm_key != null"> #{gsm_key},</if>
-			<if test="user_info_id != null"> #{user_info_id},</if>
-			<if test="is_mine != null"> #{is_mine},</if>
-			<if test="area_code != null"> #{area_code},</if>
-			<if test="farm_nickname != null"> #{farm_nickname},</if>
-			<if test="update_date != null"> #{update_date},</if>
-			<if test="owner_user_info_id != null"> #{owner_user_info_id},</if>
-			<if test="master_system_host != null"> #{master_system_host},</if>
-			<if test="master_system_port != null"> #{master_system_port},</if>
-			<if test="system_host != null"> #{system_host},</if>
-			<if test="system_port != null"> #{system_port},</if>
-			<if test="vpn_system_host != null"> #{vpn_system_host},</if>
-			<if test="vpn_system_port != null"> #{vpn_system_port},</if>
-			<if test="cropsurl != null"> #{cropsurl},</if>
-			<if test="imsurl != null"> #{imsurl},</if>
-			<if test="mqtt_broker_host != null"> #{mqtt_broker_host},</if>
-			<if test="mqtt_broker_port != null"> #{mqtt_broker_port},</if>
-			<if test="server_read_time != null"> #{server_read_time},</if>
-			<if test="product_interval != null"> #{product_interval},</if>
-			<if test="monitoring_interval != null"> #{monitoring_interval},</if>
-			<if test="history_save_db_interval != null"> #{history_save_db_interval},</if>
-			<if test="sensor_current_retention_period != null"> #{sensor_current_retention_period},</if>
-			<if test="debug_stop_event != null"> #{debug_stop_event},</if>
-			<if test="debug_stop_crops != null"> #{debug_stop_crops},</if>
-			<if test="debug_stop_device_auto_control != null"> #{debug_stop_device_auto_control},</if>
-			<if test="debug_stop_ims != null"> #{debug_stop_ims},</if>
-			<if test="delay_auto_control_start != null"> #{delay_auto_control_start},</if>
-			<if test="package_version != null"> #{package_version},</if>
-			<if test="schema_version != null"> #{schema_version},</if>
-			<if test="nutrient_monitoring_interval != null"> #{nutrient_monitoring_interval},</if>
-			<if test="farm_nickname_i18n != null"> #{farm_nickname_i18n},</if>
-			<if test="user_id != null"> #{user_id},</if>
-			<if test="farm_db_id != null"> #{farm_db_id},</if>
-			<if test="category_id != null"> #{category_id},</if>
-			<if test="monitoring_process_interval != null"> #{monitoring_process_interval}</if>
-		WHERE gsm_key = #{gsm_key};
+			<if test="gsmKey != null"> gsm_key= #{gsmKey}</if>
+			<if test="userInfoId != null"> , user_info_id= #{userInfoId}</if>
+			<if test="isMine != null"> , is_mine= #{isMine}</if>
+			<if test="areaCode != null"> , area_code= #{areaCode}</if>
+			<if test="farmNickname != null"> , farm_nickname= #{farmNickname}</if>
+			<if test="updateDate != null"> , update_date= #{updateDate}</if>
+			<if test="ownerUserInfoId != null"> , owner_user_info_id= #{ownerUserInfoId}</if>
+			<if test="masterSystemHost != null"> , master_system_host= #{masterSystemHost}</if>
+			<if test="masterSystemPort != null"> , master_system_port= #{masterSystemPort}</if>
+			<if test="systemHost != null"> , system_host= #{systemHost}</if>
+			<if test="systemPort != null"> , system_port= #{systemPort}</if>
+			<if test="vpnSystemHost != null"> , vpn_system_host= #{vpnSystemHost}</if>
+			<if test="vpnSystemPort != null"> , vpn_system_port= #{vpnSystemPort}</if>
+			<if test="cropsurl != null"> , cropsurl= #{cropsurl}</if>
+			<if test="imsurl != null"> , imsurl= #{imsurl}</if>
+			<if test="mqttBrokerHost != null"> , mqtt_broker_host= #{mqttbrokerHost}</if>
+			<if test="mqttBrokerPort != null"> , mqtt_broker_port= #{mqttBrokerPort}</if>
+			<if test="serverReadTime != null"> , server_read_time= #{serverReadTime}</if>
+			<if test="productInterval != null"> , product_interval= #{productInterval}</if>
+			<if test="monitoringInterval != null"> , monitoring_interval= #{monitoringInterval}</if>
+			<if test="historySaveDbInterval != null"> , history_save_db_interval= #{historySaveDbInterval}</if>
+			<if test="sensorCurrentRetentionPeriod != null"> , sensor_current_retention_period= #{sensorCurrentRetentionPeriod}</if>
+			<if test="debugStopEvent != null"> , debug_stop_event= #{debugStopEvent}</if>
+			<if test="debugStopCrops != null"> , debug_stop_crops= #{debugStopCrops}</if>
+			<if test="debugStopDeviceAutoControl != null"> , debug_stop_device_auto_control= #{debugStopDeviceAutoContorl}</if>
+			<if test="debugStopIms != null"> , debug_stop_ims= #{debugStopIms}</if>
+			<if test="delayAutoControlStart != null"> , delay_auto_control_start = #{delayAutoControlStart}</if>
+			<if test="packageVersion != null"> , package_version = #{packageVersion}</if>
+			<if test="schemaVersion != null"> , schema_version = #{schemaVersion}</if>
+			<if test="nutrientMonitoringInterval != null"> , nutrient_monitoring_interval= #{nutrientMonitoringInterval}</if>
+			<if test="farmNicknameI18n != null"> , farm_nickname_i18n = #{farmNicknameI18n}</if>
+			<if test="userId != null"> , user_id = #{userId}</if>
+			<if test="farmDbId != null"> , farm_db_id = #{farmDbId}</if>
+			<if test="categoryId != null"> , category_id = #{categoryId}</if>
+			<if test="monitoringProcessInterval != null"> ,monitoring_process_interval = #{monitoringProcessInterval}</if>
+		WHERE gsm_key = #{gsmKey}
 	</update>
 	
 	<delete id="delete" >
