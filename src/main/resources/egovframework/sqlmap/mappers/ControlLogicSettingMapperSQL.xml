@@ -37,7 +37,8 @@
         <result column="logic_period_size" property="logicPeriodSize"/>
         <result column="auto_manual_mode" property="autoManualMode"/>
         <result column="create_dt" property="createDt"/>
-        <result column="update_dt" property="updateDt"/>
+        <result column="default_period_size" property="defaultPeriodSize"/>
+        <result column="pre_order_setting_id" property="preOrderSettingId"/>
         <result column="pre_order_setting_id" property="preOrderSettingId"/>
         <collection property="checkConditionList" javaType="java.util.ArrayList"
                     ofType="controlLogicSettingCheckConditionVO" column="control_setting_id"
