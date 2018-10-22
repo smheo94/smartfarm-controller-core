@@ -90,7 +90,11 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 		}
 		if( vo.getCheckConditionList() != null ) {
 			vo.getCheckConditionList().forEach( checkList ->{
-				mapper.updateControlSettingChkCondition(checkList);
+				int isExist = mapper.updateControlSettingChkCondition(checkList);
+				if(isExist == 0){
+					mapper.insertControlSettingChkCondition(checkList);	
+				}
+				
 				if( checkList.getId() != null )
 				{
 					mapper.deleteControlSettingChkConditionDevice(checkList.getId());
