@@ -162,7 +162,7 @@ public class GsmEnvController {
 	 * @description 농장주와 연결되지 않은 제어기 리스트.
 	 * @return
 	 */
-	@RequestMapping(value= "/notMappedGSM", method = RequestMethod.GET)
+	@RequestMapping(value= "/notMappedList", method = RequestMethod.GET)
 	@ApiOperation("농장주와 연결되지 않은 제어기 리스트.")
 	@ResponseBody
 	public Result<List<GsmEnvVO>> notMappedList(){
