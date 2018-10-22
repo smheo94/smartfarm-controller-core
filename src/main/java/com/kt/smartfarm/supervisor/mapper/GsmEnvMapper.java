@@ -34,5 +34,6 @@ public interface GsmEnvMapper {
 	List<Map<String,Object>> gsmOfDeviceList(@Param("gsmKey")Integer gsmKey);
 	List<Map<String, Object>> getGsmList(@Param("gsmKey") Integer gsmKey);
 	List<Map<String, Object>> getHouseList(@Param("gsmKey") Integer gsmKey);
+	List<GsmEnvVO> notMappedList();
 
 }

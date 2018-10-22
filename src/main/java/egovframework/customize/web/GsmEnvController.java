@@ -157,4 +157,19 @@ public class GsmEnvController {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
 	}
+	
+	/**
+	 * @description 농장주와 연결되지 않은 제어기 리스트.
+	 * @return
+	 */
+	@RequestMapping(value= "/notMappedGSM", method = RequestMethod.GET)
+	@ApiOperation("농장주와 연결되지 않은 제어기 리스트.")
+	@ResponseBody
+	public Result<List<GsmEnvVO>> notMappedList(){
+		try {		    
+			return new Result<List<GsmEnvVO>>(gsmEnvService.notMappedList());
+		} catch(Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		}
+	}
 }
