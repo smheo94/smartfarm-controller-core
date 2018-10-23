@@ -100,5 +100,10 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 		}
 		return gsmList;
 	}
+
+	@Override
+	public List<GsmEnvVO> notMappedList() {
+		return gsmEnvMapper.notMappedList();		
+	}
   
 }

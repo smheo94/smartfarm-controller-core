@@ -20,6 +20,8 @@ public interface GsmEnvService {
 
 	List<Map<String, Object>> list(boolean all);
 
+	List<GsmEnvVO> notMappedList();
+
 	
 	
 	

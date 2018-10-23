@@ -65,7 +65,8 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
             }
             //헤더의 GSM 이 맞는경우
             return true;
-        } else if( headerGsmKey == null) {
+        } 
+        else if( headerGsmKey == null) {
             //SuperVisor고 GSM 이 없는경우는 그냥 수행
             return true;
         }
@@ -73,7 +74,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
         if( handler instanceof HandlerMethod) {
             // there are cases where this handler isn't an instance of HandlerMethod, so the cast fails.
             HandlerMethod handlerMethod = (HandlerMethod) handler;
-            if( handlerMethod.getMethod().getAnnotation(InterceptPre.class) != null ) {
+            if( handlerMethod.getMethod().getAnnotation(InterceptPre.class) != null || handlerMethod.getMethod().getAnnotation(InterceptPost.class) != null) {
                 System.out.printf( "제어기 연동이 필요 합니다.");
                 //TODO : 제어기에 데이터를 보낸다.
                 Integer gsmKey = Integer.valueOf(headerGsmKey);
@@ -115,6 +116,9 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
                 return;
             }
             String headerGsmKey = request.getHeader(X_HEADER_GSM_KEY);
+            if(headerGsmKey == null){
+            	headerGsmKey = response.getHeader(X_HEADER_GSM_KEY);	
+            }
             if( SYSTEM_TYPE_SMARTFARM.equalsIgnoreCase(systemType) ) {
                 //스마트팜에서 Post 필터가 필요 없음
                 return;
@@ -141,7 +145,9 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
                 }
 
             }
-        } finally {
+        } catch(Exception e){
+        	e.printStackTrace();
+        }finally {
 
             wrapper.copyBodyToResponse();
         }
@@ -217,7 +223,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
         if( gsmEnvVO == null ) {
             throw new HttpClientErrorException( HttpStatus.NOT_FOUND, NOT_FOUND_GSM_INFO);
         }
-        String server  = gsmEnvVO.getSystemHost();;
+        String server  = gsmEnvVO.getSystemHost();
         Integer port = gsmEnvVO.getSystemPort();
         String requestUrl = request.getRequestURI();
         URI uri = new URI("http", null, server, port, null, null, null);

@@ -135,4 +135,18 @@
 		INNER JOIN gsm_info ON green_house.gsm_key = gsm_info.gsm_key
 		WHERE green_house.gsm_key = #{gsmKey}
 	</select>
+	
+	<select id="notMappedList" resultType="gsmEnvVO">
+		SELECT
+			gsm_key, user_info_id, is_mine, area_code, farm_nickname, update_date, owner_user_info_id, master_system_host, 
+			master_system_port, system_host, system_port, vpn_system_host, vpn_system_port, cropsurl, imsurl, mqtt_broker_host, 
+			mqtt_broker_port, server_read_time, product_interval, monitoring_interval, history_save_db_interval, 
+			sensor_current_retention_period, debug_stop_event, debug_stop_crops, debug_stop_device_auto_control, 
+			debug_stop_ims, delay_auto_control_start, package_version, schema_version, nutrient_monitoring_interval, 
+			farm_nickname_i18n, user_id, farm_db_id, category_id, monitoring_process_interval
+		FROM
+			gsm_info
+		WHERE 
+			user_info_id IS NULL
+	</select>
 </mapper>
