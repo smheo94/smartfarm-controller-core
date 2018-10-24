@@ -110,18 +110,17 @@ public class HouseEnvController {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
 	}
-	
-	/*
+
 	@RequestMapping(value= "/{greenHouseId}", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<HouseEnvVO> get( @PathVariable("gsm_key") Integer gsmKey,  @PathVariable("greenHouseId") Integer greenHouseId){
+	public Result<HashMap<String,Object>> get( @PathVariable("gsm_key") Integer gsmKey,  @PathVariable("greenHouseId") Integer greenHouseId){
 		try {
-			return new Result(houseEnvService.get(gsmKey, greenHouseId));
+			return new Result<HashMap<String,Object>>(houseEnvService.get(gsmKey, greenHouseId));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
 	}
-	*/
+	
 	@RequestMapping(value= "/{greenHouseId}", method = RequestMethod.DELETE)
 	@ResponseBody
 	public Result<HouseEnvVO> delete(@PathVariable("gsm_key") Integer gsmKey,  @PathVariable("greenHouseId") Integer greenHouseId){

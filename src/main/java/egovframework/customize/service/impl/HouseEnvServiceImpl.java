@@ -14,6 +14,7 @@ package egovframework.customize.service.impl;
 
 import egovframework.customize.service.HouseEnvVO;
 import egovframework.customize.service.ProductVO;
+import egovframework.customize.service.ControlLogicSettingVO;
 import egovframework.customize.service.DeviceEnvVO;
 import egovframework.customize.service.HouseEnvService;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
@@ -26,6 +27,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kt.smartfarm.supervisor.mapper.ControlLogicSettingMapper;
 import com.kt.smartfarm.supervisor.mapper.DeviceEnvMapper;
 import com.kt.smartfarm.supervisor.mapper.HouseEnvMapper;
 
@@ -41,6 +43,9 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 	//controllerId 로 device list 가져오는 mapper
 	@Resource(name="deviceEnvMapper")
 	DeviceEnvMapper deviceEnvMapper;
+	
+	@Resource(name="controlLogicSettingMapper")
+	ControlLogicSettingMapper controlLogicMapper;
 	
 	@Override
 	public HouseEnvVO insert(HouseEnvVO vo) {				
@@ -61,33 +66,33 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 		houseEnvMapper.update(vo);
 		return vo;
 	}
-/*
+
 	@Override
 	public HashMap<String,Object> get(Integer gsmKey, Integer greenHouseId) {
 		
 		HashMap<String,Object> result = new HashMap<String, Object>();
-		List<HashMap<String,Object>> result = new ArrayList<HashMap<String,Object>>();
-		List<HashMap<String,Object>> deviceList = new ArrayList<HashMap<String,Object>>();
-		List<Integer> deviceIds = new ArrayList<Integer>();
-		List<HashMap<String,Object>> controllerList = new ArrayList<HashMap<String,Object>>();
+		List<HashMap<String,Object>> houseDetail= new ArrayList<HashMap<String,Object>>();
+		List<HashMap<String,Object>> controllerList = new ArrayList<HashMap<String,Object>>();		
+//		List<HashMap<String,Object>> deviceList = new ArrayList<HashMap<String,Object>>();
+		List<Integer> deviceIds = new ArrayList<Integer>();		
 		Map<String, Object> map = new HashMap<>();
 		
 		map.put("gsm_key",  gsmKey);
 		map.put("green_house_id",  greenHouseId);
 		
-		result = houseEnvMapper.getHouseDetail(map);		
-		deviceList = houseEnvMapper.getMappedDevice(map);
-		for(int i=0; i<deviceList.size();i++){
-			deviceIds.add((Integer)deviceList.get(i).get("device_id"));
-		}
+		houseDetail = houseEnvMapper.getHouseDetail(map);		
+		deviceIds = houseEnvMapper.getMappedDevice(map);
+	
 		map.put("deviceIds", deviceIds);
 		controllerList = houseEnvMapper.getMappedController(map);
-		result.put("deviceList", deviceList);
+		List<ControlLogicSettingVO> logicList = controlLogicMapper.getControlLogicSetting(gsmKey, greenHouseId, null);
+//		result.put("deviceList", deviceList);
 		result.put("controllerList", controllerList);
-		
+		result.put("houseDetail", houseDetail);
+		result.put("logicList", logicList);		
 		return result;
 	}
-*/
+
 	public List<HashMap<String, Object>> list(Integer gsmKey, boolean all) {
 		List<HashMap<String,Object>> result = new ArrayList<HashMap<String,Object>>();
 		List<HashMap<String,Object>> controllerList = new ArrayList<HashMap<String,Object>>();

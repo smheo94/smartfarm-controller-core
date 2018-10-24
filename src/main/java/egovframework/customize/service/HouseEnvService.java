@@ -7,7 +7,7 @@ public interface HouseEnvService {
 	HouseEnvVO insert( HouseEnvVO house);
 	Integer delete(Integer gsmKey, Integer greenHouseId);
 	HouseEnvVO update(HouseEnvVO house);
-//	HashMap<String,Object>  get(Integer gsmKey, Integer greenHouseId);
+	HashMap<String,Object>  get(Integer gsmKey, Integer greenHouseId);
 	List<HashMap<String, Object>> list(Integer gsmKey, boolean all);
 	List<HashMap<String,Object>> selectHouseTypeList();
 	List<ProductVO> selectProductList();
