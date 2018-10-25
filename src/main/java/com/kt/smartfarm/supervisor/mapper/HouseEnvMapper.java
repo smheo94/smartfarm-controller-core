@@ -41,12 +41,14 @@ public interface HouseEnvMapper {
 	List<HashMap<String, Object>> selectProductMethod(HashMap<String, Object> param);
 	
 	void insertHouseDeviceMap(HashMap<String, Object> map);
+	void deleteHouseDeviceMap(HashMap<String, Object> param);
 	
     List<HashMap<String, Object>> getHouseDetail(Map<String,Object> map);
 //	List<HashMap<String, Object>> getMappedDevice(Map<String, Object> map);
 	List<Integer> getMappedDevice(Map<String, Object> map);
 	List<HashMap<String, Object>> getMappedController(Map<String, Object> map);
 	List<DeviceEnvVO> getHouseDeviceList(Integer houseId);
+	
 	
 //	List<ProductMethodVO> selectProductMethodList(HashMap<String, Object> product);
 //	List<HashMap<String, Object>> getProductSpeciesAndCategory(String productName);

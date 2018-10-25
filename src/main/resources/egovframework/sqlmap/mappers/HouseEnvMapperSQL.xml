@@ -30,33 +30,37 @@
 		            (green_house_id, device_id)
 		VALUES (#{house_id}, #{device_id});
 	</insert>
+	<delete id="deleteHouseDeviceMap" parameterType="map">
+		DELETE
+		FROM map_green_house_device
+		WHERE green_house_id = #{house_id} AND device_id = #{device_id};
+	</delete>
 	<update id="update" parameterType="houseEnvVO">
 		UPDATE green_house
 		SET
-			<if test="product_method_id != null">	product_method_id = #{product_method_id},</if>
-			<if test="green_house_type_id != null">	green_house_type_id = #{green_house_type_id},</if>
-			<if test="house_name != null">	house_name = #{house_name},</if>
-			<if test="latitude != null">	latitude = #{latitude},</if>,
-			<if test="longitude != null">	longitude = #{longitude},</if>
-			<if test="description !=null"> description =#{description}</if>
-			<if test="build_date != null">	build_date = #{build_date},</if>
-			<if test="last_update != null">	last_update = #{last_update},</if>
-			<if test="addr_1 != null">	addr_1 = #{addr_1},</if>
-			<if test="addr_2 != null">	addr_2 = #{addr_2},</if>
-			<if test="zip != null">	zip = #{zip},</if>
-			<if test="nutrient_common_id!=null"> nutrient_common_id =#{nutrient_common_id},</if> 
-			<if test="change_gh != null">	change_gh = #{change_gh},</if>
-			<if test="change_temperature!=null">change_temperature =#{change_temperature},</if>
-			<if test="floor_space != null">	floor_space = #{floor_space},</if>
-			<if test="house_horizontal!=null"> house_horizontal =#{house_horizontal},</if>
-			<if test="house_vertical != null">	house_vertical = #{house_vertical},</if>
-			<if test="house_height!=null"> house_height=#{house_height},</if>
-			<if test="plant_spacing != null">	plant_spacing = #{plant_spacing},</if>
-			<if test="crop_cnt != null">	crop_cnt = #{crop_cnt},</if>
-			<if test="house_direction != null">	house_direction = #{house_direction},</if>
-			<if test="select_temp_sensor != null">select_temp_sensor = #{select_temp_sensor},</if>
-			<if test="select_hum_sensor != null">select_hum_sensor = #{select_hum_sensor},</if>	
-			<if test="house_name_i18n != null">	house_name_i18n = #{house_name_i18n},</if>	
+			<if test="productMethodId != null">	product_method_id = #{productMethodId}</if>
+			<if test="greenHouseTypeId != null">, green_house_type_id = #{greenHouseTypeId}</if>
+			<if test="houseName != null">,	house_name = #{houseName}</if>
+			<if test="latitude != null">,	latitude = #{latitude}</if>
+			<if test="longitude != null">,	longitude = #{longitude}</if>
+			<if test="description !=null">, description =#{description}</if>
+			<if test="addr1 != null">,	addr_1 = #{addr1}</if>
+			<if test="addr2 != null">,	addr_2 = #{addr2}</if>
+			<if test="zip != null">,	zip = #{zip}</if>
+			<if test="nutrientCommonId">, nutrient_common_id =#{nutrientCommonId}</if> 
+			<if test="changeGh != null">,	change_gh = #{changeGh}</if>
+			<if test="changeTemperature">,change_temperature =#{changeTemperature}</if>
+			<if test="floorSpace != null">,	floor_space = #{floorSpace}</if>
+			<if test="houseHorizontal">, house_horizontal =#{houseHorizontal}</if>
+			<if test="houseVertical != null">,	house_vertical = #{houseVertical}</if>
+			<if test="houseHeight">, house_height=#{houseHeight}</if>
+			<if test="plantSpacing != null">,	plant_spacing = #{plantSpacing}</if>
+			<if test="cropCnt != null">,	crop_cnt = #{cropCnt}</if>
+			<if test="houseDirection != null">,	house_direction = #{houseDirection}</if>
+			<if test="selectTempSensor != null">,select_temp_sensor = #{selectTempSensor}</if>
+			<if test="selectHumSensor != null">,select_hum_sensor = #{selectHumSensor}</if>	
+			<if test="houseNameI18n != null">,	house_name_i18n = #{houseNameI18n}</if>
+			,last_update = NOW()	
 		WHERE gsm_key = #{gsmKey} AND id = #{id};
 	</update>
 	

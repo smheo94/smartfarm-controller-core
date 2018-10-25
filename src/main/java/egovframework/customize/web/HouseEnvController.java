@@ -73,9 +73,25 @@ public class HouseEnvController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value= "/linkDevice", method = RequestMethod.POST)
 	@ResponseBody
-	public Result<HashMap<String,Object>> HouesMapDevice( @PathVariable("gsm_key") Integer gsmKey, @RequestBody HashMap<String,Object> map){
+	public Result<HashMap<String,Object>> houesMapDeviceInsert( @PathVariable("gsm_key") Integer gsmKey, @RequestBody HashMap<String,Object> map){
 		try {
 			return new Result(houseEnvService.insertHouseDeviceMap(map));
+		} catch(Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, map);
+		}
+	}
+	
+	/**
+	 * @description 온실 등록후 device 와 온실 link
+	 * @param 
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value= "/linkDevice", method = RequestMethod.DELETE)
+	@ResponseBody
+	public Result<HashMap<String,Object>> houesMapDeviceUpdate( @PathVariable("gsm_key") Integer gsmKey, @RequestBody HashMap<String,Object> map){
+		try {
+			return new Result(houseEnvService.deleteHouseDeviceMap(map));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, map);
 		}

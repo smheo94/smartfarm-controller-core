@@ -174,4 +174,17 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 		return houseEnvMapper.getHouseDeviceList(houseId);
 		
 	}
+
+	@Override
+	public HashMap<String, Object> deleteHouseDeviceMap(HashMap<String, Object> map) {
+		HashMap<String,Object> param = new HashMap<>();
+		Integer houseId = (Integer) map.get("houseId");
+		List<Integer> deviceIds = (List<Integer>) map.get("deviceId");
+		for(Integer deviceId : deviceIds){
+			param.put("house_id", houseId);
+			param.put("device_id", deviceId);
+			houseEnvMapper.deleteHouseDeviceMap(param);
+		}
+		return map;
+	}
 }

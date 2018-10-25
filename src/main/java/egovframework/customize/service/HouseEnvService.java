@@ -12,5 +12,6 @@ public interface HouseEnvService {
 	List<HashMap<String,Object>> selectHouseTypeList();
 	List<ProductVO> selectProductList();
 	HashMap<String,Object> insertHouseDeviceMap(HashMap<String, Object> map);
+	HashMap<String,Object> deleteHouseDeviceMap(HashMap<String, Object> map);
 	List<DeviceEnvVO> houseDeviceList(Integer houseId);
 }
