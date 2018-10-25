@@ -51,7 +51,7 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 
 	@Override
 	public Map<String, Object> get(Integer gsmKey, boolean all) {
-		Map<String,Object> gsmMap = gsmEnvMapper.getGsmList(gsmKey).stream().findFirst().orElse(null);
+		Map<String,Object> gsmMap = gsmEnvMapper.getGsmList(gsmKey,null).stream().findFirst().orElse(null);
 		List<HashMap<String, Object>> houseList = houseEnvService.list(gsmKey, all);
 		gsmMap.put("houseList", houseList);
 		return gsmMap;
@@ -88,9 +88,9 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 	}
 */
 	@Override
-	public List<Map<String, Object>> list(boolean all) {
+	public List<Map<String, Object>> list(boolean all,Integer userInfoId) {
 		List<Map<String,Object>> gsmList = new ArrayList<>();
-		gsmList = gsmEnvMapper.getGsmList(null);
+		gsmList = gsmEnvMapper.getGsmList(null,userInfoId);
 		for(Map<String,Object> gsm : gsmList){
 //			Integer gsmKey = (Integer)gsm.get("gsmKey");
 //			houseList = gsmEnvMapper.getHouseList(gsmKey);
@@ -108,9 +108,7 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 
 	
 	@Override
-	public Integer userRegistGSM(Integer userInfoId, Integer gsmKey) {
-		HashMap<String,Object> param = new HashMap<>();
-		param.put("userInfoId", userInfoId);
+	public Integer userRegistGSM(HashMap<String,Object> param, Integer gsmKey) {
 		param.put("gsmKey", gsmKey);
 		return gsmEnvMapper.userRegistGSM(param);		
 	}

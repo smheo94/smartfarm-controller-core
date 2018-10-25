@@ -18,11 +18,11 @@ public interface GsmEnvService {
 
 	Integer update(GsmEnvVO gsmInfo);
 
-	List<Map<String, Object>> list(boolean all);
+	List<Map<String, Object>> list(boolean all, Integer userInfoId);
 
 	List<GsmEnvVO> notMappedList();
 
-	Integer userRegistGSM(Integer userInfoId, Integer gsmKey);
+	Integer userRegistGSM(HashMap<String, Object> param, Integer gsmKey);
 
 	List<GsmEnvVO> getGsmInfoByUser(Integer userInfoId);
 

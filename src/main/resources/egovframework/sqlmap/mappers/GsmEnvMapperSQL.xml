@@ -119,6 +119,7 @@
 		FROM gsm_info
 		<where>
 			<if test="gsmKey != null"> AND gsm_info.gsm_key = #{gsmKey}</if>
+			<if test="userInfoId != null"> AND gsm_info.user_info_id = #{userInfoId}</if>
 		</where>
 	</select>
 

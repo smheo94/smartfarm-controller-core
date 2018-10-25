@@ -147,12 +147,14 @@ public class GsmEnvController {
 	@RequestMapping(value= "", method = RequestMethod.GET)
 	@ApiOperation("GSM List OLD (none) ")
 	@ResponseBody
-	public Result<List<HashMap<String,Object>>> list(@RequestParam(value = "all", required = false) Boolean all){
+	public Result<List<HashMap<String,Object>>> list(@RequestParam(value = "all", required = false) Boolean all
+			,@RequestParam(value = "userInfoId", required = false) Integer userInfoId){
+		
 		try {
 		    if( all == null ) {
                 all = true;
             }
-			return new Result(gsmEnvService.list(all));
+			return new Result(gsmEnvService.list(all,userInfoId));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
@@ -184,26 +186,15 @@ public class GsmEnvController {
 	@RequestMapping(value= "/{gsmKey}", method = RequestMethod.POST)
 	@ApiOperation("userInfoId로 제어기 등록.")
 	@ResponseBody
-	public Result userRegistGSM(@RequestParam(value="userInfoId",required=true) Integer userInfoId, @PathVariable Integer gsmKey){
+	public Result userRegistGSM(@RequestBody HashMap<String,Object> param, @PathVariable Integer gsmKey){
 		try {		    
-			return new Result(gsmEnvService.userRegistGSM(userInfoId,gsmKey));
+			return new Result(gsmEnvService.userRegistGSM(param,gsmKey));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
 	}
-	
-	@RequestMapping(value= "/user/{userInfoId}", method = RequestMethod.GET)
-	@ApiOperation("userInfoId로 제어기 조회.")
-	@ResponseBody
-	public Result getGsmInfoByUser(@PathVariable("userInfoId") Integer userInfoId){
-		try {		    
-			return new Result<List<GsmEnvVO>>(gsmEnvService.getGsmInfoByUser(userInfoId));
-		} catch(Exception e) {
-			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
-		}
-	}
-	
-//	@RequestMapping(value= "/user/{userInfoId}", method = RequestMethod.DELETE)
+//	
+//	@RequestMapping(value= "/user/{userInfoId}", method = RequestMethod.GET)
 //	@ApiOperation("userInfoId로 제어기 조회.")
 //	@ResponseBody
 //	public Result getGsmInfoByUser(@PathVariable("userInfoId") Integer userInfoId){
@@ -213,4 +204,6 @@ public class GsmEnvController {
 //			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 //		}
 //	}
+//	
+
 }
