@@ -172,4 +172,45 @@ public class GsmEnvController {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
 	}
+	
+	// 
+	// userInfoId로 제어기 조회
+	// userInfoId랑 매핑 끊기
+	
+	/**
+	 * @description userInfoId로 제어기 등록
+	 * @return
+	 */
+	@RequestMapping(value= "/{gsmKey}", method = RequestMethod.POST)
+	@ApiOperation("userInfoId로 제어기 등록.")
+	@ResponseBody
+	public Result userRegistGSM(@RequestParam(value="userInfoId",required=true) Integer userInfoId, @PathVariable Integer gsmKey){
+		try {		    
+			return new Result(gsmEnvService.userRegistGSM(userInfoId,gsmKey));
+		} catch(Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		}
+	}
+	
+	@RequestMapping(value= "/user/{userInfoId}", method = RequestMethod.GET)
+	@ApiOperation("userInfoId로 제어기 조회.")
+	@ResponseBody
+	public Result getGsmInfoByUser(@PathVariable("userInfoId") Integer userInfoId){
+		try {		    
+			return new Result<List<GsmEnvVO>>(gsmEnvService.getGsmInfoByUser(userInfoId));
+		} catch(Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		}
+	}
+	
+//	@RequestMapping(value= "/user/{userInfoId}", method = RequestMethod.DELETE)
+//	@ApiOperation("userInfoId로 제어기 조회.")
+//	@ResponseBody
+//	public Result getGsmInfoByUser(@PathVariable("userInfoId") Integer userInfoId){
+//		try {		    
+//			return new Result<List<GsmEnvVO>>(gsmEnvService.getGsmInfoByUser(userInfoId));
+//		} catch(Exception e) {
+//			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+//		}
+//	}
 }

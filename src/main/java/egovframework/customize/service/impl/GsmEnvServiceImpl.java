@@ -105,5 +105,19 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 	public List<GsmEnvVO> notMappedList() {
 		return gsmEnvMapper.notMappedList();		
 	}
+
+	
+	@Override
+	public Integer userRegistGSM(Integer userInfoId, Integer gsmKey) {
+		HashMap<String,Object> param = new HashMap<>();
+		param.put("userInfoId", userInfoId);
+		param.put("gsmKey", gsmKey);
+		return gsmEnvMapper.userRegistGSM(param);		
+	}
+
+	@Override
+	public List<GsmEnvVO> getGsmInfoByUser(Integer userInfoId) {
+		return gsmEnvMapper.getGsmInfoByUser(userInfoId);
+	}
   
 }

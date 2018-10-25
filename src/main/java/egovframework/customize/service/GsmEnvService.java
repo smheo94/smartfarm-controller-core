@@ -22,6 +22,10 @@ public interface GsmEnvService {
 
 	List<GsmEnvVO> notMappedList();
 
+	Integer userRegistGSM(Integer userInfoId, Integer gsmKey);
+
+	List<GsmEnvVO> getGsmInfoByUser(Integer userInfoId);
+
 	
 	
 	
