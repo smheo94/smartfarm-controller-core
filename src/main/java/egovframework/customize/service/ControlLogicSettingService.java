@@ -11,4 +11,5 @@ public interface ControlLogicSettingService {
 	ControlLogicSettingVO updateLogicSetting(ControlLogicSettingVO vo);
 
 	List<ControlSettingOperatorVO> listControlSettingOperation();
+	Integer delChkConditionSetting(Integer chkConditionId);
 }

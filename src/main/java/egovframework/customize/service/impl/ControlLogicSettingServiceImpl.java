@@ -112,5 +112,9 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 	public List<ControlSettingOperatorVO> listControlSettingOperation() {
 		return mapper.listControlSettingOperator();
 	}
+	@Override
+	public Integer delChkConditionSetting(Integer chkConditionId) {
+		return mapper.delChkConditionSetting(chkConditionId);
+	}
 
 }

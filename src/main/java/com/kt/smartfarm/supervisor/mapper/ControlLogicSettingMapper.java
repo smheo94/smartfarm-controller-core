@@ -51,6 +51,7 @@ public interface ControlLogicSettingMapper {
 	Integer insertControlSetting(ControlLogicSettingVO vo);
 	Integer updateControlSetting(ControlLogicSettingVO vo);
 	Integer deleteControlSetting(@Param("control_setting_id") Integer controlSettingId);
+	Integer delChkConditionSetting(Integer chkConditionId);
 
 
 }

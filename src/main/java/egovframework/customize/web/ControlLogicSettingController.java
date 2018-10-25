@@ -94,6 +94,16 @@ public class ControlLogicSettingController {
 		}
 	}
 
+	
+	@RequestMapping(value= "/chkCondition/{chkConditionId}", method = RequestMethod.DELETE)
+	@ResponseBody
+	public Result<Integer> deleteChkCondition(@PathVariable("chkConditionId") Integer chkConditionId){
+		try {
+			return new Result(service.delChkConditionSetting(chkConditionId));
+		} catch(Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, chkConditionId);
+		}
+	}
 //
 //	@SuppressWarnings("unchecked")
 //	@RequestMapping(value= "/{controllerId}", method = RequestMethod.PUT)

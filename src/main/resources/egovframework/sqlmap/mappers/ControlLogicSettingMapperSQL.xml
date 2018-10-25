@@ -192,4 +192,9 @@
         FROM cd_control_setting_operator
     </select>
 
+    <delete id="deleteControlSetting">
+		DELETE FROM
+		control_setting_chk_condition
+		WHERE id = #{chkConditionId}
+	</delete>
 </mapper>
