@@ -191,4 +191,10 @@ public class HouseEnvController {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
 	}
+	
+	/**
+	 * cctv 등록, 수정, 조회, 삭제, 온실 삭제되면 cascade
+	 */
+	
+	
 }

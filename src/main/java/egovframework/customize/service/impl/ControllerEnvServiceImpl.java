@@ -77,8 +77,8 @@ public class ControllerEnvServiceImpl extends EgovAbstractServiceImpl implements
 	public ControllerEnvVO get(Integer gsmKey, Integer controllerId) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("gsm_key",  gsmKey);
-		map.put("id",  controllerId);
-		return controllerEnvMapper.list(map).stream().findFirst().orElse(null);
+		map.put("id",  controllerId);		 
+		return controllerEnvMapper.get(map).get(0);
 	}
 
 	@Override

@@ -21,6 +21,7 @@ import java.util.Map;
 
 import egovframework.customize.service.ArrayDeviceVO;
 import egovframework.customize.service.ControllerEnvVO;
+import egovframework.customize.service.DeviceEnvVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -35,5 +36,8 @@ public interface ControllerEnvMapper {
 	void insertDeviceList(ArrayDeviceVO row);
 	void insertDeviceStatusUpdate(ArrayDeviceVO row);
 	List<HashMap<String, Object>> listType();
-	List<ControllerEnvVO> controllerDeviceList(Map<String, Object> map);	
+	List<ControllerEnvVO> controllerDeviceList(Map<String, Object> map);
+	List<ControllerEnvVO> get(Map<String, Object> map);
+	
+	List<DeviceEnvVO> getDeviceList(Integer controller_id);
 }

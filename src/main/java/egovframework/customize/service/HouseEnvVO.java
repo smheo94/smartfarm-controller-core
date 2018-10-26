@@ -45,4 +45,6 @@ public class HouseEnvVO {
 	Double selectHumSensor;
 	Integer gsmKey;
 	String houseNameI18n;
+	
+	List<CCTVSettingVO> cctvSettingVO;
 }
