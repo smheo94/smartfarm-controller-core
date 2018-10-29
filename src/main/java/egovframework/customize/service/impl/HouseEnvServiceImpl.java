@@ -81,29 +81,36 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 		HashMap<String,Object> result = new HashMap<String, Object>();
 		List<HashMap<String,Object>> houseDetail= new ArrayList<HashMap<String,Object>>();
 		List<HashMap<String,Object>> controllerList = new ArrayList<HashMap<String,Object>>();		
-//		List<HashMap<String,Object>> deviceList = new ArrayList<HashMap<String,Object>>();
+		List<HashMap<String,Object>> cctvList = new ArrayList<HashMap<String,Object>>();
 		List<Integer> deviceIds = new ArrayList<Integer>();		
 		Map<String, Object> map = new HashMap<>();
 		
 		map.put("gsm_key",  gsmKey);
 		map.put("green_house_id",  greenHouseId);
 		
-		houseDetail = houseEnvMapper.getHouseDetail(map);		
+		houseDetail = houseEnvMapper.getHouseDetail(map);
+		for(int i=0; i<houseDetail.size();i++){
+			Integer houseId = (Integer)houseDetail.get(i).get("id");
+			cctvList.add(houseEnvMapper.getCctvList(houseId));
+			houseDetail.get(i).put("cctvList", cctvList);
+		}
 		deviceIds = houseEnvMapper.getMappedDevice(map);
-	
+		
 		map.put("deviceIds", deviceIds);
 		controllerList = houseEnvMapper.getMappedController(map);
 		List<ControlLogicSettingVO> logicList = controlLogicMapper.getControlLogicSetting(gsmKey, greenHouseId, null);
 //		result.put("deviceList", deviceList);
 		result.put("controllerList", controllerList);
 		result.put("houseDetail", houseDetail);
-		result.put("logicList", logicList);		
+		result.put("logicList", logicList);
+		
 		return result;
 	}
 
 	public List<HashMap<String, Object>> list(Integer gsmKey, boolean all) {
 		List<HashMap<String,Object>> result = new ArrayList<HashMap<String,Object>>();
 		List<HashMap<String,Object>> controllerList = new ArrayList<HashMap<String,Object>>();
+		List<HashMap<String,Object>> cctvList = new ArrayList<HashMap<String,Object>>();
 		List<DeviceEnvVO> mappedDeviceList;
 		List<Integer> deviceIds = new ArrayList<Integer>();
 		Map<String, Object> map = new HashMap<>();
@@ -133,6 +140,10 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 					}
 					houseMap.put("controllerList", controllerList);
 				}
+				
+				Integer houseId = (Integer)houseMap.get("id");
+				cctvList.add(houseEnvMapper.getCctvList(houseId));
+				houseMap.put("cctvList",cctvList);
 			}
 
 			return result;

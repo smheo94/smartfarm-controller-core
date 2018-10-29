@@ -25,6 +25,8 @@ import egovframework.customize.service.HouseEnvVO;
 import egovframework.customize.service.ProductMethodVO;
 import egovframework.customize.service.ProductVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
+
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -51,6 +53,7 @@ public interface HouseEnvMapper {
 	List<DeviceEnvVO> getHouseDeviceList(Integer houseId);
 	
 	void insertCCTVSetting(CCTVSettingVO vo);
+	HashMap<String, Object> getCctvList(@Param("houseId")Integer houseId);
 	
 	
 //	List<ProductMethodVO> selectProductMethodList(HashMap<String, Object> product);

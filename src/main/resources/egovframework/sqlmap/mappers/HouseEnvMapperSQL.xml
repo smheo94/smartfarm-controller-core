@@ -136,15 +136,13 @@
 	 
 	<select id ="getHouseDetail" parameterType="map" resultType="map">
 		SELECT 
-			id, product_method_id AS productMethodId, green_house_type_id as greenHouseTypeId, house_name as houseName,
+			green_house.id, product_method_id AS productMethodId, green_house_type_id as greenHouseTypeId, house_name as houseName,
 			latitude, longitude, description, build_date as buildDate, last_update as lastUpdate, addr_1 as addr1,
 			addr_2 as addr2, zip, nutrient_common_id as nutrientCommonId, change_gh as changeGh, change_temperature as changeTemperature,
 			floor_space as floorSpace, house_horizontal as houseHorizontal, house_vertical as houseVertical, house_height as houseHeight,
 			plant_spacing as plantSpacing, crop_cnt as cropCnt, house_direction as houseDirection, select_temp_sensor as selectTempSensor,
-			select_hum_sensor as selectHumSensor, gsm_key as gsmKey, house_name_i18n as houseNameI18n,
-			cctv.id, cctv.house_id, cctv.cctv_name, cctv.cctv_ip, cctv.cctv_port, cctv.cctv_id, cctv.pwd, wowza_id, wowza_pwd
-		FROM green_house
-		INNER JOIN cctv ON green_house.id = cctv.house_id
+			select_hum_sensor as selectHumSensor, gsm_key as gsmKey, house_name_i18n as houseNameI18n
+		FROM green_house		
 		WHERE 1=1
 		AND  gsm_key = #{gsm_key}	
 	</select>
@@ -199,4 +197,18 @@
 		</selectKey>
 	</insert>
 	
+	<select id="getCctvList" parameterType="Integer">
+		SELECT 
+			id, 
+			house_id, 
+			cctv_name, 
+			cctv_ip, 
+			cctv_port, 
+			cctv_id, 
+			cctv_pwd, 
+			wowza_id, 
+			wowza_pwd
+		FROM cctv
+		WHERE house_id =#{houseId}
+	</select>	
 </mapper>
