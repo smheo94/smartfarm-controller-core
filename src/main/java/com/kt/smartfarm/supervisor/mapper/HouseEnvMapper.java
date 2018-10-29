@@ -53,7 +53,7 @@ public interface HouseEnvMapper {
 	List<DeviceEnvVO> getHouseDeviceList(Integer houseId);
 	
 	void insertCCTVSetting(CCTVSettingVO vo);
-	HashMap<String, Object> getCctvList(@Param("houseId")Integer houseId);
+	List<HashMap<String, Object>> getCctvList(@Param("houseId")Integer houseId);
 	
 	
 //	List<ProductMethodVO> selectProductMethodList(HashMap<String, Object> product);

@@ -91,8 +91,10 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 		houseDetail = houseEnvMapper.getHouseDetail(map);
 		for(int i=0; i<houseDetail.size();i++){
 			Integer houseId = (Integer)houseDetail.get(i).get("id");
-			cctvList.add(houseEnvMapper.getCctvList(houseId));
-			houseDetail.get(i).put("cctvList", cctvList);
+			cctvList = houseEnvMapper.getCctvList(houseId);
+			if(cctvList != null){
+				houseDetail.get(i).put("cctvList", cctvList);	
+			}			
 		}
 		deviceIds = houseEnvMapper.getMappedDevice(map);
 		
@@ -110,11 +112,11 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 	public List<HashMap<String, Object>> list(Integer gsmKey, boolean all) {
 		List<HashMap<String,Object>> result = new ArrayList<HashMap<String,Object>>();
 		List<HashMap<String,Object>> controllerList = new ArrayList<HashMap<String,Object>>();
-		List<HashMap<String,Object>> cctvList = new ArrayList<HashMap<String,Object>>();
+//		List<HashMap<String,Object>> cctvList = new ArrayList<HashMap<String,Object>>();
 		List<DeviceEnvVO> mappedDeviceList;
 		List<Integer> deviceIds = new ArrayList<Integer>();
 		Map<String, Object> map = new HashMap<>();
-
+		List<HashMap<String,Object>> cctv = new ArrayList<>(); 
 		if(gsmKey == null){
 			result = houseEnvMapper.getHouseDetail(map);
 			return result;
@@ -142,8 +144,11 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 				}
 				
 				Integer houseId = (Integer)houseMap.get("id");
-				cctvList.add(houseEnvMapper.getCctvList(houseId));
-				houseMap.put("cctvList",cctvList);
+				cctv = houseEnvMapper.getCctvList(houseId);
+				if(cctv !=null){					
+					houseMap.put("cctvList",cctv);	
+				}
+				
 			}
 
 			return result;
