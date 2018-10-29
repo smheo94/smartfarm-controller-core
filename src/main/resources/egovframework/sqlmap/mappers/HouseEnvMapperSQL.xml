@@ -141,8 +141,10 @@
 			addr_2 as addr2, zip, nutrient_common_id as nutrientCommonId, change_gh as changeGh, change_temperature as changeTemperature,
 			floor_space as floorSpace, house_horizontal as houseHorizontal, house_vertical as houseVertical, house_height as houseHeight,
 			plant_spacing as plantSpacing, crop_cnt as cropCnt, house_direction as houseDirection, select_temp_sensor as selectTempSensor,
-			select_hum_sensor as selectHumSensor, gsm_key as gsmKey, house_name_i18n as houseNameI18n
+			select_hum_sensor as selectHumSensor, gsm_key as gsmKey, house_name_i18n as houseNameI18n,
+			cctv.id, cctv.house_id, cctv.cctv_name, cctv.cctv_ip, cctv.cctv_port, cctv.cctv_id, cctv.pwd, wowza_id, wowza_pwd
 		FROM green_house
+		INNER JOIN cctv ON green_house.id = cctv.house_id
 		WHERE 1=1
 		AND  gsm_key = #{gsm_key}	
 	</select>
