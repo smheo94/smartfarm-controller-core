@@ -197,7 +197,7 @@
 		</selectKey>
 	</insert>
 	
-	<select id="getCctvList" parameterType="Integer">
+	<select id="getCctvList" parameterType="Integer" resultType="map">
 		SELECT 
 			id, 
 			house_id, 
