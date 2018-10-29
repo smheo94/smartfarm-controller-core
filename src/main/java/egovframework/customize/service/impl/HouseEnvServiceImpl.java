@@ -50,11 +50,12 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 	@Override
 	public HouseEnvVO insert(HouseEnvVO vo) {				
 		houseEnvMapper.insert(vo);
-		if(vo.getCctvSettingVO() == null){
+		if(vo.getCctv() == null){
 			return vo;	
-		}else if(vo.getCctvSettingVO() != null){
-			for(int i=0; i<vo.getCctvSettingVO().size();i++){
-				houseEnvMapper.insertCCTVSetting(vo);
+		}else if(vo.getCctv() != null){
+			for(int i=0; i<vo.getCctv().size();i++){
+				vo.getCctv().get(i).setHouseId(vo.getId());
+				houseEnvMapper.insertCCTVSetting(vo.getCctv().get(i));
 			}
 		}
 		return vo;

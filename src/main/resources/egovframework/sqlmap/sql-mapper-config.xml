@@ -37,6 +37,8 @@
 
 		<typeAlias alias="controlLogicSettingCheckConditionVO" type="egovframework.customize.service.ControlLogicSettingCheckConditionVO"/>
 		<typeAlias alias="controlSettingOperatorVO" type="egovframework.customize.service.ControlSettingOperatorVO"/>
+		
+		<typeAlias alias="cctv" type="egovframework.customize.service.CCTVSettingVO"/>
 
     </typeAliases>
 </configuration>

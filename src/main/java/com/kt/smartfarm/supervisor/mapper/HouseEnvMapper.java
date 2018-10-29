@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import egovframework.customize.service.CCTVSettingVO;
 import egovframework.customize.service.DeviceEnvVO;
 import egovframework.customize.service.HouseEnvVO;
 import egovframework.customize.service.ProductMethodVO;
@@ -49,7 +50,7 @@ public interface HouseEnvMapper {
 	List<HashMap<String, Object>> getMappedController(Map<String, Object> map);
 	List<DeviceEnvVO> getHouseDeviceList(Integer houseId);
 	
-	void insertCCTVSetting(HouseEnvVO vo);
+	void insertCCTVSetting(CCTVSettingVO vo);
 	
 	
 //	List<ProductMethodVO> selectProductMethodList(HashMap<String, Object> product);

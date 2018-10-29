@@ -186,11 +186,11 @@
 		WHERE mghd.green_house_id = #{houseId}			
 	</select>
 	
-	<insert id="insertCCTVSetting" parameterType="houseEnvVO" useGeneratedKeys="true">
-		INSERT INTO
-			house_id,cctv_name,cctv_ip,cctv_port,cctv_id,cctv_pwd,wowza_id,wowza_pwd	
+	<insert id="insertCCTVSetting" parameterType="cctv" useGeneratedKeys="true">
+		INSERT INTO	cctv	
+           ( house_id, cctv_name, cctv_ip, cctv_port, cctv_id, cctv_pwd)
 		VALUES(
-			#{houseId},#{cctvName},#{cctvIp},#{cctvPort},#{cctvId},#{cctvPwd},NULL,NULL
+			#{houseId},#{cctvName},#{cctvIp},#{cctvPort},#{cctvId},#{cctvPwd}
 		)
 		<selectKey keyProperty="id" resultType="int">
 			SELECT LAST_INSERT_ID() AS id;

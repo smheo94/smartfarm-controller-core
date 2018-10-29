@@ -46,5 +46,5 @@ public class HouseEnvVO {
 	Integer gsmKey;
 	String houseNameI18n;
 	
-	List<CCTVSettingVO> cctvSettingVO;
+	List<CCTVSettingVO> cctv;
 }
