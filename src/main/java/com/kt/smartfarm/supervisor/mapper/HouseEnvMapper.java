@@ -16,6 +16,7 @@
 package com.kt.smartfarm.supervisor.mapper;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -54,6 +55,9 @@ public interface HouseEnvMapper {
 	
 	void insertCCTVSetting(CCTVSettingVO vo);
 	List<HashMap<String, Object>> getCctvList(@Param("houseId")Integer houseId);
+	List<HashMap<String, Object>> getAllList();
+	Integer insertForecastData(LinkedHashMap<String, Object> hm);
+	List<HashMap<String, Object>> getWeatherCast(HashMap<String, Object> param);
 	
 	
 //	List<ProductMethodVO> selectProductMethodList(HashMap<String, Object> product);

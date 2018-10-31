@@ -136,7 +136,7 @@
 	 
 	<select id ="getHouseDetail" parameterType="map" resultType="map">
 		SELECT 
-			green_house.id, product_method_id AS productMethodId, green_house_type_id as greenHouseTypeId, house_name as houseName,
+			id, product_method_id AS productMethodId, green_house_type_id as greenHouseTypeId, house_name as houseName,
 			latitude, longitude, description, build_date as buildDate, last_update as lastUpdate, addr_1 as addr1,
 			addr_2 as addr2, zip, nutrient_common_id as nutrientCommonId, change_gh as changeGh, change_temperature as changeTemperature,
 			floor_space as floorSpace, house_horizontal as houseHorizontal, house_vertical as houseVertical, house_height as houseHeight,
@@ -144,7 +144,8 @@
 			select_hum_sensor as selectHumSensor, gsm_key as gsmKey, house_name_i18n as houseNameI18n
 		FROM green_house		
 		WHERE 1=1
-		AND  gsm_key = #{gsm_key}	
+		<if test="gsm_key != null">AND  gsm_key = #{gsm_key}</if>
+		<if test="green_house_id != null">AND id = #{green_house_id}</if>
 	</select>
 	
 	<select id ="getMappedDevice" resultType="int">
@@ -211,4 +212,45 @@
 		FROM cctv
 		WHERE house_id =#{houseId}
 	</select>	
+	
+	<select id="getAllList" resultType="map">
+		SELECT id, product_method_id AS productMethodId, green_house_type_id as greenHouseTypeId, house_name as houseName,
+			latitude, longitude, description, build_date as buildDate, last_update as lastUpdate, addr_1 as addr1,
+			addr_2 as addr2, zip, nutrient_common_id as nutrientCommonId, change_gh as changeGh, change_temperature as changeTemperature,
+			floor_space as floorSpace, house_horizontal as houseHorizontal, house_vertical as houseVertical, house_height as houseHeight,
+			plant_spacing as plantSpacing, crop_cnt as cropCnt, house_direction as houseDirection, select_temp_sensor as selectTempSensor,
+			select_hum_sensor as selectHumSensor, gsm_key as gsmKey, house_name_i18n as houseNameI18n
+		FROM green_house
+	</select>
+	
+	<insert id="insertForecastData" parameterType="map"  useGeneratedKeys="true">
+		INSERT INTO weather_cast (
+			base_date, base_time, fcst_date, fcst_time, fcst_value, nx, ny, category, category_desc
+		)
+		VALUES (
+			#{base_date}, #{base_time}, #{fcst_date}, #{fcst_time}, #{fcst_value}, #{nx}, #{ny}, #{category}, #{category_desc}
+		)
+		<selectKey keyProperty="id" resultType="int">
+			SELECT LAST_INSERT_ID() AS id;
+		</selectKey>
+	</insert>
+	
+	<select id="getWeatherCast" parameterType="map" resultType="map">
+		SELECT 
+			house_id,
+			base_date,
+			base_time,
+			fcst_date,
+			fcst_time,
+			fcst_value,
+			nx,
+			ny,
+			category,
+			category_desc
+		FROM weather_cast
+		WHERE 1=1
+			AND house_id = #{house_id}
+			AND fcstDate BETWEEN #{to_date} AND #{from_date}
+		ORDER BY id;
+	</select>
 </mapper>

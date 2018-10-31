@@ -26,17 +26,12 @@
 	<update id="update" parameterType="controllerEnvVO">
 		UPDATE controller
 		SET
-		<if test="controller_info_id != null">controller_info_id = #{controllerInfoId},</if>
-		,
-		<if test="controller_type != null">controller_type = #{controllerType},</if>
-		,
-		<if test="ip != null">ip = #{ip},</if>
-		,
-		<if test="PORT != null">PORT = #{port},</if>
-		,
-		<if test="controller_status != null">controller_status = #{controllerStatus},</if>
-		,
-		<if test="description != null">description = #{description},</if>
+		<if test="controllerInfoId != null">controller_info_id = #{controllerInfoId}</if>		
+		<if test="controllerType != null">,controller_type = #{controllerType}</if>		
+		<if test="ip != null">,ip = #{ip}</if>		
+		<if test="port != null">,PORT = #{port}</if>		
+		<if test="controllerStatus != null">,controller_status = #{controllerStatus}</if>		
+		<if test="description != null">,description = #{description}</if>
 		WHERE gsm_key = #{gsmKey} AND id = #{id};
 	</update>
 	<delete id="delete">
