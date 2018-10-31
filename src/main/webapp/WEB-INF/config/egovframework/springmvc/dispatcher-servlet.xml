@@ -80,7 +80,7 @@
  	<task:scheduler id="taskScheduler"/>
  	<task:scheduled-tasks>
  		<!-- <task:scheduled ref="batchExcuetor" method="runWeatherSchedule" cron="0 31 2,5,8,11,14,20,23 * * *"/> -->
- 		<task:scheduled ref="batchExcuetor" method="runWeatherSchedule" cron="* 10 0 * * *"/>
+ 		<task:scheduled ref="batchExcuetor" method="runWeatherSchedule" cron="* * * * * 8"/>
  	</task:scheduled-tasks>
  		
  	<!-- 	
