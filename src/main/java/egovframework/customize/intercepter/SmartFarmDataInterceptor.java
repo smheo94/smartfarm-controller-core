@@ -14,6 +14,7 @@ import egovframework.customize.service.GsmEnvVO;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.http.*;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
@@ -34,6 +35,7 @@ import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.util.Enumeration;
 import java.util.Objects;
 
@@ -244,7 +246,8 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
         if( httpEntity == null ) {
                return null;
         }
-        RestTemplate restTemplate = new RestTemplate();        
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
         final ResponseEntity<ResponseResult> returnValue = restTemplate.exchange(uri, HttpMethod.valueOf(request.getMethod()), httpEntity, ResponseResult.class);
         return returnValue;
     }
