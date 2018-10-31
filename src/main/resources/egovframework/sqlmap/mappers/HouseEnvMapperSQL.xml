@@ -225,10 +225,10 @@
 	
 	<insert id="insertForecastData" parameterType="map"  useGeneratedKeys="true">
 		INSERT INTO weather_cast (
-			base_date, base_time, fcst_date, fcst_time, fcst_value, nx, ny, category, category_desc
+			base_date, base_time, fcst_date, fcst_time, fcst_value, nx, ny, category, house_id
 		)
 		VALUES (
-			#{base_date}, #{base_time}, #{fcst_date}, #{fcst_time}, #{fcst_value}, #{nx}, #{ny}, #{category}, #{category_desc}
+			#{base_date}, #{base_time}, #{fcst_date}, #{fcst_time}, #{fcst_value}, #{nx}, #{ny}, #{category}, #{house_id}
 		)
 		<selectKey keyProperty="id" resultType="int">
 			SELECT LAST_INSERT_ID() AS id;
@@ -245,12 +245,16 @@
 			fcst_value,
 			nx,
 			ny,
-			category,
-			category_desc
+			category
 		FROM weather_cast
 		WHERE 1=1
 			AND house_id = #{house_id}
-			AND fcstDate BETWEEN #{to_date} AND #{from_date}
+			AND fcst_date BETWEEN #{to_date} AND #{from_date}
 		ORDER BY id;
 	</select>
+	<select id="getWeatherCategory" resultType="map">
+		SELECT id, category, category_desc, sub_category_desc, unit
+		FROM cd_weather_category_type		
+	</select>	
+	
 </mapper>

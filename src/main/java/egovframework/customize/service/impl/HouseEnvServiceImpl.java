@@ -227,21 +227,28 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 	@Override
 	public List<HashMap<String, Object>> getWeatherCast(Integer houseId, String fromDate, String toDate) {
 		HashMap<String,Object> param = new HashMap<>();
-		HashMap<String,Object> houseInfo = new HashMap<>();
-		HashMap<String,Object> gridXY = new HashMap<>();
-		houseInfo = get(null, houseId);
-		
-		Double longitude = Double.parseDouble(houseInfo.get("latitude").toString());
-		Double latitude = Double.parseDouble(houseInfo.get("longitude").toString());
-		latitude = Math.ceil(latitude);
-		longitude = Math.ceil(longitude);		
-		gridXY= getGridxy(latitude,longitude);
-		param.put("house_id", houseId);
-		param.put("from_date", fromDate);
-		param.put("to_date", toDate);
-		param.put("nx", gridXY.get("x").toString());
-		param.put("ny", gridXY.get("y").toString());
-		
+		try{			
+			HashMap<String,Object> houseInfo = new HashMap<>();
+			List<HashMap<String,Object>> houseDetail = new ArrayList<>();
+			HashMap<String,Object> gridXY = new HashMap<>();
+			houseInfo = get(null, houseId);
+			houseDetail = (List<HashMap<String, Object>>) houseInfo.get("houseDetail");
+			Double longitude = Double.parseDouble(houseDetail.get(0).get("latitude").toString());
+			Double latitude = Double.parseDouble(houseDetail.get(0).get("longitude").toString());
+			
+			
+			latitude = Math.ceil(latitude);
+			longitude = Math.ceil(longitude);		
+			gridXY= getGridxy(latitude,longitude);
+			param.put("house_id", houseId);
+			param.put("from_date", fromDate);
+			param.put("to_date", toDate);
+			param.put("nx", gridXY.get("x").toString());
+			param.put("ny", gridXY.get("y").toString());
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		List<HashMap<String,Object>> result =houseEnvMapper.getWeatherCast(param); 
 		return houseEnvMapper.getWeatherCast(param);
 	}
 	
@@ -288,4 +295,9 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
  
         return map;
     }
+
+	@Override
+	public List<HashMap<String, Object>> getWeatherCategory() {
+		return houseEnvMapper.getWeatherCategory();
+	}
 }

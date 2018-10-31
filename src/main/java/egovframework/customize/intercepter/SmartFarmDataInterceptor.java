@@ -238,9 +238,8 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
         String requestUrl = request.getRequestURI();
         URI uri = new URI("http", null, server, port, null, null, null);
         uri = UriComponentsBuilder.fromUri(uri).path(requestUrl)
-                .query(request.getQueryString()).build(true).toUri();
-        
-//        response.setHeader(X_HEADER_GSM_KEY, gsmKey.toString());
+                .query(request.getQueryString()).build(true).toUri();        
+
         HttpEntity httpEntity = getHttpEntity(annotationClass, request, response);
         if( httpEntity == null ) {
                return null;

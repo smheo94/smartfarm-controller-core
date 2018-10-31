@@ -59,6 +59,7 @@ public class EgovTaskScheduler {
 				//당일것만 조회해
 				String nx = gridXY.get("x").toString();
 				String ny = gridXY.get("y").toString();
+				Integer houseId = (Integer)houseList.get(i).get("id");
 				if(Integer.parseInt(nx) > 0 && Integer.parseInt(ny) >0){
 					try{
 						URL url = new URL(FORECAST_URL
@@ -103,8 +104,7 @@ public class EgovTaskScheduler {
 				        	// 당일 예보가 아닌경우 break
 				        	if(item.get("fcstDate").equals(baseDate)){
 				        		break;
-				        	}
-				        	String category = item.get("category").toString();
+				        	}				        	
 				        	hm.put("base_date", baseDate);//발표일자
 				        	hm.put("base_time", baseTime);//발표시각
 				        	hm.put("fcst_date", item.get("fcstDate").toString());//예보일자
@@ -113,7 +113,7 @@ public class EgovTaskScheduler {
 				        	hm.put("nx", item.get("nx").toString());//예보지점 X좌표
 				        	hm.put("ny", item.get("ny").toString());//예보지점 Y좌표
 				        	hm.put("category", item.get("category").toString());
-				        
+				        	hm.put("house_id", houseId);
 				        	houseEnvService.insertForecastData(hm);
 			        	}		        	
 		        	}catch(Exception e){

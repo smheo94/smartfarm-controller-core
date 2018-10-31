@@ -215,19 +215,25 @@ public class HouseEnvController {
 	
 	
 	@RequestMapping(value = "/weather_cast", method = RequestMethod.GET)
+	@ResponseBody
 	public Result weatherCast(@RequestParam(value = "house_id", required = false) Integer houseId,
 			@RequestParam(value = "from_date", required = false) String fromDate,
 			@RequestParam(value = "to_date", required = false) String toDate) {
-
 		try {
 			return new Result(houseEnvService.getWeatherCast(houseId,fromDate,toDate));
 		} catch (Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
-
 	}
-		
-		// 온실 리스트 가져와서 위경도 겹치는거 빼고 
 	
+	@RequestMapping(value = "/weather_category", method = RequestMethod.GET)
+	@ResponseBody
+	public Result weatherCategory() {
+		try {
+			return new Result(houseEnvService.getWeatherCategory());
+		} catch (Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		}
+	}
 	
 }

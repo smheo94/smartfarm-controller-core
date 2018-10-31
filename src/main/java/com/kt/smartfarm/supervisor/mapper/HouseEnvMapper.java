@@ -58,6 +58,7 @@ public interface HouseEnvMapper {
 	List<HashMap<String, Object>> getAllList();
 	Integer insertForecastData(LinkedHashMap<String, Object> hm);
 	List<HashMap<String, Object>> getWeatherCast(HashMap<String, Object> param);
+	List<HashMap<String, Object>> getWeatherCategory();
 	
 	
 //	List<ProductMethodVO> selectProductMethodList(HashMap<String, Object> product);
