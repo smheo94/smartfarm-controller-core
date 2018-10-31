@@ -79,10 +79,17 @@
 
  	<task:scheduler id="taskScheduler"/>
  	<task:scheduled-tasks>
- 		<task:scheduled ref="batchExcuetor" method="runWeatherSchedule" cron="0 31 2,5,8,11,14,20,23 * * *"/>
- 		<!-- <task:scheduled ref="batchExcuetor" method="runWeatherSchedule" cron="* 1 * * * *"/> -->
+ 		<!-- <task:scheduled ref="batchExcuetor" method="runWeatherSchedule" cron="0 31 2,5,8,11,14,20,23 * * *"/> -->
+ 		<task:scheduled ref="batchExcuetor" method="runWeatherSchedule" cron="* 10 0 * * *"/>
  	</task:scheduled-tasks>
  		
+ 	<!-- 	
+	<context:component-scan base-package="egovframework.customize.task.scheduler.EgovTaskScheduler" /> 	
+ 	<task:scheduled-tasks scheduler="taskScheduler">
+ 		<task:scheduled ref="batchExcuetor" method="runWeatherSchedule" cron="*/30 * * * * *"/>
+ 	</task:scheduled-tasks>
+ 	<task:scheduler id="taskScheduler"/>
+ 	 -->	
  	<!-- 스케쥴러 설정 END -->
  	
     <!-- UrlBasedViewResolver 를 주석 처리하면 defaultResolver가 생긴다. -->

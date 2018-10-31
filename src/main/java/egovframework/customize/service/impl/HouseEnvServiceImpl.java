@@ -247,8 +247,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 			param.put("ny", gridXY.get("y").toString());
 		}catch(Exception e){
 			e.printStackTrace();
-		}
-		List<HashMap<String,Object>> result =houseEnvMapper.getWeatherCast(param); 
+		}		 
 		return houseEnvMapper.getWeatherCast(param);
 	}
 	
