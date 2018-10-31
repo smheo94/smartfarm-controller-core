@@ -249,7 +249,12 @@
 		FROM weather_cast
 		WHERE 1=1
 			AND house_id = #{house_id}
+			<if test="from_date!=null">
 			AND fcst_date BETWEEN #{from_date} AND #{to_date}
+			</if>
+			<if test="from_date==null">
+			AND fcst_date BETWEEN NOW() AND NOW() + INTERVAL 1 DAY
+			</if>
 		ORDER BY id;
 	</select>
 	<select id="getWeatherCategory" resultType="map">
