@@ -1,6 +1,7 @@
 package egovframework.customize.service;
 
 import java.util.List;
+import java.util.Map;
 
 
 public interface ControlLogicSettingService {
@@ -9,6 +10,8 @@ public interface ControlLogicSettingService {
 	Integer delLogicSetting(Integer controlSettingId);
 
 	ControlLogicSettingVO updateLogicSetting(ControlLogicSettingVO vo);
+
+	void updateLogicSettingEnv(Map<String,Object> param);
 
 	List<ControlSettingOperatorVO> listControlSettingOperation();
 	Integer delChkConditionSetting(Integer chkConditionId);

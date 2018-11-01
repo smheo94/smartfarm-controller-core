@@ -197,4 +197,24 @@
 		control_setting_chk_condition
 		WHERE id = #{chkConditionId}
 	</delete>
+
+
+    <update id="updateControlSettingEnv">
+        UPDATE control_setting
+        <set>
+            <if test="logic_env_column != null">
+                <foreach collection="logic_env_column" open="JSON_REPLACE(logic_env, " separator="," close=")" index="logic_env_column" item="logic_env_column">
+                    CONCAT( '$.', #{logic_env_column} ) , #{logic_env_value}
+                </foreach>
+            </if>
+            <if test="logic_env_column != null">
+            ,
+                <foreach collection="logic_period_env_column" open="JSON_REPLACE(logic_period_env, " separator="," close=")" index="logic_period_env_column"
+                         item="logic_period_env_column">
+                    CONCAT( '$.', #{logic_period_env_column} ) , #{logic_period_env_value}
+                </foreach>
+            </if>
+        </set>
+        WHERE id = #{control_setting_id};
+    </update>
 </mapper>

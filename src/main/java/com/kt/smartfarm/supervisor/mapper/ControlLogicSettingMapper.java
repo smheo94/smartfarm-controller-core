@@ -24,6 +24,8 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
+
 @Repository
 @Mapper("controlLogicSettingMapper")
 public interface ControlLogicSettingMapper {
@@ -50,6 +52,7 @@ public interface ControlLogicSettingMapper {
 
 	Integer insertControlSetting(ControlLogicSettingVO vo);
 	Integer updateControlSetting(ControlLogicSettingVO vo);
+	Integer updateControlSettingEnv(Map<String, Object> param);
 	Integer deleteControlSetting(@Param("control_setting_id") Integer controlSettingId);
 	Integer delChkConditionSetting(Integer chkConditionId);
 
