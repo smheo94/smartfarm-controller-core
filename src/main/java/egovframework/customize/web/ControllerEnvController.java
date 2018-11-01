@@ -17,6 +17,9 @@ package egovframework.customize.web;
 
 import java.util.HashMap;
 import java.util.List;
+
+import egovframework.cmmn.util.InterceptPost;
+import egovframework.cmmn.util.InterceptPre;
 import egovframework.cmmn.util.Result;
 import egovframework.customize.service.ControllerEnvService;
 import egovframework.customize.service.ControllerEnvVO;
@@ -56,6 +59,7 @@ public class ControllerEnvController {
 	 */
 	@RequestMapping(value= "/{controllerId}", method = RequestMethod.PUT)
 	@ResponseBody
+	@InterceptPre
 	public Result<ControllerEnvVO> update(@PathVariable("gsmKey") Integer gsmKey, @PathVariable("controllerId") String controllerId, @RequestBody ControllerEnvVO controller){
 		try {
 			
@@ -73,8 +77,10 @@ public class ControllerEnvController {
 	 */
 	@RequestMapping(value= "/", method = RequestMethod.POST)
 	@ResponseBody
+	@InterceptPost
 	public Result<ControllerEnvVO> insert( @PathVariable("gsmKey") Integer gsmKey, @RequestBody ControllerEnvVO controller){
 		try {
+			System.out.println("controllerInsert Controller Called");
 			return new Result(controllerEnvService.insert(controller));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, controller);
@@ -137,6 +143,7 @@ public class ControllerEnvController {
 	 */
 	@RequestMapping(value= "/{controllerId}", method = RequestMethod.DELETE)
 	@ResponseBody
+	@InterceptPre
 	public Result<ControllerEnvVO> delete(@PathVariable("gsmKey") Integer gsmKey,  @PathVariable("controllerId") Integer controllerId){
 		try {
 			return new Result(controllerEnvService.delete(gsmKey, controllerId));

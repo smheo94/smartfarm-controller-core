@@ -15,17 +15,28 @@
  */
 package egovframework.customize.web;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+
+import egovframework.cmmn.util.DateUtil;
+import egovframework.cmmn.util.InterceptPost;
+import egovframework.cmmn.util.InterceptPre;
 import egovframework.cmmn.util.Result;
-import egovframework.customize.service.DeviceEnvService;
 import egovframework.customize.service.DeviceEnvVO;
 import egovframework.customize.service.HouseEnvVO;
 import egovframework.customize.service.ProductVO;
-import egovframework.customize.service.DeviceTypeVO;
 import egovframework.customize.service.HouseEnvService;
 
 import javax.annotation.Resource;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,6 +68,7 @@ public class HouseEnvController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value= "", method = RequestMethod.POST)
 	@ResponseBody
+	@InterceptPost
 	public Result<HouseEnvVO> insert( @PathVariable("gsm_key") Integer gsmKey, @RequestBody HouseEnvVO house){
 		try {
 			return new Result(houseEnvService.insert(house));
@@ -73,6 +85,7 @@ public class HouseEnvController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value= "/linkDevice", method = RequestMethod.POST)
 	@ResponseBody
+	@InterceptPost
 	public Result<HashMap<String,Object>> houesMapDeviceInsert( @PathVariable("gsm_key") Integer gsmKey, @RequestBody HashMap<String,Object> map){
 		try {
 			return new Result(houseEnvService.insertHouseDeviceMap(map));
@@ -89,6 +102,7 @@ public class HouseEnvController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value= "/linkDevice", method = RequestMethod.DELETE)
 	@ResponseBody
+	@InterceptPre
 	public Result<HashMap<String,Object>> houesMapDeviceUpdate( @PathVariable("gsm_key") Integer gsmKey, @RequestBody HashMap<String,Object> map){
 		try {
 			return new Result(houseEnvService.deleteHouseDeviceMap(map));
@@ -107,6 +121,7 @@ public class HouseEnvController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value= "", method = RequestMethod.PUT)
 	@ResponseBody
+	@InterceptPre
 	public Result<HouseEnvVO> update(@PathVariable("gsm_key") Integer gsmKey, @RequestBody HouseEnvVO house){
 		try {
 			return new Result(houseEnvService.update(house)); // gsmKey, id기준으로 업데이트
@@ -139,6 +154,7 @@ public class HouseEnvController {
 	
 	@RequestMapping(value= "/{greenHouseId}", method = RequestMethod.DELETE)
 	@ResponseBody
+	@InterceptPre
 	public Result<HouseEnvVO> delete(@PathVariable("gsm_key") Integer gsmKey,  @PathVariable("greenHouseId") Integer greenHouseId){
 		try {
 			return new Result(houseEnvService.delete(gsmKey, greenHouseId));
@@ -191,4 +207,33 @@ public class HouseEnvController {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
 	}
+	
+	/**
+	 * cctv 등록, 수정, 조회, 삭제, 온실 삭제되면 cascade
+	 * @return 
+	 */
+	
+	
+	@RequestMapping(value = "/weather_cast", method = RequestMethod.GET)
+	@ResponseBody
+	public Result weatherCast(@RequestParam(value = "house_id", required = false) Integer houseId,
+			@RequestParam(value = "from_date", required = false) String fromDate,
+			@RequestParam(value = "to_date", required = false) String toDate) {
+		try {
+			return new Result(houseEnvService.getWeatherCast(houseId,fromDate,toDate));
+		} catch (Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		}
+	}
+	
+	@RequestMapping(value = "/weather_category", method = RequestMethod.GET)
+	@ResponseBody
+	public Result weatherCategory() {
+		try {
+			return new Result(houseEnvService.getWeatherCategory());
+		} catch (Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		}
+	}
+	
 }

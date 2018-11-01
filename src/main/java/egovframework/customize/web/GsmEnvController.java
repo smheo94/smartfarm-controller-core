@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import egovframework.cmmn.util.Result;
 import egovframework.cmmn.util.InterceptPre;
+import egovframework.cmmn.util.InterceptIgnoreGSMKey;
 import egovframework.cmmn.util.InterceptPost;
 import egovframework.customize.intercepter.SmartFarmDataInterceptor;
 import egovframework.customize.service.GsmEnvVO;
@@ -80,10 +81,11 @@ public class GsmEnvController {
 	@RequestMapping(value= "", method = RequestMethod.POST)
 	@ResponseBody
 	@InterceptPost
-	public Result<GsmEnvVO> insert(HttpServletResponse response, @RequestBody GsmEnvVO gsmInfo){
+	@InterceptIgnoreGSMKey
+	public Result<GsmEnvVO> insert(HttpServletRequest request,HttpServletResponse response, @RequestBody GsmEnvVO gsmInfo){
 		try {
 			Integer result = gsmEnvService.insert(gsmInfo);
-			response.setHeader(SmartFarmDataInterceptor.X_HEADER_GSM_KEY, gsmInfo.getGsmKey().toString());
+			response.setHeader(SmartFarmDataInterceptor.X_HEADER_GSM_KEY, gsmInfo.getGsmKey().toString());			
 			return new Result(gsmInfo);
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, gsmInfo);

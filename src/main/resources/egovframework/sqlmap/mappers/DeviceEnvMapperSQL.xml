@@ -20,20 +20,27 @@
 	</insert>
 	
 	<update id="update" parameterType="deviceEnvVO">
-		UPDATE controller
+		UPDATE device
 		SET
-		<if test="controller_info_id != null">controller_info_id = #{controller_info_id},</if>
-		,
-		<if test="controller_type != null">controller_type = #{controller_type},</if>
-		,
-		<if test="ip != null">ip = #{ip},</if>
-		,
-		<if test="PORT != null">PORT = #{PORT},</if>
-		,
-		<if test="controller_status != null">controller_status = #{controller_status},</if>
-		,
-		<if test="description != null">description = #{description},</if>
-		WHERE gsm_key = #{gsm_key} AND id = #{id};
+			<if test="deviceTypeId != null"> device_type_id = #{deviceTypeId} </if>
+			<if test="deviceTypeIdx != null">,device_type_idx = #{deviceTypeIdx} </if>
+			<if test="controllerId != null">,controller_id = #{controllerId} </if>
+			<if test="nickname != null">,nickname = #{nickname} </if>
+			<if test="deviceTypeNickname != null">,device_type_nickname = #{deviceTypeNickname} </if>			
+			<if test="xPosition != null">,x_position = #{xPosition} </if>
+			<if test="yPosition != null">,y_position = #{yPosition} </if>
+			<if test="x2Position != null">,x2_position = #{x2Position} </if>
+			<if test="y2Position != null">,y2_position = #{y2Position} </if>
+			<if test="memo != null">,memo = #{memo} </if>
+			<if test="modbusAddress1 != null">,modbus_address1 = #{modbusAddress1} </if>
+			<if test="modbusAddress2 != null">,modbus_address2 = #{modbusAddress2} </if>
+			<if test="modbusAddress3 != null">,modbus_address3 = #{modbusAddress3} </if>
+			<if test="noStopControl != null">,no_stop_control = #{noStopControl} </if>
+			<if test="mode != null">,MODE = #{mode} </if>
+			<if test="updateDate != null">,update_date = NOW() </if>
+			<if test="autoManualMode != null">,auto_manual_mode = #{autoManualMode} </if>
+			<if test="status != null">,STATUS = #{status} </if>			
+		WHERE id = #{id};
 	</update>
 	
 	<delete id="delete">

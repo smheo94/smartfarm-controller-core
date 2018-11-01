@@ -3,6 +3,8 @@ package egovframework.customize.intercepter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kt.smartfarm.supervisor.mapper.GsmEnvMapper;
+
+import egovframework.cmmn.util.InterceptIgnoreGSMKey;
 import egovframework.cmmn.util.InterceptPost;
 import egovframework.cmmn.util.InterceptPre;
 
@@ -12,6 +14,7 @@ import egovframework.customize.service.GsmEnvVO;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.http.*;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
@@ -32,6 +35,7 @@ import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.util.Enumeration;
 import java.util.Objects;
 
@@ -48,7 +52,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
     GsmEnvMapper gsmEnvMapper;
     public SmartFarmDataInterceptor(String config, String myGSMKey, GsmEnvMapper gsmMapper) {
         this.systemType = config;
-        this.myGSMKey = myGSMKey;
+        this.myGSMKey = "3785";
         this.gsmEnvMapper = gsmMapper;
     }
 
@@ -56,28 +60,36 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String headerGsmKey = request.getHeader(X_HEADER_GSM_KEY);
-        if( SYSTEM_TYPE_SMARTFARM.equalsIgnoreCase(systemType) ) {
-            if( headerGsmKey == null || !Objects.equals(headerGsmKey, myGSMKey)) {
-                setErrorResult(response, String.format(ApplicationMessage.MISS_MATCHING_GSM_KEY, headerGsmKey),
-                        HttpStatus.FORBIDDEN);
-                return false;
-            }
-            //헤더의 GSM 이 맞는경우
-            return true;
-        } 
-        else if( headerGsmKey == null) {
-            //SuperVisor고 GSM 이 없는경우는 그냥 수행
-            return true;
-        }
-        startTran = false;
+       
         if( handler instanceof HandlerMethod) {
             // there are cases where this handler isn't an instance of HandlerMethod, so the cast fails.
             HandlerMethod handlerMethod = (HandlerMethod) handler;
-            if( handlerMethod.getMethod().getAnnotation(InterceptPre.class) != null || handlerMethod.getMethod().getAnnotation(InterceptPost.class) != null) {
+            
+        	 String headerGsmKey = request.getHeader(X_HEADER_GSM_KEY);
+             if(headerGsmKey == null){
+             	headerGsmKey = response.getHeader(X_HEADER_GSM_KEY);	
+             }
+             
+             if( SYSTEM_TYPE_SMARTFARM.equalsIgnoreCase(systemType) ) {
+                 if( handlerMethod.getMethod().getAnnotation(InterceptIgnoreGSMKey.class) ==null && (headerGsmKey == null || !Objects.equals(headerGsmKey, myGSMKey))) {
+                     setErrorResult(response, String.format(ApplicationMessage.MISS_MATCHING_GSM_KEY, headerGsmKey),
+                             HttpStatus.FORBIDDEN);
+                     return false;
+                 }
+                 //헤더의 GSM 이 맞는경우
+                 return true;
+             } 
+             else if( headerGsmKey == null) {
+                 //SuperVisor고 GSM 이 없는경우는 그냥 수행
+                 return true;
+             }
+             startTran = false;
+             
+             if( handlerMethod.getMethod().getAnnotation(InterceptPre.class) != null) {
                 System.out.printf( "제어기 연동이 필요 합니다.");
                 //TODO : 제어기에 데이터를 보낸다.
                 Integer gsmKey = Integer.valueOf(headerGsmKey);
+
                 ResponseEntity<ResponseResult> result = sendProxyRequest(gsmKey, InterceptPre.class, request, response);
                 boolean callResult = isSuccessResult(result);
                 if(  callResult == false  ) {
@@ -87,7 +99,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
                         response.sendError(result.getStatusCode().value(), new ObjectMapper().writeValueAsString(result.getBody()));
                     }
                     //TODO: 더이상 진행하지 않고 오류를 Response에 셋팅합니다.
-                    return false;
+                    return false;                    
                 }
             } else if( handlerMethod.getMethod().getAnnotation(InterceptPost.class) != null ) {
                 System.out.printf( "DB 트렌젝션을 시작하세요. 롤백을 할 수 있어야 합니다.");
@@ -228,12 +240,14 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
         String requestUrl = request.getRequestURI();
         URI uri = new URI("http", null, server, port, null, null, null);
         uri = UriComponentsBuilder.fromUri(uri).path(requestUrl)
-                .query(request.getQueryString()).build(true).toUri();
+                .query(request.getQueryString()).build(true).toUri();        
+
         HttpEntity httpEntity = getHttpEntity(annotationClass, request, response);
         if( httpEntity == null ) {
                return null;
         }
         RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
         final ResponseEntity<ResponseResult> returnValue = restTemplate.exchange(uri, HttpMethod.valueOf(request.getMethod()), httpEntity, ResponseResult.class);
         return returnValue;
     }

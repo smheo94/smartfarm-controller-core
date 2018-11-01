@@ -16,6 +16,9 @@
 package egovframework.customize.web;
 
 import java.util.List;
+
+import egovframework.cmmn.util.InterceptPost;
+import egovframework.cmmn.util.InterceptPre;
 import egovframework.cmmn.util.Result;
 import egovframework.customize.service.DeviceEnvService;
 import egovframework.customize.service.DeviceEnvVO;
@@ -50,6 +53,7 @@ public class DeviceEnvController {
 	@RequestMapping(value= "", method = RequestMethod.POST)
 	@ApiOperation(value = "구동기,센서 등록 : OLD( /gsm/{gsm_key}/")
 	@ResponseBody
+	@InterceptPost
 	public Result<List<DeviceEnvVO>> insert(@RequestBody List<DeviceEnvVO> device){
 		try {
 			return new Result(deviceEnvService.insert(device));
@@ -87,6 +91,7 @@ public class DeviceEnvController {
 	@RequestMapping(value= "/gsm/{gsm_key}/controller/{controllerId}", method = RequestMethod.PUT)
 	@ApiOperation(value = "구동기 모듈에 해당하는 구동기,센서 수정 : OLD( /gsm/{gsm_key}/{controllerId}")
 	@ResponseBody
+	@InterceptPre
 	public Result<DeviceEnvVO> update(@PathVariable("gsm_key") Integer gsmKey, @PathVariable("controllerId") String controllerId, @RequestBody List<DeviceEnvVO> device){
 		try {
 			return new Result(deviceEnvService.update(device)); // gsmKey, controllerId, deviceId 기준으로 업데이트
@@ -134,6 +139,7 @@ public class DeviceEnvController {
 	@RequestMapping(value= "/gsm/{gsm_key}/controller/{controllerId}", method = RequestMethod.DELETE)
 	@ApiOperation(value = "구동모듈에 해당하는 Device 삭제: OLD( /gsm/{gsm_key}/{controllerId})")
 	@ResponseBody
+	@InterceptPre
 	public Result<DeviceEnvVO> delete(@PathVariable("gsm_key") Integer gsmKey,  @PathVariable("controllerId") Integer controllerId){
 		try {
 			return new Result(deviceEnvService.delete(gsmKey, controllerId));
@@ -150,6 +156,7 @@ public class DeviceEnvController {
 	@RequestMapping(value= "/{deviceId}/relationdevices", method = RequestMethod.POST)
 	//Device Type 별로 입력 @RequestMapping(value= "/vDeviceList", method = RequestMethod.POST)
 	@ResponseBody
+	@InterceptPost
 	public Result<List<VDeviceInfoVO>> vDeviceList(@PathVariable("deviceId") Integer deviceId, @RequestBody List<VDeviceEnvVO> vo){
 		try {
 			return new Result(deviceEnvService.insertVDeviceEnv(vo));

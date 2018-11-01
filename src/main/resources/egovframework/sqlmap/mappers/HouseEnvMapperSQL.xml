@@ -142,9 +142,10 @@
 			floor_space as floorSpace, house_horizontal as houseHorizontal, house_vertical as houseVertical, house_height as houseHeight,
 			plant_spacing as plantSpacing, crop_cnt as cropCnt, house_direction as houseDirection, select_temp_sensor as selectTempSensor,
 			select_hum_sensor as selectHumSensor, gsm_key as gsmKey, house_name_i18n as houseNameI18n
-		FROM green_house
+		FROM green_house		
 		WHERE 1=1
-		AND  gsm_key = #{gsm_key}	
+		<if test="gsm_key != null">AND  gsm_key = #{gsm_key}</if>
+		<if test="green_house_id != null">AND id = #{green_house_id}</if>
 	</select>
 	
 	<select id ="getMappedDevice" resultType="int">
@@ -184,6 +185,100 @@
 		FROM map_green_house_device  AS mghd
 		INNER JOIN device ON device.id = mghd.device_id
 		WHERE mghd.green_house_id = #{houseId}			
+	</select>
+	
+	<insert id="insertCCTVSetting" parameterType="cctv" useGeneratedKeys="true">
+		INSERT INTO	cctv	
+           ( house_id, cctv_name, cctv_ip, cctv_port, cctv_id, cctv_pwd)
+		VALUES(
+			#{houseId},#{cctvName},#{cctvIp},#{cctvPort},#{cctvId},#{cctvPwd}
+		)
+		<selectKey keyProperty="id" resultType="int">
+			SELECT LAST_INSERT_ID() AS id;
+		</selectKey>
+	</insert>
+	
+	<select id="getCctvList" parameterType="Integer" resultType="map">
+		SELECT 
+			id, 
+			house_id as houseId, 
+			cctv_name as cctvName, 
+			cctv_ip as cctvIp, 
+			cctv_port as cctvPort, 
+			cctv_id as cctvId, 
+			cctv_pwd as cctvPwd, 
+			wowza_id as wowzaId, 
+			wowza_pwd as wowzaPwd
+		FROM cctv
+		WHERE house_id =#{houseId}
+	</select>	
+	
+	<select id="getAllList" resultType="map">
+		SELECT id, product_method_id AS productMethodId, green_house_type_id as greenHouseTypeId, house_name as houseName,
+			latitude, longitude, description, build_date as buildDate, last_update as lastUpdate, addr_1 as addr1,
+			addr_2 as addr2, zip, nutrient_common_id as nutrientCommonId, change_gh as changeGh, change_temperature as changeTemperature,
+			floor_space as floorSpace, house_horizontal as houseHorizontal, house_vertical as houseVertical, house_height as houseHeight,
+			plant_spacing as plantSpacing, crop_cnt as cropCnt, house_direction as houseDirection, select_temp_sensor as selectTempSensor,
+			select_hum_sensor as selectHumSensor, gsm_key as gsmKey, house_name_i18n as houseNameI18n
+		FROM green_house
+	</select>
+	
+	<insert id="insertForecastData" parameterType="map"  useGeneratedKeys="true">
+		INSERT INTO weather_cast (
+			base_date, base_time, fcst_date, fcst_time, fcst_value, nx, ny, category, house_id
+		)
+		VALUES (
+			#{base_date}, #{base_time}, #{fcst_date}, #{fcst_time}, #{fcst_value}, #{nx}, #{ny}, #{category}, #{house_id}
+		)
+		<selectKey keyProperty="id" resultType="int">
+			SELECT LAST_INSERT_ID() AS id;
+		</selectKey>
+	</insert>
+	
+	<select id="getWeatherCast" parameterType="map" resultType="map">
+		SELECT 
+			house_id,
+			base_date,
+			base_time,
+			fcst_date,
+			fcst_time,
+			fcst_value,
+			nx,
+			ny,
+			category
+		FROM weather_cast
+		WHERE 1=1
+			AND house_id = #{house_id}
+			<if test="from_date!=null">
+			AND fcst_date BETWEEN #{from_date} AND #{to_date}
+			</if>
+			<if test="from_date==null">
+			AND fcst_date BETWEEN NOW() AND NOW() + INTERVAL 1 DAY
+			</if>
+		ORDER BY id;
+	</select>
+	<select id="getWeatherCategory" resultType="map">
+		SELECT id, category, category_desc, sub_category_desc, unit
+		FROM cd_weather_category_type		
+	</select>	
+	
+	
+	<insert id="insertSunriseData" parameterType="map" useGeneratedKeys="true">
+		INSERT INTO sunrise_info(
+			house_id,loc_date,sunrise,sunset
+		)VALUES(
+			#{house_id},#{loc_date},#{sunrise},#{sunset}
+		)
+		<selectKey keyProperty="id" resultType="int">
+			SELECT LAST_INSERT_ID() AS id;
+		</selectKey>
+	</insert>
+	
+	<select id="selectSunriseDate" parameterType="map" resultType="map">
+		SELECT house_id,loc_date,sunrise,sunset
+		FROM sunrise_info
+		WHERE loc_date = CURRENT_DATE()
+	
 	</select>
 	
 </mapper>

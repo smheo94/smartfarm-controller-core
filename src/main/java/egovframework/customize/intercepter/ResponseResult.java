@@ -6,5 +6,5 @@ public class ResponseResult {
     public String message;
     public int status;
     public String error;
-    public HashMap data;
+    public Object data;
 }

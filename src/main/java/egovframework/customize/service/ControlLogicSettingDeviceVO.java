@@ -26,6 +26,7 @@ public class ControlLogicSettingDeviceVO {
 	Integer deviceNum;
 	Integer deviceInsertOrder;
 	Integer deviceId;
+	Integer required;
 	public Map<String,Object> toMap() {
 		return ClassUtil.toHashMap(this);
 	}

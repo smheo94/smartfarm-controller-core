@@ -65,14 +65,16 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 		if( logicSettingVOList == null || logicSettingVOList.size() ==0 || logicSettingVOList.get(0) ==null) {
 			return 0;
 		}
-		final ControlLogicSettingVO logicSettingVO = logicSettingVOList.get(0);
-		return	mapper.deleteControlSetting(logicSettingVO.controlSettingId);
-//		if( logicSettingVO.getDeviceList() != null ) {
-//			mapper.deleteControlSettingDevice(null, logicSettingVO.controlSettingId);
-//		}
-//		if( logicSettingVO.getCheckConditionList() != null ) {
-//			mapper.deleteControlSettingChkCondition(null, logicSettingVO.controlSettingId);
-//		}
+		final ControlLogicSettingVO logicSettingVO = logicSettingVOList.get(0);	
+		if( logicSettingVO.getDeviceList() != null ) {
+			mapper.deleteControlSettingDevice(null, logicSettingVO.controlSettingId);
+		}
+		if( logicSettingVO.getCheckConditionList() != null ) {
+			mapper.deleteControlSettingChkCondition(null, logicSettingVO.controlSettingId);
+		}	
+		return mapper.deleteControlSetting(logicSettingVO.controlSettingId);
+		
+		
 //		if( logicSettingVO.getPreOrderSettingId() != null ) {
 //
 //		}

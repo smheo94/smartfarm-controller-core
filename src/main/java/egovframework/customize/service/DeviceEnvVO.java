@@ -42,7 +42,6 @@ public class DeviceEnvVO {
 	String updateDate;
 	Integer autoManualMode;
 	Integer status;
-
 	String deviceType;
     String deviceTypeGroup;
     String deviceTypeName;

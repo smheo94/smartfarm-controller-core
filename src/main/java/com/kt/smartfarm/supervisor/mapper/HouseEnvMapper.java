@@ -16,14 +16,18 @@
 package com.kt.smartfarm.supervisor.mapper;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import egovframework.customize.service.CCTVSettingVO;
 import egovframework.customize.service.DeviceEnvVO;
 import egovframework.customize.service.HouseEnvVO;
 import egovframework.customize.service.ProductMethodVO;
 import egovframework.customize.service.ProductVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
+
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -48,6 +52,17 @@ public interface HouseEnvMapper {
 	List<Integer> getMappedDevice(Map<String, Object> map);
 	List<HashMap<String, Object>> getMappedController(Map<String, Object> map);
 	List<DeviceEnvVO> getHouseDeviceList(Integer houseId);
+	
+	void insertCCTVSetting(CCTVSettingVO vo);
+	List<HashMap<String, Object>> getCctvList(@Param("houseId")Integer houseId);
+	List<HashMap<String, Object>> getAllList();
+	
+	Integer insertForecastData(LinkedHashMap<String, Object> hm);
+	Integer insertSunriseData(HashMap<String, Object> hm);
+	
+	List<HashMap<String, Object>> getWeatherCast(HashMap<String, Object> param);
+	List<HashMap<String, Object>> getWeatherCategory();
+	
 	
 	
 //	List<ProductMethodVO> selectProductMethodList(HashMap<String, Object> product);
