@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -66,7 +67,7 @@ public class ControlLogicSettingController {
 
 	@RequestMapping(value= "", method = RequestMethod.POST)
 	@ResponseBody
-	public Result<List<DeviceEnvVO>> insert(@RequestBody ControlLogicSettingVO vo){
+	public Result<ControlLogicSettingVO> insert(@RequestBody ControlLogicSettingVO vo){
 		try {
 			return new Result(service.insertLogicSetting(vo));
 		} catch(Exception e) {
@@ -76,13 +77,37 @@ public class ControlLogicSettingController {
 
 	@RequestMapping(value= "/{controlSettingId}", method = RequestMethod.PUT)
 	@ResponseBody
-	public Result<List<DeviceEnvVO>> update(@PathVariable("controlSettingId") Integer controlSettingId, @RequestBody ControlLogicSettingVO vo){
+	public Result<ControlLogicSettingVO> update(@PathVariable("controlSettingId") Integer controlSettingId, @RequestBody ControlLogicSettingVO vo){
 		try {
 			return new Result(service.updateLogicSetting(vo));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, vo);
 		}
 	}
+
+	@RequestMapping(value= "/{controlSettingId}/env_upudate", method = RequestMethod.PUT)
+	@ResponseBody
+	public Result<String> updateEnv(@PathVariable("controlSettingId") Integer controlSettingId,
+											   @RequestBody Map<String, Object> param){
+		try {
+			service.updateLogicSettingEnv(param);
+			//TODO : JSON
+			return new Result("Success");
+		} catch(Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, param);
+		}
+	}
+
+//
+//	"UPDATE LicenseActivation"
+//			+ " SET \n"
+//			+ "license_prop_origin_text = JSON_REPLACE(license_prop_origin_text, '$.numRobot', :numRobot\n" + ",'$.numScenario', :numScenario \n"
+//			+ ", '$.numScenarioStudio', :numScenarioStudio\n"
+//			+ ", '$.numTask', :numTask\n"
+//			+ ", '$.startDate', :startDate\n"
+//			+ ", '$.expireDate', :expireDate)\n"
+//			+ " WHERE license_id = :licenseId"
+
 
 	@RequestMapping(value= "/{controlSettingId}", method = RequestMethod.DELETE)
 	@ResponseBody

@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 
 @Service("controlLogicSettingService")
@@ -107,6 +108,12 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 		}
 		return vo;
 	}
+
+	@Override
+	public void updateLogicSettingEnv(Map<String,Object> param) {
+		mapper.updateControlSettingEnv(param);
+	}
+
 
 	@Override
 	public List<ControlSettingOperatorVO> listControlSettingOperation() {
