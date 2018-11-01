@@ -299,4 +299,9 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 	public List<HashMap<String, Object>> getWeatherCategory() {
 		return houseEnvMapper.getWeatherCategory();
 	}
+
+	@Override
+	public Integer insertSunriseData(HashMap<String, Object> hm) {
+		return houseEnvMapper.insertSunriseData(hm);		
+	}
 }

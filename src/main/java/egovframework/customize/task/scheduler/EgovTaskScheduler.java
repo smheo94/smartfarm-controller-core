@@ -38,15 +38,19 @@ public class EgovTaskScheduler {
 	// 기준 시간은 
 	
 	final String FORECAST_URL = "http://newsky2.kma.go.kr/service/SecndSrtpdFrcstInfoService2/ForecastSpaceData";
-	final String certKey = "Y0VECgYwtbnfuvNYklX9OChRmOn3vCibz%2Fxe3YFrqoWiyCjkSnKRMpC9I6ybpZbHnKA5OxhNjyBGy28lrfomjQ%3D%3D";
+	final String weatherCertKey = "Y0VECgYwtbnfuvNYklX9OChRmOn3vCibz%2Fxe3YFrqoWiyCjkSnKRMpC9I6ybpZbHnKA5OxhNjyBGy28lrfomjQ%3D%3D";
 	
+	final String SUNRISE_URL = "http://apis.data.go.kr/B090041/openapi/service/RiseSetInfoService/getLCRiseSetInfo";
+	final String sunCertKey = "l%2FgDtDXE6ZralE2VJSrcon%2FKyKps%2FPANA9o497NfusyEYyei0Zv1fAWqJoxz8jaah7nv853ln7cxCWJypWOMLA%3D%3D";
 	
 	public void runWeatherSchedule(){		
 		System.out.println("weatherScheduler");
 		List<HashMap<String,Object>> houseList = new ArrayList<>();
 		DateUtil dateUtil = new DateUtil();
 		String regDay = dateUtil.getCurrentDateString();
-		String regTimeString   = new java.text.SimpleDateFormat("HH").format(new java.util.Date()) + "00";
+		String regTimeString   = new java.text.SimpleDateFormat("HH").format(new java.util.Date());		
+		regTimeString = getBaseTime(regTimeString);
+		
 		houseList = houseEnvService.getAllList();
 		for(int i=0; i<houseList.size(); i++){
 			if(houseList.get(i).get("latitude") != null && houseList.get(i).get("longitude") != null){
@@ -63,7 +67,7 @@ public class EgovTaskScheduler {
 				if(Integer.parseInt(nx) > 0 && Integer.parseInt(ny) >0){
 					try{
 						URL url = new URL(FORECAST_URL
-								+"?ServiceKey="+certKey
+								+"?ServiceKey="+weatherCertKey
 								+"&base_date="+regDay
 								+"&base_time="+regTimeString
 								+"&numOfRows=1000"
@@ -122,8 +126,92 @@ public class EgovTaskScheduler {
 				}				
 			}
 		}
-	}	
+	}
+	
 		// 온실 리스트 가져와서 위경도 겹치는거 빼고 
+	
+	
+	public void runSunriseSchedule(){
+		List<HashMap<String,Object>> houseList = new ArrayList<>();
+		DateUtil dateUtil = new DateUtil();
+		String regDay = dateUtil.getCurrentDateString();		
+		houseList = houseEnvService.getAllList();
+		for(int i=0; i<houseList.size(); i++){
+			if(houseList.get(i).get("latitude") != null && houseList.get(i).get("longitude") != null){
+				HashMap<String,Object> hm = new HashMap<>();
+				Double longitude = Double.parseDouble(houseList.get(i).get("latitude").toString());
+				Double latitude = Double.parseDouble(houseList.get(i).get("longitude").toString());
+				
+				try{
+					URL url = new URL(SUNRISE_URL
+							+"?ServiceKey="+sunCertKey
+							+"&longitude="+longitude
+							+"&latitude="+latitude
+							+"&locdate="+regDay
+							+"&dnYn=Y"						
+							+"&_type=json"
+							);					
+					HttpURLConnection http = (HttpURLConnection) url.openConnection();
+			        http.setConnectTimeout(10000);
+			        http.setUseCaches(false);
+			
+			        BufferedReader br = new BufferedReader(new InputStreamReader(http.getInputStream()));
+			        StringBuilder sb = new StringBuilder();
+			        while (true) {
+			            String line = br.readLine();
+			            if (line == null){
+			                break;
+			            }
+			            sb.append(line);
+			        }
+			        br.close();
+			        http.disconnect();
+			        
+			        JSONObject json = new JSONObject(sb.toString());
+			        JSONObject body = json.getJSONObject("response").getJSONObject("body").getJSONObject("items").getJSONObject("item");
+			        hm.put("house_id", (Integer)houseList.get(i).get("id"));
+			        hm.put("sunrise", (String)body.get("sunrise"));
+			        hm.put("sunset", (String)body.get("sunrise"));
+			        hm.put("loc_date", body.get("locdate").toString());
+			        houseEnvService.insertSunriseData(hm);
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	private String getBaseTime(String regTimeString) {
+		final int standardTime[] = {2,5,8,11,14,17,20,23};
+		int regTime = Integer.parseInt(regTimeString);		
+		int tempTime= 0;
+		int minTime = 25;
+		for(int i=0; i<standardTime.length; i++){
+
+			tempTime = regTime - standardTime[i];
+			if(minTime > tempTime){
+				if(tempTime < 0){
+					break;
+				}else{
+					minTime = tempTime;	
+				}
+			}
+		}		
+		if(regTime != 0 && regTime != 1){
+			regTime = regTime - minTime;	
+		}else if (regTime == 0){
+			regTime = 23;
+		}else if (regTime == 1){
+			regTime = 1;
+		}
+		
+		if(regTime<10){
+			regTimeString = "0"+regTime+"00";
+		}else{
+			regTimeString = regTime+"00";
+		}
+		return regTimeString;
+	}	
 	
 	private HashMap<String, Object> getGridxy(double latitude, double longitude) {
         double re1 = 6371.00877; // 지구 반경(km)

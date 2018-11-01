@@ -79,8 +79,9 @@
 
  	<task:scheduler id="taskScheduler"/>
  	<task:scheduled-tasks>
- 		<!-- <task:scheduled ref="batchExcuetor" method="runWeatherSchedule" cron="0 31 2,5,8,11,14,20,23 * * *"/> -->
- 		<task:scheduled ref="batchExcuetor" method="runWeatherSchedule" cron="* * * * * 8"/>
+ 		<task:scheduled ref="batchExcuetor" method="runWeatherSchedule" cron="0 15 2,5,8,11,14,17,20,23 * * *"/>
+ 		<task:scheduled ref="batchExcuetor" method="runSunriseSchedule" cron="0 1 0 * * *"/>
+ 		<!-- <task:scheduled ref="batchExcuetor" method="runWeatherSchedule" cron="* 01 11 * * *"/> -->
  	</task:scheduled-tasks>
  		
  	<!-- 	

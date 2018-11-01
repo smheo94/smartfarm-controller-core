@@ -262,4 +262,23 @@
 		FROM cd_weather_category_type		
 	</select>	
 	
+	
+	<insert id="insertSunriseData" parameterType="map" useGeneratedKeys="true">
+		INSERT INTO sunrise_info(
+			house_id,loc_date,sunrise,sunset
+		)VALUES(
+			#{house_id},#{loc_date},#{sunrise},#{sunset}
+		)
+		<selectKey keyProperty="id" resultType="int">
+			SELECT LAST_INSERT_ID() AS id;
+		</selectKey>
+	</insert>
+	
+	<select id="selectSunriseDate" parameterType="map" resultType="map">
+		SELECT house_id,loc_date,sunrise,sunset
+		FROM sunrise_info
+		WHERE loc_date = CURRENT_DATE()
+	
+	</select>
+	
 </mapper>
