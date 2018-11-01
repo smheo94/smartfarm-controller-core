@@ -52,7 +52,8 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
     GsmEnvMapper gsmEnvMapper;
     public SmartFarmDataInterceptor(String config, String myGSMKey, GsmEnvMapper gsmMapper) {
         this.systemType = config;
-        this.myGSMKey = "3785";
+//        this.myGSMKey = "3785";
+        this.myGSMKey = myGSMKey;
         this.gsmEnvMapper = gsmMapper;
     }
 
