@@ -15,9 +15,17 @@
 	<insert id="insert" useGeneratedKeys="true" parameterType="controllerEnvVO">
 		INSERT INTO controller
 		(gsm_key, controller_info_id, controller_type, ip, PORT, controller_status,
-		description)
+		description
+		<if test="id != null">
+			,id
+		</if>
+		)
 		VALUES (#{gsmKey}, #{controllerInfoId}, #{controllerType}, #{ip},
-		#{port}, #{controllerStatus}, #{description});
+		#{port}, #{controllerStatus}, #{description}
+		<if test="id != null">
+			,#{id}
+		</if>
+		);
 		<selectKey keyProperty="id" resultType="int">
 		SELECT LAST_INSERT_ID() AS id;
 		</selectKey>

@@ -16,9 +16,16 @@
 	<insert id="insert" useGeneratedKeys="true" parameterType="houseEnvVO">
 		INSERT INTO green_house( 
        		product_method_id, green_house_type_id, house_name, latitude, longitude, description, build_date, last_update, addr_1, addr_2, zip, nutrient_common_id, change_gh, change_temperature, floor_space, house_horizontal, house_vertical, house_height, plant_spacing, crop_cnt, house_direction, select_temp_sensor, select_hum_sensor, gsm_key, house_name_i18n
+		,
+		<if test="id != null">
+		,id
+		</if>
 		)
 		VALUES (
 			#{productMethodId},#{greenHouseTypeId},#{houseName},#{latitude},#{longitude},#{description},now(),now(),#{addr1},#{addr2},#{zip},1,1,1,#{floorSpace},#{houseHorizontal},#{houseVertical},#{houseHeight},#{plantSpacing},#{cropCnt},#{houseDirection},#{selectTempSensor},#{selectHumSensor},#{gsmKey},#{houseNameI18n}
+		<if test="id != null">
+			,#{id}
+		</if>
 		);
 		<selectKey keyProperty="id" resultType="int">
 		SELECT LAST_INSERT_ID() AS id;

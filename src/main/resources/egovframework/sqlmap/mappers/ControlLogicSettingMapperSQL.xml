@@ -105,8 +105,16 @@
 
 
     <insert id="insertControlSettingChkCondition" parameterType="controlLogicSettingCheckConditionVO" useGeneratedKeys="true">
-        INSERT INTO control_setting_chk_condition (control_setting_id, operator_code, operator_condition, value, action)
-        VALUES( #{controlSettingId}, #{operatorCode}, #{operatorCondition}, #{value}, #{action});
+        INSERT INTO control_setting_chk_condition (control_setting_id, operator_code, operator_condition, value, action
+        <if test="id != null">
+            ,id
+        </if>
+        )
+        VALUES( #{controlSettingId}, #{operatorCode}, #{operatorCondition}, #{value}, #{action}
+        <if test="id != null">
+            ,#{id}
+        </if>
+        );
         <selectKey keyProperty="id" resultType="Integer" keyColumn="id">
             SELECT LAST_INSERT_ID() AS id;
         </selectKey>
@@ -128,8 +136,16 @@
 
 
     <insert id="insertControlSettingDevice" parameterType="controlLogicSettingDeviceVO" useGeneratedKeys="true">
-        INSERT INTO control_setting_device ( control_setting_id, logic_id, device_num, device_insert_order, device_id)
-        VALUES( #{controlSettingId}, #{logicId}, #{deviceNum}, #{deviceInsertOrder}, #{deviceId});
+        INSERT INTO control_setting_device ( control_setting_id, logic_id, device_num, device_insert_order, device_id
+        <if test="id != null">
+            ,id
+        </if>
+        )
+        VALUES( #{controlSettingId}, #{logicId}, #{deviceNum}, #{deviceInsertOrder}, #{deviceId}
+        <if test="id != null">
+            ,#{id}
+        </if>
+        );
         <selectKey keyProperty="id" resultType="Integer" keyColumn="id">
             SELECT LAST_INSERT_ID() AS id;
         </selectKey>
@@ -152,8 +168,15 @@
 
 
     <insert id="insertControlSettingPreOrder" parameterType="controlLogicSettingVO" useGeneratedKeys="true">
-        INSERT INTO control_setting_pre_order (control_setting_id, pre_order_setting_id)
-        VALUES( #{controlSettingId}, #{preOrderSettingId});
+        INSERT INTO control_setting_pre_order (control_setting_id, pre_order_setting_id
+        <if test="id != null">
+            ,id
+        </if>)
+        VALUES( #{controlSettingId}, #{preOrderSettingId}
+        <if test="id != null">
+            ,#{id}
+        </if>
+        );
     </insert>
     <delete id="deleteControlSettingPreOrder">
         DELETE FROM
@@ -166,9 +189,17 @@
 
     <insert id="insertControlSetting" parameterType="controlLogicSettingVO" useGeneratedKeys="true">
         INSERT INTO control_setting ( green_house_id, logic_name, logic_id, logic_period_size, logic_env, logic_period_env, create_dt, update_dt,
-        auto_manual_mode, java_class_name)
+        auto_manual_mode, java_class_name
+        <if test="id != null">
+            ,id
+        </if>
+        )
         VALUES(#{greenHouseId}, #{logicName}, #{logicId}, #{logicPeriodSize}, #{logicEnv}, #{logicPeriodEnv}, NOW(), NOW(),
-        #{autoManualMode}, (SELECT java_class_name FROM control_logic WHERE id = #{logicId} ) );
+        #{autoManualMode}, (SELECT java_class_name FROM control_logic WHERE id = #{logicId} )
+        <if test="id != null">
+            ,#{id}
+        </if>
+        );
         <selectKey keyProperty="controlSettingId" resultType="Integer" keyColumn="id">
             SELECT LAST_INSERT_ID() AS id;
         </selectKey>
