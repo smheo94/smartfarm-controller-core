@@ -22,6 +22,8 @@ public class SmartfarmInterceptorConfig extends WebMvcConfigurerAdapter {
     public String GSM_KEY;
     @Value("${smartfarm.system.type}")
     public String SYSTEM_TYPE;
+    @Value("${smartfarm.supervisor.subpath}")
+    public String PROXY_SUB_PATH;
 
     @Resource(name="gsmEnvMapper")
     GsmEnvMapper gsmMapper;
@@ -29,7 +31,7 @@ public class SmartfarmInterceptorConfig extends WebMvcConfigurerAdapter {
     @DependsOn( {"propertyConfig"})
     public void addInterceptors(InterceptorRegistry registry) {
         System.out.printf("Load Config : %s , %s\t\n", GSM_KEY, SYSTEM_TYPE);
-        registry.addInterceptor(new SmartFarmDataInterceptor(SYSTEM_TYPE, GSM_KEY, gsmMapper)).addPathPatterns("/**");
+        registry.addInterceptor(new SmartFarmDataInterceptor(SYSTEM_TYPE, PROXY_SUB_PATH, GSM_KEY, gsmMapper)).addPathPatterns("/**");
 
     }
 }

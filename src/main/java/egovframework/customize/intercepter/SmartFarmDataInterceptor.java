@@ -11,8 +11,9 @@ import egovframework.cmmn.util.InterceptPre;
 import egovframework.cmmn.util.Result;
 import egovframework.customize.message.ApplicationMessage;
 import egovframework.customize.service.GsmEnvVO;
-import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.HttpClientErrorException;
@@ -42,19 +43,21 @@ import java.util.Objects;
 import static egovframework.customize.message.ApplicationMessage.NOT_FOUND_GSM_INFO;
 
 public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
-    private static final Log LOG = LogFactory.getLog( SmartFarmDataInterceptor.class );
+    private static final Logger LOG = LoggerFactory.getLogger(SmartFarmDataInterceptor.class);
 
 
     public  final String SYSTEM_TYPE_SMARTFARM = "Smartfarm";
     public static final String X_HEADER_GSM_KEY = "X-Smartfarm-Gsm-Key";
     String systemType;
     String myGSMKey;
+    String proxySubPath;
     GsmEnvMapper gsmEnvMapper;
-    public SmartFarmDataInterceptor(String config, String myGSMKey, GsmEnvMapper gsmMapper) {
+    public SmartFarmDataInterceptor(String config, String proxySubPath, String myGSMKey, GsmEnvMapper gsmMapper) {
         this.systemType = config;
 //        this.myGSMKey = "3785";
         this.myGSMKey = myGSMKey;
         this.gsmEnvMapper = gsmMapper;
+        this.proxySubPath = proxySubPath;
     }
 
     public boolean startTran = false;
@@ -240,7 +243,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
         Integer port = gsmEnvVO.getSystemPort();
         String requestUrl = request.getRequestURI();
         URI uri = new URI("http", null, server, port, null, null, null);
-        uri = UriComponentsBuilder.fromUri(uri).path(requestUrl)
+        uri = UriComponentsBuilder.fromUri(uri).path(proxySubPath + requestUrl)
                 .query(request.getQueryString()).build(true).toUri();        
 
         HttpEntity httpEntity = getHttpEntity(annotationClass, request, response);
@@ -249,6 +252,8 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
         }
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
+
+        LOG.debug("Send Proxy Request : {} , {}, {}", gsmKey, uri, request.getMethod()); ;
         final ResponseEntity<ResponseResult> returnValue = restTemplate.exchange(uri, HttpMethod.valueOf(request.getMethod()), httpEntity, ResponseResult.class);
         return returnValue;
     }
