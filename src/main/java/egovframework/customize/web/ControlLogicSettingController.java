@@ -15,6 +15,7 @@
  */
 package egovframework.customize.web;
 
+import egovframework.cmmn.util.InterceptPost;
 import egovframework.cmmn.util.Result;
 import egovframework.customize.service.ControlLogicSettingService;
 import egovframework.customize.service.ControlLogicSettingVO;
@@ -64,6 +65,7 @@ public class ControlLogicSettingController {
 
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	@ResponseBody
+	@InterceptPost
 	public Result<ControlLogicSettingVO> insert(@RequestBody ControlLogicSettingVO vo) {
 		try {
 			return new Result(service.insertLogicSetting(vo));
@@ -74,6 +76,7 @@ public class ControlLogicSettingController {
 
 	@RequestMapping(value = "/{controlSettingId}", method = RequestMethod.PUT)
 	@ResponseBody
+	@IntereptPre
 	public Result<ControlLogicSettingVO> update(@PathVariable("controlSettingId") Integer controlSettingId, @RequestBody ControlLogicSettingVO vo) {
 		try {
 			return new Result(service.updateLogicSetting(vo));
@@ -84,6 +87,7 @@ public class ControlLogicSettingController {
 
 	@RequestMapping(value = "/{controlSettingId}/env_upudate", method = RequestMethod.PUT)
 	@ResponseBody
+	@IntereptPre
 	public Result<String> updateEnv(@PathVariable("controlSettingId") Integer controlSettingId, @RequestBody Map<String, Object> param) {
 		try {
 			service.updateLogicSettingEnv(param);
@@ -107,6 +111,7 @@ public class ControlLogicSettingController {
 
 	@RequestMapping(value = "/{controlSettingId}", method = RequestMethod.DELETE)
 	@ResponseBody
+	@IntereptPre
 	public Result<Integer> delete(@PathVariable("controlSettingId") Integer controlSettingId) {
 		try {
 			return new Result(service.delLogicSetting(controlSettingId));
@@ -117,6 +122,7 @@ public class ControlLogicSettingController {
 
 	@RequestMapping(value = "/chkCondition/{chkConditionId}", method = RequestMethod.DELETE)
 	@ResponseBody
+	@IntereptPre
 	public Result<Integer> deleteChkCondition(@PathVariable("chkConditionId") Integer chkConditionId) {
 		try {
 			return new Result(service.delChkConditionSetting(chkConditionId));
