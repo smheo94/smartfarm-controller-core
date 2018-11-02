@@ -157,7 +157,7 @@ public class DeviceEnvController {
 	//Device Type 별로 입력 @RequestMapping(value= "/vDeviceList", method = RequestMethod.POST)
 	@ResponseBody
 	@InterceptPost
-	public Result<List<VDeviceInfoVO>> vDeviceList(@PathVariable("deviceId") Integer deviceId, @RequestBody List<VDeviceEnvVO> vo){
+	public Result<List<VDeviceEnvVO>> vDeviceList(@PathVariable("deviceId") Integer deviceId, @RequestBody List<VDeviceEnvVO> vo){
 		try {
 			return new Result(deviceEnvService.insertVDeviceEnv(vo));
 		} catch(Exception e) {
@@ -165,6 +165,27 @@ public class DeviceEnvController {
 		}
 	}
 
+	@RequestMapping(value= "/{deviceId}/relationdevices", method = RequestMethod.PUT)
+	@ResponseBody
+	@InterceptPre
+	public Result<VDeviceEnvVO> updateVDeviceList(@PathVariable("deviceId") Integer deviceId, @RequestBody VDeviceEnvVO vo){
+		try {
+			return new Result(deviceEnvService.updateVDeviceEnv(vo));
+		} catch(Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		}
+	}
+	
+	@RequestMapping(value= "/{id}/relationdevices", method = RequestMethod.DELETE)
+	@ResponseBody
+	@InterceptPre
+	public Result<VDeviceEnvVO> deleteVDeviceList(@PathVariable("id") Integer id){
+		try {
+			return new Result(deviceEnvService.deleteVDeviceEnv(id));
+		} catch(Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		}
+	}
 	/**
 	 * @description 가상장치 등록
 	 * @param deviceId

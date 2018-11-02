@@ -23,4 +23,7 @@ public interface DeviceEnvService {
 
 
 	List<VDeviceEnvVO> getVDeviceEnvList(Integer deviceId);
+	
+	VDeviceEnvVO updateVDeviceEnv(VDeviceEnvVO vo);
+	Integer deleteVDeviceEnv(Integer deviceId);
 }

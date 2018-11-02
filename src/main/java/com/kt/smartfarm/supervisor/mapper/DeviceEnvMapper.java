@@ -48,4 +48,6 @@ public interface DeviceEnvMapper {
 	Integer insertVDeviceEnv(VDeviceEnvVO vo);
 
 	List<VDeviceEnvVO> getVDeviceEnvList(@Param("deviceId") Integer deviceId);
+	Integer deleteVDeviceEnv(Integer deviceId);
+	VDeviceEnvVO updateVDeviceEnv(VDeviceEnvVO vo);
 }

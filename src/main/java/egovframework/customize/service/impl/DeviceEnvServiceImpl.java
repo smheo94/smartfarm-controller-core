@@ -42,6 +42,10 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 		try{
 			for(DeviceEnvVO vo :device){
 				deviceEnvMapper.insert(vo);
+				for(VDeviceEnvVO vDevice: vo.getRelationDeviceList()){
+					vDevice.setParentDeviceId(vo.getId());
+					deviceEnvMapper.insertVDeviceEnv(vDevice);
+				}
 			}			
 		}catch(Exception e){
 			e.printStackTrace();
@@ -153,6 +157,27 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	
+	@Override
+	public VDeviceEnvVO updateVDeviceEnv(VDeviceEnvVO vo) {
+		try{
+			return deviceEnvMapper.updateVDeviceEnv(vo);
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}		
+	}
+
+	@Override
+	public Integer deleteVDeviceEnv(Integer id) {
+		try{
+			return deviceEnvMapper.deleteVDeviceEnv(id);
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
 	}
   
 }
