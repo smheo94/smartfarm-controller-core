@@ -16,6 +16,7 @@
 package egovframework.customize.web;
 
 import egovframework.cmmn.util.InterceptPost;
+import egovframework.cmmn.util.InterceptPre;
 import egovframework.cmmn.util.Result;
 import egovframework.customize.service.ControlLogicSettingService;
 import egovframework.customize.service.ControlLogicSettingVO;
@@ -76,7 +77,7 @@ public class ControlLogicSettingController {
 
 	@RequestMapping(value = "/{controlSettingId}", method = RequestMethod.PUT)
 	@ResponseBody
-	@IntereptPre
+	@InterceptPre
 	public Result<ControlLogicSettingVO> update(@PathVariable("controlSettingId") Integer controlSettingId, @RequestBody ControlLogicSettingVO vo) {
 		try {
 			return new Result(service.updateLogicSetting(vo));
@@ -87,7 +88,7 @@ public class ControlLogicSettingController {
 
 	@RequestMapping(value = "/{controlSettingId}/env_upudate", method = RequestMethod.PUT)
 	@ResponseBody
-	@IntereptPre
+	@InterceptPre
 	public Result<String> updateEnv(@PathVariable("controlSettingId") Integer controlSettingId, @RequestBody Map<String, Object> param) {
 		try {
 			service.updateLogicSettingEnv(param);
@@ -111,7 +112,7 @@ public class ControlLogicSettingController {
 
 	@RequestMapping(value = "/{controlSettingId}", method = RequestMethod.DELETE)
 	@ResponseBody
-	@IntereptPre
+	@InterceptPre
 	public Result<Integer> delete(@PathVariable("controlSettingId") Integer controlSettingId) {
 		try {
 			return new Result(service.delLogicSetting(controlSettingId));
@@ -122,7 +123,7 @@ public class ControlLogicSettingController {
 
 	@RequestMapping(value = "/chkCondition/{chkConditionId}", method = RequestMethod.DELETE)
 	@ResponseBody
-	@IntereptPre
+	@InterceptPre
 	public Result<Integer> deleteChkCondition(@PathVariable("chkConditionId") Integer chkConditionId) {
 		try {
 			return new Result(service.delChkConditionSetting(chkConditionId));
@@ -133,6 +134,7 @@ public class ControlLogicSettingController {
 
 	@RequestMapping(value = "/device/{deviceId}", method = RequestMethod.DELETE)
 	@ResponseBody
+	@InterceptPost
 	public Result<Integer> deleteControlSettingDevice(@PathVariable("deviceId") Integer deviceId) {
 		try {
 			return new Result(service.deleteControlLogicSettingDevice(deviceId));
