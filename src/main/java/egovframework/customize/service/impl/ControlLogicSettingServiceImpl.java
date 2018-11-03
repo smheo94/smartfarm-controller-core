@@ -51,10 +51,15 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 			});
 		}
 		if (vo.getDeviceList() != null) {
-			vo.getDeviceList().forEach(device -> {
-				device.setControlSettingId(vo.controlSettingId);
+			for(int i=0; i<vo.getDeviceList().size();i++){
+				ControlLogicSettingDeviceVO device = vo.getDeviceList().get(i);
+				device.setControlSettingId(vo.getControlSettingId());
 				mapper.insertControlSettingDevice(device);
-			});
+			}
+//			vo.getDeviceList().forEach(device -> {
+//				device.setControlSettingId(vo.controlSettingId);
+//				mapper.insertControlSettingDevice(device);
+//			});
 		}
 		return vo;
 	}

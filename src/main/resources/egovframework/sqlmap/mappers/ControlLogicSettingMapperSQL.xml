@@ -190,14 +190,14 @@
     <insert id="insertControlSetting" parameterType="controlLogicSettingVO" useGeneratedKeys="true">
         INSERT INTO control_setting ( green_house_id, logic_name, logic_id, logic_period_size, logic_env, logic_period_env, create_dt, update_dt,
         auto_manual_mode, java_class_name
-        <if test="id != null">
+        <if test="controlSettingId != null">
             ,id
         </if>
         )
         VALUES(#{greenHouseId}, #{logicName}, #{logicId}, #{logicPeriodSize}, #{logicEnv}, #{logicPeriodEnv}, NOW(), NOW(),
         #{autoManualMode}, (SELECT java_class_name FROM control_logic WHERE id = #{logicId} )
-        <if test="id != null">
-            ,#{id}
+        <if test="controlSettingId != null">
+            ,#{controlSettingId}
         </if>
         );
         <selectKey keyProperty="controlSettingId" resultType="Integer" keyColumn="id">
