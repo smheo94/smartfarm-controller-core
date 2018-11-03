@@ -77,7 +77,7 @@ public class ControlLogicSettingController {
 
 	@RequestMapping(value = "/{controlSettingId}", method = RequestMethod.PUT)
 	@ResponseBody
-	@InterceptPre
+	@InterceptPost
 	public Result<ControlLogicSettingVO> update(@PathVariable("controlSettingId") Integer controlSettingId, @RequestBody ControlLogicSettingVO vo) {
 		try {
 			return new Result(service.updateLogicSetting(vo));

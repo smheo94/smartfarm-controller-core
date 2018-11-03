@@ -34,7 +34,15 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 
 	@Override
 	public ControlLogicSettingVO insertLogicSetting(ControlLogicSettingVO vo) {
+		Integer tempControlSettingId = null;
+		if(vo.getControlSettingId() !=null){
+			tempControlSettingId = vo.getControlSettingId();
+		}
 		mapper.insertControlSetting(vo);
+		if(vo.getControlSettingId() == 0){
+			vo.setControlSettingId(tempControlSettingId);	
+		}
+		
 		if (vo.getControlSettingId() == null) {
 			return vo;
 		}

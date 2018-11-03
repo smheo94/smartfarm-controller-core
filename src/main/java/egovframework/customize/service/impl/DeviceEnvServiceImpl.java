@@ -42,10 +42,13 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 		try{
 			for(DeviceEnvVO vo :device){
 				deviceEnvMapper.insert(vo);
-				for(VDeviceEnvVO vDevice: vo.getRelationDeviceList()){
-					vDevice.setParentDeviceId(vo.getId());
-					deviceEnvMapper.insertVDeviceEnv(vDevice);
+				if(vo.getRelationDeviceList() != null){
+					for(VDeviceEnvVO vDevice: vo.getRelationDeviceList()){
+						vDevice.setParentDeviceId(vo.getId());
+						deviceEnvMapper.insertVDeviceEnv(vDevice);
+					}	
 				}
+				
 			}			
 		}catch(Exception e){
 			e.printStackTrace();
