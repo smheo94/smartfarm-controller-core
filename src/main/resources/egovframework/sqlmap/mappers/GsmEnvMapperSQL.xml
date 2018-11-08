@@ -10,7 +10,8 @@
 			farm_nickname, 
 			system_host, 
 			system_port, 		
-			farm_nickname_i18n
+			farm_nickname_i18n,
+			category_id
 		)
 		VALUES (
 			#{gsmKey}, 
@@ -18,7 +19,8 @@
 			#{farmNickname},
 			#{systemHost}, 
 			#{systemPort},		
-			#{farmNicknameI18n}
+			#{farmNicknameI18n},
+			#{categoryId}
 		);
 	</insert>
 	
