@@ -63,7 +63,7 @@ public class GsmEnvController {
 	@InterceptPre
 	public Result<GsmEnvVO> update(@RequestBody GsmEnvVO gsmInfo, @PathVariable("gsmKey") Integer gsmKey){
 		try {
-			if( gsmKey != gsmInfo.getGsmKey()) {
+			if(!gsmKey.equals(gsmInfo.getGsmKey())) {
 				return new Result("Unmatched GSM key", HttpStatus.CONFLICT, gsmInfo);
 			}
 			gsmEnvService.update(gsmInfo);
