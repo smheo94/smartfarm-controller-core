@@ -30,7 +30,7 @@ public class ControlLogicDeviceVO {
 	Integer description;	
 	Integer diplayOrder;
 	Integer isUsed;
-	
+	Integer required;
 	public Map<String,Object> toMap() {
 		return ClassUtil.toHashMap(this);
 	}
