@@ -206,7 +206,7 @@
 	
 	<select id="getCctvList" parameterType="Integer" resultType="map">
 		SELECT 
-			id, 
+			cctv.id as id,  
 			house_id as houseId, 
 			cctv_name as cctvName, 
 			cctv_ip as cctvIp, 
@@ -214,8 +214,12 @@
 			cctv_id as cctvId, 
 			cctv_pwd as cctvPwd, 
 			wowza_id as wowzaId, 
-			wowza_pwd as wowzaPwd
-		FROM cctv
+			wowza_pwd as wowzaPwd,
+			stream_url as streamUrl,
+			rest_url as restUrl
+		FROM cctv as cctv
+		join wowza as wowza
+		on cctv.wowza_id = wowza.id 
 		WHERE house_id =#{houseId}
 	</select>	
 	
