@@ -4,7 +4,10 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
-	<context:property-placeholder location="classpath*:application.properties" ignore-unresolvable="true" />
+	<!-- <context:property-placeholder location="/opt/tomcat/conf/application.properties" ignore-unresolvable="true" /> -->
+	<!-- <context:property-placeholder location="classpath:application.properties" ignore-unresolvable="true" /> -->
+	<context:property-placeholder location="/home/gsm/v4/conf/smartfarm-mgr-env.properties" ignore-unresolvable="true" />
+	<!-- <context:property-placeholder location="classpath:application.properties" ignore-unresolvable="true" /> -->
 	<!--<beans profile="dev-center">-->
 		<!--<context:property-placeholder location="classpath*:application-dev-center.properties" ignore-unresolvable="true" />-->
 	<!--</beans>-->
