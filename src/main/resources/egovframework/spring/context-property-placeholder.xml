@@ -6,7 +6,7 @@
 
 	<!-- <context:property-placeholder location="/opt/tomcat/conf/application.properties" ignore-unresolvable="true" /> -->
 	<!-- <context:property-placeholder location="classpath:application.properties" ignore-unresolvable="true" /> -->
-	<context:property-placeholder location="/home/gsm/v4/conf/smartfarm-mgr-env.properties" ignore-unresolvable="true" />
+	<context:property-placeholder location="classpath:smartfarm-mgr-env.properties" ignore-unresolvable="true" />
 	<!-- <context:property-placeholder location="classpath:application.properties" ignore-unresolvable="true" /> -->
 	<!--<beans profile="dev-center">-->
 		<!--<context:property-placeholder location="classpath*:application-dev-center.properties" ignore-unresolvable="true" />-->
