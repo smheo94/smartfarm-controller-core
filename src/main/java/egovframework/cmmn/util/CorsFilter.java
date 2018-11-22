@@ -32,8 +32,12 @@ public class CorsFilter implements javax.servlet.Filter {
 	        //response.addHeader("Access-Control-Allow-Origin", "http://www.ozit.co.kr");
 	        //response.addHeader("Access-Control-Allow-Origin", "http://abc.ozit.co.kr");
 	        //response.addHeader("Access-Control-Allow-Origin", "http://test.ozrank.co.kr");
-	        
-	        filterChain.doFilter(req, new ContentCachingResponseWrapper((HttpServletResponse)res));
+
+			ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
+
+	        filterChain.doFilter(req, responseWrapper);
+
+			responseWrapper.copyBodyToResponse();
 	    }
 
 	    public void init(FilterConfig arg0) throws ServletException {
