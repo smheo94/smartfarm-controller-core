@@ -14,16 +14,15 @@ import lombok.Setter;
  */
 
 @Data
-@Getter
-@Setter
 public class CCTVSettingVO {
 	Integer id;
 	Integer houseId;
 	String cctvName;
-	String cctvIp;
-	String cctvPort;
-	String cctvId;
+	String cctvUid;
 	String cctvPwd;
+	String cctvWsUrl;
+	String cctvRtspUrl;
 	String wowzaId;
-	String wowzaPwd;
+	String wowzaStreamUrl;
+	String wowzaRestUrl;
 }

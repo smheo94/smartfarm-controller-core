@@ -195,9 +195,9 @@
 	
 	<insert id="insertCCTVSetting" parameterType="cctv" useGeneratedKeys="true">
 		INSERT INTO	cctv	
-           ( house_id, cctv_name, cctv_ip, cctv_port, cctv_id, cctv_pwd)
+           ( house_id, cctv_name, cctv_uid, cctv_pwd, cctv_ws_url, cctv_rtsp_url, wowza_id)
 		VALUES(
-			#{houseId},#{cctvName},#{cctvIp},#{cctvPort},#{cctvId},#{cctvPwd}
+			#{houseId},#{cctvName},#{cctvUid},#{cctvPwd},#{cctvWsUrl},#{cctvRtspUrl}, #{wowzaId}
 		)
 		<selectKey keyProperty="id" resultType="int">
 			SELECT LAST_INSERT_ID() AS id;
@@ -209,19 +209,17 @@
 			cctv.id as id,  
 			house_id as houseId, 
 			cctv_name as cctvName, 
-			cctv_ip as cctvIp, 
-			cctv_port as cctvPort, 
-			cctv_id as cctvId, 
-			cctv_pwd as cctvPwd, 
-			wowza_id as wowzaId, 
-			wowza_pwd as wowzaPwd,
-			stream_url as streamUrl,
-			rest_url as restUrl
+			cctv_uid as cctvUid,
+			cctv_pwd as cctvPwd,
+			cctv_ws_url as cctvWsUrl,
+			cctv_rtsp_url as cctvRtspUrl,
+			wowza_id as wowzaId,
+			stream_url as wowzaStreamUrl,
+			rest_url as wowzaRestUrl
 		FROM cctv as cctv
-		join wowza as wowza
-		on cctv.wowza_id = wowza.id 
+		JOIN wowza as wowza on cctv.wowza_id = wowza.id
 		WHERE house_id =#{houseId}
-	</select>	
+	</select>
 	
 	<select id="getAllList" resultType="map">
 		SELECT id, product_method_id AS productMethodId, green_house_type_id as greenHouseTypeId, house_name as houseName,
