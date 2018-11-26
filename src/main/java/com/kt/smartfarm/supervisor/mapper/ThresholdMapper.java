@@ -17,6 +17,9 @@ package com.kt.smartfarm.supervisor.mapper;
 
 import egovframework.customize.service.ThresholdVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
+
+import java.util.HashMap;
+
 import org.springframework.stereotype.Repository;
 
 /**
@@ -39,5 +42,5 @@ import org.springframework.stereotype.Repository;
 public interface ThresholdMapper {
 	Integer insert(ThresholdVO thresholdVO);
 	Integer update(ThresholdVO thresholdVO);
-	ThresholdVO getThreshold(Integer gsmKey);
+	ThresholdVO getThreshold(HashMap<String,Object> param);
 }

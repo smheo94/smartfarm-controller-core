@@ -47,29 +47,9 @@ public class ThresholdController {
 	@Resource(name = "thresholdService")
 	private ThresholdService thresholdService;
 		
-	
 	/**
-	 * @description 온실 등록 ( 제어기 선택은 어디서? 밑에서~ )
-	 * @param request
-	 * @param gsmKey
-	 * @param device
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	@RequestMapping(value= "/", method = RequestMethod.POST)
-	@ResponseBody
-	public Result<ThresholdVO> insert(@RequestBody ThresholdVO thresholdVO){
-		try {
-			return new Result(thresholdService.insert(thresholdVO));
-		} catch(Exception e) {
-			return new Result(e.getMessage(), HttpStatus.CONFLICT, thresholdVO);
-		}
-	}
-	
-	/**
-	 * @description 온실 update
-	 * @param gsmKey
-	 * @param house
+	 * @description 제어기 임계치 설정
+	 * 
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
@@ -89,27 +69,13 @@ public class ThresholdController {
 	@ResponseBody
 	public Result<ThresholdVO> list( @PathVariable("gsm_key") Integer gsmKey){
 		try {
-			return new Result(thresholdService.getThreshold(gsmKey));
+			HashMap<String,Object> param = new HashMap<String,Object>();
+			param.put("gsmKey", gsmKey);
+			return new Result(thresholdService.getThreshold(param));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
 	}
-	
-	/**
-	 * Deafult 관련한건 아직 정해진게 없음.
-	 * 
-	 */
 
-/*
-	@RequestMapping(value= "/{greenHouseId}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public Result<ThresholdVO> delete(@PathVariable("gsm_key") Integer gsmKey,  @PathVariable("greenHouseId") Integer greenHouseId){
-		try {
-			return new Result(thresholdService.delete(gsmKey, greenHouseId));
-		} catch(Exception e) {
-			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
-		}
-	}
-*/
 	
 }
