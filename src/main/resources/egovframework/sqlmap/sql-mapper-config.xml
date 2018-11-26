@@ -39,6 +39,7 @@
 		<typeAlias alias="controlSettingOperatorVO" type="egovframework.customize.service.ControlSettingOperatorVO"/>
 		
 		<typeAlias alias="cctv" type="egovframework.customize.service.CCTVSettingVO"/>
+		<typeAlias alias="gsmThresholdVO" type="egovframework.customize.service.GsmThresholdVO"/>
 
     </typeAliases>
 </configuration>

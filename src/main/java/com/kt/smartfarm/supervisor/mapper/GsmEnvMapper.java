@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import egovframework.customize.service.GsmEnvVO;
+import egovframework.customize.service.GsmThresholdVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -37,5 +38,9 @@ public interface GsmEnvMapper {
 	List<GsmEnvVO> notMappedList();
 	Integer userRegistGSM(HashMap<String, Object> param);
 	List<GsmEnvVO> getGsmInfoByUser(Integer userInfoId);
+	
+	GsmThresholdVO gsmThresholdInsert(GsmThresholdVO gsmThresholdVO);
+	GsmThresholdVO gsmThresholdUpdate(GsmThresholdVO gsmThresholdVO);
+	GsmThresholdVO gsmThresholdGet(HashMap<String,Object> param);
 
 }

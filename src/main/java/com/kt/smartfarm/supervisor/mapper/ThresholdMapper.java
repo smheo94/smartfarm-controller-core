@@ -42,5 +42,5 @@ import org.springframework.stereotype.Repository;
 public interface ThresholdMapper {
 	Integer insert(ThresholdVO thresholdVO);
 	Integer update(ThresholdVO thresholdVO);
-	ThresholdVO getThreshold(HashMap<String,Object> param);
+	ThresholdVO getThreshold(Integer gsmKey);
 }

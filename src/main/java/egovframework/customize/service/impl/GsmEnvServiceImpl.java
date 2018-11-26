@@ -14,6 +14,7 @@ package egovframework.customize.service.impl;
 
 import egovframework.customize.service.GsmEnvService;
 import egovframework.customize.service.GsmEnvVO;
+import egovframework.customize.service.GsmThresholdVO;
 import egovframework.customize.service.HouseEnvService;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
@@ -116,6 +117,21 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 	@Override
 	public List<GsmEnvVO> getGsmInfoByUser(Integer userInfoId) {
 		return gsmEnvMapper.getGsmInfoByUser(userInfoId);
+	}
+
+	@Override
+	public GsmThresholdVO gsmThresholdInsert(GsmThresholdVO gsmThresholdVO) {
+		return gsmEnvMapper.gsmThresholdInsert(gsmThresholdVO);
+	}
+
+	@Override
+	public GsmThresholdVO gsmThresholdUpdate(GsmThresholdVO gsmThresholdVO) {
+		return gsmEnvMapper.gsmThresholdUpdate(gsmThresholdVO);
+	}
+
+	@Override
+	public GsmThresholdVO gsmThresholdGet(HashMap<String, Object> param) {
+		return gsmEnvMapper.gsmThresholdGet(param);
 	}
   
 }

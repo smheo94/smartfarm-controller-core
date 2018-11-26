@@ -30,7 +30,7 @@
   		FROM gsm_threshold
   		WHERE gsm_key = #{gsmKey}
 	</select>
-	<!-- 
+	
 	<insert id ="insert" parameterType="thresholdVO">
 		INSERT INTO gsm_threshold (
 			gsm_key, update_date, outside_high_temp, outside_low_temp, outside_high_hum, outside_low_hum, wind_speed, rain_detector, inside_high_temp, inside_low_temp, inside_high_hum, inside_low_hum, outside_high_temp_use, outside_low_temp_use, outside_high_hum_use, outside_low_hum_use, wind_speed_use, rain_detector_use, inside_high_temp_use, inside_low_temp_use, inside_high_hum_use, inside_low_hum_use
@@ -60,7 +60,7 @@
 			 <if test="insideLowHumUse != null">inside_low_hum_use= #{insideLowHumUse},</if>
 			 update_date = NOW();
 	</insert>
-	 -->
+	 
 	<update id ="update" parameterType="thresholdVO">
 		UPDATE gsm_threshold
 		SET 			 

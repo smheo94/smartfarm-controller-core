@@ -173,5 +173,76 @@
 		WHERE 
 			user_info_id = #{userInfoId}
 	</select>
+
+
+	<select id ="gsmThresholdGet" parameterType="map" resultType="gsmThresholdVO">
+		SELECT 
+			gsm_key AS gsmKey ,
+			update_date AS updateDate ,			
+			storm_limit AS stormLimit,
+			storm_sensing_delay AS stormSensingDelay,
+			storm_terminate_delay AS stormTerminateDelay,
+			wind_direction_waiting_time AS windDirectionWaitingTime,
+			wind_direction_degree AS windDirectionDegree,
+			rain_sensing_delay AS rainSensingDelay,
+			rain_terminate_delay AS rainTerminateDelay,
+			top_window_left_degree AS topWindowLeftDegree,
+			top_window_right_degree AS topWindowRightDegree,
+			sensor_select AS sensorSelect,
+			use_wind_dectector AS useWindDetector,
+			use_rain_dectector AS useRainDetector,
+			ex_window_use_wind_dectector AS exWindowUseWindDetector,
+			ex_window_use_rain_dectector AS exWindowUseRainDetector,
+			side_window_use_wind_dectector AS sideWindowUseWindDetector,
+			side_window_use_rain_dectector AS sideWindowUseRainDetector,
+			base_forward_window AS baseForwardWindow,
+			actuator_init_temp AS actuatorInitTemp,
+			weather_mqtt_host AS weatherMqttHost,
+			weather_mqtt_port AS weatherMqttPort
+  		FROM gsm_config
+  		WHERE gsm_key = #{gsmKey}
+	</select>
+
+	<insert id ="gsmThresholdInsert" parameterType="gsmThresholdVO">
+		INSERT INTO gsm_config(
+			gsm_key, update_date, storm_limit, storm_sensing_delay, storm_terminate_delay, wind_direction_waiting_time, wind_direction_degree, 
+			rain_sensing_delay, rain_terminate_delay, top_window_left_degree, top_window_right_degree, sensor_select, use_wind_dectector, use_rain_dectector, 
+			ex_window_use_wind_dectector, ex_window_use_rain_dectector, side_window_use_wind_dectector, side_window_use_rain_dectector, 
+			base_forward_window, actuator_init_temp, weather_mqtt_host, weather_mqtt_port            
+		)
+		VALUES (
+			#{gsmKey} ,NOW(),#{stormLimit},#{stormSensingDelay},#{stormTerminateDelay},#{windDirectionWaitingTime},#{windDirectionDegree},
+			#{rainSensingDelay},#{rainTerminateDelay},#{topWindowLeftDegree},#{topWindowRightDegree},#{sensorSelect},#{useWindDetector},#{useRainDetector},
+			#{exWindowUseWindDetector},#{exWindowUseRainDetector},#{sideWindowUseWindDetector},#{sideWindowUseRainDetector},
+			#{baseForwardWindow},#{actuatorInitTemp},#{weatherMqttHost},#{weatherMqttPort}
+		) 
+	</insert>
 	
+	<update id ="gsmThresholdUpdate" parameterType="gsmThresholdVO">
+		UPDATE gsm_config
+		SET 			 
+			 <if test="stormLimit != null">storm_limit = #{stormLimit},</if>
+			 <if test="stormSensingDelay != null">storm_sensing_delay= #{stormSensingDelay},</if>
+			 <if test="stormTerminateDelay != null">storm_terminate_delay= #{stormTerminateDelay},</if>
+			 <if test="windDirectionWaitingTime != null">wind_direction_waiting_time= #{windDirectionWaitingTime},</if>
+			 <if test="windDirectionDegree != null">wind_direction_degree= #{windDirectionDegree},</if>
+			 <if test="rainSensingDelay != null">rain_sensing_delay= #{rainSensingDelay},</if>
+			 <if test="rainTerminateDelay != null">rain_terminate_delay= #{rainTerminateDelay},</if>
+			 <if test="topWindowLeftDegree != null"> top_window_left_degree= #{topWindowLeftDegree},</if>
+			 <if test="topWindowRightDegree != null">top_window_right_degree= #{topWindowRightDegree},</if>
+			 <if test="sensorSelect != null">sensor_select= #{sensorSelect},</if>
+			 <if test="useWindDetector != null">use_wind_dectector= #{useWindDetector},</if>
+			 <if test="useRainDetector != null">use_rain_dectector= #{useRainDetector},</if>
+			 <if test="exWindowUseWindDetector != null">ex_window_use_wind_dectector= #{exWindowUseWindDetector},</if>
+			 <if test="exWindowUseRainDetector != null">ex_window_use_rain_dectector= #{exWindowUseRainDetector},</if>
+			 <if test="sideWindowUseWindDetector != null">side_window_use_wind_dectector= #{sideWindowUseWindDetector},</if>
+			 <if test="sideWindowUseRainDetector != null">side_window_use_rain_dectector= #{sideWindowUseRainDetector},</if>
+			 <if test="baseForwardWindow != null">baseForwardWindow= #{baseForwardWindow},</if>
+			 <if test="actuatorInitTemp != null">actuatorInitTemp= #{actuatorInitTemp},</if>
+			 <if test="weatherMqttHost != null">base_forward_window= #{weatherMqttHost},</if>
+			 <if test="weatherMqttPort != null">actuator_init_temp= #{weatherMqttPort},</if>			 
+		 	 update_date = NOW()
+		WHERE gsm_key=#{gsmKey} 
+	</update>		
 </mapper>
+

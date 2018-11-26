@@ -23,12 +23,14 @@ import egovframework.cmmn.util.InterceptIgnoreGSMKey;
 import egovframework.cmmn.util.InterceptPost;
 import egovframework.customize.intercepter.SmartFarmDataInterceptor;
 import egovframework.customize.service.GsmEnvVO;
+import egovframework.customize.service.GsmThresholdVO;
 import egovframework.customize.service.GsmEnvService;
 import egovframework.customize.service.HouseEnvService;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.Path;
 
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
@@ -51,6 +53,7 @@ public class GsmEnvController {
 		
 	@Resource(name ="houseEnvService")
 	private HouseEnvService houseEnvService;
+		
 	/**
 	 * 제어모듈 수정
 	 * @param gsmKey
@@ -132,11 +135,11 @@ public class GsmEnvController {
 	 */
 	@RequestMapping(value= "/{gsmKey}", method = RequestMethod.DELETE)
 	@ResponseBody
-	@InterceptPre
+//	@InterceptPre
 	public Result<String> delete(@PathVariable("gsmKey") Integer gsmKey){
 		try {
 			gsmEnvService.delete(gsmKey);
-			return new Result("");
+			return new Result("OK",HttpStatus.OK,null);
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
@@ -207,5 +210,36 @@ public class GsmEnvController {
 //		}
 //	}
 //	
+	
+	@RequestMapping(value= "/threshold", method = RequestMethod.POST)	
+	@ResponseBody
+	public Result gsmThresholdInsert(@RequestBody GsmThresholdVO gsmThresholdVO){
+		try {		    
+			return new Result(gsmEnvService.gsmThresholdInsert(gsmThresholdVO));
+		} catch(Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		}
+	}
 
+	@RequestMapping(value= "/threshold", method = RequestMethod.PUT)	
+	@ResponseBody
+	public Result gsmThresholdUpdate(@RequestBody GsmThresholdVO gsmThresholdVO){
+		try {		    
+			return new Result(gsmEnvService.gsmThresholdUpdate(gsmThresholdVO));
+		} catch(Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		}
+	}
+	
+	@RequestMapping(value= "/{gsmKey}/threshold", method = RequestMethod.GET)	
+	@ResponseBody
+	public Result gsmThresholdGet(@PathVariable Integer gsmKey){
+		try {		    
+			HashMap<String,Object> param = new HashMap<String, Object>();
+			param.put("gsmKey", gsmKey);
+			return new Result(gsmEnvService.gsmThresholdGet(param));
+		} catch(Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		}
+	}
 }
