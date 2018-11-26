@@ -4,7 +4,7 @@
 
 
 	<insert id="insert" parameterType="gsmEnvVO">
-		INSERT INTO gsm_info (
+		REPLACE INTO gsm_info (
 			gsm_key,
 			area_code, 
 			farm_nickname, 

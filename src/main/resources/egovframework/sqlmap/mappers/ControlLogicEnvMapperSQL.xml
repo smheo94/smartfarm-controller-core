@@ -33,7 +33,7 @@
 				AND logic_id = #{logicId}
 			</if>
 		</where>
-		ORDER BY logic_id, device_num
+		ORDER BY logic_id,display_order,device_num
 	</select>
 
 	<select id="getLogicPropertyList" resultType="map" >
