@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kt.smartfarm.supervisor.mapper.GsmEnvMapper;
 
+import egovframework.cmmn.SystemType;
 import egovframework.cmmn.util.InterceptIgnoreGSMKey;
 import egovframework.cmmn.util.InterceptPost;
 import egovframework.cmmn.util.InterceptPre;
@@ -46,7 +47,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
     private static final Logger LOG = LoggerFactory.getLogger(SmartFarmDataInterceptor.class);
 
 
-    public  final String SYSTEM_TYPE_SMARTFARM = "Smartfarm";
+
     public static final String X_HEADER_GSM_KEY = "X-Smartfarm-Gsm-Key";
     String systemType;
     String myGSMKey;
@@ -74,7 +75,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
              	headerGsmKey = response.getHeader(X_HEADER_GSM_KEY);	
              }
              
-             if( SYSTEM_TYPE_SMARTFARM.equalsIgnoreCase(systemType) ) {
+             if( SystemType.SYSTEM_TYPE_SMARTFARM.equalsIgnoreCase(systemType) ) {
                  if( handlerMethod.getMethod().getAnnotation(InterceptIgnoreGSMKey.class) ==null && (headerGsmKey == null || !Objects.equals(headerGsmKey, myGSMKey))) {
                      setErrorResult(response, String.format(ApplicationMessage.MISS_MATCHING_GSM_KEY, headerGsmKey),
                              HttpStatus.FORBIDDEN);
@@ -135,7 +136,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
             if(headerGsmKey == null){
             	headerGsmKey = response.getHeader(X_HEADER_GSM_KEY);	
             }
-            if( SYSTEM_TYPE_SMARTFARM.equalsIgnoreCase(systemType) ) {
+            if( SystemType.SYSTEM_TYPE_SMARTFARM.equalsIgnoreCase(systemType) ) {
                 //스마트팜에서 Post 필터가 필요 없음
                 return;
             } else if( headerGsmKey == null) {

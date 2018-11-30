@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kt.smartfarm.supervisor.mapper.DBSchemaMapper">
+	<update id="schemaUpdate_20181129_1">
+		/* Alter table in target */
+		ALTER TABLE `cd_device_type`
+			ADD COLUMN `reset_value` DOUBLE   NOT NULL DEFAULT 0 AFTER `topic_group` ,
+			ADD COLUMN `accum_m` INT(11)   NOT NULL DEFAULT 0 COMMENT '분누적 ( 0 , 1 )' AFTER `reset_value` ,
+			ADD COLUMN `accum_h` INT(11)   NOT NULL DEFAULT 0 COMMENT '시누적 ( 0 , 1 )' AFTER `accum_m` ,
+			ADD COLUMN `accum_d` INT(11)   NOT NULL DEFAULT 0 COMMENT '일누적(  0, 1 )' AFTER `accum_h` ,
+			ADD COLUMN `op_time` INT(11)   NOT NULL DEFAULT 0 COMMENT '작동시간누적( 0, 1 )' AFTER `accum_d` ,
+			ADD COLUMN `value_type` INT(11)   NOT NULL DEFAULT 0 COMMENT '0 : 순간 값 , 1 : 누적 값' AFTER `op_time`
+	</update>
+</mapper>

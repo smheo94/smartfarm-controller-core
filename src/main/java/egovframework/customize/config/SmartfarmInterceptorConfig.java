@@ -33,6 +33,7 @@ public class SmartfarmInterceptorConfig extends WebMvcConfigurerAdapter {
         System.out.printf("Load Config : %s , %s\t\n", GSM_KEY, SYSTEM_TYPE);
         registry.addInterceptor(new SmartFarmDataInterceptor(SYSTEM_TYPE, PROXY_SUB_PATH, GSM_KEY, gsmMapper)).addPathPatterns("/**");
 //        registry.addInterceptor(new SmartFarmDataInterceptor(SYSTEM_TYPE, GSM_KEY, gsmMapper)).addPathPatterns("/**");
-
     }
+
+
 }
