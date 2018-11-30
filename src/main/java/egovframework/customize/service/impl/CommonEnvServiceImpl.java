@@ -40,6 +40,7 @@ import com.kt.smartfarm.supervisor.mapper.CommonEnvMapper;
 
 
 @Service("commonEnvService")
+@SuppressWarnings("PMD.AvoidThrowingRawExceptionTypes")
 public class CommonEnvServiceImpl extends EgovAbstractServiceImpl implements CommonEnvService {
     private static final Logger log = LoggerFactory.getLogger(CommonEnvServiceImpl.class);
 
@@ -52,8 +53,13 @@ public class CommonEnvServiceImpl extends EgovAbstractServiceImpl implements Com
    
     
 	@Override
-	public CommonEnvVO getThreshold(int gsmKey) throws Exception {
-		CommonEnvVO commonEnvVO = commonEnvMapper.getThreshold(gsmKey);
+	public CommonEnvVO getThreshold(int gsmKey){
+		CommonEnvVO commonEnvVO = null;
+		try {
+			commonEnvVO = commonEnvMapper.getThreshold(gsmKey);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		return commonEnvVO;
 	}
@@ -88,8 +94,14 @@ public class CommonEnvServiceImpl extends EgovAbstractServiceImpl implements Com
 	
 
 	@Override
-	public CommonEnvVO getOutWeather(int gsmKey) throws Exception {
-		CommonEnvVO commonEnvVO = commonEnvMapper.getThreshold(gsmKey);
+	public CommonEnvVO getOutWeather(int gsmKey){
+		CommonEnvVO commonEnvVO = null;
+		try {
+			commonEnvVO = commonEnvMapper.getThreshold(gsmKey);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return commonEnvVO;		
 	}
 	
@@ -105,7 +117,7 @@ public class CommonEnvServiceImpl extends EgovAbstractServiceImpl implements Com
 	}
 
 	@Override
-	public void updateOutWeather(CommonEnvVO vo) throws Exception {
+	public void updateOutWeather(CommonEnvVO vo){
 		try{
 			commonEnvMapper.updateThreshold(vo);	
 		}catch(Exception e){
@@ -120,7 +132,7 @@ public class CommonEnvServiceImpl extends EgovAbstractServiceImpl implements Com
 
 
 	@Override
-	public void updateEnvInfo(CommonEnvVO vo) throws Exception {
+	public void updateEnvInfo(CommonEnvVO vo){
 		try{
 			commonEnvMapper.updateEnvInfo(vo);
 		}catch(Exception e){

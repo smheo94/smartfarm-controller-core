@@ -3,32 +3,33 @@
 <mapper namespace="com.kt.smartfarm.supervisor.mapper.ThresholdMapper">
 
 	 
-	<select id ="getThreshold" parameterType="map" resultType="thresholdVO">
+	<select id ="getThreshold" parameterType="Integer" resultType="thresholdVO">
 		SELECT 
 			gsm_key AS gsmKey ,
-			update_date AS updateDate ,			
-			storm_limit AS stormLimit,
-			storm_sensing_delay AS stormSensingDelay,
-			storm_terminate_delay AS stormTerminateDelay,
-			wind_direction_waiting_time AS windDirectionWaitingTime,
-			wind_direction_degree AS windDirectionDegree,
-			rain_sensing_delay AS rainSensingDelay,
-			rain_terminate_delay AS rainTerminateDelay,
-			top_window_left_degree AS topWindowLeftDegree,
-			top_window_right_degree AS topWindowRightDegree,
-			sensor_select AS sensorSelect,
-			use_wind_dectector AS useWindDetector,
-			use_rain_dectector AS useRainDetector,
-			ex_window_use_wind_dectector AS exWindowUseWindDetector,
-			ex_window_use_rain_dectector AS exWindowUseRainDetector,
-			side_window_use_wind_dectector AS sideWindowUseWindDetector,
-			side_window_use_rain_dectector AS sideWindowUseRainDetector,
-			base_forward_window AS baseForwardWindow,
-			actuator_init_temp AS actuatorInitTemp,
-			weather_mqtt_host AS weatherMqttHost,
-			weather_mqtt_port AS weatherMqttPort
+			update_date AS updateDate ,
+			outside_high_temp AS outsideHighTemp ,
+			outside_low_temp AS outsideLowTemp ,
+			outside_high_hum AS outsideHighHum ,
+			outside_low_hum AS outsideLowHum ,
+			wind_speed AS windSpeed ,
+			rain_detector AS rainDetector ,
+			inside_high_temp AS insideHighTemp ,
+			inside_low_temp AS insideLowTemp ,
+			inside_high_hum AS insideHighHum ,
+			inside_low_hum AS insideLowHum ,
+			outside_high_temp_use AS outsideHighTempUse ,
+			outside_low_temp_use AS outsideLowTempUse ,
+			outside_high_hum_use AS outsideHighHumUse ,
+			outside_low_hum_use AS outsideLowHumUse ,
+			wind_speed_use AS windSpeedUse ,
+			rain_detector_use AS rainDetectorUse ,
+			inside_high_temp_use AS insideHighTempUse ,
+			inside_low_temp_use AS insideLowTempUse ,
+			inside_high_hum_use AS insideHighHumUse ,
+			inside_low_hum_use AS insideLowHumUse
   		FROM gsm_threshold
   		WHERE gsm_key = #{gsmKey}
+  		AND green_house_id = #{greenHouseId}
 	</select>
 	
 	<insert id ="insert" parameterType="thresholdVO">
@@ -36,7 +37,7 @@
 			gsm_key, update_date, outside_high_temp, outside_low_temp, outside_high_hum, outside_low_hum, wind_speed, rain_detector, inside_high_temp, inside_low_temp, inside_high_hum, inside_low_hum, outside_high_temp_use, outside_low_temp_use, outside_high_hum_use, outside_low_hum_use, wind_speed_use, rain_detector_use, inside_high_temp_use, inside_low_temp_use, inside_high_hum_use, inside_low_hum_use
 		)
 		VALUES (
-			#{gsmKey} ,NOW(),#{outsideHighTemp},#{outsideLowTemp},#{outsideHighHum},#{outsideLowHum},#{windSpeed},#{rainDetector},#{insideHighTemp},#{insideLowTemp},#{insideHighHum},#{insideLowHum},#{outsideHighTempUse},#{outsideLowTempUse},#{outsideHighHumUse},#{outsideLowHumUse},#{windSpeedUse},#{rainDetectorUse},#{insideHighTempUse},#{insideLowTempUse},#{insideHighHumUse},#{insideLowHumUse}
+			#{gsmKey},NOW(),#{outsideHighTemp},#{outsideLowTemp},#{outsideHighHum},#{outsideLowHum},#{windSpeed},#{rainDetector},#{insideHighTemp},#{insideLowTemp},#{insideHighHum},#{insideLowHum},#{outsideHighTempUse},#{outsideLowTempUse},#{outsideHighHumUse},#{outsideLowHumUse},#{windSpeedUse},#{rainDetectorUse},#{insideHighTempUse},#{insideLowTempUse},#{insideHighHumUse},#{insideLowHumUse}
 		) ON DUPLICATE KEY UPDATE 
 			 <if test="outsideHighTemp != null">outside_high_temp = #{outsideHighTemp},</if>
 			 <if test="outsideLowTemp != null">outside_low_temp= #{outsideLowTemp},</if>
@@ -60,32 +61,32 @@
 			 <if test="insideLowHumUse != null">inside_low_hum_use= #{insideLowHumUse},</if>
 			 update_date = NOW();
 	</insert>
-	 
+	
 	<update id ="update" parameterType="thresholdVO">
 		UPDATE gsm_threshold
 		SET 			 
-			 <if test="stormLimit != null">storm_limit = #{stormLimit},</if>
-			 <if test="stormSensingDelay != null">storm_sensing_delay= #{stormSensingDelay},</if>
-			 <if test="stormTerminateDelay != null">storm_terminate_delay= #{stormTerminateDelay},</if>
-			 <if test="windDirectionWaitingTime != null">wind_direction_waiting_time= #{windDirectionWaitingTime},</if>
-			 <if test="windDirectionDegree != null">wind_direction_degree= #{windDirectionDegree},</if>
-			 <if test="rainSensingDelay != null">rain_sensing_delay= #{rainSensingDelay},</if>
-			 <if test="rainTerminateDelay != null">rain_terminate_delay= #{rainTerminateDelay},</if>
-			 <if test="topWindowLeftDegree != null"> top_window_left_degree= #{topWindowLeftDegree},</if>
-			 <if test="topWindowRightDegree != null">top_window_right_degree= #{topWindowRightDegree},</if>
-			 <if test="sensorSelect != null">sensor_select= #{sensorSelect},</if>
-			 <if test="useWindDetector != null">use_wind_dectector= #{useWindDetector},</if>
-			 <if test="useRainDetector != null">use_rain_dectector= #{useRainDetector},</if>
-			 <if test="exWindowUseWindDetector != null">ex_window_use_wind_dectector= #{exWindowUseWindDetector},</if>
-			 <if test="exWindowUseRainDetector != null">ex_window_use_rain_dectector= #{exWindowUseRainDetector},</if>
-			 <if test="sideWindowUseWindDetector != null">side_window_use_wind_dectector= #{sideWindowUseWindDetector},</if>
-			 <if test="sideWindowUseRainDetector != null">side_window_use_rain_dectector= #{sideWindowUseRainDetector},</if>
-			 <if test="baseForwardWindow != null">baseForwardWindow= #{baseForwardWindow},</if>
-			 <if test="actuatorInitTemp != null">actuatorInitTemp= #{actuatorInitTemp},</if>
-			 <if test="weatherMqttHost != null">base_forward_window= #{weatherMqttHost},</if>
-			 <if test="weatherMqttPort != null">actuator_init_temp= #{weatherMqttPort},</if>			 
+			 <if test="outsideHighTemp != null">outside_high_temp = #{outsideHighTemp},</if>
+			 <if test="outsideLowTemp != null">outside_low_temp= #{outsideLowTemp},</if>
+			 <if test="outsideHighHum != null">outside_high_hum= #{outsideHighHum},</if>
+			 <if test="outsideLowHum != null">outside_low_hum= #{outsideLowHum},</if>
+			 <if test="windSpeed != null">wind_speed= #{windSpeed},</if>
+			 <if test="rainDetector != null">rain_detector= #{rainDetector},</if>
+			 <if test="insideHighTemp != null">inside_high_temp= #{insideHighTemp},</if>
+			 <if test="insideLowTemp != null"> inside_low_temp= #{insideLowTemp},</if>
+			 <if test="insideHighHum != null">inside_high_hum= #{insideHighHum},</if>
+			 <if test="insideLowHum != null">inside_low_hum= #{insideLowHum},</if>
+			 <if test="outsideHighTempUse != null">outside_high_temp_use= #{outsideHighTempUse},</if>
+			 <if test="outsideLowTempUse != null">outside_low_temp_use= #{outsideLowTempUse},</if>
+			 <if test="outsideHighHumUse != null">outside_high_hum_use= #{outsideHighHumUse},</if>
+			 <if test="outsideLowHumUse != null">outside_low_hum_use= #{outsideLowHumUse},</if>
+			 <if test="windSpeedUse != null">wind_speed_use= #{windSpeedUse},</if>
+			 <if test="rainDetectorUse != null">rain_detector_use= #{rainDetectorUse},</if>
+			 <if test="insideHighTempUse != null">inside_high_temp_use= #{insideHighTempUse},</if>
+			 <if test="insideLowTempUse != null">inside_low_temp_use= #{insideLowTempUse},</if>
+			 <if test="insideHighHumUse != null">inside_high_hum_use= #{insideHighHumUse},</if>
+			 <if test="insideLowHumUse != null">inside_low_hum_use= #{insideLowHumUse},</if>
 			 update_date = NOW()
-		WHERE gsm_key=#{gsmKey} 
+		WHERE gsm_key=#{gsmKey};
 	</update>
 	
 	

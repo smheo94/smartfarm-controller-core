@@ -122,6 +122,8 @@
 		<where>
 			<if test="gsmKey != null"> AND gsm_info.gsm_key = #{gsmKey}</if>
 			<if test="userInfoId != null"> AND gsm_info.user_info_id = #{userInfoId}</if>
+			<if test="categoryId != null"> AND gsm_info.category_id = #{categoryId}</if>
+			<if test="farmName != null"> AND gsm_info.farm_nickname LIKE CONCAT('%', #{farmName}, '%')</if>
 		</where>
 	</select>
 
@@ -237,8 +239,8 @@
 			 <if test="exWindowUseRainDetector != null">ex_window_use_rain_dectector= #{exWindowUseRainDetector},</if>
 			 <if test="sideWindowUseWindDetector != null">side_window_use_wind_dectector= #{sideWindowUseWindDetector},</if>
 			 <if test="sideWindowUseRainDetector != null">side_window_use_rain_dectector= #{sideWindowUseRainDetector},</if>
-			 <if test="baseForwardWindow != null">baseForwardWindow= #{baseForwardWindow},</if>
-			 <if test="actuatorInitTemp != null">actuatorInitTemp= #{actuatorInitTemp},</if>
+			 <if test="baseForwardWindow != null">base_forward_window= #{baseForwardWindow},</if>
+			 <if test="actuatorInitTemp != null">actuator_init_temp= #{actuatorInitTemp},</if>
 			 <if test="weatherMqttHost != null">base_forward_window= #{weatherMqttHost},</if>
 			 <if test="weatherMqttPort != null">actuator_init_temp= #{weatherMqttPort},</if>			 
 		 	 update_date = NOW()

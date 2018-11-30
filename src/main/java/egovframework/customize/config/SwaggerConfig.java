@@ -17,6 +17,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableSwagger2
 @ComponentScan("egovframework.customize.config")
+@SuppressWarnings("PMD")
 public class SwaggerConfig {
 
     @Bean

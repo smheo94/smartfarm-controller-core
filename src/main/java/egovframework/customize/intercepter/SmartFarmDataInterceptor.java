@@ -42,11 +42,12 @@ import java.util.Objects;
 
 import static egovframework.customize.message.ApplicationMessage.NOT_FOUND_GSM_INFO;
 
+@SuppressWarnings("PMD.SystemPrintln")
 public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
     private static final Logger LOG = LoggerFactory.getLogger(SmartFarmDataInterceptor.class);
 
 
-    public  final String SYSTEM_TYPE_SMARTFARM = "Smartfarm";
+    public static String SYSTEM_TYPE_SMARTFARM = "Smartfarm";
     public static final String X_HEADER_GSM_KEY = "X-Smartfarm-Gsm-Key";
     String systemType;
     String myGSMKey;

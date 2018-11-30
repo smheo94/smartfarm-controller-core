@@ -28,7 +28,6 @@ import egovframework.customize.service.ControllerEnvVO;
 import egovframework.customize.service.ControllerInfoService;
 import egovframework.customize.service.ControllerInfoVO;
 import egovframework.customize.service.DeviceService;
-import egovframework.customize.service.EgovSampleService;
 import egovframework.customize.service.SampleDefaultVO;
 import egovframework.customize.service.SampleVO;
 import egovframework.rte.fdl.property.EgovPropertyService;

@@ -79,8 +79,7 @@ public class ControllerEnvController {
 	@ResponseBody
 	@InterceptPost
 	public Result<ControllerEnvVO> insert( @PathVariable("gsmKey") Integer gsmKey, @RequestBody ControllerEnvVO controller){
-		try {
-			System.out.println("controllerInsert Controller Called");
+		try {			
 			return new Result(controllerEnvService.insert(controller));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, controller);
