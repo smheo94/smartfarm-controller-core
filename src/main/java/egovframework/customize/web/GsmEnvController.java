@@ -159,7 +159,7 @@ public class GsmEnvController {
 		    if( all == null ) {
                 all = true;
             }
-			return new Result(gsmEnvService.list(all,userInfoId));
+			return new Result(gsmEnvService.list(all,userInfoId, null, null));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
