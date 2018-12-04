@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import egovframework.cmmn.util.CommonUtil;
 import egovframework.cmmn.util.DateUtil;
-import egovframework.customize.service.EgovSampleService;
 import egovframework.customize.service.HouseEnvService;
 
 /*
@@ -37,14 +36,14 @@ public class EgovTaskScheduler {
 	// 매시간 41분마다 API 데이터를 제공한다.
 	// 기준 시간은 
 	
-	final String FORECAST_URL = "http://newsky2.kma.go.kr/service/SecndSrtpdFrcstInfoService2/ForecastSpaceData";
-	final String weatherCertKey = "Y0VECgYwtbnfuvNYklX9OChRmOn3vCibz%2Fxe3YFrqoWiyCjkSnKRMpC9I6ybpZbHnKA5OxhNjyBGy28lrfomjQ%3D%3D";
+	static String FORECAST_URL = "http://newsky2.kma.go.kr/service/SecndSrtpdFrcstInfoService2/ForecastSpaceData";
+	static String weatherCertKey = "Y0VECgYwtbnfuvNYklX9OChRmOn3vCibz%2Fxe3YFrqoWiyCjkSnKRMpC9I6ybpZbHnKA5OxhNjyBGy28lrfomjQ%3D%3D";
 	
-	final String SUNRISE_URL = "http://apis.data.go.kr/B090041/openapi/service/RiseSetInfoService/getLCRiseSetInfo";
-	final String sunCertKey = "l%2FgDtDXE6ZralE2VJSrcon%2FKyKps%2FPANA9o497NfusyEYyei0Zv1fAWqJoxz8jaah7nv853ln7cxCWJypWOMLA%3D%3D";
+	static String SUNRISE_URL = "http://apis.data.go.kr/B090041/openapi/service/RiseSetInfoService/getLCRiseSetInfo";
+	static String sunCertKey = "l%2FgDtDXE6ZralE2VJSrcon%2FKyKps%2FPANA9o497NfusyEYyei0Zv1fAWqJoxz8jaah7nv853ln7cxCWJypWOMLA%3D%3D";
 	
 	public void runWeatherSchedule(){		
-		System.out.println("weatherScheduler");
+
 		List<HashMap<String,Object>> houseList = new ArrayList<>();
 		DateUtil dateUtil = new DateUtil();
 		String regDay = dateUtil.getCurrentDateString();
@@ -92,7 +91,7 @@ public class EgovTaskScheduler {
 				        http.disconnect();
 				        
 				        JSONObject json = new JSONObject(sb.toString());
-				        if(Integer.parseInt(json.getJSONObject("response").getJSONObject("header").get("resultCode").toString()) != 0000){
+				        if(json.getJSONObject("response").getJSONObject("header").get("resultCode").toString().equals("0000")){
 				        	continue;
 				        }
 				        JSONObject body = json.getJSONObject("response").getJSONObject("body");
@@ -183,6 +182,7 @@ public class EgovTaskScheduler {
 	
 	private String getBaseTime(String regTimeString) {
 		final int standardTime[] = {2,5,8,11,14,17,20,23};
+		String regTimeToString="";
 		int regTime = Integer.parseInt(regTimeString);		
 		int tempTime= 0;
 		int minTime = 25;
@@ -206,11 +206,11 @@ public class EgovTaskScheduler {
 		}
 		
 		if(regTime<10){
-			regTimeString = "0"+regTime+"00";
+			regTimeToString = "0"+regTime+"00";
 		}else{
-			regTimeString = regTime+"00";
+			regTimeToString = regTime+"00";
 		}
-		return regTimeString;
+		return regTimeToString;
 	}	
 	
 	private HashMap<String, Object> getGridxy(double latitude, double longitude) {
