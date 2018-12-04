@@ -116,6 +116,7 @@ public class GsmEnvController {
 	 * @param gsmKey
 	 * @return
 	 */
+	@SuppressWarnings("PMD.AvoidReassigningParameters")
 	@RequestMapping(value= "/{gsmKey}", method = RequestMethod.GET)
 	@ResponseBody
 	public Result<GsmEnvVO> getAll( @PathVariable("gsmKey") Integer gsmKey, @RequestParam(value = "all", required = false) Boolean all){
@@ -152,14 +153,18 @@ public class GsmEnvController {
 	@RequestMapping(value= "", method = RequestMethod.GET)
 	@ApiOperation("GSM List OLD (none) ")
 	@ResponseBody
+	@SuppressWarnings("PMD.AvoidReassigningParameters")
 	public Result<List<HashMap<String,Object>>> list(@RequestParam(value = "all", required = false) Boolean all
-			,@RequestParam(value = "userInfoId", required = false) Integer userInfoId){
+			,@RequestParam(value = "userInfoId", required = false) Integer userInfoId
+			,@RequestParam(value = "categoryId", required = false) Integer categoryId
+			,@RequestParam(value = "farmName", required = false) String farmName
+			){
 		
 		try {
 		    if( all == null ) {
                 all = true;
             }
-			return new Result(gsmEnvService.list(all,userInfoId));
+			return new Result(gsmEnvService.list(all,userInfoId,categoryId,farmName));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}

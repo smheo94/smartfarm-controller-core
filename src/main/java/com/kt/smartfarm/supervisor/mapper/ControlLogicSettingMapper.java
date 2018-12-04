@@ -55,6 +55,8 @@ public interface ControlLogicSettingMapper {
 	Integer updateControlSettingEnv(Map<String, Object> param);
 	Integer deleteControlSetting(@Param("control_setting_id") Integer controlSettingId);
 	Integer delChkConditionSetting(Integer chkConditionId);
+	
+	void updateLogicEnv(Map<String, Object> param);
 
 
 }

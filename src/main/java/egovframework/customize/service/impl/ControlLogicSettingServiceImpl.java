@@ -137,6 +137,11 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 	}
 
 	@Override
+	public void updateLogicEnv(Map<String, Object> param) {
+		mapper.updateLogicEnv(param);
+	}
+	
+	@Override
 	public List<ControlSettingOperatorVO> listControlSettingOperation() {
 		return mapper.listControlSettingOperator();
 	}

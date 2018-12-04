@@ -99,6 +99,19 @@ public class ControlLogicSettingController {
 		}
 	}
 
+	@RequestMapping(value = "/{controlSettingId}/logic_env_update", method = RequestMethod.PUT)
+	@ResponseBody
+	@InterceptPre
+	public Result<String> updateLogicEnv(@PathVariable("controlSettingId") Integer controlSettingId, @RequestBody Map<String, Object> param) {
+		try {
+			//logic_env, period_env, update_dt, auto_manual_mode
+			service.updateLogicEnv(param);
+			return new Result("Success");
+		} catch (Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, param);
+		}
+	}
+	
 	//
 	// "UPDATE LicenseActivation"
 	// + " SET \n"

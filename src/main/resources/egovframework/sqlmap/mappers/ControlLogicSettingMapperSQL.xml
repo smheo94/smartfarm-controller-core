@@ -248,4 +248,15 @@
         </set>
         WHERE id = #{control_setting_id};
     </update>
+    
+     <update id="updateLogicEnv">
+        UPDATE control_setting
+        <set>
+            <if test="logic_env != null"> logic_env = #{logic_env} </if>
+            <if test="logic_period_env != null">,logic_period_env = #{logic_period_env}</if>
+            <if test="auto_manual_mode != null">,auto_manual_mode = #{auto_manual_mode}</if>
+            <if test="update_dt != null">,update_dt = #{update_dt}</if>
+        </set>
+        WHERE id = #{control_setting_id};
+    </update>
 </mapper>

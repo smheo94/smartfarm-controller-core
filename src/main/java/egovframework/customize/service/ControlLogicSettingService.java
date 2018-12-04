@@ -19,4 +19,6 @@ public interface ControlLogicSettingService {
 	Integer delChkConditionSetting(Integer chkConditionId);
 
 	Integer deleteControlLogicSettingDevice(Integer id);
+
+	void updateLogicEnv(Map<String, Object> param);
 }
