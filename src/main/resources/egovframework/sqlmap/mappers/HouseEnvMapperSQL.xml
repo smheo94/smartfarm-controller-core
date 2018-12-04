@@ -285,7 +285,7 @@
 					AND fcst_date BETWEEN #{from_date} AND #{to_date}
 				</if>
 				<if test="from_date==null">				
-					AND fcst_date BETWEEN NOW() AND NOW() + INTERVAL 3 DAY
+					AND fcst_date BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL 3 DAY
 				</if>
     		GROUP BY house_id, fcst_date, fcst_time, category
 		)

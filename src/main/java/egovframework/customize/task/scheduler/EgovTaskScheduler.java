@@ -9,15 +9,11 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import javax.annotation.Resource;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
-import egovframework.cmmn.util.CommonUtil;
 import egovframework.cmmn.util.DateUtil;
 import egovframework.customize.service.HouseEnvService;
 
