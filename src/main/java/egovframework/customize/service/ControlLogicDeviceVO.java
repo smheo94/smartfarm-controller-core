@@ -28,7 +28,7 @@ public class ControlLogicDeviceVO {
 	Integer isMain;
 	Integer ableArray;
 	Integer description;	
-	Integer diplayOrder;
+	Integer displayOrder;
 	Integer isUsed;
 	Integer required;
 	public Map<String,Object> toMap() {
