@@ -1,5 +1,7 @@
 package egovframework.customize.service;
 
+import com.mysql.jdbc.Blob;
+
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +9,7 @@ import lombok.Setter;
 @Data
 @Getter
 @Setter
-public class HouseDiaryVO {
+public class HousePictureDiaryVO {
 
 	Integer id;
 	Integer greenHouseId; // 
@@ -22,10 +24,12 @@ public class HouseDiaryVO {
 	Integer income; // 수입일떄만
 	Integer spend; // 지출일때만
 	String contentType; // farming || account
-	String workTime; //  종일 오전 오후		
-	String cctvImageUrl; 
+	String workTime; //  종일 오전 오후
+	Blob image;
+	String forecastDate;
 	String weather;
-	byte[] file;
-	String fileName;
-	
+	Double temperature;
+	Integer rainChance;
+	Integer rainfall;
+	Integer windSpeed;
 }

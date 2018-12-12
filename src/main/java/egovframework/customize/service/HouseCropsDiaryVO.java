@@ -1,16 +1,10 @@
 package egovframework.customize.service;
 
+import com.mysql.jdbc.Blob;
+
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-
-
-/**
- * 작업일지 , 경영일지
- * 
- * @author LEE
- *
- */
 
 @Data
 @Getter
@@ -37,5 +31,9 @@ public class HouseCropsDiaryVO {
 	String title;
 	String crops;		// 작물
 	String contentType;
+	Blob image;
+	String weatherJson;
+	byte[] file;
+	String fileName;
 	
 }

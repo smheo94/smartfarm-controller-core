@@ -4,57 +4,25 @@
 
 	<insert id="insertHouseDiary" useGeneratedKeys="true" parameterType="houseDiaryVO">
 		INSERT INTO house_diary
-		(green_house_id,title,content,work,etc,start_date,end_date,crops,harvest,income,spend,content_type,work_time)
+			(
+				green_house_id,title,content,work,etc,start_date,end_date,crops,harvest,income,spend,content_type,work_time,cctv_image_url,weather
+			)
 		VALUES 
-		(#{greenHouseId},#{title},#{content},#{work},#{etc},#{startDate},#{endDate},#{crops},#{harvest},#{income},#{spend},#{contentType},#{workTime});
+			(
+				#{greenHouseId},#{title},#{content},#{work},#{etc},#{startDate},#{endDate},#{crops},#{harvest},#{income},#{spend},#{contentType},#{workTime},#{cctvImageUrl},#{weather}
+			);
 		<selectKey keyProperty="id" resultType="int">
 		SELECT LAST_INSERT_ID() AS id;
 		</selectKey>
 	</insert>
-	
-	<select id="getHouseDiaryDetail" parameterType="map" resultType="houseDiaryVO">
-		SELECT 
-			id,
-			green_house_id,
-			title,
-			content,
-			work,
-			etc,
-			start_date,
-			end_date,
-			crops,
-			harvest,
-			income,
-			spend,
-			content_type,
-			work_time
-		FROM house_diary
-		WHERE id = #{id}
-	</select>
-	
-	
-	<select id="getMonthlyHouseDiaryList" parameterType="map" resultType="houseDiaryVO">
-		SELECT 
-			id,
-			green_house_id,
-			title,
-			content,
-			WORK,
-			etc,
-			start_date,
-			end_date,
-			crops,
-			harvest,
-			income,
-			spend,
-			content_type,
-			work_time
-		FROM house_diary
-		WHERE green_house_id = #{green_house_id}
-			AND START_DATE BETWEEN #{start_date} AND #{end_date} 
-			AND END_DATE BETWEEN #{start_date} AND #{end_date}
-			
-	</select>
+	<insert id="insertHouseDiaryFile" parameterType="houseDiaryVO">
+		INSERT INTO house_diary_file(
+			house_diary_idx,file_name,file,update_date
+		)
+		VALUES(
+			#{id},#{fileName},#{file},NOW()
+		)
+	</insert>
 	
 	<update id="updateHouseDiary" parameterType="houseDiaryVO">
 		UPDATE house_diary
@@ -75,21 +43,83 @@
 		WHERE id=#{id} AND green_house_id = #{greenHouseId}
 	</update>
 	
-	<delete id="delete" parameterType="map">
+	<update id="updateHouseDiaryFile" parameterType="houseDiaryVO">
+		UPDATE house_diary_file
+		SET
+			file_name = #{fileName},
+			file = #{file},
+			update_date = NOW()
+		WHERE house_diary_idx=#{id} 
+	</update>
+	
+	<select id="getHouseDiaryDetail" parameterType="map" resultType="houseDiaryVO">
+		SELECT 
+			id,
+			green_house_id,
+			title,
+			content,
+			work,
+			etc,
+			start_date,
+			end_date,
+			crops,
+			harvest,
+			income,
+			spend,
+			content_type,
+			work_time,
+			cctv_image_url,
+			weather
+		FROM house_diary
+		WHERE id = #{id}
+	</select>
+	
+	
+	<select id="getMonthlyHouseDiaryList" parameterType="map" resultType="map">
+		SELECT 
+			hd.id,
+			hd.green_house_id,
+			hd.title,
+			hd.content,
+			hd.WORK,
+			hd.etc,
+			hd.start_date,
+			hd.end_date,
+			hd.crops,
+			hd.harvest,
+			hd.income,
+			hd.spend,
+			hd.content_type,
+			hd.work_time,
+			hd.cctv_image_url,
+			hd.weather,
+			hdf.file_name,
+			hdf.file,
+			hdf.update_date
+		FROM house_diary as hd
+		INNER JOIN house_diary_file AS hdf ON hdf.house_diary_idx = hd.id
+		WHERE green_house_id = #{green_house_id}
+			AND START_DATE BETWEEN #{start_date} AND #{end_date} 
+			AND END_DATE BETWEEN #{start_date} AND #{end_date}			
+	</select>
+	
+	
+	
+	<delete id="deleteHouseDiary" parameterType="map">
 		DELETE
 		FROM house_diary
 		WHERE id = #{id};
 	</delete>
-	
-	
-	<!-- 
-	**************************************************************************************
-	 -->
-	
+	<delete id="deleteHouseDiaryFile" parameterType="map">
+		DELETE
+		FROM house_diary_file
+		WHERE house_diary_idx = #{id};
+	</delete>
+		
 	
 	
 	<insert id="insertCropsDiary" useGeneratedKeys="true" parameterType="cropsDiaryVO">
-		INSERT INTO house_crops_diary
+		INSERT INTO crops_diary
 		(green_house_id, leaf_width, stem, harvest, fruit_set, gether_set, fruit_height, bloom, fruit_number, aver_weight, grow_length, leaf_size, leaf_num, start_date, upload_file, content, title, crops, content_type)
 		VALUES 
 		(#{greenHouseId},#{leafWidth},#{stem},#{harvest},#{fruitSet},#{getherSet},#{fruitHeight},#{bloom},#{fruitNumber},#{averWeight},#{growLength},#{leafSize},#{leafNum},#{startDate},#{uploadFile},#{content},#{title},#{crops}, #{contentType})
@@ -98,40 +128,9 @@
 		</selectKey>
 	</insert>
 
-	
-	
-	<select id="getMonthlyCropsDiaryList" parameterType="map" resultType="cropsDiaryVO">
-		SELECT 
-			id, 
-			green_house_id, 
-			leaf_width, 
-			stem, 
-			harvest, 
-			fruit_set, 
-			gether_set, 
-			fruit_height, 
-			bloom, 
-			fruit_number, 
-			aver_weight, 
-			grow_length, 
-			leaf_size, 
-			leaf_num, 
-			start_date, 
-			upload_file, 
-			content, 
-			title, 
-			crops,
-			content_type
-		FROM house_crops_diary 
-		WHERE (
-			START_DATE BETWEEN #{start_date} AND #{end_date}
-			AND green_house_id = #{house_id}
-		)
-	</select>
-	
 	<update id="updateCropsDiary" parameterType="cropsDiaryVO">
 		UPDATE
-		house_crops_diary
+		crops_diary
 		<set>
 		<if test="leafWidth != null">leaf_width = #{leafWidth},</if>
 		<if test="stem != null">stem = #{stem},</if>
@@ -155,18 +154,52 @@
 		WHERE id = #{id} AND green_house_id = #{greenHouseId};
 	</update>
 	
-	<delete id="DeleteCropsDiary" parameterType="map">
+	<delete id="deleteCropsDiary" parameterType="map">
 		DELETE
-		FROM house_crops_diary
+		FROM crops_diary
 		WHERE id = #{id};
 	</delete>
 	
+	<delete id="deleteCropsDiaryFile" parameterType="map">
+		DELETE
+		FROM crops_diary_file
+		WHERE crops_diary_idx = #{id};
+	</delete>
+	
+	<select id="getMonthlyCropsDiaryList" parameterType="map" resultType="cropsDiaryVO">
+		SELECT 
+			id, 
+			green_house_id, 
+			leaf_width, 
+			stem, 
+			harvest, 
+			fruit_set, 
+			gether_set, 
+			fruit_height, 
+			bloom, 
+			fruit_number, 
+			aver_weight, 
+			grow_length, 
+			leaf_size, 
+			leaf_num, 
+			start_date, 
+			upload_file, 
+			content, 
+			title, 
+			crops,
+			content_type
+		FROM crops_diary 
+		WHERE (
+			START_DATE BETWEEN #{start_date} AND #{end_date}
+			AND green_house_id = #{house_id}
+		)
+	</select>
 	
 	
 	
 	
 	
-	
+		
 	<select id="getCategoryList22" resultType="map">
 		SELECT 
 			id,category_type,category_name
@@ -181,5 +214,12 @@
 		WHERE green_house.id = #{green_house_id} 
 	</select>
 	
+	<select id="getCCTVImageList" parameterType="map" resultType="map">
+		SELECT push_type,push_title,push_message,image_url,weather
+		FROM push_history
+		WHERE green_house_id = #{green_house_id}
+		AND push_type = 9 
+		<!-- push_type이 9인경우는 cctv daily 인 case -->
+	</select>
 	
 </mapper>

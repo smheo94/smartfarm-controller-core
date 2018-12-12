@@ -119,7 +119,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
     public void setErrorResult(HttpServletResponse response, String message, HttpStatus code) {
         response.setContentType("application/json");
         try {
-            response.sendError(HttpStatus.OK.value(), new ObjectMapper().writeValueAsString(new Result(message, code, message)));
+            response.sendError(HttpStatus.INTERNAL_SERVER_ERROR.value(), new ObjectMapper().writeValueAsString(new Result(message, code, message)));
         } catch (IOException e) {
             e.printStackTrace();
         }

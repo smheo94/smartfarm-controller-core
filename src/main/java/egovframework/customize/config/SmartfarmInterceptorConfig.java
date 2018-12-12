@@ -1,9 +1,7 @@
 package egovframework.customize.config;
 
-import com.kt.smartfarm.supervisor.mapper.ControllerEnvMapper;
 import com.kt.smartfarm.supervisor.mapper.GsmEnvMapper;
 import egovframework.customize.intercepter.SmartFarmDataInterceptor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -14,10 +12,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import javax.annotation.Resource;
 
 @Configuration
-@PropertySource("classpath:smartfarm-mgr-env.properties")
+//@PropertySource("classpath:smartfarm-mgr-env.properties")
+//@PropertySource(value={"classpath:application.properties","classpath:smartfarm-mgr-env.properties"}, ignoreResourceNotFound=true)
+@PropertySource(value={"classpath:application.properties","file:/home/gsm/v4/conf/smartfarm-mgr-env.properties"}, ignoreResourceNotFound=true)
+@SuppressWarnings("PMD")
 public class SmartfarmInterceptorConfig extends WebMvcConfigurerAdapter {
 
-
+	
     @Value("${smartfarm.gsm-key}")
     public String GSM_KEY;
     @Value("${smartfarm.system.type}")

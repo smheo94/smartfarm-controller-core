@@ -15,15 +15,21 @@
  */
 package egovframework.customize.web;
 
+import egovframework.cmmn.util.InterceptPre;
 import egovframework.cmmn.util.Result;
 import egovframework.customize.service.HouseCropsDiaryVO;
 import egovframework.customize.service.HouseDiaryService;
 import egovframework.customize.service.HouseDiaryVO;
+import egovframework.customize.service.HousePictureDiaryVO;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.annotation.MultipartConfig;
 
 /*
  * mgrEnv
@@ -77,21 +83,23 @@ public class HouseDiaryController {
 	}
 	
 	/**
-	 * @description 작업일지, 가계부 입력
+	 * @description 작업일지, 가계부 , 사진일지 입력
 	 * @param houseDiaryVO
 	 * @return
 	 */
-	@RequestMapping(value= "", method = RequestMethod.POST)
+	@RequestMapping(value= "", method = RequestMethod.POST, consumes = { "*/*" })
 	@ResponseBody
-	public Result insert(@RequestBody HouseDiaryVO houseDiaryVO){
+	public Result insert(@RequestPart(value="data", required=false) HouseDiaryVO houseDiaryVO, @RequestPart(value="file", required=false) MultipartFile[] file){
+//	public Result insert(@RequestBody HouseDiaryVO houseDiaryVO){
 		try{
-			return new Result(houseDiaryService.insertHouseDiary(houseDiaryVO));
+			return new Result(houseDiaryService.insertHouseDiary(houseDiaryVO,file));
+//			return new Result(houseDiaryService.insertHouseDiary(houseDiaryVO,null));
 		}catch(Exception e){
 			e.printStackTrace();
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
-	
+
 	/**
 	 * @description 작업일지, 가계부 입력
 	 * @param houseDiaryVO
@@ -99,9 +107,11 @@ public class HouseDiaryController {
 	 */
 	@RequestMapping(value= "/{id}", method = RequestMethod.PUT)
 	@ResponseBody
-	public Result update(@RequestBody HouseDiaryVO houseDiaryVO){
+	public Result update(@RequestPart(value="data", required=false) HouseDiaryVO houseDiaryVO, @RequestPart(value="file", required=false) MultipartFile[] file){
+//	public Result update(@RequestBody HouseDiaryVO houseDiaryVO){
 		try{
-			return new Result(houseDiaryService.updateHouseDiary(houseDiaryVO));
+			return new Result(houseDiaryService.updateHouseDiary(houseDiaryVO,file));
+//			return new Result(houseDiaryService.updateHouseDiary(houseDiaryVO));
 		}catch(Exception e){
 			e.printStackTrace();
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
@@ -179,9 +189,10 @@ public class HouseDiaryController {
 	
 	@RequestMapping(value= "/cropsDiary", method = RequestMethod.POST)
 	@ResponseBody
-	public Result insertCropsDiary(@RequestBody HouseCropsDiaryVO houseCropsVO){
+	public Result insertCropsDiary(@RequestPart(value="data", required=false) HouseCropsDiaryVO houseCropsVO, @RequestPart(value="file", required=false) MultipartFile[] file){
+//	public Result insertCropsDiary(@RequestBody HouseCropsDiaryVO houseCropsVO){
 		try{
-			return new Result(houseDiaryService.insertCropsDiary(houseCropsVO));
+			return new Result(houseDiaryService.insertCropsDiary(houseCropsVO,file));
 		}catch(Exception e){
 			e.printStackTrace();
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
@@ -195,9 +206,10 @@ public class HouseDiaryController {
 	 */
 	@RequestMapping(value= "/cropsDiary/{id}", method = RequestMethod.PUT)
 	@ResponseBody
-	public Result updateCropsDiary(@RequestBody HouseCropsDiaryVO houseCropsVO){
+	public Result updateCropsDiary(@RequestPart(value="data", required=false) HouseCropsDiaryVO houseCropsVO, @RequestPart(value="file", required=false) MultipartFile[] file){
+//	public Result updateCropsDiary(@RequestBody HouseCropsDiaryVO houseCropsVO){
 		try{
-			return new Result(houseDiaryService.updateCropsDiary(houseCropsVO));
+			return new Result(houseDiaryService.updateCropsDiary(houseCropsVO,file));
 		}catch(Exception e){
 			e.printStackTrace();
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
@@ -215,7 +227,7 @@ public class HouseDiaryController {
 	public Result MonthlyCropsDiaryList(@PathVariable("green_house_id") Integer greenHouseId, 
 	@RequestParam("year") Integer year, @RequestParam("month") Integer month){
 		try{
-			return new Result(houseDiaryService.MonthlyCropsDiaryList(greenHouseId,year,month));
+			return new Result(houseDiaryService.getMonthlyCropsDiaryList(greenHouseId,year,month));
 		}catch(Exception e){
 			e.printStackTrace();
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
@@ -237,5 +249,4 @@ public class HouseDiaryController {
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
-
 }
