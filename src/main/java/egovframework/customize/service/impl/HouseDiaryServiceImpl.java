@@ -12,17 +12,10 @@
  */
 package egovframework.customize.service.impl;
 
-import egovframework.cmmn.util.Result;
-import egovframework.customize.service.CommonEnvService;
-import egovframework.customize.service.CommonEnvVO;
 import egovframework.customize.service.HouseCropsDiaryVO;
 import egovframework.customize.service.HouseDiaryService;
 import egovframework.customize.service.HouseDiaryVO;
-import egovframework.customize.service.HousePictureDiaryVO;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
-import egovframework.rte.fdl.idgnr.EgovIdGnrService;
-
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -30,18 +23,9 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kt.smartfarm.supervisor.mapper.HouseDiaryMapper;
@@ -192,18 +176,9 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 	}
 
 	@Override
-	public HouseCropsDiaryVO insertCropsDiary(HouseCropsDiaryVO houseCropsVO, MultipartFile[] file) {
+	public HouseCropsDiaryVO insertCropsDiary(HouseCropsDiaryVO houseCropsVO) {
 		try{
-			houseDiaryMapper.insertCropsDiary(houseCropsVO);
-			for(int i=0; i<file.length; i++){
-				if(!file[i].isEmpty()){
-					String fileName=file[i].getOriginalFilename();
-					byte[] bytes = file[i].getBytes();
-					houseCropsVO.setFile(bytes);
-					houseCropsVO.setFileName(fileName);
-					houseDiaryMapper.insertCropsDiaryFile(houseCropsVO);
-				}	
-			}
+			houseDiaryMapper.insertCropsDiary(houseCropsVO);			
 		}catch(Exception e){
 			log.debug("insertCropsDiary Exception : "+e);
 		}
