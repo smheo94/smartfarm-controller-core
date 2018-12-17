@@ -34,7 +34,7 @@
         </profile>
     </profiles>
 	<properties>
-        <env>dev-center</env>
+        <!--<env>dev-center</env>-->
 		<!-- 컨텍스트 루트 지정 -->
 		<wtpContextName>/</wtpContextName>
 		<m2eclipse.wtp.contextRoot>/</m2eclipse.wtp.contextRoot>
@@ -249,17 +249,17 @@
     </dependencies>
 
 	<build>
-        <resources>
+        <!--<resources>
             <resource>
                 <directory>src/main/resources/</directory>
             </resource>
             <resource>
                 <directory>env/${env}/</directory>
             </resource>
-        </resources>
+        </resources>-->
         <defaultGoal>package</defaultGoal>
         <directory>${basedir}/target</directory>
-        <finalName>${artifactId}-${version}-${env}</finalName>
+        <finalName>${artifactId}-${version}</finalName>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -415,7 +415,7 @@
                 <configuration> 
                     <username>argos</username>
                     <password>gksfutneh</password>
-                    <repository>repo.docker.vivans.net:5000/${project.artifactId}-${env}</repository>
+                    <repository>repo.docker.vivans.net:5000/${project.artifactId}</repository>
                     <!--<tag>${project.version}</tag>-->
                     <buildArgs>
                         <WAR_FILE>${project.build.finalName}.war</WAR_FILE>

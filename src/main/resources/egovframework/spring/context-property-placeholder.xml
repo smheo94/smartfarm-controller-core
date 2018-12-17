@@ -7,7 +7,7 @@
 	<!-- <context:property-placeholder location="/opt/tomcat/conf/application.properties" ignore-unresolvable="true" /> -->	
 	
 	<!-- <context:property-placeholder location="classpath:smartfarm-mgr-env.properties" ignore-unresolvable="true" /> -->
-	<context:property-placeholder location="classpath:application.properties,file:/home/gsm/v4/conf/smartfarm-mgr-env.properties"
+	<context:property-placeholder location="classpath:application.properties,file:/myapp/application.properties,file:/home/gsm/v4/conf/smartfarm-mgr-env.properties"
 					 ignore-resource-not-found="true"
 					 ignore-unresolvable="true"
 					 system-properties-mode="OVERRIDE" />
