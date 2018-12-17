@@ -75,7 +75,7 @@
 	</select>
 	
 	
-	<select id="getMonthlyHouseDiaryList" parameterType="map" resultType="map">
+	<select id="getMonthlyHouseDiaryList" parameterType="map" resultType="houseDiaryVO">
 		SELECT 
 			hd.id,
 			hd.green_house_id,
@@ -97,10 +97,10 @@
 			hdf.file,
 			hdf.update_date
 		FROM house_diary as hd
-		INNER JOIN house_diary_file AS hdf ON hdf.house_diary_idx = hd.id
+		LEFT OUTER JOIN house_diary_file AS hdf ON hdf.house_diary_idx = hd.id
 		WHERE green_house_id = #{green_house_id}
-			AND START_DATE BETWEEN #{start_date} AND #{end_date} 
-			AND END_DATE BETWEEN #{start_date} AND #{end_date}			
+			AND start_date BETWEEN #{start_date} AND #{end_date} 
+			AND end_date BETWEEN #{start_date} AND #{end_date}			
 	</select>
 	
 	
@@ -168,31 +168,35 @@
 	
 	<select id="getMonthlyCropsDiaryList" parameterType="map" resultType="cropsDiaryVO">
 		SELECT 
-			id, 
-			green_house_id, 
-			leaf_width, 
-			stem, 
-			harvest, 
-			fruit_set, 
-			gether_set, 
-			fruit_height, 
-			bloom, 
-			fruit_number, 
-			aver_weight, 
-			grow_length, 
-			leaf_size, 
-			leaf_num, 
-			start_date, 
-			upload_file, 
-			content, 
-			title, 
-			crops,
-			content_type
-		FROM crops_diary 
-		WHERE (
-			START_DATE BETWEEN #{start_date} AND #{end_date}
-			AND green_house_id = #{house_id}
-		)
+			cd.id, 
+			cd.green_house_id, 
+			cd.leaf_width, 
+			cd.stem, 
+			cd.harvest, 
+			cd.fruit_set, 
+			cd.gether_set, 
+			cd.fruit_height, 
+			cd.bloom, 
+			cd.fruit_number, 
+			cd.aver_weight, 
+			cd.grow_length, 
+			cd.leaf_size, 
+			cd.leaf_num, 
+			cd.start_date, 
+			cd.upload_file, 
+			cd.content, 
+			cd.title, 
+			cd.crops,
+			cd.content_type,
+			cd.cctv_image_url,
+			cd.weather_json,
+			cdf.file_name,
+			cdf.file,
+			cdf.update_date			
+		FROM crops_diary as cd
+		LEFT OUTER JOIN crops_diary_file AS cdf ON cdf.crops_diary_idx = cd.id
+		WHERE green_house_id = #{house_id}
+			AND start_date BETWEEN #{start_date} AND #{end_date}			
 	</select>
 	
 	

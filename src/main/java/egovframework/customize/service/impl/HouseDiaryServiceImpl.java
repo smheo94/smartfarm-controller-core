@@ -56,22 +56,52 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 
 
 	@Override
-	public HouseDiaryVO insertHouseDiary(HouseDiaryVO houseDiaryVO, MultipartFile[] file) {
+	public HouseDiaryVO insertHouseDiary(HouseDiaryVO houseDiaryVO) {
 		try{
 			houseDiaryMapper.insertHouseDiary(houseDiaryVO);
-			for(int i=0; i<file.length; i++){
-				if(!file[i].isEmpty()){
-					String fileName=file[i].getOriginalFilename();
-					byte[] bytes = file[i].getBytes();
-					houseDiaryVO.setFile(bytes);
-					houseDiaryVO.setFileName(fileName);
-					houseDiaryMapper.insertHouseDiaryFile(houseDiaryVO);
-				}	
-			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 		return houseDiaryVO;
+	}
+	
+	@Override
+	public Integer insertDiaryFile(String contentType, Integer id, MultipartFile[] file) {
+		Integer result=0;
+		try{			
+//			String fileName=file[i].getOriginalFilename();
+		
+//			if(fileName.toLowerCase().endsWith(".jpg") || fileName.toLowerCase().endsWith(".jpeg") ||
+//		            fileName.toLowerCase().endsWith(".png") || fileName.toLowerCase().endsWith(".gif") ||
+//		            fileName.toLowerCase().endsWith(".bmp") || fileName.toLowerCase().endsWith(".hwp") ||
+//		            fileName.toLowerCase().endsWith(".ppt") ||fileName.toLowerCase().endsWith(".pptx") ||		            
+//		            fileName.toLowerCase().endsWith(".pdf") ||fileName.toLowerCase().endsWith(".xls") || fileName.toLowerCase().endsWith(".txt")) {
+				for(int i=0; i<file.length; i++){
+					if(!file[i].isEmpty()){
+						String fileName=file[i].getOriginalFilename();
+						byte[] bytes = file[i].getBytes();
+						if(contentType.equals("11") || contentType.equals("21")){
+							HouseDiaryVO houseDiaryVO = new HouseDiaryVO();
+							houseDiaryVO.setId(id);
+							houseDiaryVO.setFile(bytes);
+							houseDiaryVO.setFileName(fileName);
+							result = houseDiaryMapper.insertHouseDiaryFile(houseDiaryVO);
+						}
+						else if(contentType.equals("31")){
+							HouseCropsDiaryVO houseCropsDiaryVO= new HouseCropsDiaryVO();
+							houseCropsDiaryVO.setId(id);
+							houseCropsDiaryVO.setFile(bytes);
+							houseCropsDiaryVO.setFileName(fileName);
+							result = houseDiaryMapper.insertCropsDiaryFile(houseCropsDiaryVO);
+						}
+					}	
+				}
+//			}
+		
+		}catch(Exception e){
+			log.debug("insertDiaryFile Error = " + e);
+		}
+		return result;
 	}
 	
 	@Override
@@ -128,7 +158,8 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 		HashMap<String,Object> param = new HashMap<>();
 		param = getMonthDate(year,month);
 		param.put("green_house_id", houseId);
-		return houseDiaryMapper.getMonthlyHouseDiaryList(param);
+		List<HashMap<String,Object>> list =houseDiaryMapper.getMonthlyHouseDiaryList(param); 
+		return list;
 		
 	}
 
@@ -210,7 +241,8 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 	 	HashMap<String,Object> param = new HashMap<>();
 		param = getMonthDate(year,month);
 		param.put("house_id", greenHouseId);
-		return houseDiaryMapper.getMonthlyCropsDiaryList(param);
+		List<HouseCropsDiaryVO> list =houseDiaryMapper.getMonthlyCropsDiaryList(param); 
+		return list;
 	}
 
 	@Override

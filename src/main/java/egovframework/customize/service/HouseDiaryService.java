@@ -11,7 +11,7 @@ public interface HouseDiaryService {
 
 	
 //	List<HashMap<String, Object>> getMonthlyDiary(Integer year, Integer month);
-	HouseDiaryVO insertHouseDiary(HouseDiaryVO houseDiaryVO, MultipartFile[] file);
+	HouseDiaryVO insertHouseDiary(HouseDiaryVO houseDiaryVO);
 	HouseDiaryVO updateHouseDiary(HouseDiaryVO houseDiaryVO, MultipartFile[] file);
 	
 	HouseDiaryVO getHouseDiaryDetail(Integer id);
@@ -20,9 +20,10 @@ public interface HouseDiaryService {
 	
 	List<HashMap<String,Object>> getCategoryList();
 	
-	HouseCropsDiaryVO insertCropsDiary(HouseCropsDiaryVO houseCropsVO, MultipartFile[] file);
+	HouseCropsDiaryVO insertCropsDiary(HouseCropsDiaryVO houseCropsVO);
 	HouseCropsDiaryVO updateCropsDiary(HouseCropsDiaryVO houseCropsVO, MultipartFile[] file);
 	Integer DeleteCropsDiary(Integer id);
 	List<HouseCropsDiaryVO> getMonthlyCropsDiaryList(Integer greenHouseId, Integer year, Integer month);
 	HashMap<String,Object> getHouseCropsInfo(Integer greenHouseId);
+	Object insertDiaryFile(String contentType, Integer id, MultipartFile[] file);
 }

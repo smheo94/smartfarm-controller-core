@@ -87,7 +87,10 @@ public class EgovTaskScheduler {
 				        http.disconnect();
 				        
 				        JSONObject json = new JSONObject(sb.toString());
-				        if(json.getJSONObject("response").getJSONObject("header").get("resultCode").toString().equals("0000")){
+//				        if(json.getJSONObject("response").getJSONObject("header").get("resultCode").toString().equals("0000")){
+//				        	continue;
+//				        }
+				        if(!json.getJSONObject("response").getJSONObject("header").get("resultCode").toString().equals("0000")){
 				        	continue;
 				        }
 				        JSONObject body = json.getJSONObject("response").getJSONObject("body");

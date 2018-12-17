@@ -87,13 +87,24 @@ public class HouseDiaryController {
 	 * @param houseDiaryVO
 	 * @return
 	 */
-	@RequestMapping(value= "", method = RequestMethod.POST, consumes = { "*/*" })
+	@RequestMapping(value= "", method = RequestMethod.POST)
 	@ResponseBody
-	public Result insert(@RequestPart(value="data", required=false) HouseDiaryVO houseDiaryVO, @RequestPart(value="file", required=false) MultipartFile[] file){
-//	public Result insert(@RequestBody HouseDiaryVO houseDiaryVO){
+//	public Result insertDiary(@RequestPart(value="houseDiary", required=false) HouseDiaryVO houseDiaryVO, @RequestPart(value="file", required=false) MultipartFile[] file){
+	public Result insert(@RequestBody HouseDiaryVO houseDiaryVO){
 		try{
-			return new Result(houseDiaryService.insertHouseDiary(houseDiaryVO,file));
-//			return new Result(houseDiaryService.insertHouseDiary(houseDiaryVO,null));
+			return new Result(houseDiaryService.insertHouseDiary(houseDiaryVO));
+		}catch(Exception e){
+			e.printStackTrace();
+			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
+	
+	@RequestMapping(value= "/diaryFile", method = RequestMethod.POST, consumes = { "*/*" })
+	@ResponseBody
+	public Result insertDiaryFile(@RequestParam("content_type") String contentType, @RequestParam("id") Integer id, 
+			@RequestPart(value="file", required=false) MultipartFile[] file){
+		try{
+			return new Result(houseDiaryService.insertDiaryFile(contentType,id,file));
 		}catch(Exception e){
 			e.printStackTrace();
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
@@ -189,10 +200,10 @@ public class HouseDiaryController {
 	
 	@RequestMapping(value= "/cropsDiary", method = RequestMethod.POST)
 	@ResponseBody
-	public Result insertCropsDiary(@RequestPart(value="data", required=false) HouseCropsDiaryVO houseCropsVO, @RequestPart(value="file", required=false) MultipartFile[] file){
-//	public Result insertCropsDiary(@RequestBody HouseCropsDiaryVO houseCropsVO){
+//	public Result insertCropsDiary(@RequestPart(value="cropsDiary", required=false) HouseCropsDiaryVO houseCropsVO, @RequestPart(value="file", required=false) MultipartFile[] file){
+	public Result insertCropsDiary(@RequestBody HouseCropsDiaryVO houseCropsVO){
 		try{
-			return new Result(houseDiaryService.insertCropsDiary(houseCropsVO,file));
+			return new Result(houseDiaryService.insertCropsDiary(houseCropsVO));
 		}catch(Exception e){
 			e.printStackTrace();
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
