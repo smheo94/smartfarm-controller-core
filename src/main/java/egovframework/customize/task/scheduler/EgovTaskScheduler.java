@@ -148,7 +148,7 @@ public class EgovTaskScheduler {
 							+"&locdate="+regDay
 							+"&dnYn=Y"						
 							+"&_type=json"
-							);					
+							);
 					HttpURLConnection http = (HttpURLConnection) url.openConnection();
 			        http.setConnectTimeout(10000);
 			        http.setUseCaches(false);
@@ -169,7 +169,7 @@ public class EgovTaskScheduler {
 			        JSONObject body = json.getJSONObject("response").getJSONObject("body").getJSONObject("items").getJSONObject("item");
 			        hm.put("house_id", (Integer)houseList.get(i).get("id"));
 			        hm.put("sunrise", (String)body.get("sunrise"));
-			        hm.put("sunset", (String)body.get("sunrise"));
+			        hm.put("sunset", (String)body.get("sunset"));
 			        hm.put("loc_date", body.get("locdate").toString());
 			        houseEnvService.insertSunriseData(hm);
 				}catch(Exception e){
