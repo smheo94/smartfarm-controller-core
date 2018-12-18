@@ -62,6 +62,7 @@ public interface HouseEnvMapper {
 	
 	List<HashMap<String, Object>> getWeatherCast(HashMap<String, Object> param);
 	List<HashMap<String, Object>> getWeatherCategory();
+	HashMap<String, Object> getSunriseInfo(Map<String, Object> map);
 	
 	
 	

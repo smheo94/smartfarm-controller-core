@@ -308,10 +308,12 @@
 		</selectKey>
 	</insert>
 	
-	<select id="selectSunriseDate" parameterType="map" resultType="map">
+	<select id="getSunriseInfo" parameterType="map" resultType="map">
 		SELECT house_id,loc_date,sunrise,sunset
 		FROM sunrise_info
-		WHERE loc_date = CURRENT_DATE()
+		WHERE 
+			loc_date = CURRENT_DATE()
+			AND house_id = #{green_house_id}
 	
 	</select>
 	

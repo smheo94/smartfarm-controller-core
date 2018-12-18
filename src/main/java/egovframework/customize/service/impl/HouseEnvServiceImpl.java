@@ -117,6 +117,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 		List<DeviceEnvVO> mappedDeviceList;
 		List<Integer> deviceIds = new ArrayList<Integer>();
 		Map<String, Object> map = new HashMap<>();
+		HashMap<String,Object> sunriseInfo = new HashMap<>();
 		List<HashMap<String,Object>> cctv = new ArrayList<>(); 
 		if(gsmKey == null){
 			result = houseEnvMapper.getHouseDetail(map);
@@ -149,7 +150,10 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 				if(cctv !=null){					
 					houseMap.put("cctvList",cctv);	
 				}
-				
+				sunriseInfo = houseEnvMapper.getSunriseInfo(map);
+				if(sunriseInfo!=null){
+					houseMap.put("sunriseInfo", sunriseInfo);
+				}
 			}
 
 			return result;
