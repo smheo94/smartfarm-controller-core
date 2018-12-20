@@ -48,7 +48,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 @Controller
-@RequestMapping(value={"/env/{gsm_key}/house","/{gsm_key}"})
+@RequestMapping(value={"/env/{gsm_key}/house","/{gsm_key}/house"})
 public class HouseEnvController {
 
 	public static final String DEFAULT_SETUP_FILE_PATH = "data/env-default/";
