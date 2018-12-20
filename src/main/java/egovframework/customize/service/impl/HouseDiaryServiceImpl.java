@@ -48,6 +48,15 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 		}
 		return houseDiaryVO;
 	}
+	@Override
+	public HouseCropsDiaryVO insertCropsDiary(HouseCropsDiaryVO houseCropsVO) {
+		try{
+			houseDiaryMapper.insertCropsDiary(houseCropsVO);			
+		}catch(Exception e){
+			log.debug("insertCropsDiary Exception : "+e);
+		}
+		return houseCropsVO;
+	}
 	
 	@Override
 	public Integer insertDiaryFile(String contentType, Integer id, MultipartFile[] file) {
@@ -89,39 +98,56 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 	}
 	
 	@Override
-	public HouseDiaryVO updateHouseDiary(HouseDiaryVO houseDiaryVO, MultipartFile[] file) {
+	public HouseDiaryVO updateHouseDiary(HouseDiaryVO houseDiaryVO) {
 		try{
-			houseDiaryMapper.updateHouseDiary(houseDiaryVO);
-			for(int i=0; i<file.length; i++){
-				if(!file[i].isEmpty()){
-					String fileName=file[i].getOriginalFilename();
-					byte[] bytes = file[i].getBytes();
-					houseDiaryVO.setFile(bytes);
-					houseDiaryVO.setFileName(fileName);
-					houseDiaryMapper.updateHouseDiaryFile(houseDiaryVO);
-				}	
-			}	
+			houseDiaryMapper.updateHouseDiary(houseDiaryVO);				
 		}catch(Exception e){
 			e.printStackTrace();
 			log.debug("updateHouseDiary Error : " + e);
 		}		
 		return houseDiaryVO;
 	}
-
 	@Override
-	public Integer deleteHouseDiary(Integer id) {
+	public HouseCropsDiaryVO updateCropsDiary(HouseCropsDiaryVO houseCropsVO) {
 		try{
-			HashMap<String,Object> param = new HashMap<>();
-			param.put("id", id);
-			houseDiaryMapper.deleteHouseDiary(param);
-			return houseDiaryMapper.deleteHouseDiaryFile(param);
+			houseDiaryMapper.updateCropsDiary(houseCropsVO);			
 		}catch(Exception e){
-			e.printStackTrace();
-			log.debug("deleteHouseDiary Exception : " + e);
-			return null;
-		}
+			log.debug("updateCropsDiary Exception : "+e);
+		}		
+		return houseCropsVO;
 	}
-
+	@Override
+	public Object updateDiaryFile(String contentType, Integer id, MultipartFile[] file) {
+		Integer result=0;
+		try{		
+			for(int i=0; i<file.length; i++){
+				if(!file[i].isEmpty()){
+					String fileName=file[i].getOriginalFilename();
+					byte[] bytes = file[i].getBytes();
+					if(contentType.equals("11") || contentType.equals("21")){
+						HouseDiaryVO houseDiaryVO = new HouseDiaryVO();
+						houseDiaryVO.setId(id);
+						houseDiaryVO.setFile(bytes);
+						houseDiaryVO.setFileName(fileName);
+						result = houseDiaryMapper.updateHouseDiaryFile(houseDiaryVO);
+					}
+					else if(contentType.equals("31")){
+						HouseCropsDiaryVO houseCropsDiaryVO= new HouseCropsDiaryVO();
+						houseCropsDiaryVO.setId(id);
+						houseCropsDiaryVO.setFile(bytes);
+						houseCropsDiaryVO.setFileName(fileName);
+						result = houseDiaryMapper.updateCropsDiaryFile(houseCropsDiaryVO);
+					}
+				}	
+			}
+		}catch(Exception e){
+			log.debug("updateDiaryFile Error : " + e.getMessage());
+		}
+		return result;
+	}
+	
+	
+	
 	@Override
 	public HouseDiaryVO getHouseDiaryDetail(Integer id) {
 		HouseDiaryVO houseDiaryVO = new HouseDiaryVO();
@@ -148,11 +174,49 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 	}
 
 	@Override
+	public List<HouseCropsDiaryVO> getMonthlyCropsDiaryList(Integer greenHouseId, Integer year, Integer month) {
+	 	HashMap<String,Object> param = new HashMap<>();
+		param = getMonthDate(year,month);
+		param.put("house_id", greenHouseId);
+		List<HouseCropsDiaryVO> list =houseDiaryMapper.getMonthlyCropsDiaryList(param); 
+		return list;
+	}
+
+	@Override
+	public HashMap<String, Object> getHouseCropsInfo(Integer greenHouseId) {
+		HashMap<String,Object> param = new HashMap<>();
+		param.put("green_house_id", greenHouseId);
+		return houseDiaryMapper.getHouseCropsInfo(param);
+	}
+	
+	
+	@Override
 	public List<HashMap<String, Object>> getCategoryList() {
 		return houseDiaryMapper.getCategoryList22();		
 	}
-    
-	public HashMap<String,Object> getMonthDate(Integer year,Integer month){
+	
+	@Override
+	public Integer deleteHouseDiary(Integer id) {
+		try{
+			HashMap<String,Object> param = new HashMap<>();
+			param.put("id", id);
+			houseDiaryMapper.deleteHouseDiary(param);
+			return houseDiaryMapper.deleteHouseDiaryFile(param);
+		}catch(Exception e){
+			e.printStackTrace();
+			log.debug("deleteHouseDiary Exception : " + e);
+			return null;
+		}
+	}
+	@Override
+	public Integer deleteCropsDiary(Integer id) {
+		HashMap<String,Object> param = new HashMap<>();
+		param.put("id", id);
+		houseDiaryMapper.deleteCropsDiary(param);
+		return houseDiaryMapper.deleteCropsDiaryFile(param);
+	}
+	
+	private HashMap<String,Object> getMonthDate(Integer year,Integer month){
 		HashMap<String,Object> result = new HashMap<>();
 		Calendar startDateCal = Calendar.getInstance();
 		startDateCal.set(Calendar.YEAR, year);
@@ -173,57 +237,5 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 		result.put("start_date", startDate);
 		result.put("end_date", endDate);
 		return result;
-	}
-
-	@Override
-	public HouseCropsDiaryVO insertCropsDiary(HouseCropsDiaryVO houseCropsVO) {
-		try{
-			houseDiaryMapper.insertCropsDiary(houseCropsVO);			
-		}catch(Exception e){
-			log.debug("insertCropsDiary Exception : "+e);
-		}
-		return houseCropsVO;
-	}
-	@Override
-	public HouseCropsDiaryVO updateCropsDiary(HouseCropsDiaryVO houseCropsVO, MultipartFile[] file) {
-		try{
-			houseDiaryMapper.updateCropsDiary(houseCropsVO);
-			for(int i=0; i<file.length; i++){
-				if(!file[i].isEmpty()){
-					String fileName=file[i].getOriginalFilename();
-					byte[] bytes = file[i].getBytes();
-					houseCropsVO.setFile(bytes);
-					houseCropsVO.setFileName(fileName);
-					houseDiaryMapper.updateCropsDiaryFile(houseCropsVO);
-				}	
-			}
-		}catch(Exception e){
-			log.debug("updateCropsDiary Exception : "+e);
-		}		
-		return houseCropsVO;
-	}
-
-	@Override
-	public Integer DeleteCropsDiary(Integer id) {
-		HashMap<String,Object> param = new HashMap<>();
-		param.put("id", id);
-		houseDiaryMapper.deleteCropsDiary(param);
-		return houseDiaryMapper.deleteCropsDiaryFile(param);
-	}
-
-	@Override
-	public List<HouseCropsDiaryVO> getMonthlyCropsDiaryList(Integer greenHouseId, Integer year, Integer month) {
-	 	HashMap<String,Object> param = new HashMap<>();
-		param = getMonthDate(year,month);
-		param.put("house_id", greenHouseId);
-		List<HouseCropsDiaryVO> list =houseDiaryMapper.getMonthlyCropsDiaryList(param); 
-		return list;
-	}
-
-	@Override
-	public HashMap<String, Object> getHouseCropsInfo(Integer greenHouseId) {
-		HashMap<String,Object> param = new HashMap<>();
-		param.put("green_house_id", greenHouseId);
-		return houseDiaryMapper.getHouseCropsInfo(param);
 	}
 }

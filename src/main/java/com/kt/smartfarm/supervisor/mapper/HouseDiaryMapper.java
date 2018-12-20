@@ -35,7 +35,7 @@ public interface HouseDiaryMapper {
 	Integer insertHouseDiary(HouseDiaryVO houseDiaryVO);
 	Integer insertHouseDiaryFile(HouseDiaryVO houseDiaryVO);
 	Integer updateHouseDiary(HouseDiaryVO houseDiaryVO);
-	void updateHouseDiaryFile(HouseDiaryVO houseDiaryVO);
+	Integer updateHouseDiaryFile(HouseDiaryVO houseDiaryVO);
 	Integer deleteHouseDiary(HashMap<String,Object> param);
 	Integer deleteHouseDiaryFile(HashMap<String,Object> param);
 	
@@ -46,7 +46,7 @@ public interface HouseDiaryMapper {
 	void insertCropsDiary(HouseCropsDiaryVO houseCropsVO);
 	Integer insertCropsDiaryFile(HouseCropsDiaryVO houseCropsVO);
 	void updateCropsDiary(HouseCropsDiaryVO houseCropsVO);
-	void updateCropsDiaryFile(HouseCropsDiaryVO houseCropsVO);
+	Integer updateCropsDiaryFile(HouseCropsDiaryVO houseCropsVO);
 	Integer deleteCropsDiary(HashMap<String, Object> param);
 	Integer deleteCropsDiaryFile(HashMap<String,Object> param);
 	

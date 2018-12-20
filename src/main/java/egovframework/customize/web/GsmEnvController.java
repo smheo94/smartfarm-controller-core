@@ -43,7 +43,7 @@ import org.springframework.web.bind.annotation.*;
  * 센서구성,제어기구성,온실구성,제어로직구성,외부기상대구성,임계치구성
  */
 @Controller
-@RequestMapping("/gsm")
+@RequestMapping("/env/gsm")
 public class GsmEnvController {
 
 	public static final String DEFAULT_SETUP_FILE_PATH = "data/env-default/";	
@@ -121,6 +121,7 @@ public class GsmEnvController {
 	@ResponseBody
 	public Result<GsmEnvVO> getAll( @PathVariable("gsmKey") Integer gsmKey, @RequestParam(value = "all", required = false) Boolean all){
 		try {
+			// 일출, 일몰 api 같이
 			if(all == null )
 				all = true;
 			return new Result(gsmEnvService.get(gsmKey, all));

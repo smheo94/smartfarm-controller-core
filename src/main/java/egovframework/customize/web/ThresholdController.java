@@ -38,7 +38,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 @Controller
-@RequestMapping("/threshold")
+@RequestMapping("/env/threshold")
 public class ThresholdController {
 
 	public static final String DEFAULT_SETUP_FILE_PATH = "data/env-default/";

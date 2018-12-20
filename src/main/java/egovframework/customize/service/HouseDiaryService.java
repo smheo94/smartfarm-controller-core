@@ -12,18 +12,24 @@ public interface HouseDiaryService {
 	
 //	List<HashMap<String, Object>> getMonthlyDiary(Integer year, Integer month);
 	HouseDiaryVO insertHouseDiary(HouseDiaryVO houseDiaryVO);
-	HouseDiaryVO updateHouseDiary(HouseDiaryVO houseDiaryVO, MultipartFile[] file);
+	HouseDiaryVO updateHouseDiary(HouseDiaryVO houseDiaryVO);
+	HouseCropsDiaryVO insertCropsDiary(HouseCropsDiaryVO houseCropsVO);
+	HouseCropsDiaryVO updateCropsDiary(HouseCropsDiaryVO houseCropsVO);
 	
-	HouseDiaryVO getHouseDiaryDetail(Integer id);
-	List<HashMap<String,Object>> getMonthlyHouseDiaryList(Integer houseId, Integer year, Integer month);
+	Object insertDiaryFile(String contentType, Integer id, MultipartFile[] file);
+	Object updateDiaryFile(String contentType, Integer id, MultipartFile[] file);
+	
 	Integer deleteHouseDiary(Integer id);
+	Integer deleteCropsDiary(Integer id);
+	
+	List<HashMap<String,Object>> getMonthlyHouseDiaryList(Integer houseId, Integer year, Integer month);
+	List<HouseCropsDiaryVO> getMonthlyCropsDiaryList(Integer greenHouseId, Integer year, Integer month);
+	
+	HouseDiaryVO getHouseDiaryDetail(Integer id);	
 	
 	List<HashMap<String,Object>> getCategoryList();
 	
-	HouseCropsDiaryVO insertCropsDiary(HouseCropsDiaryVO houseCropsVO);
-	HouseCropsDiaryVO updateCropsDiary(HouseCropsDiaryVO houseCropsVO, MultipartFile[] file);
-	Integer DeleteCropsDiary(Integer id);
-	List<HouseCropsDiaryVO> getMonthlyCropsDiaryList(Integer greenHouseId, Integer year, Integer month);
+	
 	HashMap<String,Object> getHouseCropsInfo(Integer greenHouseId);
-	Object insertDiaryFile(String contentType, Integer id, MultipartFile[] file);
+	
 }

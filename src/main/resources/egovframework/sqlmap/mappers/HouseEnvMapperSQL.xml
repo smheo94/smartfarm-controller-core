@@ -144,7 +144,7 @@
 		SELECT 
 			id, product_method_id AS productMethodId, green_house_type_id as greenHouseTypeId, house_name as houseName,
 			latitude, longitude, description, build_date as buildDate, last_update as lastUpdate, addr_1 as addr1,
-			addr_2 as addr2, zip, nutrient_common_id as nutrientCommonId, change_gh as changeGh, change_temperature as changeTemperature,
+			addr_2 as addr2, zip, change_gh as changeGh, change_temperature as changeTemperature,
 			floor_space as floorSpace, house_horizontal as houseHorizontal, house_vertical as houseVertical, house_height as houseHeight,
 			plant_spacing as plantSpacing, crop_cnt as cropCnt, house_direction as houseDirection, select_temp_sensor as selectTempSensor,
 			select_hum_sensor as selectHumSensor, gsm_key as gsmKey, house_name_i18n as houseNameI18n

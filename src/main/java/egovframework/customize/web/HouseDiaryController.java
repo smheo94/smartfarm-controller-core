@@ -37,34 +37,12 @@ import javax.servlet.annotation.MultipartConfig;
  * 센서구성,제어기구성,온실구성,제어로직구성,외부기상대구성,임계치구성
  */
 @Controller
-@RequestMapping("/houseDiary")
+@RequestMapping("/env/houseDiary")
 public class HouseDiaryController {
 
 
 	@Resource(name = "houseDiaryService")
 	private HouseDiaryService houseDiaryService;
-	
-	
-	/**
-	 * @description 작ㅇ버일지 카테고리 리스트
-	 * @param request
-	 * @return
-	 */
-	/*
-	@RequestMapping(value= "/category/all", method = RequestMethod.GET)
-	@ResponseBody
-	public Result selectAllCategory(HttpServletRequest request){
-		try{
-			
-			HashMap<String,Object> result = houseDiaryService.selectAllCategory();			
-			return new Result<HashMap<String,Object>>("OK", HttpStatus.OK, result);	
-		}catch(Exception e){
-			e.printStackTrace();
-			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-		}
-	}
-	*/
-	
 	
 	/**
 	 * @description house에 등록되어 있는 작물 정보
@@ -112,22 +90,33 @@ public class HouseDiaryController {
 	}
 
 	/**
-	 * @description 작업일지, 가계부 입력
+	 * @description 작업일지, 가계부 update
 	 * @param houseDiaryVO
 	 * @return
 	 */
 	@RequestMapping(value= "/{id}", method = RequestMethod.PUT)
 	@ResponseBody
-	public Result update(@RequestPart(value="data", required=false) HouseDiaryVO houseDiaryVO, @RequestPart(value="file", required=false) MultipartFile[] file){
-//	public Result update(@RequestBody HouseDiaryVO houseDiaryVO){
+	public Result update(@RequestBody HouseDiaryVO houseDiaryVO){	
 		try{
-			return new Result(houseDiaryService.updateHouseDiary(houseDiaryVO,file));
-//			return new Result(houseDiaryService.updateHouseDiary(houseDiaryVO));
+			return new Result(houseDiaryService.updateHouseDiary(houseDiaryVO));
 		}catch(Exception e){
 			e.printStackTrace();
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
+	
+	@RequestMapping(value= "/diaryFile/{id}", method = RequestMethod.PUT)
+	@ResponseBody
+	public Result update(@PathVariable("id") Integer id,@RequestParam("content_type") String contentType,@RequestPart(value="file", required=false) MultipartFile[] file){
+		try{
+			return new Result(houseDiaryService.updateDiaryFile(contentType,id,file));
+
+		}catch(Exception e){
+			e.printStackTrace();
+			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
+	
 	
 	
 	/**
@@ -217,10 +206,9 @@ public class HouseDiaryController {
 	 */
 	@RequestMapping(value= "/cropsDiary/{id}", method = RequestMethod.PUT)
 	@ResponseBody
-	public Result updateCropsDiary(@RequestPart(value="data", required=false) HouseCropsDiaryVO houseCropsVO, @RequestPart(value="file", required=false) MultipartFile[] file){
-//	public Result updateCropsDiary(@RequestBody HouseCropsDiaryVO houseCropsVO){
+	public Result updateCropsDiary(@RequestBody HouseCropsDiaryVO houseCropsVO){
 		try{
-			return new Result(houseDiaryService.updateCropsDiary(houseCropsVO,file));
+			return new Result(houseDiaryService.updateCropsDiary(houseCropsVO));
 		}catch(Exception e){
 			e.printStackTrace();
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
@@ -252,9 +240,9 @@ public class HouseDiaryController {
 	 */
 	@RequestMapping(value= "/cropsDiary/{id}", method = RequestMethod.DELETE)
 	@ResponseBody
-	public Result DeleteCropsDiary(@PathVariable("id") Integer id){
+	public Result deleteCropsDiary(@PathVariable("id") Integer id){
 		try{
-			return new Result(houseDiaryService.DeleteCropsDiary(id));
+			return new Result(houseDiaryService.deleteCropsDiary(id));
 		}catch(Exception e){
 			e.printStackTrace();
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());

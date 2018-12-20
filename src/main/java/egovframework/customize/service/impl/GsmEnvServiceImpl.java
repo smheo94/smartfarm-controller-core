@@ -53,7 +53,7 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 	@Override
 	public Map<String, Object> get(Integer gsmKey, boolean all) {
 		Map<String,Object> gsmMap = gsmEnvMapper.getGsmList(gsmKey,null,null,null).stream().findFirst().orElse(null);
-		List<HashMap<String, Object>> houseList = houseEnvService.list(gsmKey, all);
+		List<HashMap<String, Object>> houseList = houseEnvService.list(gsmKey, all, true);
 		gsmMap.put("houseList", houseList);
 		return gsmMap;
 	}
@@ -96,7 +96,7 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 //			Integer gsmKey = (Integer)gsm.get("gsmKey");
 //			houseList = gsmEnvMapper.getHouseList(gsmKey);
 			Integer gsmKey = (Integer)gsm.get("gsmKey");
-			List<HashMap<String,Object>> houseList = houseEnvService.list(gsmKey, all);
+			List<HashMap<String,Object>> houseList = houseEnvService.list(gsmKey, all, false);
 			gsm.put("houseList", houseList);			
 		}
 		return gsmList;

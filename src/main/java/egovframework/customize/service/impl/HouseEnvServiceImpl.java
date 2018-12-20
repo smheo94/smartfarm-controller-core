@@ -110,7 +110,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 		return result;
 	}
 
-	public List<HashMap<String, Object>> list(Integer gsmKey, boolean all) {
+	public List<HashMap<String, Object>> list(Integer gsmKey, boolean all, boolean detail) {
 		List<HashMap<String,Object>> result = new ArrayList<HashMap<String,Object>>();
 		List<HashMap<String,Object>> controllerList = new ArrayList<HashMap<String,Object>>();
 //		List<HashMap<String,Object>> cctvList = new ArrayList<HashMap<String,Object>>();
@@ -144,15 +144,16 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 					}
 					houseMap.put("controllerList", controllerList);
 				}
-				
-				Integer houseId = (Integer)houseMap.get("id");
-				cctv = houseEnvMapper.getCctvList(houseId);
-				if(cctv !=null){					
-					houseMap.put("cctvList",cctv);	
-				}
-				sunriseInfo = houseEnvMapper.getSunriseInfo(map);
-				if(sunriseInfo!=null){
-					houseMap.put("sunriseInfo", sunriseInfo);
+				if(detail ) {
+					Integer houseId = (Integer)houseMap.get("id");
+					cctv = houseEnvMapper.getCctvList(houseId);
+					if(cctv !=null){					
+						houseMap.put("cctvList",cctv);	
+					}
+					sunriseInfo = houseEnvMapper.getSunriseInfo(map);
+					if(sunriseInfo!=null){
+						houseMap.put("sunriseInfo", sunriseInfo);
+					}
 				}
 			}
 

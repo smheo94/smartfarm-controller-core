@@ -53,12 +53,10 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
     String myGSMKey;
     String proxySubPath;
     GsmEnvMapper gsmEnvMapper;
-    public SmartFarmDataInterceptor(String config, String proxySubPath, String myGSMKey, GsmEnvMapper gsmMapper) {
+    public SmartFarmDataInterceptor(String config, String myGSMKey, GsmEnvMapper gsmMapper) {
         this.systemType = config;
-//        this.myGSMKey = "3785";
         this.myGSMKey = myGSMKey;
-        this.gsmEnvMapper = gsmMapper;
-        this.proxySubPath = proxySubPath;
+        this.gsmEnvMapper = gsmMapper;        
     }
 
     public boolean startTran = false;
@@ -104,7 +102,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
                         response.sendError(result.getStatusCode().value(), new ObjectMapper().writeValueAsString(result.getBody()));
                     }
                     //TODO: 더이상 진행하지 않고 오류를 Response에 셋팅합니다.
-                    return false;                    
+                    return false;
                 }
             } else if( handlerMethod.getMethod().getAnnotation(InterceptPost.class) != null ) {
                 System.out.printf( "DB 트렌젝션을 시작하세요. 롤백을 할 수 있어야 합니다.");

@@ -48,7 +48,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 @Controller
-@RequestMapping("/{gsm_key}/house")
+@RequestMapping("/env/{gsm_key}/house")
 public class HouseEnvController {
 
 	public static final String DEFAULT_SETUP_FILE_PATH = "data/env-default/";
@@ -136,7 +136,7 @@ public class HouseEnvController {
 	@ResponseBody
 	public Result<List<HashMap<String,Object>>> list( @PathVariable("gsm_key") Integer gsmKey){
 		try {
-			return new Result(houseEnvService.list(gsmKey, true));
+			return new Result(houseEnvService.list(gsmKey, true, true));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
