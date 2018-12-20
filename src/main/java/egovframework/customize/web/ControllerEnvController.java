@@ -40,7 +40,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * 센서구성,제어기구성,온실구성,제어로직구성,외부기상대구성,임계치구성
  */
 @Controller
-@RequestMapping("/env/{gsmKey}/controller")
+@RequestMapping(value={"/{gsmKey}/controller","/env/{gsmKey}/controller"})
 public class ControllerEnvController {
 
 	public static final String DEFAULT_SETUP_FILE_PATH = "data/env-default/";

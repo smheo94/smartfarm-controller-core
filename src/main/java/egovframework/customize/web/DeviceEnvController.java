@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @Controller
-@RequestMapping("/env/device")
+@RequestMapping(value={"/env/device","/device"})
 //@RequestMapping("/env/{gsm_key}/device")
 public class DeviceEnvController {
 

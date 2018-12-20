@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 @Controller
-@RequestMapping("/env/category")
+@RequestMapping(value={"/category","/env/category"})
 public class CategoryEnvController {
 
 	//@Resource(name = "categoryEnvService")

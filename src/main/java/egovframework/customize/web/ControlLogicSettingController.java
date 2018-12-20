@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/env/control_logic_setting")
+@RequestMapping(value={"/env/control_logic_setting","/control_logic_setting"})
 public class ControlLogicSettingController {
 
 	public static final String DEFAULT_SETUP_FILE_PATH = "data/env-default/";
