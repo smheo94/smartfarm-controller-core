@@ -240,8 +240,8 @@
 			 <if test="sideWindowUseRainDetector != null">side_window_use_rain_dectector= #{sideWindowUseRainDetector},</if>
 			 <if test="baseForwardWindow != null">base_forward_window= #{baseForwardWindow},</if>
 			 <if test="actuatorInitTemp != null">actuator_init_temp= #{actuatorInitTemp},</if>
-			 <if test="weatherMqttHost != null">base_forward_window= #{weatherMqttHost},</if>
-			 <if test="weatherMqttPort != null">actuator_init_temp= #{weatherMqttPort},</if>			 
+			 <if test="weatherMqttHost != null">weather_mqtt_host= #{weatherMqttHost},</if>
+			 <if test="weatherMqttPort != null">weather_mqtt_port= #{weatherMqttPort},</if>			 
 		 	 update_date = NOW()
 		WHERE gsm_key=#{gsmKey} 
 	</update>		

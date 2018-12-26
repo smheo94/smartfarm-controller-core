@@ -121,12 +121,14 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 
 	@Override
 	public GsmThresholdVO gsmThresholdInsert(GsmThresholdVO gsmThresholdVO) {
-		return gsmEnvMapper.gsmThresholdInsert(gsmThresholdVO);
+		gsmEnvMapper.gsmThresholdInsert(gsmThresholdVO);
+		return gsmThresholdVO;
 	}
 
 	@Override
 	public GsmThresholdVO gsmThresholdUpdate(GsmThresholdVO gsmThresholdVO) {
-		return gsmEnvMapper.gsmThresholdUpdate(gsmThresholdVO);
+		gsmEnvMapper.gsmThresholdUpdate(gsmThresholdVO);
+		return gsmThresholdVO;
 	}
 
 	@Override
