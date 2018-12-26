@@ -44,7 +44,16 @@
 		<if test="insideLowTemp != null">, inside_low_temp </if>
 		<if test="insideHighHum != null">, inside_high_hum </if>
 		<if test="insideLowHum != null">, inside_low_hum </if>
-		, outside_high_temp_use, outside_low_temp_use, outside_high_hum_use, outside_low_hum_use, wind_speed_use, rain_detector_use, inside_high_temp_use, inside_low_temp_use, inside_high_hum_use, inside_low_hum_use
+		<if test="outsideHighTempUse != null">, outside_high_temp_use </if>
+		<if test="outsideLowTempUse != null">, outside_low_temp_use </if>
+		<if test="outsideHighHumUse != null">, outside_high_hum_use </if>
+		<if test="outsideLowHumUse != null">, outside_low_hum_use </if>
+		<if test="windSpeedUse != null">, wind_speed_use </if>
+		<if test="rainDetectorUse != null">, rain_detector_use </if>
+		<if test="insideHighTempUse != null">, inside_high_temp_use </if>
+		<if test="insideLowTempUse != null">, inside_low_temp_use </if>
+		<if test="insideHighHumUse != null">, inside_high_hum_use </if>
+		<if test="insideLowHumUse != null">, inside_low_hum_use </if>
 		)
 		VALUES (
 			#{gsmKey},NOW()
@@ -58,8 +67,17 @@
 		<if test="insideLowTemp != null">,#{insideLowTemp} </if>
 		<if test="insideHighHum != null">,#{insideHighHum} </if>
 		<if test="insideLowHum != null">,#{insideLowHum} </if>
-		,#{outsideHighTempUse},#{outsideLowTempUse},#{outsideHighHumUse},#{outsideLowHumUse},#{windSpeedUse},#{rainDetectorUse},#{insideHighTempUse},#{insideLowTempUse},#{insideHighHumUse},#{insideLowHumUse}
-		) ON DUPLICATE KEY UPDATE 
+		<if test="outsideHighTempUse != null">, #{outsideHighTempUse} </if>
+		<if test="outsideLowTempUse != null">, #{outsideLowTempUse} </if>
+		<if test="outsideHighHumUse != null">, #{outsideHighHumUse} </if>
+		<if test="outsideLowHumUse != null">, #{outsideLowHumUse} </if>
+		<if test="windSpeedUse != null">, #{windSpeedUse} </if>
+		<if test="rainDetectorUse != null">, #{rainDetectorUse} </if>
+		<if test="insideHighTempUse != null">, #{insideHighTempUse} </if>
+		<if test="insideLowTempUse != null">, #{insideLowTempUse} </if>
+		<if test="insideHighHumUse != null">, #{insideHighHumUse} </if>
+		<if test="insideLowHumUse != null">, #{insideLowHumUse} </if>
+		) ON DUPLICATE KEY UPDATE
 			 <if test="outsideHighTemp != null">outside_high_temp = #{outsideHighTemp},</if>
 			 <if test="outsideLowTemp != null">outside_low_temp= #{outsideLowTemp},</if>
 			 <if test="outsideHighHum != null">outside_high_hum= #{outsideHighHum},</if>

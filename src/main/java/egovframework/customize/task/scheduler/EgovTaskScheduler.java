@@ -137,8 +137,8 @@ public class EgovTaskScheduler {
 		for(int i=0; i<houseList.size(); i++){
 			if(houseList.get(i).get("latitude") != null && houseList.get(i).get("longitude") != null){
 				HashMap<String,Object> hm = new HashMap<>();
-				Double longitude = Double.parseDouble(houseList.get(i).get("latitude").toString());
-				Double latitude = Double.parseDouble(houseList.get(i).get("longitude").toString());
+				Double longitude = Double.parseDouble(houseList.get(i).get("longitude").toString());
+				Double latitude = Double.parseDouble(houseList.get(i).get("latitude").toString());
 				
 				try{
 					URL url = new URL(SUNRISE_URL
@@ -168,8 +168,8 @@ public class EgovTaskScheduler {
 			        JSONObject json = new JSONObject(sb.toString());
 			        JSONObject body = json.getJSONObject("response").getJSONObject("body").getJSONObject("items").getJSONObject("item");
 			        hm.put("house_id", (Integer)houseList.get(i).get("id"));
-			        hm.put("sunrise", (String)body.get("sunrise"));
-			        hm.put("sunset", (String)body.get("sunset"));
+			        hm.put("sunrise", body.get("sunrise"));
+			        hm.put("sunset", body.get("sunset"));
 			        hm.put("loc_date", body.get("locdate").toString());
 			        houseEnvService.insertSunriseData(hm);
 				}catch(Exception e){
