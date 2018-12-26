@@ -218,7 +218,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 		tempDeviceList = houseEnvMapper.getGroundDeviceList(houseId);
 		for(HashMap<String,Object> device : tempDeviceList){
 			if(device.get("dtg").toString().equals("sensor_gr_temp") || device.get("dtg").toString().equals("sensor_gr_moisture")){
-				String deviceTypeKey = (String)device.get("dt") + (String)device.get("device_type_idx");
+				String deviceTypeKey = device.get("dt").toString() + device.get("device_type_idx").toString();
 				device.put("device_type_key", deviceTypeKey);
 				deviceList.add(device);
 			}			

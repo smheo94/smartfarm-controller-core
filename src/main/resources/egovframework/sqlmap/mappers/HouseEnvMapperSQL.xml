@@ -193,10 +193,11 @@
 		WHERE mghd.green_house_id = #{houseId}			
 	</select>
 	
-	<select id="getGroundDeviceList" parameterType="Integer" resultType="deviceEnvVO">
-		SELECT device.* ,,cpt.device_type AS dt
+	<select id="getGroundDeviceList" parameterType="Integer" resultType="map">
+		SELECT device.* ,cpt.device_type AS dt, cpt.device_type_group AS dtg
 		FROM map_green_house_device  AS mghd
 		INNER JOIN device ON device.id = mghd.device_id
+		INNER JOIN cd_device_type cpt ON cpt.id = device.device_type_id
 		WHERE mghd.green_house_id = #{houseId}			
 	</select>
 	
