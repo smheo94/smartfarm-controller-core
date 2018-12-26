@@ -217,19 +217,19 @@
 			stream_url as wowzaStreamUrl,
 			rest_url as wowzaRestUrl
 		FROM cctv as cctv
-		JOIN wowza as wowza on cctv.wowza_id = wowza.id
+		LEFT OUTER JOIN wowza as wowza on cctv.wowza_id = wowza.id
 		WHERE house_id =#{houseId}
 	</select>
 	
 	<update id="updateCctv" parameterType="cctv">
 		UPDATE cctv
 		SET
-			<if test="cctvName != null"> cctv_name = ${cctvName}</if>
-			<if test="cctvUid != null">, cctv_uid = ${cctvUid}</if>
-			<if test="cctvWsUrl != null">, cctv_ws_url = ${cctvWsUrl}</if>
-			<if test="cctvRtspUrl != null">, cctv_rtsp_url = ${cctvRtspUrl}</if>
-			<if test="wowzaId != null">, wowza_id = ${wowzaId}</if>
-		WHERE house_id = #{houseId} AND id = #{id};
+			<if test="cctvName != null"> cctv_name = #{cctvName}</if>
+			<if test="cctvUid != null">, cctv_uid = #{cctvUid}</if>
+			<if test="cctvWsUrl != null">, cctv_ws_url = #{cctvWsUrl}</if>
+			<if test="cctvRtspUrl != null">, cctv_rtsp_url = #{cctvRtspUrl}</if>
+			<if test="wowzaId != null">, wowza_id = #{wowzaId}</if>
+		WHERE house_id = #{houseId} AND id = #{id};				
 	</update>
 	
 	<delete id='deleteCctv'>
