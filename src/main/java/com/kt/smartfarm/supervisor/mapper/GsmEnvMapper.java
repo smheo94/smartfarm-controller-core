@@ -39,8 +39,8 @@ public interface GsmEnvMapper {
 	Integer userRegistGSM(HashMap<String, Object> param);
 	List<GsmEnvVO> getGsmInfoByUser(Integer userInfoId);
 	
-	GsmThresholdVO gsmThresholdInsert(GsmThresholdVO gsmThresholdVO);
-	GsmThresholdVO gsmThresholdUpdate(GsmThresholdVO gsmThresholdVO);
+	Integer gsmThresholdInsert(GsmThresholdVO gsmThresholdVO);
+	Integer gsmThresholdUpdate(GsmThresholdVO gsmThresholdVO);
 	GsmThresholdVO gsmThresholdGet(HashMap<String,Object> param);
 
 }

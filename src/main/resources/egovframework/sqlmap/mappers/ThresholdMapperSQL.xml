@@ -29,15 +29,36 @@
 			inside_low_hum_use AS insideLowHumUse
   		FROM gsm_threshold
   		WHERE gsm_key = #{gsmKey}
-  		AND green_house_id = #{greenHouseId}
 	</select>
 	
 	<insert id ="insert" parameterType="thresholdVO">
 		INSERT INTO gsm_threshold (
-			gsm_key, update_date, outside_high_temp, outside_low_temp, outside_high_hum, outside_low_hum, wind_speed, rain_detector, inside_high_temp, inside_low_temp, inside_high_hum, inside_low_hum, outside_high_temp_use, outside_low_temp_use, outside_high_hum_use, outside_low_hum_use, wind_speed_use, rain_detector_use, inside_high_temp_use, inside_low_temp_use, inside_high_hum_use, inside_low_hum_use
+			gsm_key, update_date
+		<if test="outsideHighTemp != null">, outside_high_temp </if>
+		<if test="outsideLowTemp != null">, outside_low_temp </if>
+		<if test="outsideHighHum != null">, outside_high_hum </if>
+		<if test="outsideLowHum != null">, outside_low_hum </if>
+		<if test="windSpeed != null">, wind_speed </if>
+		<if test="rainDetector != null">, rain_detector </if>
+		<if test="insideHighTemp != null">, inside_high_temp </if>
+		<if test="insideLowTemp != null">, inside_low_temp </if>
+		<if test="insideHighHum != null">, inside_high_hum </if>
+		<if test="insideLowHum != null">, inside_low_hum </if>
+		, outside_high_temp_use, outside_low_temp_use, outside_high_hum_use, outside_low_hum_use, wind_speed_use, rain_detector_use, inside_high_temp_use, inside_low_temp_use, inside_high_hum_use, inside_low_hum_use
 		)
 		VALUES (
-			#{gsmKey},NOW(),#{outsideHighTemp},#{outsideLowTemp},#{outsideHighHum},#{outsideLowHum},#{windSpeed},#{rainDetector},#{insideHighTemp},#{insideLowTemp},#{insideHighHum},#{insideLowHum},#{outsideHighTempUse},#{outsideLowTempUse},#{outsideHighHumUse},#{outsideLowHumUse},#{windSpeedUse},#{rainDetectorUse},#{insideHighTempUse},#{insideLowTempUse},#{insideHighHumUse},#{insideLowHumUse}
+			#{gsmKey},NOW()
+		<if test="outsideHighTemp != null">,#{outsideHighTemp} </if>
+		<if test="outsideLowTemp != null">,#{outsideLowTemp} </if>
+		<if test="outsideHighHum != null">,#{outsideHighHum} </if>
+		<if test="outsideLowHum != null">,#{outsideLowHum} </if>
+		<if test="windSpeed != null">,#{windSpeed} </if>
+		<if test="rainDetector != null">,#{rainDetector} </if>
+		<if test="insideHighTemp != null">,#{insideHighTemp} </if>
+		<if test="insideLowTemp != null">,#{insideLowTemp} </if>
+		<if test="insideHighHum != null">,#{insideHighHum} </if>
+		<if test="insideLowHum != null">,#{insideLowHum} </if>
+		,#{outsideHighTempUse},#{outsideLowTempUse},#{outsideHighHumUse},#{outsideLowHumUse},#{windSpeedUse},#{rainDetectorUse},#{insideHighTempUse},#{insideLowTempUse},#{insideHighHumUse},#{insideLowHumUse}
 		) ON DUPLICATE KEY UPDATE 
 			 <if test="outsideHighTemp != null">outside_high_temp = #{outsideHighTemp},</if>
 			 <if test="outsideLowTemp != null">outside_low_temp= #{outsideLowTemp},</if>

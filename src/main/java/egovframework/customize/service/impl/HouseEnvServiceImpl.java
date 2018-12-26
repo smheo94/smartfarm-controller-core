@@ -14,6 +14,7 @@ package egovframework.customize.service.impl;
 
 import egovframework.customize.service.HouseEnvVO;
 import egovframework.customize.service.ProductVO;
+import egovframework.customize.service.CCTVSettingVO;
 import egovframework.customize.service.ControlLogicSettingVO;
 import egovframework.customize.service.DeviceEnvVO;
 import egovframework.customize.service.HouseEnvService;
@@ -83,6 +84,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 		List<HashMap<String,Object>> houseDetail= new ArrayList<HashMap<String,Object>>();
 		List<HashMap<String,Object>> controllerList = new ArrayList<HashMap<String,Object>>();		
 		List<HashMap<String,Object>> cctvList = new ArrayList<HashMap<String,Object>>();
+		HashMap<String,Object> sunriseInfo = new HashMap<>();
 		List<Integer> deviceIds = new ArrayList<Integer>();		
 		Map<String, Object> map = new HashMap<>();
 		
@@ -95,7 +97,11 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 			cctvList = houseEnvMapper.getCctvList(houseId);
 			if(cctvList != null){
 				houseDetail.get(i).put("cctvList", cctvList);	
-			}			
+			}
+			sunriseInfo = houseEnvMapper.getSunriseInfo(map);
+			if(sunriseInfo!=null){
+				houseDetail.get(i).put("sunriseInfo", sunriseInfo);
+			}
 		}
 		deviceIds = houseEnvMapper.getMappedDevice(map);
 		
@@ -323,5 +329,25 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 	@Override
 	public Integer insertSunriseData(HashMap<String, Object> hm) {
 		return houseEnvMapper.insertSunriseData(hm);		
+	}
+	
+	@Override
+	public HashMap<String, Object> insertCctv(CCTVSettingVO cctv) {
+		return houseEnvMapper.insertCCTVSetting(cctv);
+	}
+
+	@Override
+	public List<HashMap<String, Object>> getCctvsByHouseId(Integer houseId) {
+		return houseEnvMapper.getCctvList(houseId);
+	}
+
+	@Override
+	public Integer deleteCctv(Integer id) {
+		return houseEnvMapper.deleteCctv(id);
+	}
+
+	@Override
+	public Integer updateCctv(CCTVSettingVO cctv) {
+		return houseEnvMapper.updateCctv(cctv);
 	}
 }

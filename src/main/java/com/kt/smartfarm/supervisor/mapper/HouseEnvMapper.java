@@ -53,8 +53,10 @@ public interface HouseEnvMapper {
 	List<HashMap<String, Object>> getMappedController(Map<String, Object> map);
 	List<DeviceEnvVO> getHouseDeviceList(Integer houseId);
 	
-	void insertCCTVSetting(CCTVSettingVO vo);
+	HashMap<String, Object> insertCCTVSetting(CCTVSettingVO vo);
 	List<HashMap<String, Object>> getCctvList(@Param("houseId")Integer houseId);
+	Integer updateCctv(CCTVSettingVO vo);
+	Integer deleteCctv(Integer cctvId);
 	List<HashMap<String, Object>> getAllList();
 	
 	Integer insertForecastData(LinkedHashMap<String, Object> hm);
