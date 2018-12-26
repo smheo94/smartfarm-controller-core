@@ -83,6 +83,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 		List<HashMap<String,Object>> houseDetail= new ArrayList<HashMap<String,Object>>();
 		List<HashMap<String,Object>> controllerList = new ArrayList<HashMap<String,Object>>();		
 		List<HashMap<String,Object>> cctvList = new ArrayList<HashMap<String,Object>>();
+		HashMap<String,Object> sunriseInfo = new HashMap<>();
 		List<Integer> deviceIds = new ArrayList<Integer>();		
 		Map<String, Object> map = new HashMap<>();
 		
@@ -95,7 +96,11 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 			cctvList = houseEnvMapper.getCctvList(houseId);
 			if(cctvList != null){
 				houseDetail.get(i).put("cctvList", cctvList);	
-			}			
+			}
+			sunriseInfo = houseEnvMapper.getSunriseInfo(map);
+			if(sunriseInfo!=null){
+				houseDetail.get(i).put("sunriseInfo", sunriseInfo);
+			}
 		}
 		deviceIds = houseEnvMapper.getMappedDevice(map);
 		
