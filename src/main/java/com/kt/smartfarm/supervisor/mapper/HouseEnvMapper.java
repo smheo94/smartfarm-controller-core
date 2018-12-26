@@ -64,6 +64,8 @@ public interface HouseEnvMapper {
 	List<HashMap<String, Object>> getWeatherCategory();
 	HashMap<String, Object> getSunriseInfo(Map<String, Object> map);
 	
+	List<HashMap<String, Object>> getGroundDeviceList(Integer houseId);
+	
 	
 	
 //	List<ProductMethodVO> selectProductMethodList(HashMap<String, Object> product);

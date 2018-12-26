@@ -99,8 +99,8 @@
 		FROM house_diary as hd
 		LEFT OUTER JOIN house_diary_file AS hdf ON hdf.house_diary_idx = hd.id
 		WHERE green_house_id = #{green_house_id}
-			AND start_date BETWEEN #{start_date} AND #{end_date} 
-			AND end_date BETWEEN #{start_date} AND #{end_date}			
+			<if test="start_date!=null and end_date!=null">AND start_date BETWEEN #{start_date} AND #{end_date}</if> 
+			<if test="start_date!=null and end_date!=null">AND end_date BETWEEN #{start_date} AND #{end_date}</if>			
 	</select>
 	
 	
@@ -196,12 +196,10 @@
 		FROM crops_diary as cd
 		LEFT OUTER JOIN crops_diary_file AS cdf ON cdf.crops_diary_idx = cd.id
 		WHERE green_house_id = #{house_id}
-			AND start_date BETWEEN #{start_date} AND #{end_date}			
+		<if test="start_date!=null and end_date!=null">
+			AND start_date BETWEEN #{start_date} AND #{end_date}
+		</if>
 	</select>
-	
-	
-	
-	
 	
 		
 	<select id="getCategoryList22" resultType="map">
@@ -218,11 +216,13 @@
 		WHERE green_house.id = #{green_house_id} 
 	</select>
 	
-	<select id="getCCTVImageList" parameterType="map" resultType="map">
-		SELECT push_type,push_title,push_message,image_url,weather
+	<select id="getImageDiaryList" parameterType="map" resultType="map">
+		SELECT id,push_date,push_type,push_title,push_message,image_url,weather
 		FROM push_history
-		WHERE green_house_id = #{green_house_id}
+		WHERE green_house_id = #{houseId}
 		AND push_type = 9 
+		AND error_message IS NULL
+		AND image_url IS NOT NULL
 		<!-- push_type이 9인경우는 cctv daily 인 case -->
 	</select>
 	

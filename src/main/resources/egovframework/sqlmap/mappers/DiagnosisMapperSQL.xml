@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kt.smartfarm.supervisor.mapper.DiagnosisMapper">
+
+	 
+	<select id ="getThresholdGround" parameterType="map" resultType="map">
+		SELECT
+			<if test=" high_temp == null and low_temp == null ">
+				MAX(group_temp) as intn_tempr_avg_val /* 내부평균온도 */
+				, MAX(extr_tempr_val) as extr_tempr_avg_val /* 외부온도값 */
+				, TO_CHAR(MAX(msr_dt),'YYYYMMDD') as rlvn_date_val /* 측정일 */
+				, TO_CHAR(MAX(msr_dt),'HH24') as rlvn_time_val /* 측정시간 */
+				, TO_CHAR(MAX(msr_dt),'YYYYMMDDHH24') as base_date /* 측정일 */
+         	</if>
+         	<if test=" high_temp != null and low_temp != null ">
+         		TO_CHAR(MAX(msr_dt),'YYYYMMDDHH24') as base_date
+          		,TO_CHAR(MAX(msr_dt),'YYYYMMDD') as date
+         		, MAX(group_temp) AS intn_tempr_avg_val
+				, MAX(extr_tempr_val) as extr_tempr_avg_val /* 외부온도값 */
+         		, SUM(CASE WHEN (group_temp &gt;= ${high_temp}) THEN  1 ELSE 0 END )AS high_temp_time
+         		, SUM(CASE WHEN (group_temp &lt;= ${low_temp}) THEN  1 ELSE 0 END )AS low_temp_time
+         	</if>
+		FROM crpapp.if_grhos_sttus_moni_hst BAS /* 온실모니터링이력 */
+		WHERE  grhos_id = '${green_house_id}'
+		AND msr_dt BETWEEN '${start_date}' and '${end_date}'
+		GROUP BY DATE_TRUNC('HOUR',msr_dt)
+		ORDER BY base_date		
+	</select>
+	
+</mapper>

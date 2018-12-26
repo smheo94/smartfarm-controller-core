@@ -124,10 +124,10 @@ public class HouseDiaryController {
 	 * @param greenHouseId
 	 * @return
 	 */
-	@RequestMapping(value= "/monthly/{greenHouseId}", method = RequestMethod.GET)
+	@RequestMapping(value= "/list/{greenHouseId}", method = RequestMethod.GET)
 	@ResponseBody
 	public Result MonthlyHouseDiaryList(@PathVariable("greenHouseId") Integer greenHouseId,
-			@RequestParam("year") Integer year, @RequestParam("month") Integer month){
+			@RequestParam(value="year",required=false) Integer year, @RequestParam(value="month",required=false) Integer month){
 		try{
 			return new Result(houseDiaryService.getMonthlyHouseDiaryList(greenHouseId,year,month));
 		}catch(Exception e){
@@ -221,10 +221,10 @@ public class HouseDiaryController {
 	 * @param greenHouseId
 	 * @return
 	 */
-	@RequestMapping(value= "/cropsDiary/monthly/{green_house_id}", method = RequestMethod.GET)
+	@RequestMapping(value= "/cropsDiary/list/{green_house_id}", method = RequestMethod.GET)
 	@ResponseBody
 	public Result MonthlyCropsDiaryList(@PathVariable("green_house_id") Integer greenHouseId, 
-	@RequestParam("year") Integer year, @RequestParam("month") Integer month){
+	@RequestParam(value="year", required=false) Integer year, @RequestParam(value="month", required=false) Integer month){
 		try{
 			return new Result(houseDiaryService.getMonthlyCropsDiaryList(greenHouseId,year,month));
 		}catch(Exception e){
@@ -243,6 +243,23 @@ public class HouseDiaryController {
 	public Result deleteCropsDiary(@PathVariable("id") Integer id){
 		try{
 			return new Result(houseDiaryService.deleteCropsDiary(id));
+		}catch(Exception e){
+			e.printStackTrace();
+			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
+	
+	/**
+	 * @description 사진일지 리스트 
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value= "/imageDiary/{houseId}", method = RequestMethod.GET)
+	@ResponseBody
+	public Result getImageDiaryList(@PathVariable("houseId") Integer houseId){
+		try{
+			//error message가 null 이고 push_type이 9인것들
+			return new Result(houseDiaryService.getImageDiaryList(houseId));
 		}catch(Exception e){
 			e.printStackTrace();
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());

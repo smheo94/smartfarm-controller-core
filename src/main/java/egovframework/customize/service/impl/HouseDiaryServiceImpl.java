@@ -16,6 +16,8 @@ import egovframework.customize.service.HouseCropsDiaryVO;
 import egovframework.customize.service.HouseDiaryService;
 import egovframework.customize.service.HouseDiaryVO;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -166,7 +168,9 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 	@Override
 	public List<HashMap<String,Object>> getMonthlyHouseDiaryList(Integer houseId,Integer year, Integer month) {
 		HashMap<String,Object> param = new HashMap<>();
-		param = getMonthDate(year,month);
+		if(year != null && month != null){
+			param = getMonthDate(year,month);	
+		}		
 		param.put("green_house_id", houseId);
 		List<HashMap<String,Object>> list =houseDiaryMapper.getMonthlyHouseDiaryList(param); 
 		return list;
@@ -176,7 +180,9 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 	@Override
 	public List<HouseCropsDiaryVO> getMonthlyCropsDiaryList(Integer greenHouseId, Integer year, Integer month) {
 	 	HashMap<String,Object> param = new HashMap<>();
-		param = getMonthDate(year,month);
+	 	if(year != null && month != null){
+	 		param = getMonthDate(year,month);	
+	 	}
 		param.put("house_id", greenHouseId);
 		List<HouseCropsDiaryVO> list =houseDiaryMapper.getMonthlyCropsDiaryList(param); 
 		return list;
@@ -237,5 +243,17 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 		result.put("start_date", startDate);
 		result.put("end_date", endDate);
 		return result;
+	}
+	@Override
+	public List<HashMap<String, Object>> getImageDiaryList(Integer houseId) {
+		List<HashMap<String,Object>> imageDiaryList = new ArrayList<HashMap<String,Object>>();
+		try{			
+			HashMap<String,Object> param = new HashMap<>();
+			param.put("houseId", houseId);
+			imageDiaryList = houseDiaryMapper.getImageDiaryList(param);	
+		}catch(Exception e){
+			log.debug("getImageDiaryList Error = " + e.getMessage());			
+		}		
+		return imageDiaryList;
 	}
 }

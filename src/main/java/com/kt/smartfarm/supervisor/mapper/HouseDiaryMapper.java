@@ -53,5 +53,7 @@ public interface HouseDiaryMapper {
 	List<HouseCropsDiaryVO> getMonthlyCropsDiaryList(HashMap<String, Object> param);
 	HashMap<String, Object> getHouseCropsInfo(HashMap<String, Object> param);
 	
-	List<HashMap<String, Object>> getCategoryList22();	
+	List<HashMap<String, Object>> getCategoryList22();
+	
+	List<HashMap<String, Object>> getImageDiaryList(HashMap<String,Object> param);	
 }

@@ -23,4 +23,5 @@ public interface HouseEnvService {
 	List<HashMap<String,Object>> getWeatherCast(Integer houseId, String fromDate, String toDate);
 	List<HashMap<String,Object>> getWeatherCategory();
 	Integer insertSunriseData(HashMap<String, Object> hm);
+	List<HashMap<String,Object>> groundDeviceList(Integer houseId);
 }

@@ -31,5 +31,6 @@ public interface HouseDiaryService {
 	
 	
 	HashMap<String,Object> getHouseCropsInfo(Integer greenHouseId);
+	List<HashMap<String,Object>> getImageDiaryList(Integer houseId);
 	
 }

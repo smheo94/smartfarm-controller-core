@@ -193,6 +193,14 @@
 		WHERE mghd.green_house_id = #{houseId}			
 	</select>
 	
+	<select id="getGroundDeviceList" parameterType="Integer" resultType="deviceEnvVO">
+		SELECT device.* ,,cpt.device_type AS dt
+		FROM map_green_house_device  AS mghd
+		INNER JOIN device ON device.id = mghd.device_id
+		WHERE mghd.green_house_id = #{houseId}			
+	</select>
+	
+	
 	<insert id="insertCCTVSetting" parameterType="cctv" useGeneratedKeys="true">
 		INSERT INTO	cctv	
            ( house_id, cctv_name, cctv_uid, cctv_pwd, cctv_ws_url, cctv_rtsp_url, wowza_id)

@@ -206,6 +206,21 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 	}
 
 	@Override
+	public List<HashMap<String,Object>> groundDeviceList(Integer houseId) {
+		List<HashMap<String,Object>> tempDeviceList = new ArrayList<>();
+		List<HashMap<String,Object>> deviceList = new ArrayList<>();
+		tempDeviceList = houseEnvMapper.getGroundDeviceList(houseId);
+		for(HashMap<String,Object> device : tempDeviceList){
+			if(device.get("dtg").toString().equals("sensor_gr_temp") || device.get("dtg").toString().equals("sensor_gr_moisture")){
+				String deviceTypeKey = (String)device.get("dt") + (String)device.get("device_type_idx");
+				device.put("device_type_key", deviceTypeKey);
+				deviceList.add(device);
+			}			
+		}
+		return deviceList;
+	}
+	
+	@Override
 	public HashMap<String, Object> deleteHouseDeviceMap(HashMap<String, Object> map) {
 		HashMap<String,Object> param = new HashMap<>();
 		Integer houseId = (Integer) map.get("houseId");

@@ -236,4 +236,14 @@ public class HouseEnvController {
 		}
 	}
 	
+	@RequestMapping(value= "/{houseId}/groundDeviceList", method = RequestMethod.GET)
+	@ResponseBody
+	public Result<List<DeviceEnvVO>> groundDeviceList(@PathVariable("houseId") Integer houseId){
+		try {			
+			return new Result(houseEnvService.groundDeviceList(houseId));
+		} catch(Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		}
+	}
+	
 }
