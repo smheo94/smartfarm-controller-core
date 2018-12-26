@@ -14,6 +14,7 @@ package egovframework.customize.service.impl;
 
 import egovframework.customize.service.HouseEnvVO;
 import egovframework.customize.service.ProductVO;
+import egovframework.customize.service.CCTVSettingVO;
 import egovframework.customize.service.ControlLogicSettingVO;
 import egovframework.customize.service.DeviceEnvVO;
 import egovframework.customize.service.HouseEnvService;
@@ -313,5 +314,25 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 	@Override
 	public Integer insertSunriseData(HashMap<String, Object> hm) {
 		return houseEnvMapper.insertSunriseData(hm);		
+	}
+	
+	@Override
+	public HashMap<String, Object> insertCctv(CCTVSettingVO cctv) {
+		return houseEnvMapper.insertCCTVSetting(cctv);
+	}
+
+	@Override
+	public List<HashMap<String, Object>> getCctvsByHouseId(Integer houseId) {
+		return houseEnvMapper.getCctvList(houseId);
+	}
+
+	@Override
+	public Integer deleteCctv(Integer id) {
+		return houseEnvMapper.deleteCctv(id);
+	}
+
+	@Override
+	public Integer updateCctv(CCTVSettingVO cctv) {
+		return houseEnvMapper.updateCctv(cctv);
 	}
 }
