@@ -4,10 +4,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -38,22 +36,31 @@ public class EgovTaskScheduler {
 	static String SUNRISE_URL = "http://apis.data.go.kr/B090041/openapi/service/RiseSetInfoService/getLCRiseSetInfo";
 	static String sunCertKey = "l%2FgDtDXE6ZralE2VJSrcon%2FKyKps%2FPANA9o497NfusyEYyei0Zv1fAWqJoxz8jaah7nv853ln7cxCWJypWOMLA%3D%3D";
 	
-	public void runWeatherSchedule(){		
-
+	public void runWeatherSchedule(){
 		List<HashMap<String,Object>> houseList = new ArrayList<>();
-		DateUtil dateUtil = new DateUtil();
-		String regDay = dateUtil.getCurrentDateString();
-		String regTimeString   = new java.text.SimpleDateFormat("HH").format(new java.util.Date());		
-		regTimeString = getBaseTime(regTimeString);
-		
+//		DateUtil dateUtil = new DateUtil();
+//		String regDay = dateUtil.getCurrentDateString();
+//		String regTimeString   = new java.text.SimpleDateFormat("HH").format(new java.util.Date());
+//		regTimeString = getBaseTime(regTimeString);
+
+		//시간계산이 복잡하여 단순화함
+		Calendar c = Calendar.getInstance();
+		int h = c.get(Calendar.HOUR_OF_DAY);
+		c.add(Calendar.HOUR_OF_DAY, -(h%3+1));
+
+		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyyMMdd");
+		SimpleDateFormat sdf2 = new SimpleDateFormat("HH00");
+		String regDay = sdf1.format(c.getTime());
+		String regTimeString = sdf2.format(c.getTime());
+
 		houseList = houseEnvService.getAllList();
 		for(int i=0; i<houseList.size(); i++){
 			if(houseList.get(i).get("latitude") != null && houseList.get(i).get("longitude") != null){
-				Double longitude = Double.parseDouble(houseList.get(i).get("latitude").toString());
-				Double latitude = Double.parseDouble(houseList.get(i).get("longitude").toString());
-				latitude = Math.ceil(latitude);
-				longitude = Math.ceil(longitude);
-				
+				Double longitude = Double.parseDouble(houseList.get(i).get("longitude").toString());
+				Double latitude = Double.parseDouble(houseList.get(i).get("latitude").toString());
+				//latitude = Math.ceil(latitude);
+				//longitude = Math.ceil(longitude);
+
 				HashMap<String,Object> gridXY = getGridxy(latitude,longitude);
 				//당일것만 조회해
 				String nx = gridXY.get("x").toString();
