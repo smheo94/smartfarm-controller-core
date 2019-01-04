@@ -52,7 +52,7 @@
 		WHERE house_diary_idx=#{id} 
 	</update>
 	
-	<select id="getHouseDiaryDetail" parameterType="map" resultType="houseDiaryVO">
+	<select id="getHouseDiaryDetail" parameterType="map" resultType="map">
 		SELECT 
 			id,
 			green_house_id,
@@ -166,7 +166,7 @@
 		WHERE crops_diary_idx = #{id};
 	</delete>
 	
-	<select id="getMonthlyCropsDiaryList" parameterType="map" resultType="cropsDiaryVO">
+	<select id="getMonthlyCropsDiaryList" parameterType="map" resultType="map">
 		SELECT 
 			cd.id, 
 			cd.green_house_id, 

@@ -22,8 +22,8 @@ public interface HouseDiaryService {
 	Integer deleteHouseDiary(Integer id);
 	Integer deleteCropsDiary(Integer id);
 	
-	List<HashMap<String,Object>> getMonthlyHouseDiaryList(Integer houseId, Integer year, Integer month);
-	List<HouseCropsDiaryVO> getMonthlyCropsDiaryList(Integer greenHouseId, Integer year, Integer month);
+	HashMap<String,Object> getMonthlyHouseDiaryList(Integer houseId, Integer year, Integer month);
+//	List<HouseCropsDiaryVO> getMonthlyCropsDiaryList(Integer greenHouseId, Integer year, Integer month);
 	
 	HouseDiaryVO getHouseDiaryDetail(Integer id);	
 	

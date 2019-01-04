@@ -60,6 +60,7 @@ public class HouseDiaryController {
 		}
 	}
 	
+
 	/**
 	 * @description 작업일지, 가계부 , 사진일지 입력
 	 * @param houseDiaryVO
@@ -120,7 +121,7 @@ public class HouseDiaryController {
 	
 	
 	/**
-	 * @description 작업일지, 가계부 월별 리스트 
+	 * @description 작업일지, 가계부 월별,전체 리스트 
 	 * @param greenHouseId
 	 * @return
 	 */
@@ -221,6 +222,7 @@ public class HouseDiaryController {
 	 * @param greenHouseId
 	 * @return
 	 */
+	/*
 	@RequestMapping(value= "/cropsDiary/list/{green_house_id}", method = RequestMethod.GET)
 	@ResponseBody
 	public Result MonthlyCropsDiaryList(@PathVariable("green_house_id") Integer greenHouseId, 
@@ -232,7 +234,7 @@ public class HouseDiaryController {
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
-	
+	*/
 	/**
 	 * @description 작업일지, 가계부 월별 리스트 
 	 * @param id
