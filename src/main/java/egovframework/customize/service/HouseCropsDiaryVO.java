@@ -31,8 +31,8 @@ public class HouseCropsDiaryVO {
 	String title;
 	String crops;		// 작물
 	String contentType;
-	Blob image;
-	String weatherJson;
+	String cctvImageUrl;
+	String weather;
 	byte[] file;
 	String fileName;
 	

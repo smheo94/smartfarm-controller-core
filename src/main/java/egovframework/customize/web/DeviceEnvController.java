@@ -218,4 +218,14 @@ public class DeviceEnvController {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
 	}
+	
+//	@RequestMapping(value= "/deviceTypeList", method = RequestMethod.GET)
+//	@ResponseBody
+//	public Result<DeviceEnvVO> deviceTypeList(){
+//		try {
+//			return new Result(deviceEnvService.getDevice(deviceId, withVDeviceList));
+//		} catch(Exception e) {
+//			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+//		}
+//	}
 }

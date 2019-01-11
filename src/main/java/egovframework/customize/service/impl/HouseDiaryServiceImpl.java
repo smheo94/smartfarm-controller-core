@@ -151,17 +151,31 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 	
 	
 	@Override
-	public HouseDiaryVO getHouseDiaryDetail(Integer id) {
-		HouseDiaryVO houseDiaryVO = new HouseDiaryVO();
+	public HashMap<String,Object> getHouseDiaryDetail(Integer id) {
+		HashMap<String,Object> result = new HashMap<>();
 		try{			
-			HashMap<String,Object> param = new HashMap<>();
+			HashMap<String,Object> param = new HashMap<>();			
 			param.put("id", id);
-			houseDiaryVO = houseDiaryMapper.getHouseDiaryDetail(param);
+			result = houseDiaryMapper.getHouseDiaryDetail(param);
 		}catch(Exception e){
 			e.printStackTrace();
 			log.debug("getHouseDiaryDetail Exception : " + e);
 		}		
-		return houseDiaryVO;
+		return result;
+	}
+	
+	@Override
+	public HashMap<String,Object> getCropsDiaryDetail(Integer id) {
+		HashMap<String,Object> result = new HashMap<>();
+		try{			
+			HashMap<String,Object> param = new HashMap<>();			
+			param.put("id", id);
+			result = houseDiaryMapper.getCropsDiaryDetail(param);
+		}catch(Exception e){
+			e.printStackTrace();
+			log.debug("getCropsDiaryDetail Exception : " + e);
+		}		
+		return result;
 	}
 
 

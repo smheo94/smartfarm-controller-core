@@ -25,12 +25,14 @@ public interface HouseDiaryService {
 	HashMap<String,Object> getMonthlyHouseDiaryList(Integer houseId, Integer year, Integer month);
 //	List<HouseCropsDiaryVO> getMonthlyCropsDiaryList(Integer greenHouseId, Integer year, Integer month);
 	
-	HouseDiaryVO getHouseDiaryDetail(Integer id);	
+	HashMap<String,Object> getHouseDiaryDetail(Integer id);
+	HashMap<String,Object> getCropsDiaryDetail(Integer id);
 	
 	List<HashMap<String,Object>> getCategoryList();
 	
 	
 	HashMap<String,Object> getHouseCropsInfo(Integer greenHouseId);
 	List<HashMap<String,Object>> getImageDiaryList(Integer houseId);
+	
 	
 }

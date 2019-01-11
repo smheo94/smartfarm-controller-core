@@ -145,7 +145,7 @@ public class HouseDiaryController {
 	
 	@RequestMapping(value= "/{id}", method = RequestMethod.GET)
 	@ResponseBody
-	public Result HouseDiaryDetail(@PathVariable Integer id){
+	public Result houseDiaryDetail(@PathVariable Integer id){
 		try{
 			return new Result(houseDiaryService.getHouseDiaryDetail(id));
 		}catch(Exception e){
@@ -154,6 +154,16 @@ public class HouseDiaryController {
 		}
 	}
 	
+	@RequestMapping(value= "/cropsDiary/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public Result cropsDiaryDetail(@PathVariable Integer id){
+		try{
+			return new Result(houseDiaryService.getCropsDiaryDetail(id));
+		}catch(Exception e){
+			e.printStackTrace();
+			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
 	/**
 	 * @description 작업일지, 가계부 월별 리스트 
 	 * @param id
