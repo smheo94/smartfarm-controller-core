@@ -32,7 +32,7 @@
 	</insert>
 	
 	<insert id="insertHouseDeviceMap" parameterType="map">		
-		INSERT INTO map_green_house_device
+		REPLACE INTO map_green_house_device
 		            (green_house_id, device_id)
 		VALUES (#{house_id}, #{device_id});
 	</insert>
