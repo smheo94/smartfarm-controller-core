@@ -125,7 +125,7 @@
 			cd.crops,
 			cd.content_type,
 			cd.cctv_image_url,
-			cd.weather_json,
+			cd.weather,
 			cdf.file_name,
 			cdf.file,
 			cdf.update_date			
