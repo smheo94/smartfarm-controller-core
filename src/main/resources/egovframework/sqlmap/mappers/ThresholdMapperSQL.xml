@@ -18,11 +18,11 @@
 		);		
 	</insert>
 	
-	<DELETE id="delete" parameterType="map">
+	<delete id="delete" parameterType="map">
 		DELETE
 		FROM sf_main.gsm_threshold
 		WHERE gsm_key = #{gsm_key} AND green_house_id = #{green_house_id};
-	</DELETE>
+	</delete>
 	<!-- 
 	<update id ="update" parameterType="thresholdVO">
 		UPDATE gsm_threshold
