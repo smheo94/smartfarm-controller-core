@@ -58,7 +58,7 @@ public class ThresholdController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value= "/", method = RequestMethod.POST)
 	@ResponseBody
-	public Result<ThresholdVO> insert(@RequestBody ThresholdVO thresholdVO){
+	public Result<List<ThresholdVO>> insert(@RequestBody List<ThresholdVO> thresholdVO){
 		try {
 			return new Result(thresholdService.insert(thresholdVO));
 		} catch(Exception e) {
@@ -66,30 +66,11 @@ public class ThresholdController {
 		}
 	}
 	
-	/**
-	 * @description 온실 update
-	 * @param gsmKey
-	 * @param house
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	@RequestMapping(value= "/", method = RequestMethod.PUT)
+	@RequestMapping(value= "/{gsm_key}/{green_house_id}", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<ThresholdVO> update(@RequestBody ThresholdVO thresholdVO){		
+	public Result<List<ThresholdVO>> list( @PathVariable("gsm_key") Integer gsmKey, @PathVariable("green_house_id") Integer greenHouseId){
 		try {
-			return new Result(thresholdService.update(thresholdVO)); // gsmKey, id기준으로 업데이트
-		} catch(Exception e) {
-			return new Result(e.getMessage(), HttpStatus.CONFLICT, thresholdVO);
-		}
-	}
-	  
-	
-	
-	@RequestMapping(value= "/{gsm_key}", method = RequestMethod.GET)
-	@ResponseBody
-	public Result<ThresholdVO> list( @PathVariable("gsm_key") Integer gsmKey){
-		try {
-			return new Result(thresholdService.getThreshold(gsmKey));
+			return new Result(thresholdService.getThreshold(gsmKey,greenHouseId));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
@@ -100,16 +81,16 @@ public class ThresholdController {
 	 * 
 	 */
 
-/*
-	@RequestMapping(value= "/{greenHouseId}", method = RequestMethod.DELETE)
+
+	@RequestMapping(value= "/{gsm_key}/{green_house_id}", method = RequestMethod.DELETE)
 	@ResponseBody
-	public Result<ThresholdVO> delete(@PathVariable("gsm_key") Integer gsmKey,  @PathVariable("greenHouseId") Integer greenHouseId){
+	public Result<ThresholdVO> delete(@PathVariable("gsm_key") Integer gsmKey,  @PathVariable("green_house_id") Integer greenHouseId){
 		try {
 			return new Result(thresholdService.delete(gsmKey, greenHouseId));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
 	}
-*/
+
 	
 }

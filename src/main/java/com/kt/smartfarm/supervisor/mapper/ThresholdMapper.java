@@ -19,6 +19,7 @@ import egovframework.customize.service.ThresholdVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
@@ -40,7 +41,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 @Mapper("thresholdMapper")
 public interface ThresholdMapper {
-	Integer insert(ThresholdVO thresholdVO);
-	Integer update(ThresholdVO thresholdVO);
-	ThresholdVO getThreshold(Integer gsmKey);
+	Integer insert(List<ThresholdVO> thresholdVO);
+	Integer delete(HashMap<String,Object> param);
+//	Integer update(ThresholdVO thresholdVO);
+	List<ThresholdVO> getThreshold(HashMap<String,Object> param);
 }

@@ -15,6 +15,10 @@ package egovframework.customize.service.impl;
 import egovframework.customize.service.ThresholdService;
 import egovframework.customize.service.ThresholdVO;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+
+import java.util.HashMap;
+import java.util.List;
+
 import javax.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -121,22 +125,32 @@ public class ThresholdServiceImpl extends EgovAbstractServiceImpl implements Thr
 	}
 */
 	@Override
-	public ThresholdVO insert(ThresholdVO thresholdVO) {
+	public List<ThresholdVO> insert(List<ThresholdVO> thresholdVO) {
 		thresholdMapper.insert(thresholdVO);
 		return thresholdVO;
 	}
+//
+//	@Override
+//	public ThresholdVO update(ThresholdVO thresholdVO) {
+//		thresholdMapper.update(thresholdVO);
+//		return thresholdVO;
+//				
+//	}
 
 	@Override
-	public ThresholdVO update(ThresholdVO thresholdVO) {
-		thresholdMapper.update(thresholdVO);
-		return thresholdVO;
-				
-	}
-
-	@Override
-	public ThresholdVO getThreshold(Integer gsmKey) {
-		return thresholdMapper.getThreshold(gsmKey);
+	public List<ThresholdVO> getThreshold(Integer gsmKey, Integer greenHouseId) {
+		HashMap<String,Object> param = new HashMap<String,Object>();
+		param.put("gsm_key", gsmKey);
+		param.put("green_house_id", greenHouseId);
+		return thresholdMapper.getThreshold(param);
 	}
 	
+	@Override
+	public int delete(Integer gsmKey, Integer greenHouseId) {
+		HashMap<String,Object> param = new HashMap<String,Object>();
+		param.put("gsm_key", gsmKey);
+		param.put("green_house_id", greenHouseId);
+		return thresholdMapper.delete(param);
+	}
 
 }
