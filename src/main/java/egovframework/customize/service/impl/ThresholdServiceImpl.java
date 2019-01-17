@@ -18,13 +18,19 @@ import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
 
 import com.kt.smartfarm.supervisor.mapper.ThresholdMapper;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 
 @Service("thresholdService")
@@ -33,124 +39,41 @@ public class ThresholdServiceImpl extends EgovAbstractServiceImpl implements Thr
 
     @Resource(name="thresholdMapper")
     private ThresholdMapper	thresholdMapper;
-	
-/*
-	@Override
-	public ThresholdVO getThresholdDefault(ThresholdVO vo) {
-		ObjectMapper objectMapper = new ObjectMapper();
-		HashMap<String,Object> mapResult = new HashMap<String,Object>();
-		FileInputStream fis = null;
-		try {
-			fis = new FileInputStream(EgovSampleController.DEFAULT_SETUP_FILE_PATH + "outweather.json");
-		} catch (FileNotFoundException e) {					
-			log.error("[Exception]", e);
-		}		
-		mapResult = defaultToMap(objectMapper, fis);
-		vo.setInsideHighHum(Double.parseDouble(mapResult.get("inside_high_hum").toString()));
-		vo.setInsideLowHum(Double.parseDouble(mapResult.get("inside_low_hum").toString()));
-		vo.setInsideHighTemp(Double.parseDouble(mapResult.get("inside_high_temp").toString()));
-		vo.setInsideLowTemp(Double.parseDouble(mapResult.get("inside_low_temp").toString()));
-		vo.setInsideHighHumUse(Integer.parseInt(mapResult.get("inside_high_hum_use").toString()));
-		vo.setInsideLowHumUse(Integer.parseInt(mapResult.get("inside_low_hum_use").toString()));
-		vo.setInsideHighTempUse(Integer.parseInt(mapResult.get("inside_high_temp_use").toString()));
-		vo.setInsideLowTempUse(Integer.parseInt(mapResult.get("inside_low_temp_use").toString()));
-		
-		vo.setOutsideHighHum(Double.parseDouble(mapResult.get("outside_high_hum").toString()));
-		vo.setOutsideLowHum(Double.parseDouble(mapResult.get("outside_low_hum").toString()));
-		vo.setOutsideHighTemp(Double.parseDouble(mapResult.get("outside_high_temp").toString()));
-		vo.setOutsideLowTemp(Double.parseDouble(mapResult.get("outside_low_temp").toString()));
-		vo.setOutsideHighHumUse(Integer.parseInt(mapResult.get("outside_high_hum_use").toString()));
-		vo.setOutsideLowHumUse(Integer.parseInt(mapResult.get("outside_low_hum_use").toString()));
-		vo.setOutsideHighTempUse(Integer.parseInt(mapResult.get("outside_high_temp_use").toString()));
-		vo.setOutsideLowTempUse(Integer.parseInt(mapResult.get("outside_low_temp_use").toString()));
-		
-		fis = null;
-		return vo;		
-	}
-	*/
-/*
-	@Override
-	public void updateThresholdDefault(ThresholdVO vo) {
-		ObjectMapper objectMapper = new ObjectMapper();
-		FileOutputStream fos = null;
-		
-		try {
-			fos = new FileOutputStream(EgovSampleController.DEFAULT_SETUP_FILE_PATH + "outweather.json");
-		} catch (FileNotFoundException e) {
-			log.error("outWeatherHandle", e);
-		}
-		HashMap<String,Object> data = objectMapper.convertValue(vo, HashMap.class);
-		if(data!=null){
-			try {
-				objectMapper.writeValue(fos, data);
-			} catch (JsonGenerationException e) {
-				log.error("outWeatherHandle", e);			
-			} catch (JsonMappingException e) {						
-				log.error("outWeatherHandle", e);			
-			} catch (IOException e) {						
-				log.error("outWeatherHandle", e);			
-			}
-		}		
-		
-		try {
-			if( fos != null ) {
-				fos.close();
-			}
-		} catch (IOException e) {
-			log.error("outWeatherHandle", e);
-		}
-		fos = null;
-	}
-	
-	private HashMap<String,Object> defaultToMap(ObjectMapper objectMapper, FileInputStream fis) {
-		HashMap<String, Object> result = new HashMap<String,Object>();
-		try {
-			result = objectMapper.readValue(fis, HashMap.class);
-		} catch (JsonParseException e) {
-			log.error("[Exception]", e);
-		} catch (JsonMappingException e) {
-			log.error("[Exception]", e);
-		} catch (IOException e) {
-			log.error("[Exception]", e);
-		}
-		
-		try {
-			if(fis != null ) {
-				fis.close();
-			}
-		} catch (IOException e) {
-			log.error("[Exception]", e);
-		}
-		return result;
-	}
-*/
-	@Override
-	public List<ThresholdVO> insert(List<ThresholdVO> thresholdVO) {
-		thresholdMapper.insert(thresholdVO);
-		return thresholdVO;
-	}
-//
-//	@Override
-//	public ThresholdVO update(ThresholdVO thresholdVO) {
-//		thresholdMapper.update(thresholdVO);
-//		return thresholdVO;
-//				
-//	}
+
+    @Autowired
+    private DataSourceTransactionManager transactionManager;
 
 	@Override
 	public List<ThresholdVO> getThreshold(Integer gsmKey, Integer greenHouseId) {
-		HashMap<String,Object> param = new HashMap<String,Object>();
-		param.put("gsm_key", gsmKey);
-		param.put("green_house_id", greenHouseId);
+		Map<String,Object> param = new HashMap<String,Object>();
+		param.put("gsmKey", gsmKey);
+		param.put("greenHouseId", greenHouseId);
 		return thresholdMapper.getThreshold(param);
 	}
-	
+
 	@Override
-	public int delete(Integer gsmKey, Integer greenHouseId) {
-		HashMap<String,Object> param = new HashMap<String,Object>();
-		param.put("gsm_key", gsmKey);
-		param.put("green_house_id", greenHouseId);
-		return thresholdMapper.delete(param);
+	public int update(Integer gsmKey, Integer greenHouseId, List<ThresholdVO> thresholdVOs) {
+		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+
+		TransactionStatus status =  transactionManager.getTransaction(def);
+		int cnt = 0;
+		try {
+			Map<String,Object> param = new HashMap<String,Object>();
+			param.put("gsmKey", gsmKey);
+			param.put("greenHouseId", greenHouseId);
+			thresholdMapper.delete(param);
+
+			for ( ThresholdVO thresholdVO : thresholdVOs ) {
+				cnt += thresholdMapper.insert(thresholdVO);
+			}
+		} catch ( Exception ex ) {
+			transactionManager.rollback(status);
+			throw ex;
+		}
+		transactionManager.commit(status);
+		return cnt;
 	}
+
 
 }
