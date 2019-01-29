@@ -34,11 +34,11 @@
 			<if test="startDate != null">start_date =#{startDate},</if>
 			<if test="endDate != null">end_date =#{endDate},</if>
 			<if test="crops != null">crops =#{crops},</if>
-			<if test="harvest != null">harvest =#{harvest},</if>
-			<if test="income != null">income =#{income},</if>
-			<if test="spend != null">spend =#{spend},</if>
+			<if test="harvest != null">harvest =#{harvest},</if>			
 			<if test="contentType != null">content_type=#{contentType},</if>
-			<if test="workTime != null">work_time =#{workTime}</if>
+			<if test="workTime != null">work_time =#{workTime},</if>
+			income =#{income},
+			spend =#{spend}
 		</set>
 		WHERE id=#{id} AND green_house_id = #{greenHouseId}
 	</update>

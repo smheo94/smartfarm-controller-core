@@ -75,14 +75,14 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 					if(!file[i].isEmpty()){
 						String fileName=file[i].getOriginalFilename();
 						byte[] bytes = file[i].getBytes();
-						if(contentType.equals("11") || contentType.equals("21")){
+						if(contentType.equals("11") || contentType.equals("21") || contentType.equals("1") || contentType.equals("2")){
 							HouseDiaryVO houseDiaryVO = new HouseDiaryVO();
 							houseDiaryVO.setId(id);
 							houseDiaryVO.setFile(bytes);
 							houseDiaryVO.setFileName(fileName);
 							result = houseDiaryMapper.insertHouseDiaryFile(houseDiaryVO);
 						}
-						else if(contentType.equals("31")){
+						else if(contentType.equals("31") || contentType.equals("3")){
 							HouseCropsDiaryVO houseCropsDiaryVO= new HouseCropsDiaryVO();
 							houseCropsDiaryVO.setId(id);
 							houseCropsDiaryVO.setFile(bytes);
