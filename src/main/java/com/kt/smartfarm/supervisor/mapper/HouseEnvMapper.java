@@ -22,6 +22,7 @@ import java.util.Map;
 
 import egovframework.customize.service.CCTVSettingVO;
 import egovframework.customize.service.DeviceEnvVO;
+import egovframework.customize.service.DeviceTypeVO;
 import egovframework.customize.service.HouseEnvVO;
 import egovframework.customize.service.ProductMethodVO;
 import egovframework.customize.service.ProductVO;
@@ -67,6 +68,7 @@ public interface HouseEnvMapper {
 	HashMap<String, Object> getSunriseInfo(Map<String, Object> map);
 	
 	List<HashMap<String, Object>> getGroundDeviceList(Integer houseId);
+	List<DeviceTypeVO> getHouseDeviceTypeList(Integer houseId);
 	
 	
 	

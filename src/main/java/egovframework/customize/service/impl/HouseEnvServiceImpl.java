@@ -207,10 +207,18 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 
 	@Override
 	public List<DeviceEnvVO> houseDeviceList(Integer houseId) {
-		return houseEnvMapper.getHouseDeviceList(houseId);
-		
+		return houseEnvMapper.getHouseDeviceList(houseId);		
 	}
 
+	@Override
+	public HashMap<String,Object> houseDeviceInfoList(Integer houseId) {
+		HashMap<String,Object> result = new HashMap<String,Object>();
+		result.put("deviceList", houseEnvMapper.getHouseDeviceList(houseId));
+		result.put("deviceTypeList", houseEnvMapper.getHouseDeviceTypeList(houseId));
+		return result;	
+		
+	}
+	
 	@Override
 	public List<HashMap<String,Object>> groundDeviceList(Integer houseId) {
 		List<HashMap<String,Object>> tempDeviceList = new ArrayList<>();

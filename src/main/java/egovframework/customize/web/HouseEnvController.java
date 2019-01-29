@@ -195,7 +195,21 @@ public class HouseEnvController {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
 	}
-
+	
+	/**
+	 * 에버커스, 노루시스템즈를 위한 별도의 연동 api
+	 * @description 온실에 추가되어 있는 장치 리스트와, 장치 타입
+	 */
+	@RequestMapping(value = "/{houseId}/deviceInfoList", method = RequestMethod.GET)
+	@ResponseBody
+	public Result<HashMap<String,Object>> houseDeviceInfoList(@PathVariable("houseId") Integer houseId) {
+		try {
+			return new Result(houseEnvService.houseDeviceInfoList(houseId));
+		} catch (Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		}
+	}
+	
 	/**
 	 * cctv 등록, 수정, 조회, 삭제, 온실 삭제되면 cascade
 	 * 
