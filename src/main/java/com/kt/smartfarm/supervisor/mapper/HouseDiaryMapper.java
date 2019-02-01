@@ -41,7 +41,10 @@ public interface HouseDiaryMapper {
 	Integer deleteHouseDiaryFile(HashMap<String,Object> param);
 	
 	HashMap<String,Object> getHouseDiaryDetail(HashMap<String, Object> param);
+	List<HashMap<String,Object>> getHouseDiaryFile(HashMap<String, Object> param);
+	
 	HashMap<String,Object> getCropsDiaryDetail(HashMap<String, Object> param);
+	List<HashMap<String,Object>> getCropsDiaryFile(HashMap<String, Object> param);
 	
 	List<HashMap<String,Object>> getMonthlyHouseDiaryList(HashMap<String, Object> param);
 	
@@ -60,5 +63,7 @@ public interface HouseDiaryMapper {
 	List<HashMap<String, Object>> getCategoryList22();
 	
 	List<HashMap<String, Object>> getImageDiaryList(HashMap<String,Object> param);
+	
+	
 		
 }

@@ -31,5 +31,6 @@ public interface HouseEnvService {
 	Integer deleteCctv(Integer id);
 	Integer updateCctv(CCTVSettingVO cctv);
 	List<HashMap<String, Object>> getCctvsByHouseId(Integer houseId);
+	HashMap<String,Object> houseDeviceInfoList(Integer houseId);
 
 }

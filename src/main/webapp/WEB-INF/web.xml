@@ -41,6 +41,25 @@
     <filter-name>CorsFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
+  
+    <filter>
+    <filter-name>SmartfarmFilter</filter-name>
+    <filter-class>egovframework.customize.config.SmartfarmFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>SmartfarmFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+<!-- 
+  	<servlet>
+   		<servlet-name>FofDisPatcherServlet</servlet-name>
+    	<servlet-class>egovframework.customize.config.FofDisPatcherServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+	    <servlet-name>FofDisPatcherServlet</servlet-name>
+	    <url-pattern>/*</url-pattern>
+	</servlet-mapping>
+   -->
   <context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>classpath*:egovframework/spring/context-*.xml</param-value>
@@ -59,7 +78,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>action</servlet-name>
-    <url-pattern>/</url-pattern>
+    <url-pattern>/*</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>action</servlet-name>
