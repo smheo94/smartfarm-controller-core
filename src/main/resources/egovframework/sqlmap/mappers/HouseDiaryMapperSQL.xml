@@ -23,7 +23,13 @@
 			#{id},#{fileName},#{file},NOW()
 		)
 	</insert>
-	
+
+	<select id="selectHouseDiaryFile" resultType="houseDiaryVO">
+		SELECT house_diary_idx, file_name, update_date
+		FROM house_diary_file
+		WHERE house_diary_idx = #{id} AND file_name = #{fileName};
+	</select>
+
 	<update id="updateHouseDiary" parameterType="houseDiaryVO">
 		UPDATE house_diary
 		<set>
@@ -49,7 +55,7 @@
 			file_name = #{fileName},
 			file = #{file},
 			update_date = NOW()
-		WHERE house_diary_idx=#{id} 
+		WHERE house_diary_idx=#{id}
 	</update>
 	<!-- 
 	<select id="getHouseDiaryDetail" parameterType="map" resultType="map">
