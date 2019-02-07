@@ -1,15 +1,4 @@
-/*
- * Copyright 2008-2009 the original author or authors.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
 package egovframework.customize.service.impl;
 
 import egovframework.customize.service.HouseCropsDiaryVO;
@@ -17,11 +6,7 @@ import egovframework.customize.service.HouseDiaryService;
 import egovframework.customize.service.HouseDiaryVO;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import javax.annotation.Resource;
 
@@ -64,33 +49,101 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 	public Integer insertDiaryFile(String contentType, Integer id, MultipartFile[] file) {
 		Integer result=0;
 		try{			
+			
+//			String fileName=file[i].getOriginalFilename();
+
+//			if(fileName.toLowerCase().endsWith(".jpg") || fileName.toLowerCase().endsWith(".jpeg") ||
+//		            fileName.toLowerCase().endsWith(".png") || fileName.toLowerCase().endsWith(".gif") ||
+//		            fileName.toLowerCase().endsWith(".bmp") || fileName.toLowerCase().endsWith(".hwp") ||
+//		            fileName.toLowerCase().endsWith(".ppt") ||fileName.toLowerCase().endsWith(".pptx") ||		            
+//		            fileName.toLowerCase().endsWith(".pdf") ||fileName.toLowerCase().endsWith(".xls") || fileName.toLowerCase().endsWith(".txt")) {
+
+			deleteDiaryFIleNotExists(file, id);
 			for(int i=0; i<file.length; i++){
-				String fileName=file[i].getOriginalFilename();		
-				if(fileName.toLowerCase().endsWith(".jpg") || fileName.toLowerCase().endsWith(".jpeg") || fileName.toLowerCase().endsWith(".png")){
-//				for(int i=0; i<file.length; i++){
-					if(!file[i].isEmpty()){
-//						String fileName=file[i].getOriginalFilename();
-						byte[] bytes = file[i].getBytes();
-						if(contentType.equals("11") || contentType.equals("21") || contentType.equals("1") || contentType.equals("2")){
-							HouseDiaryVO houseDiaryVO = new HouseDiaryVO();
-							houseDiaryVO.setId(id);
-							houseDiaryVO.setFile(bytes);
-							houseDiaryVO.setFileName(fileName);
+				if(!file[i].isEmpty()){
+					String fileName=file[i].getOriginalFilename();
+					byte[] bytes = file[i].getBytes();
+					if(contentType.equals("11") || contentType.equals("21") || contentType.equals("1") || contentType.equals("2")){
+						HouseDiaryVO houseDiaryVO = new HouseDiaryVO();
+						houseDiaryVO.setId(id);
+						houseDiaryVO.setFile(bytes);
+						houseDiaryVO.setFileName(fileName);
+						HouseDiaryVO dbhouseDiaryVO  = houseDiaryMapper.selectHouseDiaryFile(houseDiaryVO);
+						if( dbhouseDiaryVO != null ) {
+							result = houseDiaryMapper.updateHouseDiaryFile(houseDiaryVO);
+						} else {
 							result = houseDiaryMapper.insertHouseDiaryFile(houseDiaryVO);
 						}
-						else if(contentType.equals("31") || contentType.equals("3")){
-							HouseCropsDiaryVO houseCropsDiaryVO= new HouseCropsDiaryVO();
-							houseCropsDiaryVO.setId(id);
-							houseCropsDiaryVO.setFile(bytes);
-							houseCropsDiaryVO.setFileName(fileName);
+					}
+					else if(contentType.equals("31") || contentType.equals("3")){
+						HouseCropsDiaryVO houseCropsDiaryVO= new HouseCropsDiaryVO();
+						houseCropsDiaryVO.setId(id);
+						houseCropsDiaryVO.setFile(bytes);
+						houseCropsDiaryVO.setFileName(fileName);
+						HouseCropsDiaryVO dbhouseDiaryVO  = houseDiaryMapper.selectCropsDiaryFile(houseCropsDiaryVO);
+						if( dbhouseDiaryVO != null ) {
+							result = houseDiaryMapper.updateCropsDiaryFile(houseCropsDiaryVO);
+						} else {
 							result = houseDiaryMapper.insertCropsDiaryFile(houseCropsDiaryVO);
 						}
-					}	
+					}
 				}
 			}
-		
+
 		}catch(Exception e){
 			log.debug("insertDiaryFile Error = " + e);
+		}
+		return result;
+	}
+
+	private void deleteDiaryFIleNotExists(MultipartFile[] file, Integer diaryId) {
+		HashMap<String, Object> param = new HashMap<>();
+		param.put("id", diaryId);
+		final List<HashMap<String, Object>> houseDiaryFileList = houseDiaryMapper.getHouseDiaryFile(param);
+		if( houseDiaryFileList != null && houseDiaryFileList.size() > 0  && file != null && file.length > 0 ) {
+			for (HashMap<String, Object> houseDiaryFile : houseDiaryFileList) {
+				String fileName = (String) houseDiaryFile.get("file_name");
+				boolean isExists = false;
+				for (MultipartFile filePart : file) {
+					String newFileName = filePart.getOriginalFilename();
+					if (Objects.equals(fileName, newFileName)) {
+						isExists = true;
+					}
+				}
+				if( isExists == false) {
+					param.put("file_name", fileName);
+					houseDiaryMapper.deleteHouseDiaryFile(param);
+				}
+			}
+		}
+	}
+
+	@Override
+	public Object updateDiaryFile(String contentType, Integer id, MultipartFile[] file) {
+		Integer result=0;
+		try{
+			for(int i=0; i<file.length; i++){
+				if(!file[i].isEmpty()){
+					String fileName=file[i].getOriginalFilename();
+					byte[] bytes = file[i].getBytes();
+					if(contentType.equals("11") || contentType.equals("21") || contentType.equals("1") || contentType.equals("2")){
+						HouseDiaryVO houseDiaryVO = new HouseDiaryVO();
+						houseDiaryVO.setId(id);
+						houseDiaryVO.setFile(bytes);
+						houseDiaryVO.setFileName(fileName);
+						result = houseDiaryMapper.updateHouseDiaryFile(houseDiaryVO);
+					}
+					else if(contentType.equals("31") || contentType.equals("3")){
+						HouseCropsDiaryVO houseCropsDiaryVO= new HouseCropsDiaryVO();
+						houseCropsDiaryVO.setId(id);
+						houseCropsDiaryVO.setFile(bytes);
+						houseCropsDiaryVO.setFileName(fileName);
+						result = houseDiaryMapper.updateCropsDiaryFile(houseCropsDiaryVO);
+					}
+				}
+			}
+		}catch(Exception e){
+			log.debug("updateDiaryFile Error : " + e.getMessage());
 		}
 		return result;
 	}
@@ -114,35 +167,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 		}		
 		return houseCropsVO;
 	}
-	@Override
-	public Object updateDiaryFile(String contentType, Integer id, MultipartFile[] file) {
-		Integer result=0;
-		try{		
-			for(int i=0; i<file.length; i++){
-				if(!file[i].isEmpty()){
-					String fileName=file[i].getOriginalFilename();
-					byte[] bytes = file[i].getBytes();
-					if(contentType.equals("11") || contentType.equals("21") || contentType.equals("1") || contentType.equals("2")){
-						HouseDiaryVO houseDiaryVO = new HouseDiaryVO();
-						houseDiaryVO.setId(id);
-						houseDiaryVO.setFile(bytes);
-						houseDiaryVO.setFileName(fileName);
-						result = houseDiaryMapper.updateHouseDiaryFile(houseDiaryVO);
-					}
-					else if(contentType.equals("31") || contentType.equals("3")){
-						HouseCropsDiaryVO houseCropsDiaryVO= new HouseCropsDiaryVO();
-						houseCropsDiaryVO.setId(id);
-						houseCropsDiaryVO.setFile(bytes);
-						houseCropsDiaryVO.setFileName(fileName);
-						result = houseDiaryMapper.updateCropsDiaryFile(houseCropsDiaryVO);
-					}
-				}	
-			}
-		}catch(Exception e){
-			log.debug("updateDiaryFile Error : " + e.getMessage());
-		}
-		return result;
-	}
+
 	
 	
 	

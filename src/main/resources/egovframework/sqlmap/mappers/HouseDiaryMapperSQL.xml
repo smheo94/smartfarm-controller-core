@@ -23,6 +23,15 @@
 			#{id},#{fileName},#{file},NOW()
 		)
 	</insert>
+
+
+	<select id="selectHouseDiaryFile" resultType="houseDiaryVO">
+		SELECT house_diary_idx, file_name, update_date
+		FROM house_diary_file
+		WHERE house_diary_idx = #{id} AND file_name = #{fileName};
+	</select>
+
+
 	<insert id="insertCropsDiaryFile" parameterType="cropsDiaryVO">
 		INSERT INTO crops_diary_file(
 			crops_diary_idx,file_name,file,update_date
@@ -56,7 +65,7 @@
 			file_name = #{fileName},
 			file = #{file},
 			update_date = NOW()
-		WHERE house_diary_idx=#{id} 
+		WHERE house_diary_idx=#{id}
 	</update>
 	<!-- 
 	<select id="getHouseDiaryDetail" parameterType="map" resultType="map">

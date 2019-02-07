@@ -89,6 +89,19 @@ public class HouseDiaryController {
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
+	@RequestMapping(value= "/diaryFile", method = RequestMethod.PUT, consumes = {"*/*"})
+	@ResponseBody
+	public Result update( @RequestParam("content_type") String contentType, @RequestParam("id") Integer id, 
+			@RequestPart(value="file", required=false) MultipartFile[] file){
+		try{
+			return new Result(houseDiaryService.updateDiaryFile(contentType,id,file));
+
+		}catch(Exception e){
+			e.printStackTrace();
+			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
+	
 	/**
 	 * @description 작업일지, 가계부 update
 	 * @param houseDiaryVO
@@ -105,19 +118,7 @@ public class HouseDiaryController {
 		}
 	}
 	
-	@RequestMapping(value= "/diaryFile", method = RequestMethod.PUT, consumes = {"*/*"})
-	@ResponseBody
-	public Result update( @RequestParam("content_type") String contentType, @RequestParam("id") Integer id, 
-			@RequestPart(value="file", required=false) MultipartFile[] file){
-		try{
-			return new Result(houseDiaryService.updateDiaryFile(contentType,id,file));
 
-		}catch(Exception e){
-			e.printStackTrace();
-			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-		}
-	}
-	
 	
 	
 	/**
