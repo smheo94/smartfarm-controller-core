@@ -64,16 +64,12 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 	public Integer insertDiaryFile(String contentType, Integer id, MultipartFile[] file) {
 		Integer result=0;
 		try{			
-//			String fileName=file[i].getOriginalFilename();
-		
-//			if(fileName.toLowerCase().endsWith(".jpg") || fileName.toLowerCase().endsWith(".jpeg") ||
-//		            fileName.toLowerCase().endsWith(".png") || fileName.toLowerCase().endsWith(".gif") ||
-//		            fileName.toLowerCase().endsWith(".bmp") || fileName.toLowerCase().endsWith(".hwp") ||
-//		            fileName.toLowerCase().endsWith(".ppt") ||fileName.toLowerCase().endsWith(".pptx") ||		            
-//		            fileName.toLowerCase().endsWith(".pdf") ||fileName.toLowerCase().endsWith(".xls") || fileName.toLowerCase().endsWith(".txt")) {
-				for(int i=0; i<file.length; i++){
+			for(int i=0; i<file.length; i++){
+				String fileName=file[i].getOriginalFilename();		
+				if(fileName.toLowerCase().endsWith(".jpg") || fileName.toLowerCase().endsWith(".jpeg") || fileName.toLowerCase().endsWith(".png")){
+//				for(int i=0; i<file.length; i++){
 					if(!file[i].isEmpty()){
-						String fileName=file[i].getOriginalFilename();
+//						String fileName=file[i].getOriginalFilename();
 						byte[] bytes = file[i].getBytes();
 						if(contentType.equals("11") || contentType.equals("21") || contentType.equals("1") || contentType.equals("2")){
 							HouseDiaryVO houseDiaryVO = new HouseDiaryVO();
@@ -91,7 +87,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 						}
 					}	
 				}
-//			}
+			}
 		
 		}catch(Exception e){
 			log.debug("insertDiaryFile Error = " + e);

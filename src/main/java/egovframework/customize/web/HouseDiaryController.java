@@ -89,7 +89,6 @@ public class HouseDiaryController {
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
-
 	/**
 	 * @description 작업일지, 가계부 update
 	 * @param houseDiaryVO
@@ -106,9 +105,10 @@ public class HouseDiaryController {
 		}
 	}
 	
-	@RequestMapping(value= "/diaryFile/{id}", method = RequestMethod.PUT)
+	@RequestMapping(value= "/diaryFile", method = RequestMethod.PUT, consumes = {"*/*"})
 	@ResponseBody
-	public Result update(@PathVariable("id") Integer id,@RequestParam("content_type") String contentType,@RequestPart(value="file", required=false) MultipartFile[] file){
+	public Result update( @RequestParam("content_type") String contentType, @RequestParam("id") Integer id, 
+			@RequestPart(value="file", required=false) MultipartFile[] file){
 		try{
 			return new Result(houseDiaryService.updateDiaryFile(contentType,id,file));
 
@@ -225,26 +225,7 @@ public class HouseDiaryController {
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
-	
-	
-	/**
-	 * @description 작업일지, 가계부 월별 리스트 
-	 * @param greenHouseId
-	 * @return
-	 */
-	/*
-	@RequestMapping(value= "/cropsDiary/list/{green_house_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Result MonthlyCropsDiaryList(@PathVariable("green_house_id") Integer greenHouseId, 
-	@RequestParam(value="year", required=false) Integer year, @RequestParam(value="month", required=false) Integer month){
-		try{
-			return new Result(houseDiaryService.getMonthlyCropsDiaryList(greenHouseId,year,month));
-		}catch(Exception e){
-			e.printStackTrace();
-			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-		}
-	}
-	*/
+
 	/**
 	 * @description 작업일지, 가계부 월별 리스트 
 	 * @param id
