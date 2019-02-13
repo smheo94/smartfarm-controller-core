@@ -143,7 +143,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
         try {
             response.sendError(HttpStatus.INTERNAL_SERVER_ERROR.value(), new ObjectMapper().writeValueAsString(new Result(message, code, message)));
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.debug(e.getMessage());
         }
     }
     @Override
@@ -233,7 +233,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
 
             }
         } catch(Exception e){
-        	e.printStackTrace();
+        	LOG.debug(e.getMessage());
         }finally {
 
             wrapper.copyBodyToResponse();

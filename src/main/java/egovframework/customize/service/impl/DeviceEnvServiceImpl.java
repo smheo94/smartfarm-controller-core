@@ -24,6 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.kt.smartfarm.supervisor.mapper.DeviceEnvMapper;
@@ -34,6 +36,7 @@ import javax.annotation.Resource;
 @Service("deviceEnvService")
 public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements DeviceEnvService {
 
+	private static final Logger log = LoggerFactory.getLogger(DeviceEnvServiceImpl.class);
 	@Resource(name="deviceEnvMapper")
 	DeviceEnvMapper deviceEnvMapper;
 	
@@ -51,7 +54,7 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 				
 			}			
 		}catch(Exception e){
-			e.printStackTrace();
+			log.debug(e.getMessage());
 		}
 		return device;
 	}
@@ -146,7 +149,7 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 				deviceEnvMapper.insertVDeviceEnv(vo);
 			}
 		}catch(Exception e){
-			e.printStackTrace();
+			log.debug(e.getMessage());
 		}		
 		return voList;
 	}
@@ -157,7 +160,7 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 			return deviceEnvMapper.getVDeviceEnvList(deviceId);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.debug(e.getMessage());
 		}
 		return null;
 	}
@@ -168,7 +171,7 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 		try{
 			return deviceEnvMapper.updateVDeviceEnv(vo);
 		}catch(Exception e){
-			e.printStackTrace();
+			log.debug(e.getMessage());
 			return null;
 		}		
 	}
@@ -178,7 +181,7 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 		try{
 			return deviceEnvMapper.deleteVDeviceEnv(id);
 		}catch(Exception e){
-			e.printStackTrace();
+			log.debug(e.getMessage());
 			return null;
 		}
 	}

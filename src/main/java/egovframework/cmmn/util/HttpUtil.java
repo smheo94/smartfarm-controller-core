@@ -11,13 +11,15 @@ import java.net.URL;
 import java.util.HashMap;
 
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import egovframework.customize.service.ControllerEnvVO;
 import egovframework.customize.service.DeviceEnvVO;
 
 public class HttpUtil {	
 //	private String url;
-	
+	protected static final  Logger log = LoggerFactory.getLogger(HttpUtil.class);
 	public String postHandler(HashMap<String,Object> param, HashMap<String,Object> controllerInfo){		
 		try{			
 			String result ="";
@@ -37,7 +39,7 @@ public class HttpUtil {
 			result = getRestApiResponseData(result, conn);
          return result;
 		}catch(Exception e){
-			e.printStackTrace();
+			log.debug(e.getMessage());
 			return "ERROR";
 		}
 	}

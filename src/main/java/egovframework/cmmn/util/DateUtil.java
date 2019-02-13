@@ -9,7 +9,11 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class DateUtil {
+	protected static final  Logger log = LoggerFactory.getLogger(DateUtil.class);
 	/**
 	 * <pre>
 	 *    현재 날짜를 yyyyMMdd 형식으로 반환한다.
@@ -187,7 +191,7 @@ public class DateUtil {
 			SimpleDateFormat formatter = new SimpleDateFormat(pattern, locale);
 			result = formatter.format(dateData);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.debug(e.getMessage());
 		}
 		return result;
 	}
@@ -236,7 +240,7 @@ public class DateUtil {
 			// cal.getTime();
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.debug(e.getMessage());
 		}
 		return new Timestamp(cal.getTime().getTime());
 
@@ -277,7 +281,7 @@ public class DateUtil {
 
 			cal.set(year, month, day, hour, min, sec);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.debug(e.getMessage());
 		}
 		return new Timestamp(cal.getTime().getTime());
 
@@ -372,7 +376,7 @@ public class DateUtil {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.debug(e.getMessage());
 		}
 		return true;
 	}
@@ -451,7 +455,7 @@ public class DateUtil {
 			calendar.setTime(date);
 			result = calendar.get(java.util.Calendar.DAY_OF_WEEK);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.debug(e.getMessage());
 		}
 		return result;
 	}
@@ -495,7 +499,7 @@ public class DateUtil {
 
 			duration = d2.getTime() - d1.getTime();
 		} catch(Exception e) {
-			e.printStackTrace();
+			log.debug(e.getMessage());
 		}
 
 		return (int) (duration / (1000 * 60 * 60 * 24));
@@ -520,7 +524,7 @@ public class DateUtil {
 		try {
 			result = yearsBetween(from, to, "yyyyMMdd");
 		} catch(Exception e) {
-			e.printStackTrace();
+			log.debug(e.getMessage());
 		}
 		return result;
 	}
@@ -562,7 +566,7 @@ public class DateUtil {
 		try {
 			result = addMinute(s, minute, "yyyyMMddHHmm");
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.debug(e.getMessage());
 		}
 		return result;
 	}
@@ -593,7 +597,7 @@ public class DateUtil {
 			date.setTime(date.getTime() + ((long) minute * 1000 * 60));
 			result = formatter.format(date);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.debug(e.getMessage());
 		}
 		return result;
 	}
@@ -638,7 +642,7 @@ public class DateUtil {
 			date = check(s, format);
 			date.setTime(date.getTime() + ((long) second * 1000));
 		} catch(Exception e) {
-			e.printStackTrace();
+			log.debug(e.getMessage());
 		}
 		return formatter.format(date);
 	}
@@ -660,7 +664,7 @@ public class DateUtil {
 		try {
 			result = addMilliSecond(s, milliSecond, "yyyyMMddHHmmss");
 		} catch(Exception e) {
-			e.printStackTrace();
+			log.debug(e.getMessage());
 		}
 		return result;
 	}
@@ -691,7 +695,7 @@ public class DateUtil {
 			date.setTime(date.getTime() + ((long) milliSecond));
 			result = formatter.format(date);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.debug(e.getMessage());
 		}
 		return result;
 	}
@@ -738,7 +742,7 @@ public class DateUtil {
 			date.setTime(date.getTime() + ((long) day * 1000 * 60 * 60 * 24));
 			result = formatter.format(date);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.debug(e.getMessage());
 		}
 		return result;
 	}
@@ -819,7 +823,7 @@ public class DateUtil {
 
 			result =  formatter.format(targetDate);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.debug(e.getMessage());
 		}
 		
 		return result;
@@ -868,7 +872,7 @@ public class DateUtil {
 					+ ((long) year * 1000 * 60 * 60 * 24 * (365)));
 			result =  formatter.format(date);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.debug(e.getMessage());
 		}
 		return result;
 	}
@@ -902,7 +906,7 @@ public class DateUtil {
 				current.setTime(current.getTime() + ((long) nAdd * 1000 * 60));
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.debug(e.getMessage());
 		}
 		return formatter.format(current);
 	}
@@ -968,7 +972,7 @@ public class DateUtil {
 				result += toDate.compareTo(fromDate);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.debug(e.getMessage());
 		}
 		return result;
 	}
@@ -1026,7 +1030,7 @@ public class DateUtil {
 			java.util.Date targetDate = check(tempDate, "yyyyMMdd");
 			result = formatter.format(targetDate);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.debug(e.getMessage());
 		}
 		return result;
 	}
@@ -1130,7 +1134,7 @@ public class DateUtil {
 		try {
 			date = formatter.parse(dateStr);
 		} catch(Exception e) {
-			e.printStackTrace();
+			log.debug(e.getMessage());
 		}
 		return returnFormatter.format(date);
 	}

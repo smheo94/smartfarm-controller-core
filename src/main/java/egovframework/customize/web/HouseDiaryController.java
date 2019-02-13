@@ -21,7 +21,10 @@ import egovframework.customize.service.HouseCropsDiaryVO;
 import egovframework.customize.service.HouseDiaryService;
 import egovframework.customize.service.HouseDiaryVO;
 import egovframework.customize.service.HousePictureDiaryVO;
+import egovframework.customize.task.scheduler.EgovTaskScheduler;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -40,7 +43,7 @@ import javax.servlet.annotation.MultipartConfig;
 @RequestMapping(value={"/env/houseDiary","/houseDiary"})
 public class HouseDiaryController {
 
-
+	private static final Logger log = LoggerFactory.getLogger(HouseDiaryController.class);
 	@Resource(name = "houseDiaryService")
 	private HouseDiaryService houseDiaryService;
 	
@@ -55,7 +58,7 @@ public class HouseDiaryController {
 		try{
 			return new Result(houseDiaryService.getHouseCropsInfo(greenHouseId));
 		}catch(Exception e){
-			e.printStackTrace();
+			
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
@@ -73,7 +76,7 @@ public class HouseDiaryController {
 		try{
 			return new Result(houseDiaryService.insertHouseDiary(houseDiaryVO));
 		}catch(Exception e){
-			e.printStackTrace();
+			
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
@@ -85,7 +88,7 @@ public class HouseDiaryController {
 		try{
 			return new Result(houseDiaryService.insertDiaryFile(contentType,id,file));
 		}catch(Exception e){
-			e.printStackTrace();
+			
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
@@ -97,7 +100,7 @@ public class HouseDiaryController {
 			return new Result(houseDiaryService.updateDiaryFile(contentType,id,file));
 
 		}catch(Exception e){
-			e.printStackTrace();
+			
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
@@ -113,7 +116,7 @@ public class HouseDiaryController {
 		try{
 			return new Result(houseDiaryService.updateHouseDiary(houseDiaryVO));
 		}catch(Exception e){
-			e.printStackTrace();
+			
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
@@ -133,7 +136,7 @@ public class HouseDiaryController {
 		try{
 			return new Result(houseDiaryService.getMonthlyHouseDiaryList(greenHouseId,year,month));
 		}catch(Exception e){
-			e.printStackTrace();
+			
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
@@ -150,7 +153,7 @@ public class HouseDiaryController {
 		try{
 			return new Result(houseDiaryService.getHouseDiaryDetail(id));
 		}catch(Exception e){
-			e.printStackTrace();
+			
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
@@ -161,7 +164,7 @@ public class HouseDiaryController {
 		try{
 			return new Result(houseDiaryService.getCropsDiaryDetail(id));
 		}catch(Exception e){
-			e.printStackTrace();
+			
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
@@ -176,7 +179,7 @@ public class HouseDiaryController {
 		try{
 			return new Result(houseDiaryService.deleteHouseDiary(id));
 		}catch(Exception e){
-			e.printStackTrace();
+			
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
@@ -192,7 +195,7 @@ public class HouseDiaryController {
 		try{
 			return new Result(houseDiaryService.getCategoryList());
 		}catch(Exception e){
-			e.printStackTrace();
+			
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
@@ -206,7 +209,7 @@ public class HouseDiaryController {
 		try{
 			return new Result(houseDiaryService.insertCropsDiary(houseCropsVO));
 		}catch(Exception e){
-			e.printStackTrace();
+			
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
@@ -222,7 +225,7 @@ public class HouseDiaryController {
 		try{
 			return new Result(houseDiaryService.updateCropsDiary(houseCropsVO));
 		}catch(Exception e){
-			e.printStackTrace();
+			
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
@@ -238,7 +241,7 @@ public class HouseDiaryController {
 		try{
 			return new Result(houseDiaryService.deleteCropsDiary(id));
 		}catch(Exception e){
-			e.printStackTrace();
+			
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
@@ -255,7 +258,7 @@ public class HouseDiaryController {
 			//error message가 null 이고 push_type이 9인것들
 			return new Result(houseDiaryService.getImageDiaryList(houseId));
 		}catch(Exception e){
-			e.printStackTrace();
+			
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}

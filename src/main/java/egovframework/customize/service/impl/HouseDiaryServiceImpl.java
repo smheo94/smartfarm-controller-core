@@ -31,7 +31,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 		try{
 			houseDiaryMapper.insertHouseDiary(houseDiaryVO);
 		}catch(Exception e){
-			e.printStackTrace();
+			log.debug(e.getMessage());
 		}
 		return houseDiaryVO;
 	}
@@ -153,7 +153,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 		try{
 			houseDiaryMapper.updateHouseDiary(houseDiaryVO);				
 		}catch(Exception e){
-			e.printStackTrace();
+			log.debug(e.getMessage());
 			log.debug("updateHouseDiary Error : " + e);
 		}		
 		return houseDiaryVO;
@@ -180,7 +180,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 			result = houseDiaryMapper.getHouseDiaryDetail(param);			
 			result.put("houseDiaryFile", houseDiaryMapper.getHouseDiaryFile(param));
 		}catch(Exception e){
-			e.printStackTrace();
+			log.debug(e.getMessage());
 			log.debug("getHouseDiaryDetail Exception : " + e);
 		}		
 		return result;
@@ -195,7 +195,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 			result = houseDiaryMapper.getCropsDiaryDetail(param);
 			result.put("cropsDiaryFile", houseDiaryMapper.getCropsDiaryFile(param));
 		}catch(Exception e){
-			e.printStackTrace();
+			log.debug(e.getMessage());
 			log.debug("getCropsDiaryDetail Exception : " + e);
 		}		
 		return result;
@@ -251,7 +251,6 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 			houseDiaryMapper.deleteHouseDiary(param);
 			return houseDiaryMapper.deleteHouseDiaryFile(param);
 		}catch(Exception e){
-			e.printStackTrace();
 			log.debug("deleteHouseDiary Exception : " + e);
 			return null;
 		}

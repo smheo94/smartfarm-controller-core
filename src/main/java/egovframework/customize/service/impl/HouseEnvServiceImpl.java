@@ -26,6 +26,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +40,7 @@ import javax.annotation.Resource;
 
 @Service("houseEnvService")
 public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements HouseEnvService {
-
+	private static final Logger log = LoggerFactory.getLogger(HouseEnvServiceImpl.class);
 	@Resource(name="houseEnvMapper")
 	HouseEnvMapper houseEnvMapper;
 	
@@ -186,7 +188,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 				product.setProductMethod(productMethodList);
 			}			
 		}catch(Exception e){
-			e.printStackTrace();
+			log.debug(e.getMessage());
 		}
 		return productList;
 	}
@@ -280,7 +282,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 			param.put("nx", gridXY.get("x").toString());
 			param.put("ny", gridXY.get("y").toString());
 		}catch(Exception e){
-			e.printStackTrace();
+			log.debug(e.getMessage());
 		}		 
 		return houseEnvMapper.getWeatherCast(param);
 	}
