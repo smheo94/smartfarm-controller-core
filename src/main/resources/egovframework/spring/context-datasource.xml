@@ -7,12 +7,7 @@
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
     <import resource="context-property-placeholder.xml" />
-	<!-- 테스트 실행용 -->
-	<!--  
-	<jdbc:embedded-database id="dataSource" type="HSQL">
-		<jdbc:script location= "classpath:/db/sampledb.sql"/>
-	</jdbc:embedded-database>
-     --> 
+
 
     <!-- Mysql (POM에서 commons-dbcp, mysql-connector-java 관련 라이브러리 설정 ) -->
     <!--  
@@ -31,12 +26,26 @@
         <property name="password" value="shddjq01##"/>
     </bean>
      -->
+	<bean id="environmentVariablesConfiguration" class="org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig">
+		<property name="algorithm" value="PBEWithMD5AndDES" />		
+	</bean>
 
+	<bean id="configurationEncryptor" class="org.jasypt.encryption.pbe.StandardPBEStringEncryptor">
+		<property name="config" ref="environmentVariablesConfiguration" />
+		<property name="password" value="shddjq01##" />
+	</bean>
+	
+	<bean id="appProps" class="org.jasypt.spring3.properties.EncryptablePropertyPlaceholderConfigurer">
+		<constructor-arg ref="configurationEncryptor"/>
+	</bean>
+	
+	
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="${smartfarm.db.driver-class-name}"/>
         <property name="url" value="${smartfarm.db.url}"/>
         <property name="username" value="${smartfarm.db.username}"/>
-        <property name="password" value="${smartfarm.db.password}"/>
+        <!-- <property name="password" value="${smartfarm.db.password}"/> -->
+        <property name="password" value="${variable.secret.var}"/>        
         <property name="testOnBorrow" value="true"/>
         <property name="validationQuery" value="SELECT 1"/>
         <property name="testWhileIdle" value="true"/>

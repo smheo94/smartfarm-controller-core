@@ -27,13 +27,15 @@ public class SmartfarmInterceptorConfig extends WebMvcConfigurerAdapter {
     public String PROXY_SUB_PATH;
     @Value("${smartfarm.db.url}")
     private String DB_URL;
-    
+    @Value("${variable.secret.var}")
+    private String pass;
     @Resource(name="gsmEnvMapper")
     GsmEnvMapper gsmMapper;
     @Override
     @DependsOn( {"propertyConfig"})
     public void addInterceptors(InterceptorRegistry registry) {
         System.out.printf("Load Config : %s , %s, %s\t\n", GSM_KEY, SYSTEM_TYPE, DB_URL);
+        System.out.println("PASS */* = " + pass);
         registry.addInterceptor(new SmartFarmDataInterceptor(SYSTEM_TYPE, GSM_KEY, gsmMapper)).addPathPatterns("/**");
 //        registry.addInterceptor(new SmartFarmDataInterceptor(SYSTEM_TYPE, GSM_KEY, gsmMapper)).addPathPatterns("/**");
 
