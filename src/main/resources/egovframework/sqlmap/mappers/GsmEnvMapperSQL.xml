@@ -29,6 +29,7 @@
 		SET 
 			<if test="gsmKey != null"> gsm_key= #{gsmKey}</if>
 			<if test="userInfoId != null"> , user_info_id= #{userInfoId}</if>
+			<if test="userInfoId == 0"> , user_info_id = NULL</if>
 			<if test="isMine != null"> , is_mine= #{isMine}</if>
 			<if test="areaCode != null"> , area_code= #{areaCode}</if>
 			<if test="farmNickname != null"> , farm_nickname= #{farmNickname}</if>
