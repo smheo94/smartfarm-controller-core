@@ -5,12 +5,12 @@
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
 
-	<!-- <context:property-placeholder location="classpath:application.properties,file:/myapp/application.properties,file:/home/gsm/v4/conf/smartfarm-mgr-env.properties"
-					 ignore-resource-not-found="true"
-					 ignore-unresolvable="true"
-					 system-properties-mode="OVERRIDE" /> -->
-	 <context:property-placeholder location="classpath:application.properties,classpath:encryption.properties,file:/myapp/application.properties,file:/home/gsm/v4/conf/smartfarm-mgr-env.properties"
+	<context:property-placeholder location="classpath:application.properties,file:/myapp/application.properties,file:/home/gsm/v4/conf/smartfarm-mgr-env.properties"
 					 ignore-resource-not-found="true"
 					 ignore-unresolvable="true"
 					 system-properties-mode="OVERRIDE" />
+	 <!-- <context:property-placeholder location="classpath:application.properties,classpath:encryption.properties,file:/myapp/application.properties,file:/home/gsm/v4/conf/smartfarm-mgr-env.properties"
+					 ignore-resource-not-found="true"
+					 ignore-unresolvable="true"
+					 system-properties-mode="OVERRIDE" /> -->
 </beans>

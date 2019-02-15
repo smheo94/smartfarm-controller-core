@@ -26,6 +26,7 @@
         <property name="password" value="shddjq01##"/>
     </bean>
      -->
+     <!-- 
 	<bean id="environmentVariablesConfiguration" class="org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig">
 		<property name="algorithm" value="PBEWithMD5AndDES" />		
 	</bean>
@@ -38,14 +39,14 @@
 	<bean id="appProps" class="org.jasypt.spring3.properties.EncryptablePropertyPlaceholderConfigurer">
 		<constructor-arg ref="configurationEncryptor"/>
 	</bean>
-	
+	 -->
 	
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="${smartfarm.db.driver-class-name}"/>
         <property name="url" value="${smartfarm.db.url}"/>
         <property name="username" value="${smartfarm.db.username}"/>
-        <!-- <property name="password" value="${smartfarm.db.password}"/> -->
-        <property name="password" value="${variable.secret.var}"/>        
+        <property name="password" value="${smartfarm.db.password}"/>
+        <!-- <property name="password" value="${variable.secret.var}"/>  -->       
         <property name="testOnBorrow" value="true"/>
         <property name="validationQuery" value="SELECT 1"/>
         <property name="testWhileIdle" value="true"/>

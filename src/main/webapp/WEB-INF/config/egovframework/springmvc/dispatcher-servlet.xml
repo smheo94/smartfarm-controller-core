@@ -11,9 +11,11 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
     <context:component-scan base-package="egovframework">
-        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>               
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+        
+        
     </context:component-scan>
     
     <!-- HashMap으로 받기 위해 아래와 같이 수정한다. -->
@@ -81,6 +83,7 @@
  	<task:scheduled-tasks>
  		<task:scheduled ref="batchExcuetor" method="runWeatherSchedule" cron="0 15 2,5,8,11,14,17,20,23 * * *"/>
  		<task:scheduled ref="batchExcuetor" method="runSunriseSchedule" cron="0 1 0 * * *"/>
+ 		<!-- <task:scheduled ref="batchExcuetor" method="runSunriseSchedule" cron="0 * * * * *"/> -->
  		<!-- <task:scheduled ref="batchExcuetor" method="runWeatherSchedule" cron="* 01 11 * * *"/> -->
  	</task:scheduled-tasks>
  		
