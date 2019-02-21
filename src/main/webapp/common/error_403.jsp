@@ -1,25 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isErrorPage="true"%>
-<%
-    int status = response.getStatus();
-    String message = "페이지 오류가 발생했습니다.";
-    if ( exception != null && exception.getMessage() != null ) {
-        message = exception.getMessage();
-    } else {
-       if ( status == 400 )
-           message = "Bad Request";
-       else if ( status == 403 )
-           message = "Forbidden";
-       else if ( status == 404 )
-           message = "페이지를 찾을 수 없습니다.";
-    }
-%>
+<%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>[<%=status%>] ERROR PAGE</title>
+    <title>ERROR PAGE</title>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,900" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="/css/style.css" />
 
@@ -34,7 +20,7 @@
         <div class="notfound-404">
             <h1>Oops!</h1>
         </div>
-        <h2><%=status%> - <%=message%></h2>
+        <h2>403 - Forbidden.</h2>
     </div>
 </div>
 </body>
