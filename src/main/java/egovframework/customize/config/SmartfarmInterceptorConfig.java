@@ -15,6 +15,7 @@ import javax.annotation.Resource;
 //@PropertySource("classpath:smartfarm-mgr-env.properties")
 //@PropertySource(value={"classpath:application.properties","classpath:smartfarm-mgr-env.properties"}, ignoreResourceNotFound=true)
 @PropertySource(value={"classpath:application.properties","file:/myapp/application.properties","file:/home/gsm/v4/conf/smartfarm-mgr-env.properties"}, ignoreResourceNotFound=true)
+//@PropertySource(value={"classpath:application.properties","classpath:encryption.properties","file:/myapp/application.properties","file:/home/gsm/v4/conf/smartfarm-mgr-env.properties"}, ignoreResourceNotFound=true)
 @SuppressWarnings("PMD")
 public class SmartfarmInterceptorConfig extends WebMvcConfigurerAdapter {
 
