@@ -40,7 +40,7 @@ import javax.servlet.annotation.MultipartConfig;
  * 센서구성,제어기구성,온실구성,제어로직구성,외부기상대구성,임계치구성
  */
 @Controller
-@RequestMapping(value={"/env/houseDiary","/houseDiary"})
+@RequestMapping(value="/env/houseDiary")
 public class HouseDiaryController {
 
 	private static final Logger log = LoggerFactory.getLogger(HouseDiaryController.class);

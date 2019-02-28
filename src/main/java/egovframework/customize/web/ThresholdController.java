@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Slf4j
 @Controller
-@RequestMapping(value={"/env/threshold","/threshold"})
+@RequestMapping(value="/env/threshold")
 public class ThresholdController {
 
 	public static final String DEFAULT_SETUP_FILE_PATH = "data/env-default/";

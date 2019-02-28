@@ -54,7 +54,7 @@ import org.springmodules.validation.commons.DefaultBeanValidator;
  * 센서구성,제어기구성,온실구성,제어로직구성,외부기상대구성,임계치구성
  */
 @Controller
-@RequestMapping(value={"/controllerinfo","/env/controllerinfo"})
+@RequestMapping(value="/env/controllerinfo")
 public class ControllerInfoController {
 
 	public static final String DEFAULT_SETUP_FILE_PATH = "data/env-default/";

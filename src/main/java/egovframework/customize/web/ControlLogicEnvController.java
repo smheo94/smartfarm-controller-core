@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 @Controller
-@RequestMapping(value={"/env/controllogic","/controllogic"})
+@RequestMapping(value={"/env/controllogic"})
 public class ControlLogicEnvController {
 
 	public static final String DEFAULT_SETUP_FILE_PATH = "data/env-default/";
