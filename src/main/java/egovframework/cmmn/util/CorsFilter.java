@@ -29,13 +29,13 @@ public class CorsFilter implements javax.servlet.Filter {
 	        response.setHeader("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, Accept, Authorization, X-Smartfarm-Gsm-Key");
 	        response.setHeader("Access-Control-Allow-Origin", "*");
 
-			ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
+//			ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
 //			ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper(request);
 			
 //	        filterChain.doFilter(requestWrapper, responseWrapper);
-			filterChain.doFilter(req, responseWrapper);
+			filterChain.doFilter(req, res);
 
-			responseWrapper.copyBodyToResponse();
+//			responseWrapper.copyBodyToResponse();
 	    }
 
 	    public void init(FilterConfig arg0) throws ServletException {

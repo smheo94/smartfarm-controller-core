@@ -116,5 +116,10 @@
     </bean>
 	<!-- /For Pagination Tag -->
 
+    <!--
     <mvc:view-controller path="/cmmn/validator.do" view-name="cmmn/validator"/>
+
+    -->
+    <mvc:default-servlet-handler />
+    <mvc:annotation-driven />
 </beans>

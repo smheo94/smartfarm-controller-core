@@ -163,10 +163,11 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
             }
         } catch(Exception e){
         	LOG.debug(e.getMessage());
-        }finally {
-
-            wrapper.copyBodyToResponse();
         }
+//        finally {
+//
+//            wrapper.copyBodyToResponse();
+//        }
 
     }
 
