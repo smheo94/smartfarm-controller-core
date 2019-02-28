@@ -39,6 +39,7 @@ public class SmartfarmInterceptorConfig extends WebMvcConfigurerAdapter {
 //        System.out.println("PASS */* = " + pass);
         registry.addInterceptor(new SmartFarmDataInterceptor(SYSTEM_TYPE, GSM_KEY, gsmMapper)).addPathPatterns("/**");
 //        registry.addInterceptor(new SmartFarmDataInterceptor(SYSTEM_TYPE, GSM_KEY, gsmMapper)).addPathPatterns("/**");
-
     }
+
+
 }
