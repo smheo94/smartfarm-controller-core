@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kt.smartfarm.supervisor.mapper.GsmEnvMapper;
 
+import egovframework.cmmn.SystemType;
 import egovframework.cmmn.util.InterceptIgnoreGSMKey;
 import egovframework.cmmn.util.InterceptPost;
 import egovframework.cmmn.util.InterceptPre;
@@ -52,12 +53,11 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
     String myGSMKey;
     String proxySubPath;
     GsmEnvMapper gsmEnvMapper;
-    public SmartFarmDataInterceptor(String config, String proxySubPath, String myGSMKey, GsmEnvMapper gsmMapper) {
+    public SmartFarmDataInterceptor(String config, String myGSMKey, GsmEnvMapper gsmMapper) {
         this.systemType = config;
 //        this.myGSMKey = "3785";
         this.myGSMKey = myGSMKey;
         this.gsmEnvMapper = gsmMapper;
-        this.proxySubPath = proxySubPath;
     }
 
     public boolean startTran = false;
