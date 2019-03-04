@@ -94,10 +94,21 @@
     <auth-method>BASIC</auth-method>
   </login-config>
 
-  <error-page>
-    <error-code>403</error-code>
-    <location>/common/error_403.jsp</location>
-  </error-page>
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>Protected Context</web-resource-name>
+      <url-pattern>/*</url-pattern>
+      <http-method>GET</http-method>
+      <http-method>PUT</http-method>
+      <http-method>POST</http-method>
+      <http-method>DELETE</http-method>
+      <http-method>HEAD</http-method>
+      <http-method>TRACE</http-method>
+      <http-method>OPTIONS</http-method>
+    </web-resource-collection>
+    <auth-constraint />
+  </security-constraint>
+
   <error-page>
     <location>/common/error.jsp</location>
   </error-page>
