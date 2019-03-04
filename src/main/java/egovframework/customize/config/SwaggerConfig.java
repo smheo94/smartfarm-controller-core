@@ -1,11 +1,6 @@
 package egovframework.customize.config;
 
-import egovframework.customize.intercepter.SmartFarmDataInterceptor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.core.annotation.Order;
 import org.springframework.web.servlet.config.annotation.*;
 
 import springfox.documentation.builders.PathSelectors;

@@ -8,39 +8,7 @@
 
     <import resource="context-property-placeholder.xml" />
 
-
     <!-- Mysql (POM에서 commons-dbcp, mysql-connector-java 관련 라이브러리 설정 ) -->
-    <!--  
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://127.0.0.1:3307/gsm" />
-        <property name="username" value="root"/>
-        <property name="password" value="shddjq01"/>
-    </bean>
-     -->
-     <!-- 
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://router.vivans.net:47316/sf_farm_001" />
-        <property name="username" value="sf_dev"/>
-        <property name="password" value="shddjq01##"/>
-    </bean>
-     -->
-     <!-- 
-	<bean id="environmentVariablesConfiguration" class="org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig">
-		<property name="algorithm" value="PBEWithMD5AndDES" />		
-	</bean>
-
-	<bean id="configurationEncryptor" class="org.jasypt.encryption.pbe.StandardPBEStringEncryptor">
-		<property name="config" ref="environmentVariablesConfiguration" />
-		<property name="password" value="shddjq01##" />
-	</bean>
-	
-	<bean id="appProps" class="org.jasypt.spring3.properties.EncryptablePropertyPlaceholderConfigurer">
-		<constructor-arg ref="configurationEncryptor"/>
-	</bean>
-	 -->
-	
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="${smartfarm.db.driver-class-name}"/>
         <property name="url" value="${smartfarm.db.url}"/>
@@ -53,33 +21,5 @@
         <property name="maxWait" value="60000" />
 		<property name="timeBetweenEvictionRunsMillis" value="7200000" />
    	</bean>
-   	<!--
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://127.0.0.1:3307/gsm_empty" />
-        <property name="username" value="root"/>
-        <property name="password" value="shddjq01"/>
-    </bean>
-    
-    -->
-    <!-- 
-    <bean id="dataSource2" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://127.0.0.1:3307/gsm" />
-        <property name="username" value="root"/>
-        <property name="password" value="shddjq01"/>
-    </bean>
-     -->
-    <!-- 필요하면 multiDataSource 를 설정해야 함. -->
-    <!-- http://blast21.kr/10 참조 -->
-    
-    <!-- oracle (POM에서 commons-dbcp, ojdbc(라이센스 사항으로 별도로 배포되지 않음) 관련 라이브러리 설정)
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
-        <property name="url" value="jdbc:oracle:thin:@127.0.0.1:1521:example" />
-        <property name="username" value="user"/>
-        <property name="password" value="password"/>
-    </bean>
-    -->
-    
+
 </beans>

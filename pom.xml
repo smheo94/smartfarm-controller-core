@@ -115,12 +115,12 @@
 		    <scope>provided</scope>
 		    <version>2.5</version>
         </dependency>
-<!-- https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client -->
-<dependency>
-    <groupId>org.mariadb.jdbc</groupId>
-    <artifactId>mariadb-java-client</artifactId>
-    <version>2.2.6</version>
-</dependency>
+        <!-- https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client -->
+        <dependency>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
+            <version>2.2.6</version>
+        </dependency>
 
         <dependency>
 		    <groupId>javax.servlet</groupId>
@@ -174,7 +174,6 @@
 		<!-- json end -->
         
         <!-- mysql이나 oracle DB 사용시 아래 설정 추가  -->
-        
         <dependency>
             <groupId>com.googlecode.log4jdbc</groupId>
             <artifactId>log4jdbc</artifactId>
@@ -227,7 +226,7 @@
 		    <artifactId>commons-fileupload</artifactId>
 		    <version>1.3.2</version>
 		</dependency>
-		 
+
 		<!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
 		<dependency>
 		    <groupId>commons-io</groupId>
