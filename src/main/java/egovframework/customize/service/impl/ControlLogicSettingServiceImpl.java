@@ -15,6 +15,7 @@ package egovframework.customize.service.impl;
 import com.kt.smartfarm.supervisor.mapper.ControlLogicSettingMapper;
 import egovframework.customize.service.*;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -32,6 +33,16 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 		return mapper.getControlLogicSetting(gsmKey, houseId, controlSettingId);
 	}
 
+//	@Override
+//	public ControlLogicSettingHistoryVO getControlLogicSettingHIstoryDetail(Integer gsmKey, Integer houseId, Integer controlSettingId, Long logDt) {
+//		return mapper.getControlLogicSettingHistoryDetail(gsmKey, houseId, controlSettingId, logDt);
+//	}
+
+	@Override
+	public List<ControlLogicSettingHistoryVO> getControlLogicSettingHIstoryList(Integer gsmKey, Integer houseId, Integer controlSettingId, Long fromData, Long toDate)
+	{
+		return  mapper.getControlLogicSettingHistoryList(gsmKey, houseId, controlSettingId, fromData, toDate);
+	}
 	@Override
 	public ControlLogicSettingVO insertLogicSetting(ControlLogicSettingVO vo) {
 		Integer tempControlSettingId = null;

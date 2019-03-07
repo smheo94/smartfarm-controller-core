@@ -50,6 +50,31 @@ public class ControlLogicSettingController {
 		}
 	}
 
+
+	@RequestMapping(value = "/gsm/{gsmKey}/house/{houseId}/settingId/{controlSettingId}/history", method = RequestMethod.GET)
+	@ResponseBody
+	public Result<List<ControlLogicSettingVO>> historyList(@PathVariable("gsmKey") Integer gsmKey, @PathVariable("houseId") Integer houseId,
+														   @PathVariable("controlSettingId") Integer controlSettingId,
+														   @RequestParam(required = false, name = "from_date") Long fromDate,
+														   @RequestParam(required = false, name = "to_date") Long toDate) {
+		try {
+			return new Result(service.getControlLogicSettingHIstoryList(gsmKey, houseId, controlSettingId, fromDate, toDate));
+		} catch (Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		}
+	}
+
+//	@RequestMapping(value = "/gsm/{gsmKey}/house/{houseId}/settingId/{controlSettingId}/history/logdt/{logdt}", method = RequestMethod.GET)
+//	@ResponseBody
+//	public Result<ControlLogicSettingVO> historyDetail(@PathVariable("gsmKey") Integer gsmKey, @PathVariable("houseId") Integer houseId,
+//															 @PathVariable("controlSettingId") Integer controlSettingId, @PathVariable("logdt") Long logDt) {
+//		try {
+//			return new Result(service.getControlLogicSettingHIstoryDetail(gsmKey, houseId, controlSettingId, logDt));
+//		} catch (Exception e) {
+//			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+//		}
+//	}
+
 	@RequestMapping(value = "/{controlSettingId}", method = RequestMethod.GET)
 	@ResponseBody
 	public Result<List<ControlLogicSettingVO>> get(@PathVariable("controlSettingId") Integer controlSettingId) {

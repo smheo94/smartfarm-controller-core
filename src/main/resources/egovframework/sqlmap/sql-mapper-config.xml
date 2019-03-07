@@ -34,6 +34,7 @@
 		<typeAlias alias="vDeviceEnvVO" type="egovframework.customize.service.VDeviceEnvVO"/>
 
 		<typeAlias alias="controlLogicSettingVO" type="egovframework.customize.service.ControlLogicSettingVO"/>
+		<typeAlias alias="controlLogicSettingHistoryVO" type="egovframework.customize.service.ControlLogicSettingHistoryVO"/>
 		<typeAlias alias="controlLogicSettingDeviceVO" type="egovframework.customize.service.ControlLogicSettingDeviceVO"/>
 
 		<typeAlias alias="controlLogicSettingCheckConditionVO" type="egovframework.customize.service.ControlLogicSettingCheckConditionVO"/>
