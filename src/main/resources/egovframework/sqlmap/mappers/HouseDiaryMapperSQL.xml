@@ -58,7 +58,13 @@
 		</set>
 		WHERE id=#{id} AND green_house_id = #{greenHouseId}
 	</update>
-	
+
+	<select id="selectCropsDiaryFile" resultType="houseDiaryVO">
+		SELECT crops_diary_idx, file_name, update_date
+		FROM crops_diary_file
+		WHERE crops_diary_idx = #{id} AND file_name = #{fileName};
+	</select>
+
 	<update id="updateHouseDiaryFile" parameterType="houseDiaryVO">
 		UPDATE house_diary_file
 		SET
