@@ -193,7 +193,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 			HashMap<String,Object> param = new HashMap<>();			
 			param.put("id", id);
 			result = houseDiaryMapper.getCropsDiaryDetail(param);
-			result.put("cropsDiaryFile", houseDiaryMapper.getCropsDiaryFile(param));
+			result.put("houseDiaryFile", houseDiaryMapper.getCropsDiaryFile(param));
 		}catch(Exception e){
 			log.debug(e.getMessage());
 			log.debug("getCropsDiaryDetail Exception : " + e);

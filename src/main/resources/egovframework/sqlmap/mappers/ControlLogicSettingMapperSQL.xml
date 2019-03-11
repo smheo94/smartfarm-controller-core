@@ -176,4 +176,166 @@
         SELECT operator_code, operator_group, name, display_order
         FROM cd_control_setting_operator
     </select>
+
+    <insert id="insertControlSettingChkConditionDevice" parameterType="controlLogicSettingCheckConditionVO">
+        INSERT INTO control_setting_chk_condition_device (control_setting_chk_condition_id, device_id)
+        <foreach collection="deviceIdList" item="deviceIdList" index="deviceIdList" separator="," open=" VALUES ">
+            ( #{id}, #{deviceIdList} )
+        </foreach>
+    </insert>
+    <delete id="deleteControlSettingChkConditionDevice">
+        DELETE FROM control_setting_chk_condition_device
+        WHERE control_setting_chk_condition_id = #{id}
+    </delete>
+
+
+    <insert id="insertControlSettingChkCondition" parameterType="controlLogicSettingCheckConditionVO" useGeneratedKeys="true">
+        INSERT INTO control_setting_chk_condition (control_setting_id, operator_code, operator_condition, value, action
+        <if test="id != null">
+            ,id
+        </if>
+        )
+        VALUES( #{controlSettingId}, #{operatorCode}, #{operatorCondition}, #{value}, #{action}
+        <if test="id != null">
+            ,#{id}
+        </if>
+        );
+        <selectKey keyProperty="id" resultType="Integer" keyColumn="id">
+            SELECT LAST_INSERT_ID() AS id;
+        </selectKey>
+    </insert>
+    <update id="updateControlSettingChkCondition" parameterType="controlLogicSettingCheckConditionVO">
+        update
+            control_setting_chk_condition
+        set control_setting_id = #{controlSettingId}, operator_code = #{operatorCode}, operator_condition = #{operatorCondition}, value = #{value}, action = #{action}
+        where id = #{id};
+    </update>
+    <delete id="deleteControlSettingChkCondition">
+        DELETE FROM
+        control_setting_chk_condition
+        <where>
+            <if test="id != null">AND id = #{id};</if>
+            <if test="control_setting_id != null">AND control_setting_id = #{control_setting_id};</if>
+        </where>
+    </delete>
+
+
+    <insert id="insertControlSettingDevice" parameterType="controlLogicSettingDeviceVO" useGeneratedKeys="true">
+        INSERT INTO control_setting_device ( control_setting_id, logic_id, device_num, device_insert_order, device_id
+        <if test="id != null">
+            ,id
+        </if>
+        )
+        VALUES( #{controlSettingId}, #{logicId}, #{deviceNum}, #{deviceInsertOrder}, #{deviceId}
+        <if test="id != null">
+            ,#{id}
+        </if>
+        );
+        <selectKey keyProperty="id" resultType="Integer" keyColumn="id">
+            SELECT LAST_INSERT_ID() AS id;
+        </selectKey>
+    </insert>
+    <update id="updateControlSettingDevice" parameterType="controlLogicSettingDeviceVO">
+        update
+            control_setting_device
+        set control_setting_id = #{controlSettingId}, logic_id = #{logicId}, device_num = #{deviceNum}, device_insert_order = #{deviceInsertOrder},
+            device_id = #{deviceId}
+        where id = #{id};
+    </update>
+    <delete id="deleteControlSettingDevice">
+        DELETE FROM
+        control_setting_device
+        <where>
+            <if test="id != null">AND id = #{id};</if>
+            <if test="control_setting_id != null">AND control_setting_id = #{control_setting_id};</if>
+        </where>
+    </delete>
+
+
+    <insert id="insertControlSettingPreOrder" parameterType="controlLogicSettingVO" useGeneratedKeys="true">
+        INSERT INTO control_setting_pre_order (control_setting_id, pre_order_setting_id
+        <if test="id != null">
+            ,id
+        </if>)
+        VALUES( #{controlSettingId}, #{preOrderSettingId}
+        <if test="id != null">
+            ,#{id}
+        </if>
+        );
+    </insert>
+    <delete id="deleteControlSettingPreOrder">
+        DELETE FROM
+        control_setting_pre_order
+        <where>
+            <if test="id != null">AND id = #{id};</if>
+            <if test="control_setting_id != null">AND control_setting_id = #{control_setting_id};</if>
+        </where>
+    </delete>
+
+    <insert id="insertControlSetting" parameterType="controlLogicSettingVO" useGeneratedKeys="true">
+        INSERT INTO control_setting ( green_house_id, logic_name, logic_id, logic_period_size, logic_env, logic_period_env, create_dt, update_dt,
+        auto_manual_mode, java_class_name
+        <if test="controlSettingId != null">
+            ,id
+        </if>
+        )
+        VALUES(#{greenHouseId}, #{logicName}, #{logicId}, #{logicPeriodSize}, #{logicEnv}, #{logicPeriodEnv}, NOW(), NOW(),
+        #{autoManualMode}, (SELECT java_class_name FROM control_logic WHERE id = #{logicId} )
+        <if test="controlSettingId != null">
+            ,#{controlSettingId}
+        </if>
+        );
+        <selectKey keyProperty="controlSettingId" resultType="Integer" keyColumn="id">
+            SELECT LAST_INSERT_ID() AS id;
+        </selectKey>
+    </insert>
+    <update id="updateControlSetting" parameterType="controlLogicSettingVO">
+        update
+            control_setting
+        set logic_name = #{logicName}, logic_id = #{logicId}, logic_period_size = #{logicPeriodSize}, logic_env = #{logicEnv}
+                , logic_period_env = #{logicPeriodEnv},  update_dt = NOW(), auto_manual_mode = #{autoManualMode}
+        where id = #{controlSettingId};
+    </update>
+    <delete id="deleteControlSetting">
+        DELETE FROM
+            control_setting
+        WHERE id = #{control_setting_id}
+    </delete>
+    <delete id="delChkConditionSetting">
+        DELETE FROM
+            control_setting_chk_condition
+        WHERE id = #{chkConditionId}
+    </delete>
+
+
+    <update id="updateControlSettingEnv">
+        UPDATE control_setting
+        <set>
+            <if test="logic_env_column != null">
+                <foreach collection="logic_env_column" open="JSON_REPLACE(logic_env, " separator="," close=")" index="logic_env_column" item="logic_env_column">
+                    CONCAT( '$.', #{logic_env_column} ) , #{logic_env_value}
+                </foreach>
+            </if>
+            <if test="logic_env_column != null">
+                ,
+                <foreach collection="logic_period_env_column" open="JSON_REPLACE(logic_period_env, " separator="," close=")" index="logic_period_env_column"
+                         item="logic_period_env_column">
+                    CONCAT( '$.', #{logic_period_env_column} ) , #{logic_period_env_value}
+                </foreach>
+            </if>
+        </set>
+        WHERE id = #{control_setting_id};
+    </update>
+
+    <update id="updateLogicEnv">
+        UPDATE control_setting
+        <set>
+            <if test="logic_env != null"> logic_env = #{logic_env} </if>
+            <if test="logic_period_env != null">,logic_period_env = #{logic_period_env}</if>
+            <if test="auto_manual_mode != null">,auto_manual_mode = #{auto_manual_mode}</if>
+            <if test="update_dt != null">,update_dt = #{update_dt}</if>
+        </set>
+        WHERE id = #{control_setting_id};
+    </update>
+
 </mapper>

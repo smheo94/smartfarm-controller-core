@@ -169,7 +169,7 @@ public class ClassUtil {
     				return Integer.valueOf((String)value);
     			}				
     		}
-    		LOG.error( "Exception : [invokeMethod] : %s --> %s, %s\r\n",  value.getClass().getName(), type.getName(), e.toString() );
+    		LOG.error( "Exception : [invokeMethod] : {} --> {}, {}\r\n",  value.getClass().getName(), type.getName(), e.toString() );
     		throw e;
 		}
 	}

@@ -251,6 +251,7 @@
             <version>1.9.2</version>
         </dependency>
 
+
     </dependencies>
 
 	<build>
@@ -444,7 +445,7 @@
                             <!--<tasks>-->
                                 <!--<delete>-->
                                     <!--<fileset dir="${project.build.outputDirectory}/classes" includes="application.properties" />-->
-                                    <!--<fileset dir="${project.build.outputDirectory}/classes" includes="log4j.xml" />-->
+                                    <!--<fileset dir="${project.build.outputDirectory}/classes" includes="log4j2.xml" />-->
                                 <!--</delete>-->
                             <!--</tasks>-->
                         <!--</configuration>-->

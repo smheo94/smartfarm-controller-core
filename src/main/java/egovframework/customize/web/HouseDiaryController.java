@@ -157,17 +157,7 @@ public class HouseDiaryController {
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
-	
-	@RequestMapping(value= "/cropsDiary/{id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Result cropsDiaryDetail(@PathVariable Integer id){
-		try{
-			return new Result(houseDiaryService.getCropsDiaryDetail(id));
-		}catch(Exception e){
-			
-			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-		}
-	}
+
 	/**
 	 * @description 작업일지, 가계부 월별 리스트 
 	 * @param id
@@ -183,7 +173,18 @@ public class HouseDiaryController {
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
-	
+
+
+	@RequestMapping(value= "/cropsDiary/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public Result cropsDiaryDetail(@PathVariable Integer id){
+		try{
+			return new Result(houseDiaryService.getCropsDiaryDetail(id));
+		}catch(Exception e){
+
+			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
 	/**
 	 * 작물
 	 * 종류
