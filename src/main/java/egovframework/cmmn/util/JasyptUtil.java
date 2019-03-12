@@ -6,7 +6,8 @@ public class JasyptUtil {
 
     public static String encrypt(String text) {
         String algorithm = "PBEWithMD5AndDES";
-        String password = "SMARTFARM-PASS";
+        //String password = "SMARTFARM-PASS";
+        String password = null;
         return encrypt(algorithm, password, text);
     }
 
