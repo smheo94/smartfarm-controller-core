@@ -4,11 +4,33 @@
 	<update id="schemaUpdate_20181129_1">
 		/* Alter table in target */
 		ALTER TABLE `cd_device_type`
-			ADD COLUMN `reset_value` DOUBLE   NOT NULL DEFAULT 0 AFTER `topic_group` ,
-			ADD COLUMN `accum_m` INT(11)   NOT NULL DEFAULT 0 COMMENT '분누적 ( 0 , 1 )' AFTER `reset_value` ,
-			ADD COLUMN `accum_h` INT(11)   NOT NULL DEFAULT 0 COMMENT '시누적 ( 0 , 1 )' AFTER `accum_m` ,
-			ADD COLUMN `accum_d` INT(11)   NOT NULL DEFAULT 0 COMMENT '일누적(  0, 1 )' AFTER `accum_h` ,
-			ADD COLUMN `op_time` INT(11)   NOT NULL DEFAULT 0 COMMENT '작동시간누적( 0, 1 )' AFTER `accum_d` ,
-			ADD COLUMN `value_type` INT(11)   NOT NULL DEFAULT 0 COMMENT '0 : 순간 값 , 1 : 누적 값' AFTER `op_time`
+			ADD COLUMN `reset_point` DOUBLE   NOT NULL DEFAULT 0 ,
+			ADD COLUMN `accum_m` INT(11)   NOT NULL DEFAULT 0 COMMENT '분누적 ( 0 , 1 )',
+			ADD COLUMN `accum_h` INT(11)   NOT NULL DEFAULT 0 COMMENT '시누적 ( 0 , 1 )' ,
+			ADD COLUMN `accum_d` INT(11)   NOT NULL DEFAULT 0 COMMENT '일누적(  0, 1 )' ,
+			ADD COLUMN `op_time` INT(11)   NOT NULL DEFAULT 0 COMMENT '작동시간누적( 0, 1 )',
+			ADD COLUMN `value_type` INT(11)   NOT NULL DEFAULT 0 COMMENT '0 : 순간 값 , 1 : 누적 값';
+	</update>
+
+	<update id="schemaUpdate_20181203_1">
+
+		INSERT INTO `cd_device_type` (`id`, `name`, `description`, `last_update`, `device_type`, `device_type_name`, `device_type_group`, `kind`, `is_physical_device`, `manufacturer`, `model_name`, `model_spec`, `model_version`, `is_master`, `use_house_type`, `default_address1`, `default_address2`, `default_address3`, `dcac`, `min_value`, `max_value`, `description_i18n`, `device_type_name_i18n`, `unit`, `round_number`, `topic_group`, `reset_point`, `accum_m`, `accum_h`, `accum_d`, `op_time`, `value_type`)
+		VALUES ('12802', 'sensor_gr_nutamt_1', '노지액비계1', '2014-11-13 00:00:00', 'sensor_gr_nutamt_1', '노지액비계1', 'sensor_gr_nutamt', 'sensor_inner', '1', 'KT', '1', '1', '1', '0', '12', 'grflowamt', NULL, NULL, 'DC', '0', '651.26', '__common.device_type.name.sensor_nutamt', '__common.device_type.group_name.sensor_nutamt', NULL, NULL, 'NutrientFlow', '600', '1', '1', '1', '0', '2');
+		UPDATE `cd_device_type` SET `reset_point` = '60000',  `device_type_name_i18n` = '__common.device_type.name.sensor_flowamt'
+				, `device_type_name_i18n` = '__common.device_type.group_name.sensor_flowamt'
+		WHERE `id` = '12801';
+
+		UPDATE `cd_device_type` SET `accum_h` = '1' , `accum_m` = '1', `accum_d` = '1',  `value_type` = '2'  WHERE `id` = '21201';
+		UPDATE `cd_device_type` SET `accum_h` = '1' , `accum_m` = '1', `accum_d` = '1',  `value_type` = '2'  WHERE `id` = '21202';
+		UPDATE `cd_device_type` SET `accum_h` = '1' , `accum_m` = '1', `accum_d` = '1',  `value_type` = '2'  WHERE `id` = '12801';
+		UPDATE `cd_device_type` SET `accum_h` = '1' , `accum_m` = '1', `accum_d` = '1',  `value_type` = '1'  WHERE `id` = '906';
+		UPDATE `cd_device_type` SET `accum_h` = '1' , `accum_m` = '1', `accum_d` = '1',  `value_type` = '1'  WHERE `id` = '903';
+		UPDATE `cd_device_type` SET `op_time` = '1'  WHERE `id` = '17';
+		UPDATE `cd_device_type` SET `op_time` = '1'  WHERE `id` = '24';
+		UPDATE `cd_device_type` SET `op_time` = '1'  WHERE `id` = '23';
+	</update>
+
+	<update id="schemaUpdate_20181204_1">>
+		ALTER TABLE `monitoring_current` CHANGE `data` `data` VARCHAR(20000) CHARSET utf8 COLLATE utf8_general_ci NULL;
 	</update>
 </mapper>

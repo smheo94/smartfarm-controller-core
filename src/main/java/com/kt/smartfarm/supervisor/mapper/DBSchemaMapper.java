@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 @Mapper("dBSchemaMapper")
 public interface DBSchemaMapper {
     void schemaUpdate_20181129_1();
+    void schemaUpdate_20181203_1();
+    void schemaUpdate_20181204_1();
 }
