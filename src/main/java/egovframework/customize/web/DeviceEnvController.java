@@ -20,10 +20,7 @@ import java.util.List;
 import egovframework.cmmn.util.InterceptPost;
 import egovframework.cmmn.util.InterceptPre;
 import egovframework.cmmn.util.Result;
-import egovframework.customize.service.DeviceEnvService;
-import egovframework.customize.service.DeviceEnvVO;
-import egovframework.customize.service.VDeviceEnvVO;
-import egovframework.customize.service.VDeviceInfoVO;
+import egovframework.customize.service.*;
 
 import javax.annotation.Resource;
 
@@ -44,6 +41,8 @@ public class DeviceEnvController {
 	@Resource(name = "deviceEnvService")
 	private DeviceEnvService deviceEnvService;
 
+	@Resource(name="authCheckService")
+	private AuthCheckService authCheckService;
 	/**
 	 * 구동기,센서 등록
 	 * @param device	 *
@@ -73,6 +72,9 @@ public class DeviceEnvController {
 	public Result<List<DeviceEnvVO>> list( @PathVariable("gsm_key") Integer gsmKey,
 										   @RequestParam("withVDeviceList") Boolean withVDeviceList){
 		try {
+			if( !authCheckService.authCheck(gsmKey, null) ) {
+				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
+			}
 			return new Result(deviceEnvService.list(gsmKey, null, withVDeviceList));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
@@ -94,6 +96,9 @@ public class DeviceEnvController {
 	@InterceptPre
 	public Result<DeviceEnvVO> update(@PathVariable("gsm_key") Integer gsmKey, @PathVariable("controllerId") String controllerId, @RequestBody List<DeviceEnvVO> device){
 		try {
+			if( !authCheckService.authCheck(gsmKey, null) ) {
+				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
+			}
 			return new Result(deviceEnvService.update(device)); // gsmKey, controllerId, deviceId 기준으로 업데이트
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, device);
@@ -112,6 +117,9 @@ public class DeviceEnvController {
 	public Result<List<DeviceEnvVO>> list( @PathVariable("gsm_key") Integer gsmKey, @PathVariable("controllerId") Integer controllerId,
 										   @RequestParam(value = "withVDeviceList", required = false) Boolean withVDeviceList) {
 		try {
+			if( !authCheckService.authCheck(gsmKey, null) ) {
+				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
+			}
 			return new Result(deviceEnvService.list(gsmKey, controllerId, withVDeviceList));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
@@ -142,6 +150,9 @@ public class DeviceEnvController {
 	@InterceptPre
 	public Result<DeviceEnvVO> delete(@PathVariable("gsm_key") Integer gsmKey,  @PathVariable("controllerId") Integer controllerId){
 		try {
+			if( !authCheckService.authCheck(gsmKey, null) ) {
+				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
+			}
 			return new Result(deviceEnvService.delete(gsmKey, controllerId));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);

@@ -28,11 +28,7 @@ import egovframework.cmmn.util.DateUtil;
 import egovframework.cmmn.util.InterceptPost;
 import egovframework.cmmn.util.InterceptPre;
 import egovframework.cmmn.util.Result;
-import egovframework.customize.service.CCTVSettingVO;
-import egovframework.customize.service.DeviceEnvVO;
-import egovframework.customize.service.HouseEnvVO;
-import egovframework.customize.service.ProductVO;
-import egovframework.customize.service.HouseEnvService;
+import egovframework.customize.service.*;
 
 import javax.annotation.Resource;
 
@@ -57,7 +53,8 @@ public class HouseEnvController {
 
 	@Resource(name = "houseEnvService")
 	private HouseEnvService houseEnvService;
-
+	@Resource(name="authCheckService")
+	private AuthCheckService authCheckService;
 	/**
 	 * @description 온실 등록 ( 제어기 선택은 어디서? 밑에서~ )
 	 * @param request
@@ -70,6 +67,9 @@ public class HouseEnvController {
 	@InterceptPost
 	public Result<HouseEnvVO> insert(@PathVariable("gsm_key") Integer gsmKey, @RequestBody HouseEnvVO house) {
 		try {
+			if( !authCheckService.authCheck(gsmKey, null) ) {
+				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
+			}
 			return new Result(houseEnvService.insert(house));
 		} catch (Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, house);
@@ -86,6 +86,9 @@ public class HouseEnvController {
 	@InterceptPost
 	public Result<HashMap<String, Object>> houesMapDeviceInsert(@PathVariable("gsm_key") Integer gsmKey, @RequestBody HashMap<String, Object> map) {
 		try {
+			if( !authCheckService.authCheck(gsmKey, null) ) {
+				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
+			}
 			return new Result(houseEnvService.insertHouseDeviceMap(map));
 		} catch (Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, map);
@@ -102,6 +105,9 @@ public class HouseEnvController {
 	@InterceptPre
 	public Result<HashMap<String, Object>> houesMapDeviceUpdate(@PathVariable("gsm_key") Integer gsmKey, @RequestBody HashMap<String, Object> map) {
 		try {
+			if( !authCheckService.authCheck(gsmKey, null) ) {
+				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
+			}
 			return new Result(houseEnvService.deleteHouseDeviceMap(map));
 		} catch (Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, map);
@@ -119,6 +125,9 @@ public class HouseEnvController {
 	@InterceptPre
 	public Result<HouseEnvVO> update(@PathVariable("gsm_key") Integer gsmKey, @RequestBody HouseEnvVO house) {
 		try {
+			if( !authCheckService.authCheck(gsmKey, null) ) {
+				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
+			}
 			return new Result(houseEnvService.update(house)); // gsmKey, id기준으로 업데이트
 		} catch (Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, house);
@@ -129,6 +138,9 @@ public class HouseEnvController {
 	@ResponseBody
 	public Result<List<HashMap<String, Object>>> list(@PathVariable("gsm_key") Integer gsmKey) {
 		try {
+			if( !authCheckService.authCheck(gsmKey, null) ) {
+				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
+			}
 			return new Result(houseEnvService.list(gsmKey, true, true));
 		} catch (Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
@@ -139,6 +151,9 @@ public class HouseEnvController {
 	@ResponseBody
 	public Result<HashMap<String, Object>> get(@PathVariable("gsm_key") Integer gsmKey, @PathVariable("greenHouseId") Integer greenHouseId) {
 		try {
+			if( !authCheckService.authCheck(gsmKey, null) ) {
+				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
+			}
 			return new Result<HashMap<String, Object>>(houseEnvService.get(gsmKey, greenHouseId));
 		} catch (Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
@@ -150,6 +165,9 @@ public class HouseEnvController {
 	@InterceptPre
 	public Result<HouseEnvVO> delete(@PathVariable("gsm_key") Integer gsmKey, @PathVariable("greenHouseId") Integer greenHouseId) {
 		try {
+			if( !authCheckService.authCheck(gsmKey, null) ) {
+				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
+			}
 			return new Result(houseEnvService.delete(gsmKey, greenHouseId));
 		} catch (Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
@@ -190,6 +208,9 @@ public class HouseEnvController {
 	@ResponseBody
 	public Result<List<DeviceEnvVO>> houseDeviceList(@PathVariable("houseId") Integer houseId) {
 		try {
+			if( !authCheckService.authCheck(null, houseId) ) {
+				return new Result("Not Allowed", HttpStatus.FORBIDDEN, houseId);
+			}
 			return new Result(houseEnvService.houseDeviceList(houseId));
 		} catch (Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
@@ -204,6 +225,9 @@ public class HouseEnvController {
 	@ResponseBody
 	public Result<HashMap<String,Object>> houseDeviceInfoList(@PathVariable("houseId") Integer houseId) {
 		try {
+			if( !authCheckService.authCheck(null, houseId) ) {
+				return new Result("Not Allowed", HttpStatus.FORBIDDEN, houseId);
+			}
 			return new Result(houseEnvService.houseDeviceInfoList(houseId));
 		} catch (Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
@@ -221,6 +245,9 @@ public class HouseEnvController {
 	public Result weatherCast(@RequestParam(value = "house_id", required = false) Integer houseId, @RequestParam(value = "from_date", required = false) String fromDate,
 			@RequestParam(value = "to_date", required = false) String toDate) {
 		try {
+			if( !authCheckService.authCheck(null, houseId) ) {
+				return new Result("Not Allowed", HttpStatus.FORBIDDEN, houseId);
+			}
 			return new Result(houseEnvService.getWeatherCast(houseId, fromDate, toDate));
 		} catch (Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
@@ -241,7 +268,10 @@ public class HouseEnvController {
 	@RequestMapping(value= "/{houseId}/groundDeviceList", method = RequestMethod.GET)
 	@ResponseBody
 	public Result<List<DeviceEnvVO>> groundDeviceList(@PathVariable("houseId") Integer houseId){
-		try {			
+		try {
+			if( !authCheckService.authCheck(null, houseId) ) {
+				return new Result("Not Allowed", HttpStatus.FORBIDDEN, houseId);
+			}
 			return new Result(houseEnvService.groundDeviceList(houseId));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
@@ -269,6 +299,9 @@ public class HouseEnvController {
 	@ResponseBody
 	public Result<List<CCTVSettingVO>> insertCctv(@PathVariable Integer houseId) {
 		try {
+			if( !authCheckService.authCheck(null, houseId) ) {
+				return new Result("Not Allowed", HttpStatus.FORBIDDEN, houseId);
+			}
 			return new Result(houseEnvService.getCctvsByHouseId(houseId));
 		} catch (Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);

@@ -18,6 +18,7 @@ package egovframework.customize.web;
 import egovframework.cmmn.util.InterceptPost;
 import egovframework.cmmn.util.InterceptPre;
 import egovframework.cmmn.util.Result;
+import egovframework.customize.service.AuthCheckService;
 import egovframework.customize.service.ControlLogicSettingService;
 import egovframework.customize.service.ControlLogicSettingVO;
 import egovframework.customize.service.DeviceEnvVO;
@@ -40,10 +41,16 @@ public class ControlLogicSettingController {
 	@Resource(name = "controlLogicSettingService")
 	private ControlLogicSettingService service;
 
+	@Resource(name="authCheckService")
+	private AuthCheckService authCheckService;
+
 	@RequestMapping(value = "/gsm/{gsmKey}/house/{houseId}", method = RequestMethod.GET)
 	@ResponseBody
 	public Result<List<ControlLogicSettingVO>> list(@PathVariable("gsmKey") Integer gsmKey, @PathVariable("houseId") Integer houseId) {
 		try {
+			if( !authCheckService.authCheck(gsmKey, null) ) {
+				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
+			}
 			return new Result(service.getLogicSetting(gsmKey, houseId, null));
 		} catch (Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
@@ -58,6 +65,9 @@ public class ControlLogicSettingController {
 														   @RequestParam(required = false, name = "from_date") Long fromDate,
 														   @RequestParam(required = false, name = "to_date") Long toDate) {
 		try {
+			if( !authCheckService.authCheck(gsmKey, null) ) {
+				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
+			}
 			return new Result(service.getControlLogicSettingHIstoryList(gsmKey, houseId, controlSettingId, fromDate, toDate));
 		} catch (Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
@@ -83,6 +93,9 @@ public class ControlLogicSettingController {
 			if (logicSettingList == null || logicSettingList.size() == 0) {
 				return new Result(HttpStatus.NOT_FOUND.name(), HttpStatus.NOT_FOUND, null);
 			}
+			if( !authCheckService.authCheck(null, logicSettingList.get(0).getGreenHouseId()) ) {
+				return new Result("Not Allowed", HttpStatus.FORBIDDEN, controlSettingId);
+			}
 			return new Result(logicSettingList.get(0));
 		} catch (Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
@@ -94,6 +107,9 @@ public class ControlLogicSettingController {
 	@InterceptPost
 	public Result<ControlLogicSettingVO> insert(@RequestBody ControlLogicSettingVO vo) {
 		try {
+			if( !authCheckService.authCheck(null, vo.getGreenHouseId()) ) {
+				return new Result("Not Allowed", HttpStatus.FORBIDDEN, vo);
+			}
 			return new Result(service.insertLogicSetting(vo));
 		} catch (Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, vo);
@@ -105,6 +121,9 @@ public class ControlLogicSettingController {
 	@InterceptPost
 	public Result<ControlLogicSettingVO> update(@PathVariable("controlSettingId") Integer controlSettingId, @RequestBody ControlLogicSettingVO vo) {
 		try {
+			if( !authCheckService.authCheck(null, vo.getGreenHouseId()) ) {
+				return new Result("Not Allowed", HttpStatus.FORBIDDEN, vo);
+			}
 			return new Result(service.updateLogicSetting(vo));
 		} catch (Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, vo);

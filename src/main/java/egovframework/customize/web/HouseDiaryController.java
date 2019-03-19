@@ -17,10 +17,7 @@ package egovframework.customize.web;
 
 import egovframework.cmmn.util.InterceptPre;
 import egovframework.cmmn.util.Result;
-import egovframework.customize.service.HouseCropsDiaryVO;
-import egovframework.customize.service.HouseDiaryService;
-import egovframework.customize.service.HouseDiaryVO;
-import egovframework.customize.service.HousePictureDiaryVO;
+import egovframework.customize.service.*;
 import egovframework.customize.task.scheduler.EgovTaskScheduler;
 
 import org.slf4j.Logger;
@@ -46,7 +43,9 @@ public class HouseDiaryController {
 	private static final Logger log = LoggerFactory.getLogger(HouseDiaryController.class);
 	@Resource(name = "houseDiaryService")
 	private HouseDiaryService houseDiaryService;
-	
+
+	@Resource(name="authCheckService")
+	private AuthCheckService authCheckService;
 	/**
 	 * @description house에 등록되어 있는 작물 정보
 	 * @param greenHouseId 
