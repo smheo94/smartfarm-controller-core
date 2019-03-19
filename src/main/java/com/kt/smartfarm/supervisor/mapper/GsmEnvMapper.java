@@ -33,7 +33,8 @@ public interface GsmEnvMapper {
 	Integer insert(GsmEnvVO gsmInfo);
 	Integer update(GsmEnvVO gsmInfo);
 	List<Map<String,Object>> gsmOfDeviceList(@Param("gsmKey")Integer gsmKey);
-	List<Map<String, Object>> getGsmList(@Param("gsmKey") Integer gsmKey, @Param("userInfoId") Integer userInfoId, @Param("categoryId") Integer categoryId, @Param("farmName") String farmName);
+	List<Map<String, Object>> getGsmList(@Param("gsmKey") Integer gsmKey, @Param("userInfoId") Integer userInfoId, @Param("categoryId") Integer categoryId, @Param("farmName") String farmName,
+										 @Param("authUserIdx") String authUserIdx);
 	List<Map<String, Object>> getHouseList(@Param("gsmKey") Integer gsmKey);
 	List<GsmEnvVO> notMappedList();
 	Integer userRegistGSM(HashMap<String, Object> param);

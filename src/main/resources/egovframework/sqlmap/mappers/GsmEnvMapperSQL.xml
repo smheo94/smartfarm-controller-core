@@ -124,6 +124,35 @@
 			<if test="userInfoId != null"> AND gsm_info.user_info_id = #{userInfoId}</if>
 			<if test="categoryId != null"> AND gsm_info.category_id = #{categoryId}</if>
 			<if test="farmName != null"> AND gsm_info.farm_nickname LIKE CONCAT('%', #{farmName}, '%')</if>
+			<if test="authUserIdx != null and userInfoId == null and categoryId == null and farmName == null">
+				AND gsm_info.gsm_key IN (
+					SELECT DISTINCT gi.gsm_key
+					FROM gsm_category gc
+					INNER JOIN (
+					SELECT DISTINCT REPLACE(SUBSTRING(gc.path,2, LENGTH(gc.path)-2),'][',',') id_path
+					FROM (
+					SELECT gc.id, gc.name, gc.level, gc.pid, gc.priority, fn_category_path(gc.id) AS path
+					FROM gsm_category gc
+					) gc
+					INNER JOIN auth_group_detail ad ON gc.path LIKE CONCAT('%[',ad.category_id,']%')
+					INNER JOIN user_info_auth_group ua ON ua.auth_group_id = ad.group_id
+					WHERE ad.category_id != '0'
+					AND ua.user_idx = #{authUserIdx}
+					) pt ON FIND_IN_SET(gc.id, pt.id_path)
+					INNER JOIN gsm_info gi ON gi.category_id = gc.id
+
+					UNION ALL
+					SELECT ad.gsm_key
+					FROM auth_group_detail ad
+					INNER JOIN user_info_auth_group ua ON ua.auth_group_id = ad.group_id
+					WHERE ad.category_id = '0'
+					AND ua.user_idx = #{authUserIdx}
+
+					UNION ALL
+					SELECT gsm_key FROM gsm_info
+					WHERE user_info_id = #{authUserIdx} OR (SELECT roles_id FROM user_info_roles WHERE roles_id = 100 AND user_idx = #{authUserIdx})
+				)
+			</if>
 		</where>
 	</select>
 

@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import egovframework.cmmn.util.DateUtil;
@@ -26,6 +27,7 @@ import egovframework.customize.service.impl.HouseEnvServiceImpl;
  * TODO : profile리스트 가지고 오는것. db에 넣는 것.
  */
 @Component
+@PropertySource(value={"classpath:application.properties","file:///myapp/application.properties"}, ignoreResourceNotFound = true)
 public class EgovTaskScheduler {	
 	private static final Logger log = LoggerFactory.getLogger(EgovTaskScheduler.class);
 	@Value("${smartfarm.system.type}")

@@ -383,8 +383,8 @@
                         <configuration>
                             <tasks>
                                 <delete file="${project.build.outputDirectory}/application.properties" />
-                                <delete
-                                        file="${project.build.outputDirectory}/log4j2.xml" />
+                                <!--<delete-->
+                                        <!--file="${project.build.outputDirectory}/log4j2.xml" />-->
                             </tasks>
                         </configuration>
                 </execution>

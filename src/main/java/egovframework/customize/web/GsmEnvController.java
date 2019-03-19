@@ -185,7 +185,8 @@ public class GsmEnvController {
 		    if( all == null ) {
                 all = true;
             }
-			return new Result(gsmEnvService.list(all,userInfoId,categoryId,farmName));
+			String authUserIdx = authCheckService.getAuthUserIdx();
+			return new Result(gsmEnvService.list(all,userInfoId,categoryId,farmName, authUserIdx));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}

@@ -3,7 +3,7 @@
 <mapper namespace="com.kt.smartfarm.supervisor.mapper.AuthCheckMapper">
 	<select id="selectCheckAllowAuth" parameterType="map" resultType="map">
 		SELECT
-		fn_is_allow_user_gsm(#{gsm_key},  #{user_idx}) AS allow_gsm,
-		fn_is_allow_user_house(#{house_id},  #{user_idx}) AS allow_house
+			IFNULL( fn_is_allow_user_gsm(#{gsm_key},  #{user_idx}), 0) AS allow_gsm,
+			IFNULL( fn_is_allow_user_house(#{house_id},  #{user_idx}), 0) AS allow_house
 	</select>
 </mapper>

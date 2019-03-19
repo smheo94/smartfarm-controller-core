@@ -42,28 +42,35 @@ public class AuthCheckServiceImpl extends EgovAbstractServiceImpl implements Aut
 
 	@Override
 	public Boolean authCheck(Integer gsmKey, Integer houseId) {
-		if( Objects.equals(config.SYSTEM_TYPE, SystemType.SYSTEM_TYPE_SMARTFARM) ) {
+		if (Objects.equals(config.SYSTEM_TYPE, SystemType.SYSTEM_TYPE_SMARTFARM)) {
 			//20190318 - 제어기에서는 검사 안해요
 			return true;
 		}
 		final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if( authentication == null )
-			return false;
-		if( authentication.getPrincipal() == null )
-			return false;
+		if (authentication == null) return false;
+		if (authentication.getPrincipal() == null) return false;
 		String userIdx = authentication.getPrincipal().toString();
-		HashMap<String,Object> param = new HashMap<>();
+		HashMap<String, Object> param = new HashMap<>();
 		param.put("user_idx", userIdx);
 		param.put("gsm_key", gsmKey);
 		param.put("house_id", houseId);
-		List<HashMap<String,Object>> result = authCheckMapper.selectCheckAllowAuth(param);
-		if( result != null ) {
+		List<HashMap<String, Object>> result = authCheckMapper.selectCheckAllowAuth(param);
+		if (result != null) {
 			Integer allowGsm = (Integer) result.get(0).get("allow_gsm");
 			Integer allowHouse = (Integer) result.get(0).get("allow_house");
-			if (gsmKey != null && allowGsm == null) return false;
-			if (houseId != null && allowHouse == null) return false;
+			if (gsmKey != null && allowGsm != 1) return false;
+			if (houseId != null && allowHouse != 1) return false;
 			return true;
 		}
 		return false;
+	}
+	public String getAuthUserIdx() {
+		final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if(authentication ==null)
+			return null;
+		if(authentication.getPrincipal()==null)
+			return null;
+		String userIdx = authentication.getPrincipal().toString();
+		return userIdx;
 	}
 }

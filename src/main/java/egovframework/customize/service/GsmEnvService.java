@@ -18,7 +18,7 @@ public interface GsmEnvService {
 
 	Integer update(GsmEnvVO gsmInfo);
 
-	List<Map<String, Object>> list(boolean all, Integer userInfoId, Integer categoryId, String farmName);
+	List<Map<String, Object>> list(boolean all, Integer userInfoId, Integer categoryId, String farmName, String authUserIdx);
 
 	List<GsmEnvVO> notMappedList();
 
