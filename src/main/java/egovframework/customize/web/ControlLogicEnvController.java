@@ -46,8 +46,6 @@ public class ControlLogicEnvController {
 
 	/**
 	 * 제어로직 전체 list
-	 * @param gsmKey
-	 * @param controllerId
 	 * @return
 	 */
 	@RequestMapping(value= "", method = RequestMethod.GET)

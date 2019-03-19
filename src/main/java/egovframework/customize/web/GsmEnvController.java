@@ -15,6 +15,7 @@
  */
 package egovframework.customize.web;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import egovframework.cmmn.util.Result;
@@ -34,6 +35,9 @@ import javax.ws.rs.Path;
 
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.SpringSecurityMessageSource;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -119,7 +123,7 @@ public class GsmEnvController {
 	@SuppressWarnings("PMD.AvoidReassigningParameters")
 	@RequestMapping(value= "/{gsmKey}", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<GsmEnvVO> getAll( @PathVariable("gsmKey") Integer gsmKey, @RequestParam(value = "all", required = false) Boolean all){
+	public Result<GsmEnvVO> getAll( @PathVariable("gsmKey") Integer gsmKey, @RequestParam(value = "all", required = false) Boolean all, Authentication authentication){
 		try {
 			// 일출, 일몰 api 같이
 			if(all == null )
@@ -178,8 +182,9 @@ public class GsmEnvController {
 	@RequestMapping(value= "/notMappedList", method = RequestMethod.GET)
 	@ApiOperation("농장주와 연결되지 않은 제어기 리스트.")
 	@ResponseBody
-	public Result<List<GsmEnvVO>> notMappedList(){
-		try {		    
+	public Result<List<GsmEnvVO>> notMappedList(Principal principal){
+		try {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 			return new Result<List<GsmEnvVO>>(gsmEnvService.notMappedList());
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
