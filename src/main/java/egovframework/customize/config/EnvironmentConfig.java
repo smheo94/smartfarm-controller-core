@@ -37,7 +37,7 @@ public class EnvironmentConfig {
 	@Bean
 	public boolean UpdateDBSchema() {
 		Long version = 20181127L;
-		if( SystemType.SYSTEM_TYPE_SMARTFARM.equals(config.SYSTEM_TYPE) ) {
+		if( SystemType.SYSTEM_TYPE_SMARTFARM.equalsIgnoreCase(config.SYSTEM_TYPE) ) {
 			final List<Method> methodList = Arrays.stream(mapper.getClass().getMethods()).sorted(Comparator.comparing(Method::getName)).collect(Collectors.toList());
 			for (Method m : methodList) {
 				try {
