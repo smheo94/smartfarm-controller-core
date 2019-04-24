@@ -24,7 +24,7 @@ public class CorsFilter implements javax.servlet.Filter {
 	        HttpServletResponse response = (HttpServletResponse) res;
 //	        HttpServletRequest request = (HttpServletRequest) req;
 	        
-	        response.setHeader("Access-Control-Allow-Methods", "OPTIONS, PUT, GET, POST, DELETE"); // CRUD
+	        response.setHeader("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE"); // CRUD
 	        response.setHeader("Access-Control-Max-Age", "3600");
 	        response.setHeader("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, Accept, Authorization, X-Smartfarm-Gsm-Key");
 	        response.setHeader("Access-Control-Allow-Origin", "*");

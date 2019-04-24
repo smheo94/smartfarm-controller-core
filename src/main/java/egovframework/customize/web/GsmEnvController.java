@@ -46,7 +46,7 @@ import org.springframework.web.bind.annotation.*;
  * 센서구성,제어기구성,온실구성,제어로직구성,외부기상대구성,임계치구성
  */
 @Controller
-@RequestMapping(value="/env/gsm")
+@RequestMapping(value="/gsm")
 public class GsmEnvController {
 
 	public static final String DEFAULT_SETUP_FILE_PATH = "data/env-default/";	

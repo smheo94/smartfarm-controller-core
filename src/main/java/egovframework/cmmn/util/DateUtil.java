@@ -9,10 +9,76 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class DateUtil {
+
+	public static final String MilliSecDateTimeTimeZoneFormat = "yyyy-MM-dd HH:mm:ss.SSSZ";
+	public static final String GeneralDateTimeFormat = "yyyy-MM-dd HH:mm:ss";
+	public static final String GeneralDateTimeMilliFormat = "yyyy-MM-dd HH:mm:ss.SSS";
+	public static final String HttpDateTimeFOrmat = "EEE, dd MMM yyyy HH:mm:ss zzz";
+	public static final DateTimeFormatter[] SimplePatterns = {
+			DateTimeFormat.forPattern( "yyyy-MM-dd'T'HH:mm:ss.SSS"),
+			DateTimeFormat.forPattern( "yyyy-MM-dd'T'HH:mm:ss"),
+			DateTimeFormat.forPattern( "yyyy-MM-dd'T'HH:mm:ssZ"),
+			DateTimeFormat.forPattern( "yyyy-MM-dd'T'HH:mm:ssZZ"),
+			DateTimeFormat.forPattern( "yyyy-MM-dd'T'HH:mm:ssZZZ"),
+			DateTimeFormat.forPattern( MilliSecDateTimeTimeZoneFormat),
+			DateTimeFormat.forPattern( GeneralDateTimeFormat),
+			DateTimeFormat.forPattern( GeneralDateTimeMilliFormat),
+			DateTimeFormat.forPattern( "MMMMM d, yyyy h:mm:ss a"),
+			DateTimeFormat.forPattern( HttpDateTimeFOrmat),
+			DateTimeFormat.forPattern( "yyyy-MM-dd"),
+			DateTimeFormat.forPattern( "yyyy-MM-ddZZ"),
+			DateTimeFormat.forPattern( "'T'HH:mm:ss"),
+			DateTimeFormat.forPattern( "'T'HH:mm:ssZZ"),
+			DateTimeFormat.forPattern( "HH:mm:ss"),
+			DateTimeFormat.forPattern( "HH:mm:ssZZ"),
+			DateTimeFormat.forPattern( "EEE, dd MMM yyyy HH:mm:ss Z"),
+			DateTimeFormat.forPattern( "yyyyMMddHHmmss"),
+			DateTimeFormat.forPattern( "yyyyMMddHHmmss.SSS"),
+	};
+
+
+	public static Date parseForString(String dateStr) {
+		try {
+			DateTime dateTime =  org.joda.time.DateTime.parse(dateStr);
+			return dateTime.toDate();
+		} catch (Exception e) {
+
+		}
+		for( int i = 0; i < SimplePatterns.length; i++) {
+			try {
+
+				org.joda.time.DateTime dateTime = SimplePatterns[i].parseDateTime(dateStr);
+				return dateTime.toDate();
+			} catch(Exception e) {
+
+			}
+		}
+		return null;
+	}
+	public static Date parse(Object obj) {
+		if( obj == null)
+			return null;
+		Date resultDate = null;
+		if(obj instanceof String ) {
+			resultDate = parseForString((String)obj);
+		} else if( obj instanceof Long ) {
+			resultDate = new Date((Long)obj);
+		} else if(obj instanceof Double ) {
+			resultDate = new Date( Long.parseLong(((Double)obj).toString() ));
+		} else if(obj instanceof Date ) {
+			resultDate = (Date)obj;
+		} else {
+			resultDate = parseForString(obj.toString());
+		}
+		return resultDate;
+	}
 	protected static final  Logger log = LoggerFactory.getLogger(DateUtil.class);
 	/**
 	 * <pre>

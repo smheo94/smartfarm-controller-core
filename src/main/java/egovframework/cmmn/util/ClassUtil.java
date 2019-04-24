@@ -1,20 +1,20 @@
 package egovframework.cmmn.util;
+
+import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalTime;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.nio.file.WatchEvent.Modifier;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.math.NumberUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-
-public class ClassUtil {
-	private static final Logger LOG = LoggerFactory.getLogger( ClassUtil.class );
+@Slf4j
+public class ClassUtil  {
 	public int aa  =5 ;
 	public String [] bbb = new String [2];
 	public List<ClassUtil> ccc = new ArrayList<ClassUtil>();
@@ -23,33 +23,23 @@ public class ClassUtil {
 		Object fieldObj = null;		
 		try {		
 			Object mapObj = 	mapType.getConstructor().newInstance();			
-			Map map = (Map)mapObj;			
+			Map map = (Map)mapObj;
 			for(Field field : classObject.getClass().getFields()) {	
 				fieldObj = field.get(classObject);
 				
 				if( fieldObj == null || field.getType().getPackage() == null || field.getType().getPackage().getName().startsWith("java") ) {
-					map.put(field.getName(), fieldObj);	
+					map.put(field.getName(), fieldObj);
 				} else {
 					//System.out.println( field.getType().getName() + " "  + field.getType().getPackage().getName());
 					map.put(field.getName(), toMap(fieldObj, mapType));
 				}				
 			}
 			return map;
-		} catch (InstantiationException e) {
-			LOG.error("[Exception]", e);
-		} catch (IllegalAccessException e) {
-			LOG.error("[Exception]", e);		
-		} catch (IllegalArgumentException e) {			
-			LOG.error("[Exception]", e);
-		} catch (InvocationTargetException e) {
-			LOG.error("[Exception]", e);
-		} catch (NoSuchMethodException e) {
-			LOG.error("[Exception]", e);
-		} catch (SecurityException e) {
-			LOG.error("[Exception]", e);
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+			log.error("[Exception]", e);
 		} catch(Exception e ) {
 			if( fieldObj != null ) {
-				LOG.error("Type : " + fieldObj);
+				log.error("Type : " + fieldObj);
 			}
 		}	
 		return null;		
@@ -82,14 +72,14 @@ public class ClassUtil {
 			}
 			return map;
 		}  catch (IllegalAccessException e) {
-			LOG.error("[Exception]", e);		
-		} catch (IllegalArgumentException e) {			
-			LOG.error("[Exception]", e);
+			log.error("[Exception]", e);
+		} catch (IllegalArgumentException e) {
+			log.error("[Exception]", e);
 		} catch (SecurityException e) {
-			LOG.error("[Exception]", e);
+			log.error("[Exception]", e);
 		} catch(Exception e ) {
 			if( fieldObj != null ) {
-				LOG.error("Type : " + fieldObj);
+				log.error("Type : " + fieldObj);
 			}
 		}	
 		return null;		
@@ -149,34 +139,75 @@ public class ClassUtil {
 				
 			}		
 		} catch (IllegalAccessException e) {
-			LOG.error("[Exception]", e);
+			log.error("[Exception]", e);
 		}	
 		builder.append("]");
 		return builder.toString();
 	}
-	
-	
-	public static Object castToSomething(Object value, Class type) {
+
+	public static <T>  T castToSomething(Object value, Class<T> type) {
+		return castToSomething(value, type, null);
+	}
+	public static <T>  T castToSomething(Object value, Class<T> type, T defaultValue)
+	{
 		try {
-			return type.cast(value);
-		} catch(ClassCastException e) {
-    		String valueTypeName = value.getClass().getName();
-    		String toTypeName = type.getName();
-    		if( "java.lang.Integer".equals(toTypeName)  || "int".equals(toTypeName) ) {			 
-    			if( "java.lang.Double".equals(valueTypeName) ) {
-    				return (Integer)((Double)value).intValue();
-    			} else if( "java.lang.String".equals(valueTypeName) ) {
-    				return Integer.valueOf((String)value);
-    			}				
-    		}
-    		LOG.error( "Exception : [invokeMethod] : {} --> {}, {}\r\n",  value.getClass().getName(), type.getName(), e.toString() );
-    		throw e;
+			if( value == null ) {
+				return (T)defaultValue;
+			}
+			return (T)type.cast(value);
+		} catch(ClassCastException e)  {
+			return getT(value, type, defaultValue, e);
 		}
 	}
-	
-	
-	
-	
+
+	private static <T> T getT(Object value, Class<T> type, Object defaultValue, ClassCastException e) {
+		String valueTypeName = value.getClass().getName();
+		String toTypeName = type.getName();
+		if( "java.lang.Integer".equals(toTypeName)  || "int".equals(toTypeName) ) {
+			if( "java.lang.Double".equals(valueTypeName) ) {
+				return (T)(Integer)((Double)value).intValue();
+			} else if( "java.lang.Long".equals(valueTypeName) ) {
+				return (T)(Integer)((Long)value).intValue();
+			} else if( "java.lang.String".equals(valueTypeName) ) {
+				return (T)Integer.valueOf((String)value);
+			}
+		} else if( "java.lang.Double".equals(toTypeName)  || "double".equals(toTypeName) ) {
+			if( "java.lang.Integer".equals(valueTypeName) ) {
+				return (T)(Double)((Integer)value).doubleValue();
+			} else if( "java.lang.Long".equals(valueTypeName) ) {
+				return (T)(Double)((Long)value).doubleValue();
+			} else if( "java.lang.String".equals(valueTypeName) ) {
+				return (T)Double.valueOf((String)value);
+			}
+		} else if( "java.lang.Long".equals(toTypeName)  || "long".equals(toTypeName) ) {
+			if( "java.lang.Integer".equals(valueTypeName) ) {
+				return (T)(Long)((Integer)value).longValue();
+			} else if( "java.lang.Double".equals(valueTypeName) ) {
+				return (T)(Long)((Double)value).longValue();
+			} else if( "java.lang.String".equals(valueTypeName) ) {
+				return (T)Long.valueOf((String)value);
+			}
+		} else if( "java.lang.String".equals(toTypeName)  ) {
+			return (T)String.valueOf(value);
+		} else if( "java.sql.Time".equals(toTypeName)  ) {
+			if( value instanceof String ) {
+				if( ((String) value).length() == 8 ) {
+					return (T) Time.valueOf( ((String) value).substring(((String) value).length() - 8 )  );
+				} else if( ((String) value).length() > 8) {
+					final LocalTime localTime = DateTime.parse((String) value).withZone(DateTimeZone.getDefault()).toLocalTime();
+					return (T)new Time(localTime.toDateTimeToday().getMillis());
+				}
+			}
+		} else if( "java.util.Date".equals(toTypeName)  ) {
+			return (T)DateUtil.parse(value);
+		} else if( defaultValue != null ) {
+			return (T)defaultValue;
+		}
+		log.error( "Exception : [invokeMethod] : {} --> {}, {}\r\n",  value, type.getName(), e.toString() );
+		throw e;
+	}
+
+
 	public static String toSimpleString(Object classObject, int length) {
 		StringBuilder builder = new StringBuilder();
 		//.append(classObject.getClass().getName())
@@ -229,7 +260,7 @@ public class ClassUtil {
 				builder.append(i < fields.length -1 ?  "," : "");					
 			}		
 		} catch (IllegalAccessException e) {
-			LOG.error("[Exception]", e);
+			log.error("[Exception]", e);
 		}	
 		return builder.toString();
 	}

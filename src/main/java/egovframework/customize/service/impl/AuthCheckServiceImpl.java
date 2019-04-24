@@ -15,6 +15,7 @@ package egovframework.customize.service.impl;
 import com.kt.smartfarm.supervisor.mapper.AuthCheckMapper;
 import com.kt.smartfarm.supervisor.mapper.CategoryEnvMapper;
 import egovframework.cmmn.SystemType;
+import egovframework.cmmn.util.ClassUtil;
 import egovframework.customize.config.SmartfarmInterceptorConfig;
 import egovframework.customize.service.AuthCheckService;
 import egovframework.customize.service.CategoryEnvService;
@@ -56,8 +57,8 @@ public class AuthCheckServiceImpl extends EgovAbstractServiceImpl implements Aut
 		param.put("house_id", houseId);
 		List<HashMap<String, Object>> result = authCheckMapper.selectCheckAllowAuth(param);
 		if (result != null) {
-			Integer allowGsm = (Integer) result.get(0).get("allow_gsm");
-			Integer allowHouse = (Integer) result.get(0).get("allow_house");
+			Integer allowGsm = (Integer)ClassUtil.castToSomething(result.get(0).get("allow_gsm"), Integer.class);
+			Integer allowHouse = (Integer)ClassUtil.castToSomething( result.get(0).get("allow_house"), Integer.class);
 			if (gsmKey != null && allowGsm != 1) return false;
 			if (houseId != null && allowHouse != 1) return false;
 			return true;
