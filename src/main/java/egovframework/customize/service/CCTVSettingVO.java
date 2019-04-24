@@ -22,6 +22,7 @@ public class CCTVSettingVO {
 	String cctvPwd;
 	String cctvWsUrl;
 	String cctvRtspUrl;
+	Integer isRtspPlay;
 	String wowzaId;
 	String wowzaStreamUrl;
 	String wowzaRestUrl;

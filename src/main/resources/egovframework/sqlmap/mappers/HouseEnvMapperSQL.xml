@@ -212,9 +212,9 @@
 	
 	<insert id="insertCCTVSetting" parameterType="cctv" useGeneratedKeys="true">
 		INSERT INTO	cctv	
-           ( house_id, cctv_name, cctv_uid, cctv_pwd, cctv_ws_url, cctv_rtsp_url, wowza_id)
+           ( house_id, cctv_name, cctv_uid, cctv_pwd, cctv_ws_url, cctv_rtsp_url, is_rtsp_play, wowza_id)
 		VALUES(
-			#{houseId},#{cctvName},#{cctvUid},#{cctvPwd},#{cctvWsUrl},#{cctvRtspUrl}, #{wowzaId}
+			#{houseId},#{cctvName},#{cctvUid},#{cctvPwd},#{cctvWsUrl},#{cctvRtspUrl}, #{isRtspPlay}, #{wowzaId}
 		)
 		<selectKey keyProperty="id" resultType="int">
 			SELECT LAST_INSERT_ID() AS id;
@@ -230,6 +230,7 @@
 			cctv_pwd as cctvPwd,
 			cctv_ws_url as cctvWsUrl,
 			cctv_rtsp_url as cctvRtspUrl,
+			is_rtsp_play as isRtspPlay,
 			wowza_id as wowzaId,
 			stream_url as wowzaStreamUrl,
 			rest_url as wowzaRestUrl
@@ -246,6 +247,7 @@
 			<if test="cctvPwd != null">, cctv_pwd = #{cctvPwd}</if>
 			<if test="cctvWsUrl != null">, cctv_ws_url = #{cctvWsUrl}</if>
 			<if test="cctvRtspUrl != null">, cctv_rtsp_url = #{cctvRtspUrl}</if>
+			<if test="isRtspPlay != null">, is_rtsp_play = #{isRtspPlay}</if>
 			<if test="wowzaId != null">, wowza_id = #{wowzaId}</if>
 		WHERE house_id = #{houseId} AND id = #{id};				
 	</update>
