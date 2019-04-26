@@ -29,6 +29,7 @@
 		SET 
 			<if test="gsmKey != null"> gsm_key= #{gsmKey}</if>
 			<if test="userInfoId != null"> , user_info_id= #{userInfoId}</if>
+			<if test="userInfoId == 0"> , user_info_id = NULL</if>
 			<if test="isMine != null"> , is_mine= #{isMine}</if>
 			<if test="areaCode != null"> , area_code= #{areaCode}</if>
 			<if test="farmNickname != null"> , farm_nickname= #{farmNickname}</if>
@@ -112,16 +113,46 @@
 		SELECT
 			gsm_info.gsm_key as gsmKey, gsm_info.user_info_id as userInfoId, is_mine as isMine, area_code as areaCode,
  			farm_nickname as farmNickname, gsm_info.update_date as updateDate, owner_user_info_id as ownerUserInfoId, master_system_host as masterSystemHost,
- 			master_system_port as masterSystemPort, system_host as systemHost, system_port as systemPort, cropsurl, imsurl,
+ 			master_system_port as masterSystemPort, system_host as systemHost, system_port as systemPort,  
  			mqtt_broker_host as mqttbrokerHost, mqtt_broker_port as mqttBrokerPort, server_read_time as serverReadTime, product_interval as productInterval,
- 			monitoring_interval as monitoringInterval, history_save_db_interval as historySaveDbInterval, sensor_current_retention_period as sensorCurrentRetentionPeriod,
- 			debug_stop_event as debugStopEvent, debug_stop_crops as debugStopCrops, debug_stop_device_auto_control as debugStopDeviceAutoContorl, debug_stop_ims as debugStopIms,
+ 			monitoring_interval as monitoringInterval, history_save_db_interval as historySaveDbInterval,
  			delay_auto_control_start as delayAutoControlStart, package_version as packageVersion, schema_version as schemaVersion, nutrient_monitoring_interval as nutrientMonitoringInterval,
  			farm_nickname_i18n as farmNicknameI18n, user_id as userId, farm_db_id as farmDbId, category_id as categoryId
 		FROM gsm_info
 		<where>
 			<if test="gsmKey != null"> AND gsm_info.gsm_key = #{gsmKey}</if>
 			<if test="userInfoId != null"> AND gsm_info.user_info_id = #{userInfoId}</if>
+			<if test="categoryId != null"> AND gsm_info.category_id = #{categoryId}</if>
+			<if test="farmName != null"> AND gsm_info.farm_nickname LIKE CONCAT('%', #{farmName}, '%')</if>
+			<if test="authUserIdx != null and userInfoId == null and categoryId == null and farmName == null">
+				AND gsm_info.gsm_key IN (
+					SELECT DISTINCT gi.gsm_key
+					FROM gsm_category gc
+					INNER JOIN (
+					SELECT DISTINCT REPLACE(SUBSTRING(gc.path,2, LENGTH(gc.path)-2),'][',',') id_path
+					FROM (
+					SELECT gc.id, gc.name, gc.level, gc.pid, gc.priority, fn_category_path(gc.id) AS path
+					FROM gsm_category gc
+					) gc
+					INNER JOIN auth_group_detail ad ON gc.path LIKE CONCAT('%[',ad.category_id,']%')
+					INNER JOIN user_info_auth_group ua ON ua.auth_group_id = ad.group_id
+					WHERE ad.category_id != '0'
+					AND ua.user_idx = #{authUserIdx}
+					) pt ON FIND_IN_SET(gc.id, pt.id_path)
+					INNER JOIN gsm_info gi ON gi.category_id = gc.id
+
+					UNION ALL
+					SELECT ad.gsm_key
+					FROM auth_group_detail ad
+					INNER JOIN user_info_auth_group ua ON ua.auth_group_id = ad.group_id
+					WHERE ad.category_id = '0'
+					AND ua.user_idx = #{authUserIdx}
+
+					UNION ALL
+					SELECT gsm_key FROM gsm_info
+					WHERE user_info_id = #{authUserIdx} OR (SELECT roles_id FROM user_info_roles WHERE roles_id = 100 AND user_idx = #{authUserIdx})
+				)
+			</if>
 		</where>
 	</select>
 
@@ -237,10 +268,10 @@
 			 <if test="exWindowUseRainDetector != null">ex_window_use_rain_dectector= #{exWindowUseRainDetector},</if>
 			 <if test="sideWindowUseWindDetector != null">side_window_use_wind_dectector= #{sideWindowUseWindDetector},</if>
 			 <if test="sideWindowUseRainDetector != null">side_window_use_rain_dectector= #{sideWindowUseRainDetector},</if>
-			 <if test="baseForwardWindow != null">baseForwardWindow= #{baseForwardWindow},</if>
-			 <if test="actuatorInitTemp != null">actuatorInitTemp= #{actuatorInitTemp},</if>
-			 <if test="weatherMqttHost != null">base_forward_window= #{weatherMqttHost},</if>
-			 <if test="weatherMqttPort != null">actuator_init_temp= #{weatherMqttPort},</if>			 
+			 <if test="baseForwardWindow != null">base_forward_window= #{baseForwardWindow},</if>
+			 <if test="actuatorInitTemp != null">actuator_init_temp= #{actuatorInitTemp},</if>
+			 <if test="weatherMqttHost != null">weather_mqtt_host= #{weatherMqttHost},</if>
+			 <if test="weatherMqttPort != null">weather_mqtt_port= #{weatherMqttPort},</if>			 
 		 	 update_date = NOW()
 		WHERE gsm_key=#{gsmKey} 
 	</update>		

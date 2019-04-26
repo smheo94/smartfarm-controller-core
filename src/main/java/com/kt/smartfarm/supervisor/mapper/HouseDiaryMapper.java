@@ -20,6 +20,7 @@ import java.util.List;
 
 import egovframework.customize.service.HouseCropsDiaryVO;
 import egovframework.customize.service.HouseDiaryVO;
+import egovframework.customize.service.HousePictureDiaryVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -32,19 +33,37 @@ public interface HouseDiaryMapper {
 //	List<HashMap<String, Object>> selectDiaryMonthly(HashMap<String, Object> param);
 	
 	Integer insertHouseDiary(HouseDiaryVO houseDiaryVO);
-	HouseDiaryVO getHouseDiaryDetail(HashMap<String, Object> param);
-	List<HashMap<String, Object>> getCategoryList22();
-	List<HouseDiaryVO> getMonthlyHouseDiaryList(HashMap<String, Object> param);
+	Integer insertHouseDiaryFile(HouseDiaryVO houseDiaryVO);
+	HouseDiaryVO selectHouseDiaryFile(HouseDiaryVO houseDiaryVO);
 	Integer updateHouseDiary(HouseDiaryVO houseDiaryVO);
-	Integer delete(HashMap<String,Object> param);
+	Integer updateHouseDiaryFile(HouseDiaryVO houseDiaryVO);
+	Integer deleteHouseDiary(HashMap<String,Object> param);
+	Integer deleteHouseDiaryFile(HashMap<String,Object> param);
+	
+	HashMap<String,Object> getHouseDiaryDetail(HashMap<String, Object> param);
+	List<HashMap<String,Object>> getHouseDiaryFile(HashMap<String, Object> param);
+	
+	HashMap<String,Object> getCropsDiaryDetail(HashMap<String, Object> param);
+	List<HashMap<String,Object>> getCropsDiaryFile(HashMap<String, Object> param);
+	
+	List<HashMap<String,Object>> getMonthlyHouseDiaryList(HashMap<String, Object> param);
+	
 	
 	void insertCropsDiary(HouseCropsDiaryVO houseCropsVO);
+	Integer insertCropsDiaryFile(HouseCropsDiaryVO houseCropsVO);
+	HouseCropsDiaryVO selectCropsDiaryFile(HouseCropsDiaryVO houseDiaryVO);
 	void updateCropsDiary(HouseCropsDiaryVO houseCropsVO);
-	Integer DeleteCropsDiary(HashMap<String, Object> param);
-	List<HouseCropsDiaryVO> getMonthlyCropsDiaryList(HashMap<String, Object> param);
+	Integer updateCropsDiaryFile(HouseCropsDiaryVO houseCropsVO);
+	Integer deleteCropsDiary(HashMap<String, Object> param);
+	Integer deleteCropsDiaryFile(HashMap<String,Object> param);
+	
+	List<HashMap<String,Object>> getMonthlyCropsDiaryList(HashMap<String, Object> param);
 	HashMap<String, Object> getHouseCropsInfo(HashMap<String, Object> param);
 	
+	List<HashMap<String, Object>> getCategoryList22();
+	
+	List<HashMap<String, Object>> getImageDiaryList(HashMap<String,Object> param);
 	
 	
-	
+		
 }

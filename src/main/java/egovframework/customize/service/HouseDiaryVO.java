@@ -4,14 +4,6 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-
-/**
- * 작업일지 , 경영일지
- * 
- * @author LEE
- *
- */
-
 @Data
 @Getter
 @Setter
@@ -30,6 +22,10 @@ public class HouseDiaryVO {
 	Integer income; // 수입일떄만
 	Integer spend; // 지출일때만
 	String contentType; // farming || account
-	String workTime; //  종일 오전 오후
+	String workTime; //  종일 오전 오후		
+	String cctvImageUrl; 
+	String weather;
+	byte[] file;
+	String fileName;
 	
 }

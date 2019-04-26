@@ -28,11 +28,13 @@
 		<typeAlias alias="thresholdVO" type="egovframework.customize.service.ThresholdVO"/>
 		
 		<typeAlias alias="houseDiaryVO" type="egovframework.customize.service.HouseDiaryVO"/>
+		<typeAlias alias="housePicDiaryVO" type="egovframework.customize.service.HousePictureDiaryVO"/>
 		<typeAlias alias="cropsDiaryVO" type="egovframework.customize.service.HouseCropsDiaryVO"/>
 		<typeAlias alias="vDeviceInfoVO" type="egovframework.customize.service.VDeviceInfoVO"/>
 		<typeAlias alias="vDeviceEnvVO" type="egovframework.customize.service.VDeviceEnvVO"/>
 
 		<typeAlias alias="controlLogicSettingVO" type="egovframework.customize.service.ControlLogicSettingVO"/>
+		<typeAlias alias="controlLogicSettingHistoryVO" type="egovframework.customize.service.ControlLogicSettingHistoryVO"/>
 		<typeAlias alias="controlLogicSettingDeviceVO" type="egovframework.customize.service.ControlLogicSettingDeviceVO"/>
 
 		<typeAlias alias="controlLogicSettingCheckConditionVO" type="egovframework.customize.service.ControlLogicSettingCheckConditionVO"/>

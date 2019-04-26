@@ -11,18 +11,20 @@ import java.net.URL;
 import java.util.HashMap;
 
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import egovframework.customize.service.ControllerEnvVO;
 import egovframework.customize.service.DeviceEnvVO;
 
 public class HttpUtil {	
-	private String url;
-	
+//	private String url;
+	protected static final  Logger log = LoggerFactory.getLogger(HttpUtil.class);
 	public String postHandler(HashMap<String,Object> param, HashMap<String,Object> controllerInfo){		
 		try{			
 			String result ="";
 
-			JSONObject dataResult = new JSONObject();
+//			JSONObject dataResult = new JSONObject();
 
 			String controllerUrl=(String)param.get("controllerUrl");
 			String api = (String)param.get("api");
@@ -37,7 +39,7 @@ public class HttpUtil {
 			result = getRestApiResponseData(result, conn);
          return result;
 		}catch(Exception e){
-			e.printStackTrace();
+			log.debug(e.getMessage());
 			return "ERROR";
 		}
 	}
@@ -70,7 +72,7 @@ public class HttpUtil {
 		String inputLine="";
 		String data ="";
 		StringBuffer response = new StringBuffer();
-
+		String apiResult="";
          while (true) {
         	 inputLine = in.readLine();
         	 if(inputLine == null){
@@ -80,9 +82,9 @@ public class HttpUtil {
         	 JSONObject json = new JSONObject(response.toString());
              
         	 data = json.getJSONObject("data").get("data").toString();
-             result = data;
+        	 apiResult = data;
          }         
-		return result;
+		return apiResult;
 	}
 	
 	public String strToJson(String str){

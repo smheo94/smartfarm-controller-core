@@ -41,23 +41,23 @@ public class GsmThresholdVO {
 	// 센서 선택
 	Double sensorSelect;
 	// 바람 측정 여부
-	Integer useWindDetector;
+	int useWindDetector;
 	// 감우 측정 여부
-	Integer useRainDetector;
+	int useRainDetector;
 	// 환기창 바람 측정 여부
-	Integer exWindowUseWindDetector;
+	int exWindowUseWindDetector;
 	// 환기창 감우 측정 여부
-	Integer exWindowUseRainDetector;
+	int exWindowUseRainDetector;
 	// 측창 바람 측정 여부
-	Integer sideWindowUseWindDetector;
+	int sideWindowUseWindDetector;
 	// 측창감우측정여부
-	Integer sideWindowUseRainDetector;
+	int sideWindowUseRainDetector;
 	//천창
-	Integer baseForwardWindow;
+	int baseForwardWindow;
 	// 구동기 초기화 온도
-	Integer actuatorInitTemp;
+	int actuatorInitTemp;
 	// 기상대 mqtt host
 	String weatherMqttHost;
 	// 기상대 mqtt port
-	Integer weatherMqttPort;
+	int weatherMqttPort;
 }

@@ -40,8 +40,8 @@ import org.springframework.stereotype.Repository;
 @Mapper("deviceMapper")
 public interface DeviceMapper {	
 	
-	HashMap<String, Object> getSensorInfoList() throws Exception;
-	HashMap<String, Object> getDeviceInfoList()throws Exception;
-	HashMap<String, Object> insertDeviceList() throws Exception;
-	HashMap<String, Object> insertSensorList() throws Exception;
+	HashMap<String, Object> getSensorInfoList();
+	HashMap<String, Object> getDeviceInfoList();
+	HashMap<String, Object> insertDeviceList();
+	HashMap<String, Object> insertSensorList();
 }

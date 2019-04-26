@@ -40,32 +40,32 @@ import org.springframework.stereotype.Repository;
 @Repository
 @Mapper("commonEnvMapper")
 public interface CommonEnvMapper {
-	CommonEnvVO getOutWeather(int gsmKey) throws Exception;
-	void updateOutWeather(CommonEnvVO vo) throws Exception;
-	CommonEnvVO getOutWeatherDefault(int gsmKey) throws Exception;
-	void updateOutWeatherDefault(CommonEnvVO vo) throws Exception;
+	CommonEnvVO getOutWeather(int gsmKey);
+	void updateOutWeather(CommonEnvVO vo);
+	CommonEnvVO getOutWeatherDefault(int gsmKey);
+	void updateOutWeatherDefault(CommonEnvVO vo);
 	
-	CommonEnvVO getThreshold(int gsmKey) throws Exception;
-	void updateThreshold(CommonEnvVO vo) throws Exception;
-	CommonEnvVO getThresholdDefault(int gsmKey) throws Exception;
-	void updateThresholdDefault(CommonEnvVO vo) throws Exception;
+	CommonEnvVO getThreshold(int gsmKey);
+	void updateThreshold(CommonEnvVO vo);
+	CommonEnvVO getThresholdDefault(int gsmKey);
+	void updateThresholdDefault(CommonEnvVO vo);
 	
 	void updateEnvInfo(CommonEnvVO vo);
 	CommonEnvVO getOutweatherInfo(HashMap<String, Object> param);
 	
-	HashMap<String, Object> getSensorInfoList() throws Exception;
-	HashMap<String, Object> getDeviceInfoList()throws Exception;
-	HashMap<String, Object> insertController(HashMap<String, Object> actuatorModuleInfo) throws Exception;
-	HashMap<String, Object> insertSensorList() throws Exception;
+	HashMap<String, Object> getSensorInfoList();
+	HashMap<String, Object> getDeviceInfoList();
+	HashMap<String, Object> insertController(HashMap<String, Object> actuatorModuleInfo);
+	HashMap<String, Object> insertSensorList();
 	
-	void insertDeviceList(HashMap<String, Object> row) throws Exception;
-	void updateController(HashMap<String, Object> controllerInfo) throws Exception;	
-	int deleteDeviceOfChangedDeviceType(HashMap<String, Object> row) throws Exception;
-	void insertDeviceStatusUpdate(HashMap<String, Object> row) throws Exception;
-	void updateDeviceList(HashMap<String, Object> row) throws Exception;
-	void deleteDeviceOfRemovedDevice(String controllerId, List<String> deviceIdList) throws Exception;
-	void deleteDeviceInfoUsingControllerId(HashMap<String, Object> param) throws Exception;
-	void deleteControllerInfo(int controllerId) throws Exception;
+	void insertDeviceList(HashMap<String, Object> row);
+	void updateController(HashMap<String, Object> controllerInfo);	
+	int deleteDeviceOfChangedDeviceType(HashMap<String, Object> row);
+	void insertDeviceStatusUpdate(HashMap<String, Object> row);
+	void updateDeviceList(HashMap<String, Object> row);
+	void deleteDeviceOfRemovedDevice(String controllerId, List<String> deviceIdList);
+	void deleteDeviceInfoUsingControllerId(HashMap<String, Object> param);
+	void deleteControllerInfo(int controllerId);
 	
 	
 	void insertSensorControllerInfo(HashMap<String, Object> sensorListInfo);

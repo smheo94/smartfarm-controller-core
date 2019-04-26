@@ -40,6 +40,7 @@ import com.kt.smartfarm.supervisor.mapper.CommonEnvMapper;
 
 
 @Service("commonEnvService")
+@SuppressWarnings("PMD.AvoidThrowingRawExceptionTypes")
 public class CommonEnvServiceImpl extends EgovAbstractServiceImpl implements CommonEnvService {
     private static final Logger log = LoggerFactory.getLogger(CommonEnvServiceImpl.class);
 
@@ -52,8 +53,13 @@ public class CommonEnvServiceImpl extends EgovAbstractServiceImpl implements Com
    
     
 	@Override
-	public CommonEnvVO getThreshold(int gsmKey) throws Exception {
-		CommonEnvVO commonEnvVO = commonEnvMapper.getThreshold(gsmKey);
+	public CommonEnvVO getThreshold(int gsmKey){
+		CommonEnvVO commonEnvVO = null;
+		try {
+			commonEnvVO = commonEnvMapper.getThreshold(gsmKey);
+		} catch (Exception e) {
+			log.debug(e.getMessage());
+		}
 
 		return commonEnvVO;
 	}
@@ -88,8 +94,14 @@ public class CommonEnvServiceImpl extends EgovAbstractServiceImpl implements Com
 	
 
 	@Override
-	public CommonEnvVO getOutWeather(int gsmKey) throws Exception {
-		CommonEnvVO commonEnvVO = commonEnvMapper.getThreshold(gsmKey);
+	public CommonEnvVO getOutWeather(int gsmKey){
+		CommonEnvVO commonEnvVO = null;
+		try {
+			commonEnvVO = commonEnvMapper.getThreshold(gsmKey);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			log.debug(e.getMessage());
+		}
 		return commonEnvVO;		
 	}
 	
@@ -105,7 +117,7 @@ public class CommonEnvServiceImpl extends EgovAbstractServiceImpl implements Com
 	}
 
 	@Override
-	public void updateOutWeather(CommonEnvVO vo) throws Exception {
+	public void updateOutWeather(CommonEnvVO vo){
 		try{
 			commonEnvMapper.updateThreshold(vo);	
 		}catch(Exception e){
@@ -120,7 +132,7 @@ public class CommonEnvServiceImpl extends EgovAbstractServiceImpl implements Com
 
 
 	@Override
-	public void updateEnvInfo(CommonEnvVO vo) throws Exception {
+	public void updateEnvInfo(CommonEnvVO vo){
 		try{
 			commonEnvMapper.updateEnvInfo(vo);
 		}catch(Exception e){
@@ -141,7 +153,7 @@ public class CommonEnvServiceImpl extends EgovAbstractServiceImpl implements Com
 //			HashMap<String,Object> result = commonEnvMapper.getSensorInfoList();
 //			return result;
 //		}catch(Exception e){
-//			e.printStackTrace();
+//			log.debug(e.getMessage());
 //			return null;
 //		}		
 //	}
@@ -152,7 +164,7 @@ public class CommonEnvServiceImpl extends EgovAbstractServiceImpl implements Com
 //			HashMap<String,Object> result = commonEnvMapper.getDeviceInfoList();
 //			return result;
 //		}catch(Exception e){
-//			e.printStackTrace();
+//			log.debug(e.getMessage());
 //			return null;
 //		}				
 //	}
@@ -205,7 +217,7 @@ public class CommonEnvServiceImpl extends EgovAbstractServiceImpl implements Com
 			return result;
 			
 		}catch(Exception e){
-			e.printStackTrace();
+			log.debug(e.getMessage());
 			throw new RuntimeException(e);
 			//TODO rollback 되는지 확인			
 		}		
@@ -286,7 +298,7 @@ public class CommonEnvServiceImpl extends EgovAbstractServiceImpl implements Com
 			return result;
 			
 		}catch(Exception e){
-			e.printStackTrace();
+			log.debug(e.getMessage());
 			throw new RuntimeException(e);
 			//TODO rollback 되는지 확인			
 		}		
@@ -303,7 +315,7 @@ public class CommonEnvServiceImpl extends EgovAbstractServiceImpl implements Com
 				return null;
 			}
 		}catch(Exception e){
-			e.printStackTrace();
+			log.debug(e.getMessage());
 			throw new RuntimeException(e);
 			//ROLLBACK
 		}
@@ -444,7 +456,7 @@ public class CommonEnvServiceImpl extends EgovAbstractServiceImpl implements Com
 			}			
 			return result;
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.debug(e.getMessage());
 			throw new RuntimeException();			
 		}
 	}
@@ -469,7 +481,7 @@ public class CommonEnvServiceImpl extends EgovAbstractServiceImpl implements Com
 			result.put("isSuccess", "isSuccess");
 			return result;
 		}catch(Exception e){
-			e.printStackTrace();
+			log.debug(e.getMessage());
 			throw new RuntimeException();
 		}
 		
@@ -527,7 +539,7 @@ public class CommonEnvServiceImpl extends EgovAbstractServiceImpl implements Com
 			}
 			return controllerInfoList;
 		}catch(Exception e){
-			e.printStackTrace();
+			log.debug(e.getMessage());
 			return null;
 		}
 	}
@@ -554,7 +566,7 @@ public class CommonEnvServiceImpl extends EgovAbstractServiceImpl implements Com
 			param.put("controller_id", controllerId);
 			return commonEnvMapper.selectDeviceOfControlModule(param);	
 		}catch(Exception e){
-			e.printStackTrace();
+			log.debug(e.getMessage());
 			return null;
 		}
 				

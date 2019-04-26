@@ -15,10 +15,7 @@
  */                                                               
 package com.kt.smartfarm.supervisor.mapper;
 
-import egovframework.customize.service.ControlLogicSettingCheckConditionVO;
-import egovframework.customize.service.ControlLogicSettingDeviceVO;
-import egovframework.customize.service.ControlLogicSettingVO;
-import egovframework.customize.service.ControlSettingOperatorVO;
+import egovframework.customize.service.*;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -31,6 +28,16 @@ import java.util.Map;
 public interface ControlLogicSettingMapper {
 	List<ControlLogicSettingVO> getControlLogicSetting(@Param("gsm_key") Integer gsmKey, @Param("green_house_id") Integer greenHouseId,
 													   @Param("control_setting_id") Integer controlSettingId);
+
+
+//	ControlLogicSettingHistoryVO getControlLogicSettingHistoryDetail(@Param("gsm_key") Integer gsmKey, @Param("green_house_id") Integer greenHouseId,
+//													   @Param("control_setting_id") Integer controlSettingId, @Param("log_dt") Long logDt);
+
+	List<ControlLogicSettingHistoryVO> getControlLogicSettingHistoryList(@Param("gsm_key") Integer gsmKey, @Param("green_house_id") Integer greenHouseId,
+																   @Param("control_setting_id") Integer controlSettingId
+														, @Param("from_date") Long fromData, @Param("to_date") Long toDate);
+
+
 	List<ControlLogicSettingDeviceVO> getControlDevices(Long logicId);
 	List<ControlLogicSettingCheckConditionVO> getCheckConditions(Long logicId);
 
@@ -55,6 +62,8 @@ public interface ControlLogicSettingMapper {
 	Integer updateControlSettingEnv(Map<String, Object> param);
 	Integer deleteControlSetting(@Param("control_setting_id") Integer controlSettingId);
 	Integer delChkConditionSetting(Integer chkConditionId);
+	
+	void updateLogicEnv(Map<String, Object> param);
 
 
 }

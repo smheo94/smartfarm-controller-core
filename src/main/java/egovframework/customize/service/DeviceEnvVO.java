@@ -51,4 +51,7 @@ public class DeviceEnvVO {
 
 	List<VDeviceEnvVO> relationDeviceList;
 
+	public String getDeviceTypeKey() {
+		return deviceType + "$" + deviceTypeIdx;
+	}
 }

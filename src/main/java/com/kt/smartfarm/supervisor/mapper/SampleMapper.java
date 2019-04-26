@@ -49,7 +49,7 @@ public interface SampleMapper {
 	 * @return 등록 결과
 	 * @exception Exception
 	 */
-	void insertSample(SampleVO vo) throws Exception;
+	void insertSample(SampleVO vo);
 
 	/**
 	 * 글을 수정한다.
@@ -57,7 +57,7 @@ public interface SampleMapper {
 	 * @return void형
 	 * @exception Exception
 	 */
-	void updateSample(SampleVO vo) throws Exception;
+	void updateSample(SampleVO vo);
 
 	/**
 	 * 글을 삭제한다.
@@ -65,7 +65,7 @@ public interface SampleMapper {
 	 * @return void형
 	 * @exception Exception
 	 */
-	void deleteSample(SampleVO vo) throws Exception;
+	void deleteSample(SampleVO vo);
 
 	/**
 	 * 글을 조회한다.
@@ -73,7 +73,7 @@ public interface SampleMapper {
 	 * @return 조회한 글
 	 * @exception Exception
 	 */
-	SampleVO selectSample(SampleVO vo) throws Exception;
+	SampleVO selectSample(SampleVO vo);
 
 	/**
 	 * 글 목록을 조회한다.
@@ -81,7 +81,7 @@ public interface SampleMapper {
 	 * @return 글 목록
 	 * @exception Exception
 	 */
-//	List<?> selectSampleList(SampleDefaultVO searchVO) throws Exception;
+//	List<?> selectSampleList(SampleDefaultVO searchVO);
 
 	/**
 	 * 글 총 갯수를 조회한다.

@@ -22,6 +22,7 @@ import java.util.Map;
 
 import egovframework.customize.service.CCTVSettingVO;
 import egovframework.customize.service.DeviceEnvVO;
+import egovframework.customize.service.DeviceTypeVO;
 import egovframework.customize.service.HouseEnvVO;
 import egovframework.customize.service.ProductMethodVO;
 import egovframework.customize.service.ProductVO;
@@ -53,8 +54,10 @@ public interface HouseEnvMapper {
 	List<HashMap<String, Object>> getMappedController(Map<String, Object> map);
 	List<DeviceEnvVO> getHouseDeviceList(Integer houseId);
 	
-	void insertCCTVSetting(CCTVSettingVO vo);
+	HashMap<String, Object> insertCCTVSetting(CCTVSettingVO vo);
 	List<HashMap<String, Object>> getCctvList(@Param("houseId")Integer houseId);
+	Integer updateCctv(CCTVSettingVO vo);
+	Integer deleteCctv(Integer cctvId);
 	List<HashMap<String, Object>> getAllList();
 	
 	Integer insertForecastData(LinkedHashMap<String, Object> hm);
@@ -62,6 +65,10 @@ public interface HouseEnvMapper {
 	
 	List<HashMap<String, Object>> getWeatherCast(HashMap<String, Object> param);
 	List<HashMap<String, Object>> getWeatherCategory();
+	HashMap<String, Object> getSunriseInfo(Map<String, Object> map);
+	
+	List<HashMap<String, Object>> getGroundDeviceList(Integer houseId);
+	List<DeviceTypeVO> getHouseDeviceTypeList(Integer houseId);
 	
 	
 	

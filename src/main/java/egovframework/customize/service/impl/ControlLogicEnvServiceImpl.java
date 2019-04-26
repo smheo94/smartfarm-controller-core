@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +32,7 @@ import javax.annotation.Resource;
 
 @Service("controlLogicEnvService")
 public class ControlLogicEnvServiceImpl extends EgovAbstractServiceImpl implements ControlLogicEnvService {
-
+	private static final Logger log = LoggerFactory.getLogger(ControlLogicEnvServiceImpl.class);
 	@Resource(name="controlLogicMapper")
 	ControlLogicMapper controlLogicMapper;
 	@Override
@@ -43,7 +45,7 @@ public class ControlLogicEnvServiceImpl extends EgovAbstractServiceImpl implemen
 				cl.setControlDeviceList(logicDeviceList.stream().filter(d -> d.getLogicId().equals(cl.getId())).collect(Collectors.toList()));
 				cl.setControlPropertyList(logicPropertyList.stream().filter(m -> m.get("logicId").equals(cl.getId())).collect(Collectors.toList()));
 			} catch (Exception e) {
-				e.printStackTrace();
+				log.debug(e.getMessage());
 			}
 		});
 		return logicList;

@@ -30,7 +30,7 @@ import java.util.List;
 
 
 @Controller
-@RequestMapping("/")
+@RequestMapping(value="")
 public class CodeDataController {
 
 	@Resource(name = "deviceEnvService")

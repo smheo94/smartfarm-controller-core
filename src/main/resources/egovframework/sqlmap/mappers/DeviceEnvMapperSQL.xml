@@ -65,7 +65,8 @@
 			device.description, setup_date, x_position, y_position, x2_position,
 			y2_position, memo, modbus_address1, modbus_address2, modbus_address3,
 			no_stop_control, MODE, update_date, auto_manual_mode, STATUS
-			,CDT.device_type, CDT.device_type_group, CDT.device_type_name, CDT.description AS device_type_description, CDT.kind, CDT.dcac
+			,CDT.device_type, CDT.device_type_group, CDT.device_type_name, CDT.description AS device_type_description, CDT.kind, CDT.dcac,
+			CDT.round_number,CDT.topic_group,CDT.reset_point,CDT.accum_m,CDT.accum_h,CDT.accum_d,CDT.op_time,CDT.value_type			
 		FROM device
 		INNER JOIN cd_device_type CDT ON CDT.id = device.device_type_id
 		<where>
@@ -81,7 +82,8 @@
 			device_type_name, device_type_group, kind, is_physical_device,
 			manufacturer, model_name, model_spec, model_version, is_master,
 			use_house_type, default_address1, default_address2, default_address3,
-			dcac, min_value, MAX_VALUE, description_i18n, device_type_name_i18n,unit
+			dcac, min_value, MAX_VALUE, description_i18n, device_type_name_i18n,unit,
+			round_number,topic_group,reset_point,accum_m,accum_h,accum_d,op_time,value_type
 		FROM cd_device_type
 		<where>
 		<if test="kind != null" >

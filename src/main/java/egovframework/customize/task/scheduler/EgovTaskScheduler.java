@@ -4,23 +4,21 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-
-import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
-import egovframework.cmmn.util.CommonUtil;
 import egovframework.cmmn.util.DateUtil;
-import egovframework.customize.service.EgovSampleService;
 import egovframework.customize.service.HouseEnvService;
+import egovframework.customize.service.impl.HouseEnvServiceImpl;
 
 /*
  * 1시간 단위 동네예보 스케쥴러 
@@ -29,53 +27,141 @@ import egovframework.customize.service.HouseEnvService;
  * TODO : profile리스트 가지고 오는것. db에 넣는 것.
  */
 @Component
+@PropertySource(value={"classpath:application.properties","file:///myapp/application.properties"}, ignoreResourceNotFound = true)
 public class EgovTaskScheduler {	
-
+	private static final Logger log = LoggerFactory.getLogger(EgovTaskScheduler.class);
+	@Value("${smartfarm.system.type}")
+    public String SYSTEM_TYPE;
+	
 	@Autowired
 	public HouseEnvService houseEnvService;
 	
 	// 매시간 41분마다 API 데이터를 제공한다.
 	// 기준 시간은 
 	
-	final String FORECAST_URL = "http://newsky2.kma.go.kr/service/SecndSrtpdFrcstInfoService2/ForecastSpaceData";
-	final String weatherCertKey = "Y0VECgYwtbnfuvNYklX9OChRmOn3vCibz%2Fxe3YFrqoWiyCjkSnKRMpC9I6ybpZbHnKA5OxhNjyBGy28lrfomjQ%3D%3D";
+	static String FORECAST_URL = "http://newsky2.kma.go.kr/service/SecndSrtpdFrcstInfoService2/ForecastSpaceData";
+	static String weatherCertKey = "Y0VECgYwtbnfuvNYklX9OChRmOn3vCibz%2Fxe3YFrqoWiyCjkSnKRMpC9I6ybpZbHnKA5OxhNjyBGy28lrfomjQ%3D%3D";
 	
-	final String SUNRISE_URL = "http://apis.data.go.kr/B090041/openapi/service/RiseSetInfoService/getLCRiseSetInfo";
-	final String sunCertKey = "l%2FgDtDXE6ZralE2VJSrcon%2FKyKps%2FPANA9o497NfusyEYyei0Zv1fAWqJoxz8jaah7nv853ln7cxCWJypWOMLA%3D%3D";
+	static String SUNRISE_URL = "http://apis.data.go.kr/B090041/openapi/service/RiseSetInfoService/getLCRiseSetInfo";
+	static String sunCertKey = "l%2FgDtDXE6ZralE2VJSrcon%2FKyKps%2FPANA9o497NfusyEYyei0Zv1fAWqJoxz8jaah7nv853ln7cxCWJypWOMLA%3D%3D";
 	
-	public void runWeatherSchedule(){		
-		System.out.println("weatherScheduler");
+	public void runWeatherSchedule(){
 		List<HashMap<String,Object>> houseList = new ArrayList<>();
-		DateUtil dateUtil = new DateUtil();
-		String regDay = dateUtil.getCurrentDateString();
-		String regTimeString   = new java.text.SimpleDateFormat("HH").format(new java.util.Date());		
-		regTimeString = getBaseTime(regTimeString);
-		
-		houseList = houseEnvService.getAllList();
-		for(int i=0; i<houseList.size(); i++){
-			if(houseList.get(i).get("latitude") != null && houseList.get(i).get("longitude") != null){
-				Double longitude = Double.parseDouble(houseList.get(i).get("latitude").toString());
-				Double latitude = Double.parseDouble(houseList.get(i).get("longitude").toString());
-				latitude = Math.ceil(latitude);
-				longitude = Math.ceil(longitude);
-				
-				HashMap<String,Object> gridXY = getGridxy(latitude,longitude);
-				//당일것만 조회해
-				String nx = gridXY.get("x").toString();
-				String ny = gridXY.get("y").toString();
-				Integer houseId = (Integer)houseList.get(i).get("id");
-				if(Integer.parseInt(nx) > 0 && Integer.parseInt(ny) >0){
+//		DateUtil dateUtil = new DateUtil();
+//		String regDay = dateUtil.getCurrentDateString();
+//		String regTimeString   = new java.text.SimpleDateFormat("HH").format(new java.util.Date());
+//		regTimeString = getBaseTime(regTimeString);
+
+		//시간계산이 복잡하여 단순화함
+		if(SYSTEM_TYPE.equalsIgnoreCase("supervisor")){
+			Calendar c = Calendar.getInstance();
+			int h = c.get(Calendar.HOUR_OF_DAY);
+			c.add(Calendar.HOUR_OF_DAY, -(h%3+1));
+	
+			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyyMMdd");
+			SimpleDateFormat sdf2 = new SimpleDateFormat("HH00");
+			String regDay = sdf1.format(c.getTime());
+			String regTimeString = sdf2.format(c.getTime());
+	
+			houseList = houseEnvService.getAllList();
+			for(int i=0; i<houseList.size(); i++){
+				if(houseList.get(i).get("latitude") != null && houseList.get(i).get("longitude") != null){
+					Double longitude = Double.parseDouble(houseList.get(i).get("longitude").toString());
+					Double latitude = Double.parseDouble(houseList.get(i).get("latitude").toString());
+					HashMap<String,Object> gridXY = getGridxy(latitude,longitude);
+					String nx = gridXY.get("x").toString();
+					String ny = gridXY.get("y").toString();
+					Integer houseId = (Integer)houseList.get(i).get("id");
+					if(Integer.parseInt(nx) > 0 && Integer.parseInt(ny) >0){
+						try{
+							URL url = new URL(FORECAST_URL
+									+"?ServiceKey="+weatherCertKey
+									+"&base_date="+regDay
+									+"&base_time="+regTimeString
+									+"&numOfRows=1000"
+									+"&nx="+nx
+									+"&ny="+ny
+									+"&_type=json"
+									);
+						 	HttpURLConnection http = (HttpURLConnection) url.openConnection();
+					        http.setConnectTimeout(10000);
+					        http.setUseCaches(false);
+					
+					        BufferedReader br = new BufferedReader(new InputStreamReader(http.getInputStream()));
+					        StringBuilder sb = new StringBuilder();
+					        while (true) {
+					            String line = br.readLine();
+					            if (line == null){
+					                break;
+					            }
+					            sb.append(line);
+					        }
+					        br.close();
+					        http.disconnect();
+					        
+					        JSONObject json = new JSONObject(sb.toString());
+					        if(!json.getJSONObject("response").getJSONObject("header").get("resultCode").toString().equals("0000")){
+					        	continue;
+					        }
+					        JSONObject body = json.getJSONObject("response").getJSONObject("body");
+					        JSONObject items = body.getJSONObject("items");
+					        JSONArray itemArray = items.getJSONArray("item");
+	
+					        String baseDate = itemArray.getJSONObject(0).get("baseDate").toString();
+					        String baseTime = itemArray.getJSONObject(0).get("baseTime").toString();
+					      
+				        	for(int j=0 ; j<itemArray.length();j++){
+					        	LinkedHashMap<String,Object> hm = new LinkedHashMap<String,Object>();
+					        	JSONObject item = itemArray.getJSONObject(j);
+					        	// 당일 예보가 아닌경우 break
+					        	if(item.get("fcstDate").equals(baseDate)){
+					        		break;
+					        	}				        	
+					        	hm.put("base_date", baseDate);//발표일자
+					        	hm.put("base_time", baseTime);//발표시각
+					        	hm.put("fcst_date", item.get("fcstDate").toString());//예보일자
+					        	hm.put("fcst_time", item.get("fcstTime").toString());//에보시각
+					        	hm.put("fcst_value", item.get("fcstValue").toString());//카테고리에 해당하는 예보 값
+					        	hm.put("nx", item.get("nx").toString());//예보지점 X좌표
+					        	hm.put("ny", item.get("ny").toString());//예보지점 Y좌표
+					        	hm.put("category", item.get("category").toString());
+					        	hm.put("house_id", houseId);
+					        	houseEnvService.insertForecastData(hm);
+				        	}		        	
+			        	}catch(Exception e){
+			        		log.debug(e.getMessage());
+			        	}
+					}				
+				}
+			}
+		}
+	}
+	
+		// 온실 리스트 가져와서 위경도 겹치는거 빼고 
+	
+	
+	public void runSunriseSchedule(){
+		if(SYSTEM_TYPE.equalsIgnoreCase("supervisor")){
+			List<HashMap<String,Object>> houseList = new ArrayList<>();
+			DateUtil dateUtil = new DateUtil();
+			String regDay = dateUtil.getCurrentDateString();		
+			houseList = houseEnvService.getAllList();
+			for(int i=0; i<houseList.size(); i++){
+				if(houseList.get(i).get("latitude") != null && houseList.get(i).get("longitude") != null){
+					HashMap<String,Object> hm = new HashMap<>();
+					Double longitude = Double.parseDouble(houseList.get(i).get("longitude").toString());
+					Double latitude = Double.parseDouble(houseList.get(i).get("latitude").toString());
+					
 					try{
-						URL url = new URL(FORECAST_URL
-								+"?ServiceKey="+weatherCertKey
-								+"&base_date="+regDay
-								+"&base_time="+regTimeString
-								+"&numOfRows=1000"
-								+"&nx="+nx
-								+"&ny="+ny
+						URL url = new URL(SUNRISE_URL
+								+"?ServiceKey="+sunCertKey
+								+"&longitude="+longitude
+								+"&latitude="+latitude
+								+"&locdate="+regDay
+								+"&dnYn=Y"						
 								+"&_type=json"
 								);
-					 	HttpURLConnection http = (HttpURLConnection) url.openConnection();
+						HttpURLConnection http = (HttpURLConnection) url.openConnection();
 				        http.setConnectTimeout(10000);
 				        http.setUseCaches(false);
 				
@@ -92,90 +178,15 @@ public class EgovTaskScheduler {
 				        http.disconnect();
 				        
 				        JSONObject json = new JSONObject(sb.toString());
-				        if(Integer.parseInt(json.getJSONObject("response").getJSONObject("header").get("resultCode").toString()) != 0000){
-				        	continue;
-				        }
-				        JSONObject body = json.getJSONObject("response").getJSONObject("body");
-				        JSONObject items = body.getJSONObject("items");
-				        JSONArray itemArray = items.getJSONArray("item");
-
-				        String baseDate = itemArray.getJSONObject(0).get("baseDate").toString();
-				        String baseTime = itemArray.getJSONObject(0).get("baseTime").toString();
-				      
-			        	for(int j=0 ; j<itemArray.length();j++){
-				        	LinkedHashMap<String,Object> hm = new LinkedHashMap<String,Object>();
-				        	JSONObject item = itemArray.getJSONObject(j);
-				        	// 당일 예보가 아닌경우 break
-				        	if(item.get("fcstDate").equals(baseDate)){
-				        		break;
-				        	}				        	
-				        	hm.put("base_date", baseDate);//발표일자
-				        	hm.put("base_time", baseTime);//발표시각
-				        	hm.put("fcst_date", item.get("fcstDate").toString());//예보일자
-				        	hm.put("fcst_time", item.get("fcstTime").toString());//에보시각
-				        	hm.put("fcst_value", item.get("fcstValue").toString());//카테고리에 해당하는 예보 값
-				        	hm.put("nx", item.get("nx").toString());//예보지점 X좌표
-				        	hm.put("ny", item.get("ny").toString());//예보지점 Y좌표
-				        	hm.put("category", item.get("category").toString());
-				        	hm.put("house_id", houseId);
-				        	houseEnvService.insertForecastData(hm);
-			        	}		        	
-		        	}catch(Exception e){
-		        		e.printStackTrace();
-		        	}
-				}				
-			}
-		}
-	}
-	
-		// 온실 리스트 가져와서 위경도 겹치는거 빼고 
-	
-	
-	public void runSunriseSchedule(){
-		List<HashMap<String,Object>> houseList = new ArrayList<>();
-		DateUtil dateUtil = new DateUtil();
-		String regDay = dateUtil.getCurrentDateString();		
-		houseList = houseEnvService.getAllList();
-		for(int i=0; i<houseList.size(); i++){
-			if(houseList.get(i).get("latitude") != null && houseList.get(i).get("longitude") != null){
-				HashMap<String,Object> hm = new HashMap<>();
-				Double longitude = Double.parseDouble(houseList.get(i).get("latitude").toString());
-				Double latitude = Double.parseDouble(houseList.get(i).get("longitude").toString());
-				
-				try{
-					URL url = new URL(SUNRISE_URL
-							+"?ServiceKey="+sunCertKey
-							+"&longitude="+longitude
-							+"&latitude="+latitude
-							+"&locdate="+regDay
-							+"&dnYn=Y"						
-							+"&_type=json"
-							);					
-					HttpURLConnection http = (HttpURLConnection) url.openConnection();
-			        http.setConnectTimeout(10000);
-			        http.setUseCaches(false);
-			
-			        BufferedReader br = new BufferedReader(new InputStreamReader(http.getInputStream()));
-			        StringBuilder sb = new StringBuilder();
-			        while (true) {
-			            String line = br.readLine();
-			            if (line == null){
-			                break;
-			            }
-			            sb.append(line);
-			        }
-			        br.close();
-			        http.disconnect();
-			        
-			        JSONObject json = new JSONObject(sb.toString());
-			        JSONObject body = json.getJSONObject("response").getJSONObject("body").getJSONObject("items").getJSONObject("item");
-			        hm.put("house_id", (Integer)houseList.get(i).get("id"));
-			        hm.put("sunrise", (String)body.get("sunrise"));
-			        hm.put("sunset", (String)body.get("sunrise"));
-			        hm.put("loc_date", body.get("locdate").toString());
-			        houseEnvService.insertSunriseData(hm);
-				}catch(Exception e){
-					e.printStackTrace();
+				        JSONObject body = json.getJSONObject("response").getJSONObject("body").getJSONObject("items").getJSONObject("item");
+				        hm.put("house_id", (Integer)houseList.get(i).get("id"));
+				        hm.put("sunrise", body.get("sunrise"));
+				        hm.put("sunset", body.get("sunset"));
+				        hm.put("loc_date", body.get("locdate").toString());
+				        houseEnvService.insertSunriseData(hm);
+					}catch(Exception e){
+						log.debug(e.getMessage());
+					}
 				}
 			}
 		}
@@ -183,6 +194,7 @@ public class EgovTaskScheduler {
 	
 	private String getBaseTime(String regTimeString) {
 		final int standardTime[] = {2,5,8,11,14,17,20,23};
+		String regTimeToString="";
 		int regTime = Integer.parseInt(regTimeString);		
 		int tempTime= 0;
 		int minTime = 25;
@@ -206,11 +218,11 @@ public class EgovTaskScheduler {
 		}
 		
 		if(regTime<10){
-			regTimeString = "0"+regTime+"00";
+			regTimeToString = "0"+regTime+"00";
 		}else{
-			regTimeString = regTime+"00";
+			regTimeToString = regTime+"00";
 		}
-		return regTimeString;
+		return regTimeToString;
 	}	
 	
 	private HashMap<String, Object> getGridxy(double latitude, double longitude) {

@@ -1,23 +1,36 @@
 package egovframework.customize.config;
 
-import egovframework.customize.intercepter.SmartFarmDataInterceptor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.core.annotation.Order;
 import org.springframework.web.servlet.config.annotation.*;
 
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.service.ApiKey;
+import springfox.documentation.service.AuthorizationScope;
+import springfox.documentation.service.SecurityReference;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger.web.ApiKeyVehicle;
+import springfox.documentation.swagger.web.SecurityConfiguration;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableSwagger2
 @ComponentScan("egovframework.customize.config")
-public class SwaggerConfig {
+@PropertySource(value={"classpath:application.properties","file:///myapp/application.properties"}, ignoreResourceNotFound = true)
+@SuppressWarnings("PMD")
+@EnableWebMvc
+public class SwaggerConfig extends WebMvcConfigurerAdapter {
+    @Value("${security.oauth2.client.client-id}")
+    private String clientId;
+    @Value("${security.oauth2.client.client-secret}")
+    private String clientSecret;
 
     @Bean
     public Docket api() {
@@ -26,15 +39,28 @@ public class SwaggerConfig {
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("egovframework.customize.web"))
                 .paths(PathSelectors.any())
-                .build();
-
+                .build()
+                .securitySchemes(Arrays.asList(apiKey()))
+                .securityContexts(securityContexts());
     }
-}
+    private ApiKey apiKey() {
+        return new ApiKey("Authorization", "api-key", "header");
+    }
 
+    @Bean
+    @DependsOn("propertySourcesPlaceholderConfigurer")
+    public SecurityConfiguration securityInfo() {
+        SecurityConfiguration sc = new SecurityConfiguration(clientId, clientSecret, "spring_oauth", clientId, "", ApiKeyVehicle.HEADER, "api-key", " ");
+        return sc;
+    }
 
-@Configuration
-@EnableWebMvc
-class WebConfig extends WebMvcConfigurerAdapter {
+    private AuthorizationScope[] scopes() {
+        AuthorizationScope[] scopes = {
+                new AuthorizationScope("read", "for read operations")
+                , new AuthorizationScope("write", "for write operations")
+        };
+        return scopes;
+    }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -44,6 +70,19 @@ class WebConfig extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
 
+    }
+
+    private List<SecurityContext> securityContexts() {
+        List<SecurityContext> securityContexts = new ArrayList<>();
+        String paths[] = {"/env.*"};
+        for (String path: paths) {
+            securityContexts.add(SecurityContext.builder()
+                    .securityReferences(Arrays.asList(new SecurityReference("Authorization", scopes())))
+                    .forPaths(PathSelectors.regex(path))
+                    .build());
+        }
+
+        return securityContexts;
     }
 }
 

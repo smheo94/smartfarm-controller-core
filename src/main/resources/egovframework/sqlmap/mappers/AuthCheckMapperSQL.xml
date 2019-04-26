@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kt.smartfarm.supervisor.mapper.AuthCheckMapper">
+	<select id="selectCheckAllowAuth" parameterType="map" resultType="map">
+		SELECT
+			IFNULL( fn_is_allow_user_gsm(#{gsm_key},  #{user_idx}), 0) AS allow_gsm,
+			IFNULL( fn_is_allow_user_house(#{house_id},  #{user_idx}), 0) AS allow_house
+	</select>
+</mapper>

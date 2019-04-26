@@ -53,5 +53,12 @@ public class DeviceTypeVO {
 	String descriptionI18n;
 	String deviceTypeNameI18n;
 	
-	
+	Integer roundNumber;
+	String topicGroup;
+	Double resetPoint;
+	Integer accumM;
+	Integer accumH;
+	Integer accumD;
+	Integer opTime;
+	Integer valueType;	
 }

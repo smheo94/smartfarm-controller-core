@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 @Controller
-@RequestMapping("/controllogic")
+@RequestMapping(value={"/controllogic"})
 public class ControlLogicEnvController {
 
 	public static final String DEFAULT_SETUP_FILE_PATH = "data/env-default/";
@@ -46,8 +46,6 @@ public class ControlLogicEnvController {
 
 	/**
 	 * 제어로직 전체 list
-	 * @param gsmKey
-	 * @param controllerId
 	 * @return
 	 */
 	@RequestMapping(value= "", method = RequestMethod.GET)

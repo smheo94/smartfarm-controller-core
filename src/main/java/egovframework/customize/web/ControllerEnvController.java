@@ -40,7 +40,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * 센서구성,제어기구성,온실구성,제어로직구성,외부기상대구성,임계치구성
  */
 @Controller
-@RequestMapping("/{gsmKey}/controller")
+@RequestMapping(value="/{gsmKey}/controller")
 public class ControllerEnvController {
 
 	public static final String DEFAULT_SETUP_FILE_PATH = "data/env-default/";
@@ -79,8 +79,7 @@ public class ControllerEnvController {
 	@ResponseBody
 	@InterceptPost
 	public Result<ControllerEnvVO> insert( @PathVariable("gsmKey") Integer gsmKey, @RequestBody ControllerEnvVO controller){
-		try {
-			System.out.println("controllerInsert Controller Called");
+		try {			
 			return new Result(controllerEnvService.insert(controller));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, controller);

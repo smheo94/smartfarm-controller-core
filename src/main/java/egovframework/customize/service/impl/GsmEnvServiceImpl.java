@@ -52,8 +52,8 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 
 	@Override
 	public Map<String, Object> get(Integer gsmKey, boolean all) {
-		Map<String,Object> gsmMap = gsmEnvMapper.getGsmList(gsmKey,null).stream().findFirst().orElse(null);
-		List<HashMap<String, Object>> houseList = houseEnvService.list(gsmKey, all);
+		Map<String,Object> gsmMap = gsmEnvMapper.getGsmList(gsmKey,null,null,null, null).stream().findFirst().orElse(null);
+		List<HashMap<String, Object>> houseList = houseEnvService.list(gsmKey, all, true);
 		gsmMap.put("houseList", houseList);
 		return gsmMap;
 	}
@@ -89,14 +89,14 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 	}
 */
 	@Override
-	public List<Map<String, Object>> list(boolean all,Integer userInfoId) {
+	public List<Map<String, Object>> list(boolean all,Integer userInfoId, Integer categoryId, String farmName, String authUserIdx) {
 		List<Map<String,Object>> gsmList = new ArrayList<>();
-		gsmList = gsmEnvMapper.getGsmList(null,userInfoId);
+		gsmList = gsmEnvMapper.getGsmList(null,userInfoId,categoryId,farmName, authUserIdx);
 		for(Map<String,Object> gsm : gsmList){
 //			Integer gsmKey = (Integer)gsm.get("gsmKey");
 //			houseList = gsmEnvMapper.getHouseList(gsmKey);
 			Integer gsmKey = (Integer)gsm.get("gsmKey");
-			List<HashMap<String,Object>> houseList = houseEnvService.list(gsmKey, all);
+			List<HashMap<String,Object>> houseList = houseEnvService.list(gsmKey, all, false);
 			gsm.put("houseList", houseList);			
 		}
 		return gsmList;
@@ -121,12 +121,14 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 
 	@Override
 	public GsmThresholdVO gsmThresholdInsert(GsmThresholdVO gsmThresholdVO) {
-		return gsmEnvMapper.gsmThresholdInsert(gsmThresholdVO);
+		gsmEnvMapper.gsmThresholdInsert(gsmThresholdVO);
+		return gsmThresholdVO;
 	}
 
 	@Override
 	public GsmThresholdVO gsmThresholdUpdate(GsmThresholdVO gsmThresholdVO) {
-		return gsmEnvMapper.gsmThresholdUpdate(gsmThresholdVO);
+		gsmEnvMapper.gsmThresholdUpdate(gsmThresholdVO);
+		return gsmThresholdVO;
 	}
 
 	@Override

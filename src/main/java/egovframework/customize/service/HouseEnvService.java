@@ -12,7 +12,7 @@ public interface HouseEnvService {
 	Integer delete(Integer gsmKey, Integer greenHouseId);
 	HouseEnvVO update(HouseEnvVO house);
 	HashMap<String,Object>  get(Integer gsmKey, Integer greenHouseId);
-	List<HashMap<String, Object>> list(Integer gsmKey, boolean all);
+	List<HashMap<String, Object>> list(Integer gsmKey, boolean all, boolean detail);
 	List<HashMap<String,Object>> selectHouseTypeList();
 	List<ProductVO> selectProductList();
 	HashMap<String,Object> insertHouseDeviceMap(HashMap<String, Object> map);
@@ -23,4 +23,14 @@ public interface HouseEnvService {
 	List<HashMap<String,Object>> getWeatherCast(Integer houseId, String fromDate, String toDate);
 	List<HashMap<String,Object>> getWeatherCategory();
 	Integer insertSunriseData(HashMap<String, Object> hm);
+
+	List<HashMap<String,Object>> groundDeviceList(Integer houseId);
+
+	// CCTV
+	HashMap<String, Object> insertCctv(CCTVSettingVO cctv);
+	Integer deleteCctv(Integer id);
+	Integer updateCctv(CCTVSettingVO cctv);
+	List<HashMap<String, Object>> getCctvsByHouseId(Integer houseId);
+	HashMap<String,Object> houseDeviceInfoList(Integer houseId);
+
 }

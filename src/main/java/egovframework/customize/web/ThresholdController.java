@@ -15,30 +15,25 @@
  */
 package egovframework.customize.web;
 
-import java.util.HashMap;
 import java.util.List;
 import egovframework.cmmn.util.Result;
-import egovframework.customize.service.DeviceEnvService;
 import egovframework.customize.service.ThresholdVO;
-import egovframework.customize.service.ProductVO;
 import egovframework.customize.service.ThresholdService;
-import egovframework.customize.service.ThresholdVO;
-import egovframework.customize.service.DeviceTypeVO;
-import egovframework.customize.service.HouseEnvService;
 
 import javax.annotation.Resource;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-
+@Slf4j
 @Controller
-@RequestMapping("/threshold")
+@RequestMapping(value="/threshold")
 public class ThresholdController {
 
 	public static final String DEFAULT_SETUP_FILE_PATH = "data/env-default/";
@@ -50,66 +45,40 @@ public class ThresholdController {
 	
 	/**
 	 * @description 온실 등록 ( 제어기 선택은 어디서? 밑에서~ )
-	 * @param request
 	 * @param gsmKey
-	 * @param device
+	 * @param greenHouseId
+	 * @param thresholdVOs
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	@RequestMapping(value= "/", method = RequestMethod.POST)
+	@RequestMapping(value= "/gsm/{gsmKey}/house/{greenHouseId}", method = RequestMethod.POST)
 	@ResponseBody
-	public Result<ThresholdVO> insert(@RequestBody ThresholdVO thresholdVO){
+	public Result insert(@PathVariable Integer gsmKey, @PathVariable Integer greenHouseId,
+											@RequestBody List<ThresholdVO> thresholdVOs){
 		try {
-			return new Result(thresholdService.insert(thresholdVO));
-		} catch(Exception e) {
-			return new Result(e.getMessage(), HttpStatus.CONFLICT, thresholdVO);
-		}
-	}
-	
-	/**
-	 * @description 온실 update
-	 * @param gsmKey
-	 * @param house
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	@RequestMapping(value= "/", method = RequestMethod.PUT)
-	@ResponseBody
-	public Result<ThresholdVO> update(@RequestBody ThresholdVO thresholdVO){		
-		try {
-			return new Result(thresholdService.update(thresholdVO)); // gsmKey, id기준으로 업데이트
-		} catch(Exception e) {
-			return new Result(e.getMessage(), HttpStatus.CONFLICT, thresholdVO);
-		}
-	}
-	  
-	
-	
-	@RequestMapping(value= "/{gsm_key}", method = RequestMethod.GET)
-	@ResponseBody
-	public Result<ThresholdVO> list( @PathVariable("gsm_key") Integer gsmKey){
-		try {
-			return new Result(thresholdService.getThreshold(gsmKey));
-		} catch(Exception e) {
-			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
-		}
-	}
-	
-	/**
-	 * Deafult 관련한건 아직 정해진게 없음.
-	 * 
-	 */
+			int cnt = thresholdService.update(gsmKey, greenHouseId, thresholdVOs);
 
-/*
-	@RequestMapping(value= "/{greenHouseId}", method = RequestMethod.DELETE)
+			if ( cnt > 0 ) {
+				log.info("{} | {} | Threshold insert | SUCCEED | {} ", "UnknownHost", "UnknownUser", thresholdVOs );
+				return new Result<List<ThresholdVO>>("OK", HttpStatus.OK, thresholdVOs);
+			} else {
+				log.info("{} | {} | Threshold insert | FAIL | {} ", "UnknownHost", "UnknownUser", thresholdVOs );
+				return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, "Query Failed");
+			}
+		} catch(Exception e) {
+			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
+	
+	@RequestMapping(value= "/gsm/{gsmKey}/house/{greenHouseId}", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<ThresholdVO> delete(@PathVariable("gsm_key") Integer gsmKey,  @PathVariable("greenHouseId") Integer greenHouseId){
+	public Result<List<ThresholdVO>> list( @PathVariable Integer gsmKey, @PathVariable Integer greenHouseId){
 		try {
-			return new Result(thresholdService.delete(gsmKey, greenHouseId));
+			return new Result(thresholdService.getThreshold(gsmKey,greenHouseId));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
 	}
-*/
+
 	
 }

@@ -32,7 +32,7 @@
 	</insert>
 	
 	<insert id="insertHouseDeviceMap" parameterType="map">		
-		INSERT INTO map_green_house_device
+		REPLACE INTO map_green_house_device
 		            (green_house_id, device_id)
 		VALUES (#{house_id}, #{device_id});
 	</insert>
@@ -144,7 +144,7 @@
 		SELECT 
 			id, product_method_id AS productMethodId, green_house_type_id as greenHouseTypeId, house_name as houseName,
 			latitude, longitude, description, build_date as buildDate, last_update as lastUpdate, addr_1 as addr1,
-			addr_2 as addr2, zip, nutrient_common_id as nutrientCommonId, change_gh as changeGh, change_temperature as changeTemperature,
+			addr_2 as addr2, zip, change_gh as changeGh, change_temperature as changeTemperature,
 			floor_space as floorSpace, house_horizontal as houseHorizontal, house_vertical as houseVertical, house_height as houseHeight,
 			plant_spacing as plantSpacing, crop_cnt as cropCnt, house_direction as houseDirection, select_temp_sensor as selectTempSensor,
 			select_hum_sensor as selectHumSensor, gsm_key as gsmKey, house_name_i18n as houseNameI18n
@@ -193,11 +193,28 @@
 		WHERE mghd.green_house_id = #{houseId}			
 	</select>
 	
+	<select id="getHouseDeviceTypeList" parameterType="Integer" resultType="deviceTypeVO">
+		SELECT cdt.* 
+		FROM map_green_house_device  AS mghd
+		INNER JOIN device ON device.id = mghd.device_id
+		INNER JOIN cd_device_type AS cdt ON device.device_type_id = cdt.id
+		WHERE mghd.green_house_id = #{houseId}			
+	</select>
+	
+	<select id="getGroundDeviceList" parameterType="Integer" resultType="map">
+		SELECT device.* ,cpt.device_type AS dt, cpt.device_type_group AS dtg
+		FROM map_green_house_device  AS mghd
+		INNER JOIN device ON device.id = mghd.device_id
+		INNER JOIN cd_device_type cpt ON cpt.id = device.device_type_id
+		WHERE mghd.green_house_id = #{houseId}			
+	</select>
+	
+	
 	<insert id="insertCCTVSetting" parameterType="cctv" useGeneratedKeys="true">
 		INSERT INTO	cctv	
-           ( house_id, cctv_name, cctv_uid, cctv_pwd, cctv_ws_url, cctv_rtsp_url, wowza_id)
+           ( house_id, cctv_name, cctv_uid, cctv_pwd, cctv_ws_url, cctv_rtsp_url, is_rtsp_play, wowza_id)
 		VALUES(
-			#{houseId},#{cctvName},#{cctvUid},#{cctvPwd},#{cctvWsUrl},#{cctvRtspUrl}, #{wowzaId}
+			#{houseId},#{cctvName},#{cctvUid},#{cctvPwd},#{cctvWsUrl},#{cctvRtspUrl}, #{isRtspPlay}, #{wowzaId}
 		)
 		<selectKey keyProperty="id" resultType="int">
 			SELECT LAST_INSERT_ID() AS id;
@@ -213,13 +230,32 @@
 			cctv_pwd as cctvPwd,
 			cctv_ws_url as cctvWsUrl,
 			cctv_rtsp_url as cctvRtspUrl,
+			is_rtsp_play as isRtspPlay,
 			wowza_id as wowzaId,
 			stream_url as wowzaStreamUrl,
 			rest_url as wowzaRestUrl
 		FROM cctv as cctv
-		JOIN wowza as wowza on cctv.wowza_id = wowza.id
+		LEFT OUTER JOIN wowza as wowza on cctv.wowza_id = wowza.id
 		WHERE house_id =#{houseId}
 	</select>
+	
+	<update id="updateCctv" parameterType="cctv">
+		UPDATE cctv
+		SET
+			<if test="cctvName != null"> cctv_name = #{cctvName}</if>
+			<if test="cctvUid != null">, cctv_uid = #{cctvUid}</if>
+			<if test="cctvPwd != null">, cctv_pwd = #{cctvPwd}</if>
+			<if test="cctvWsUrl != null">, cctv_ws_url = #{cctvWsUrl}</if>
+			<if test="cctvRtspUrl != null">, cctv_rtsp_url = #{cctvRtspUrl}</if>
+			<if test="isRtspPlay != null">, is_rtsp_play = #{isRtspPlay}</if>
+			<if test="wowzaId != null">, wowza_id = #{wowzaId}</if>
+		WHERE house_id = #{houseId} AND id = #{id};				
+	</update>
+	
+	<delete id='deleteCctv'>
+		DELETE from cctv where id=#{cctvId}
+	</delete>
+	
 	
 	<select id="getAllList" resultType="map">
 		SELECT id, product_method_id AS productMethodId, green_house_type_id as greenHouseTypeId, house_name as houseName,
@@ -244,7 +280,7 @@
 	</insert>
 	
 	<select id="getWeatherCast" parameterType="map" resultType="map">
-		SELECT 
+	<!-- 	SELECT 
 			house_id,
 			base_date,
 			base_time,
@@ -263,6 +299,32 @@
 			<if test="from_date==null">
 			AND fcst_date BETWEEN NOW() AND NOW() + INTERVAL 1 DAY
 			</if>
+		ORDER BY id; -->
+		SELECT 
+			house_id,
+			base_date,
+			base_time,
+			fcst_date,
+			fcst_time,
+			fcst_value,
+			nx,
+			ny,
+			category
+		FROM weather_cast
+		WHERE id IN (
+			SELECT 
+				MAX(id)
+			FROM weather_cast
+			WHERE 1=1
+				AND house_id = #{house_id}
+				<if test="from_date!=null">
+					AND fcst_date BETWEEN #{from_date} AND #{to_date}
+				</if>
+				<if test="from_date==null">				
+					AND fcst_date BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL 3 DAY
+				</if>
+    		GROUP BY house_id, fcst_date, fcst_time, category
+		)
 		ORDER BY id;
 	</select>
 	<select id="getWeatherCategory" resultType="map">
@@ -282,10 +344,12 @@
 		</selectKey>
 	</insert>
 	
-	<select id="selectSunriseDate" parameterType="map" resultType="map">
+	<select id="getSunriseInfo" parameterType="map" resultType="map">
 		SELECT house_id,loc_date,sunrise,sunset
 		FROM sunrise_info
-		WHERE loc_date = CURRENT_DATE()
+		WHERE 
+			loc_date = CURRENT_DATE()
+			AND house_id = #{green_house_id}
 	
 	</select>
 	

@@ -46,7 +46,7 @@ public class DeviceServiceImpl extends EgovAbstractServiceImpl implements Device
 			HashMap<String,Object> result = deviceMapper.getSensorInfoList();
 			return result;
 		}catch(Exception e){
-			e.printStackTrace();
+			log.debug(e.getMessage());
 			return null;
 		}		
 	}
@@ -56,7 +56,7 @@ public class DeviceServiceImpl extends EgovAbstractServiceImpl implements Device
 			HashMap<String,Object> result = deviceMapper.getDeviceInfoList();
 			return result;
 		}catch(Exception e){
-			e.printStackTrace();
+			log.debug(e.getMessage());
 			return null;
 		}		
 		
@@ -69,7 +69,7 @@ public class DeviceServiceImpl extends EgovAbstractServiceImpl implements Device
 			HashMap<String,Object> result = deviceMapper.insertDeviceList();
 			return result;	
 		}catch(Exception e){
-			e.printStackTrace();
+			log.debug(e.getMessage());
 			return null;
 		}
 		
@@ -82,7 +82,7 @@ public class DeviceServiceImpl extends EgovAbstractServiceImpl implements Device
 			HashMap<String, Object> result = deviceMapper.insertSensorList();
 			return result;
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.debug(e.getMessage());
 			return null;
 		}
 		

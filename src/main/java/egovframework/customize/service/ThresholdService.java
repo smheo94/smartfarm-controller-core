@@ -1,9 +1,10 @@
 package egovframework.customize.service;
 
+import java.util.List;
+
 public interface ThresholdService {
 
-	ThresholdVO insert(ThresholdVO thresholdVO);
-	ThresholdVO update(ThresholdVO thresholdVO);
-	ThresholdVO getThreshold(Integer gsmKey);
+	List<ThresholdVO> getThreshold(Integer gsmKey, Integer houseId);
+	int update(Integer gsmKey, Integer houseId, List<ThresholdVO> thresholdVOs);
 
 }

@@ -14,6 +14,7 @@ package egovframework.customize.service.impl;
 
 import egovframework.customize.service.HouseEnvVO;
 import egovframework.customize.service.ProductVO;
+import egovframework.customize.service.CCTVSettingVO;
 import egovframework.customize.service.ControlLogicSettingVO;
 import egovframework.customize.service.DeviceEnvVO;
 import egovframework.customize.service.HouseEnvService;
@@ -25,6 +26,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +40,7 @@ import javax.annotation.Resource;
 
 @Service("houseEnvService")
 public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements HouseEnvService {
-
+	private static final Logger log = LoggerFactory.getLogger(HouseEnvServiceImpl.class);
 	@Resource(name="houseEnvMapper")
 	HouseEnvMapper houseEnvMapper;
 	
@@ -83,6 +86,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 		List<HashMap<String,Object>> houseDetail= new ArrayList<HashMap<String,Object>>();
 		List<HashMap<String,Object>> controllerList = new ArrayList<HashMap<String,Object>>();		
 		List<HashMap<String,Object>> cctvList = new ArrayList<HashMap<String,Object>>();
+		HashMap<String,Object> sunriseInfo = new HashMap<>();
 		List<Integer> deviceIds = new ArrayList<Integer>();		
 		Map<String, Object> map = new HashMap<>();
 		
@@ -95,7 +99,11 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 			cctvList = houseEnvMapper.getCctvList(houseId);
 			if(cctvList != null){
 				houseDetail.get(i).put("cctvList", cctvList);	
-			}			
+			}
+			sunriseInfo = houseEnvMapper.getSunriseInfo(map);
+			if(sunriseInfo!=null){
+				houseDetail.get(i).put("sunriseInfo", sunriseInfo);
+			}
 		}
 		deviceIds = houseEnvMapper.getMappedDevice(map);
 		
@@ -110,13 +118,14 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 		return result;
 	}
 
-	public List<HashMap<String, Object>> list(Integer gsmKey, boolean all) {
+	public List<HashMap<String, Object>> list(Integer gsmKey, boolean all, boolean detail) {
 		List<HashMap<String,Object>> result = new ArrayList<HashMap<String,Object>>();
 		List<HashMap<String,Object>> controllerList = new ArrayList<HashMap<String,Object>>();
 //		List<HashMap<String,Object>> cctvList = new ArrayList<HashMap<String,Object>>();
 		List<DeviceEnvVO> mappedDeviceList;
 		List<Integer> deviceIds = new ArrayList<Integer>();
 		Map<String, Object> map = new HashMap<>();
+		HashMap<String,Object> sunriseInfo = new HashMap<>();
 		List<HashMap<String,Object>> cctv = new ArrayList<>(); 
 		if(gsmKey == null){
 			result = houseEnvMapper.getHouseDetail(map);
@@ -143,13 +152,17 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 					}
 					houseMap.put("controllerList", controllerList);
 				}
-				
-				Integer houseId = (Integer)houseMap.get("id");
-				cctv = houseEnvMapper.getCctvList(houseId);
-				if(cctv !=null){					
-					houseMap.put("cctvList",cctv);	
+				if(detail ) {
+					Integer houseId = (Integer)houseMap.get("id");
+					cctv = houseEnvMapper.getCctvList(houseId);
+					if(cctv !=null){					
+						houseMap.put("cctvList",cctv);	
+					}
+					sunriseInfo = houseEnvMapper.getSunriseInfo(map);
+					if(sunriseInfo!=null){
+						houseMap.put("sunriseInfo", sunriseInfo);
+					}
 				}
-				
 			}
 
 			return result;
@@ -175,7 +188,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 				product.setProductMethod(productMethodList);
 			}			
 		}catch(Exception e){
-			e.printStackTrace();
+			log.debug(e.getMessage());
 		}
 		return productList;
 	}
@@ -196,10 +209,33 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 
 	@Override
 	public List<DeviceEnvVO> houseDeviceList(Integer houseId) {
-		return houseEnvMapper.getHouseDeviceList(houseId);
-		
+		return houseEnvMapper.getHouseDeviceList(houseId);		
 	}
 
+	@Override
+	public HashMap<String,Object> houseDeviceInfoList(Integer houseId) {
+		HashMap<String,Object> result = new HashMap<String,Object>();
+		result.put("deviceList", houseEnvMapper.getHouseDeviceList(houseId));
+		result.put("deviceTypeList", houseEnvMapper.getHouseDeviceTypeList(houseId));
+		return result;	
+		
+	}
+	
+	@Override
+	public List<HashMap<String,Object>> groundDeviceList(Integer houseId) {
+		List<HashMap<String,Object>> tempDeviceList = new ArrayList<>();
+		List<HashMap<String,Object>> deviceList = new ArrayList<>();
+		tempDeviceList = houseEnvMapper.getGroundDeviceList(houseId);
+		for(HashMap<String,Object> device : tempDeviceList){
+			if(device.get("dtg").toString().equals("sensor_gr_temp") || device.get("dtg").toString().equals("sensor_gr_moisture")){
+				String deviceTypeKey = device.get("dt").toString() + device.get("device_type_idx").toString();
+				device.put("device_type_key", deviceTypeKey);
+				deviceList.add(device);
+			}			
+		}
+		return deviceList;
+	}
+	
 	@Override
 	public HashMap<String, Object> deleteHouseDeviceMap(HashMap<String, Object> map) {
 		HashMap<String,Object> param = new HashMap<>();
@@ -246,7 +282,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 			param.put("nx", gridXY.get("x").toString());
 			param.put("ny", gridXY.get("y").toString());
 		}catch(Exception e){
-			e.printStackTrace();
+			log.debug(e.getMessage());
 		}		 
 		return houseEnvMapper.getWeatherCast(param);
 	}
@@ -303,5 +339,25 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 	@Override
 	public Integer insertSunriseData(HashMap<String, Object> hm) {
 		return houseEnvMapper.insertSunriseData(hm);		
+	}
+	
+	@Override
+	public HashMap<String, Object> insertCctv(CCTVSettingVO cctv) {
+		return houseEnvMapper.insertCCTVSetting(cctv);
+	}
+
+	@Override
+	public List<HashMap<String, Object>> getCctvsByHouseId(Integer houseId) {
+		return houseEnvMapper.getCctvList(houseId);
+	}
+
+	@Override
+	public Integer deleteCctv(Integer id) {
+		return houseEnvMapper.deleteCctv(id);
+	}
+
+	@Override
+	public Integer updateCctv(CCTVSettingVO cctv) {
+		return houseEnvMapper.updateCctv(cctv);
 	}
 }
