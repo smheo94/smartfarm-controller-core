@@ -10,7 +10,7 @@ public interface GsmEnvService {
 
 	//GsmEnvVO get(Integer gsmKey);
 
-	Map<String,Object> get(Integer gsmKey, boolean  all);
+	Map<String,Object> get(Integer gsmKey, boolean  all, Boolean isSmartfarmSystem);
 
 	Integer delete(Integer gsmKey);
 
@@ -18,7 +18,7 @@ public interface GsmEnvService {
 
 	Integer update(GsmEnvVO gsmInfo);
 
-	List<Map<String, Object>> list(boolean all, Integer userInfoId, Integer categoryId, String farmName, String authUserIdx);
+	List<Map<String, Object>> list(boolean all, Integer userInfoId, Integer categoryId, String farmName, String authUserIdx, Boolean isSmartfarmSystem);
 
 	List<GsmEnvVO> notMappedList();
 

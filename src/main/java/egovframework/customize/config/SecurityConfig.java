@@ -32,7 +32,8 @@ import java.util.Map;
 
 @Configuration
 @EnableWebSecurity
-@PropertySource(value={"classpath:application.properties","file:///myapp/application.properties"}, ignoreResourceNotFound = true)
+
+@PropertySource(value={"classpath:application.properties","file:/myapp/application.properties","file:/home/gsm/v4/conf/smartfarm-mgr-env.properties"}, ignoreResourceNotFound=true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Value("${security.oauth2.client.client-id}")
@@ -43,10 +44,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private String tokenInfoUri;
 
 	@Value("${smartfarm.farm.auth-basic-id}")
-	private String authBasicId;
+	private String authBasicAPIId;
 
 	@Value("${smartfarm.farm.auth-user-secret}")
-	private String authUserSecret;
+	private String authBasicAPISecret;
+
+	@Value("${smartfarm.farm.auth-basic-userid}")
+	private String authBasicUserId;
+
+	@Value("${smartfarm.farm.auth-basic-usersecret}")
+	private String authBasicUserSecret;
 
 	@Autowired
 	BasicAuthenticationPoint authEntryPoint;
@@ -91,7 +98,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		auth.inMemoryAuthentication().withUser(authBasicId).password(authUserSecret).roles("USER");
+		auth.inMemoryAuthentication().withUser(authBasicAPIId).password(authBasicAPISecret).roles("API-USER").
+		and().withUser(authBasicUserId).password(authBasicUserSecret).roles("USER");
 	}
 	@Override
 	@Bean

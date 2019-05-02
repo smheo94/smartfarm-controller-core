@@ -43,7 +43,7 @@ public class AuthCheckServiceImpl extends EgovAbstractServiceImpl implements Aut
 
 	@Override
 	public Boolean authCheck(Integer gsmKey, Integer houseId) {
-		if (SystemType.SYSTEM_TYPE_SMARTFARM.equalsIgnoreCase(config.SYSTEM_TYPE)) {
+		if (config.isSmartfarmSystem()) {
 			//20190318 - 제어기에서는 검사 안해요
 			return true;
 		}

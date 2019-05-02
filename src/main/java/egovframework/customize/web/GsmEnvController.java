@@ -20,10 +20,12 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.kt.smartfarm.supervisor.mapper.AuthCheckMapper;
+import egovframework.cmmn.SystemType;
 import egovframework.cmmn.util.Result;
 import egovframework.cmmn.util.InterceptPre;
 import egovframework.cmmn.util.InterceptIgnoreGSMKey;
 import egovframework.cmmn.util.InterceptPost;
+import egovframework.customize.config.SmartfarmInterceptorConfig;
 import egovframework.customize.intercepter.SmartFarmDataInterceptor;
 import egovframework.customize.service.*;
 
@@ -33,6 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Path;
 
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.SpringSecurityMessageSource;
@@ -59,6 +62,9 @@ public class GsmEnvController {
 
 	@Resource(name="authCheckService")
 	private AuthCheckService authCheckService;
+
+	@Autowired
+	SmartfarmInterceptorConfig config;
 	/**
 	 * 제어모듈 수정
 	 * @param gsmKey
@@ -141,7 +147,7 @@ public class GsmEnvController {
 			// 일출, 일몰 api 같이
 			if(all == null )
 				all = true;
-			return new Result(gsmEnvService.get(gsmKey, all));
+			return new Result(gsmEnvService.get(gsmKey, all, config.isSmartfarmSystem()));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
@@ -180,13 +186,13 @@ public class GsmEnvController {
 			,@RequestParam(value = "categoryId", required = false) Integer categoryId
 			,@RequestParam(value = "farmName", required = false) String farmName
 			){
-		
 		try {
 		    if( all == null ) {
                 all = true;
             }
 			String authUserIdx = authCheckService.getAuthUserIdx();
-			return new Result(gsmEnvService.list(all,userInfoId,categoryId,farmName, authUserIdx));
+		    Boolean isSmartfarm = config.isSmartfarmSystem();
+			return new Result(gsmEnvService.list(all,userInfoId,categoryId,farmName, authUserIdx, isSmartfarm));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}

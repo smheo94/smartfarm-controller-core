@@ -1,6 +1,7 @@
 package egovframework.customize.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import egovframework.cmmn.SystemType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +27,7 @@ import java.util.Objects;
 
 @Configuration
 @EnableResourceServer
-@PropertySource(value={"classpath:application.properties","file:///myapp/application.properties"}, ignoreResourceNotFound = true)
+@PropertySource(value={"classpath:application.properties","file:/myapp/application.properties","file:/home/gsm/v4/conf/smartfarm-mgr-env.properties"}, ignoreResourceNotFound=true)
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
 	@Value("${smartfarm.system.type}")
@@ -46,16 +47,16 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
-		if(Objects.equals(SYSTEM_TYPE, EnvironmentConfig.SYSTEM_TYPE_SMARTFARM )) {
-//			//Basic Auth를 사용
-//			http.csrf().disable().authorizeRequests()
-//					.antMatchers("/swagger-resources/**","/swagger-ui.html","/v2/api-docs", "/webjars/**", "/api/**").permitAll()
-//					.antMatchers("/", "/api/public-key", "/error").permitAll()
-//					.anyRequest().authenticated()
-//					.and().httpBasic()
-//					.authenticationEntryPoint(authEntryPoint);
-
-		} else{
+//		if(SystemType.SYSTEM_TYPE_SMARTFARM.equalsIgnoreCase(SYSTEM_TYPE)) {
+////			//Basic Auth를 사용
+////			http.csrf().disable().authorizeRequests()
+////					.antMatchers("/swagger-resources/**","/swagger-ui.html","/v2/api-docs", "/webjars/**", "/api/**").permitAll()
+////					.antMatchers("/", "/api/public-key", "/error").permitAll()
+////					.anyRequest().authenticated()
+////					.and().httpBasic()
+////					.authenticationEntryPoint(authEntryPoint);
+//
+//		} else{
 			// @formatter:off
 			http.authorizeRequests().antMatchers(HttpMethod.OPTIONS).permitAll()
 					.antMatchers("/index.jsp", "/swagger-resources/**", "/swagger-ui.html", "/v2/api-docs", "/webjars/**").permitAll() // Swagger Support
@@ -66,6 +67,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 					.and().exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint)
 					;
 			// @formatter:on
-		}
+//		}
 	}
 }

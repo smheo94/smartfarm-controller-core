@@ -23,7 +23,7 @@ import java.util.List;
 @Configuration
 @EnableSwagger2
 @ComponentScan("egovframework.customize.config")
-@PropertySource(value={"classpath:application.properties","file:///myapp/application.properties"}, ignoreResourceNotFound = true)
+@PropertySource(value={"classpath:application.properties","file:/myapp/application.properties","file:/home/gsm/v4/conf/smartfarm-mgr-env.properties"}, ignoreResourceNotFound=true)
 @SuppressWarnings("PMD")
 @EnableWebMvc
 public class SwaggerConfig extends WebMvcConfigurerAdapter {

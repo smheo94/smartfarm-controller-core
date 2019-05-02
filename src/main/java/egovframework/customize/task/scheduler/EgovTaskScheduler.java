@@ -27,7 +27,7 @@ import egovframework.customize.service.impl.HouseEnvServiceImpl;
  * TODO : profile리스트 가지고 오는것. db에 넣는 것.
  */
 @Component
-@PropertySource(value={"classpath:application.properties","file:///myapp/application.properties"}, ignoreResourceNotFound = true)
+@PropertySource(value={"classpath:application.properties","file:/myapp/application.properties","file:/home/gsm/v4/conf/smartfarm-mgr-env.properties"}, ignoreResourceNotFound=true)
 public class EgovTaskScheduler {	
 	private static final Logger log = LoggerFactory.getLogger(EgovTaskScheduler.class);
 	@Value("${smartfarm.system.type}")

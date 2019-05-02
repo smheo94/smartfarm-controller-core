@@ -28,12 +28,14 @@ import egovframework.cmmn.util.DateUtil;
 import egovframework.cmmn.util.InterceptPost;
 import egovframework.cmmn.util.InterceptPre;
 import egovframework.cmmn.util.Result;
+import egovframework.customize.config.SmartfarmInterceptorConfig;
 import egovframework.customize.service.*;
 
 import javax.annotation.Resource;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -55,6 +57,8 @@ public class HouseEnvController {
 	private HouseEnvService houseEnvService;
 	@Resource(name="authCheckService")
 	private AuthCheckService authCheckService;
+	@Autowired
+	SmartfarmInterceptorConfig config;
 	/**
 	 * @description 온실 등록 ( 제어기 선택은 어디서? 밑에서~ )
 	 * @param request
@@ -141,7 +145,7 @@ public class HouseEnvController {
 			if( !authCheckService.authCheck(gsmKey, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
 			}
-			return new Result(houseEnvService.list(gsmKey, true, true));
+			return new Result(houseEnvService.list(gsmKey, true, true, config.isSmartfarmSystem()));
 		} catch (Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
@@ -154,7 +158,7 @@ public class HouseEnvController {
 			if( !authCheckService.authCheck(gsmKey, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
 			}
-			return new Result<HashMap<String, Object>>(houseEnvService.get(gsmKey, greenHouseId));
+			return new Result<HashMap<String, Object>>(houseEnvService.get(gsmKey, greenHouseId, config.isSmartfarmSystem()));
 		} catch (Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
@@ -248,7 +252,7 @@ public class HouseEnvController {
 			if( !authCheckService.authCheck(null, houseId) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, houseId);
 			}
-			return new Result(houseEnvService.getWeatherCast(houseId, fromDate, toDate));
+			return new Result(houseEnvService.getWeatherCast(houseId, fromDate, toDate, config.isSmartfarmSystem()));
 		} catch (Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}

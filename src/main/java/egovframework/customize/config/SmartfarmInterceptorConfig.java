@@ -1,6 +1,7 @@
 package egovframework.customize.config;
 
 import com.kt.smartfarm.supervisor.mapper.GsmEnvMapper;
+import egovframework.cmmn.SystemType;
 import egovframework.customize.intercepter.SmartFarmDataInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -32,12 +33,17 @@ public class SmartfarmInterceptorConfig extends WebMvcConfigurerAdapter {
 //    private String pass;
     @Resource(name="gsmEnvMapper")
     GsmEnvMapper gsmMapper;
+
+    public Boolean isSmartfarmSystem() {
+        return SystemType.SYSTEM_TYPE_SMARTFARM.equalsIgnoreCase(SYSTEM_TYPE);
+    }
+
     @Override
     @DependsOn( {"propertyConfig"})
     public void addInterceptors(InterceptorRegistry registry) {
         System.out.printf("Load Config : %s , %s, %s\t\n", GSM_KEY, SYSTEM_TYPE, DB_URL);
 //        System.out.println("PASS */* = " + pass);
-        registry.addInterceptor(new SmartFarmDataInterceptor(SYSTEM_TYPE, GSM_KEY, gsmMapper)).addPathPatterns("/**");
+        registry.addInterceptor(new SmartFarmDataInterceptor(isSmartfarmSystem(), PROXY_SUB_PATH, GSM_KEY, gsmMapper)).addPathPatterns("/**");
 //        registry.addInterceptor(new SmartFarmDataInterceptor(SYSTEM_TYPE, GSM_KEY, gsmMapper)).addPathPatterns("/**");
     }
 

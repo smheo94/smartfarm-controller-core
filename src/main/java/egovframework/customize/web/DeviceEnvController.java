@@ -89,7 +89,6 @@ public class DeviceEnvController {
 	 * @param device
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	@RequestMapping(value= "/gsm/{gsm_key}/controller/{controllerId}", method = RequestMethod.PUT)
 	@ApiOperation(value = "구동기 모듈에 해당하는 구동기,센서 수정 : OLD( /gsm/{gsm_key}/{controllerId}")
 	@ResponseBody

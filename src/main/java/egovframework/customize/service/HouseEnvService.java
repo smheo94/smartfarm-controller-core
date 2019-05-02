@@ -11,8 +11,8 @@ public interface HouseEnvService {
 	HouseEnvVO insert( HouseEnvVO house);
 	Integer delete(Integer gsmKey, Integer greenHouseId);
 	HouseEnvVO update(HouseEnvVO house);
-	HashMap<String,Object>  get(Integer gsmKey, Integer greenHouseId);
-	List<HashMap<String, Object>> list(Integer gsmKey, boolean all, boolean detail);
+	HashMap<String,Object>  get(Integer gsmKey, Integer greenHouseId, Boolean isSmartfarmSystem);
+	List<HashMap<String, Object>> list(Integer gsmKey, boolean all, boolean detail, Boolean isSmartfarmSystem);
 	List<HashMap<String,Object>> selectHouseTypeList();
 	List<ProductVO> selectProductList();
 	HashMap<String,Object> insertHouseDeviceMap(HashMap<String, Object> map);
@@ -20,7 +20,7 @@ public interface HouseEnvService {
 	List<DeviceEnvVO> houseDeviceList(Integer houseId);
 	List<HashMap<String, Object>> getAllList();
 	Integer insertForecastData(LinkedHashMap<String, Object> hm);
-	List<HashMap<String,Object>> getWeatherCast(Integer houseId, String fromDate, String toDate);
+	List<HashMap<String,Object>> getWeatherCast(Integer houseId, String fromDate, String toDate, Boolean isSmartfarmSystem);
 	List<HashMap<String,Object>> getWeatherCategory();
 	Integer insertSunriseData(HashMap<String, Object> hm);
 

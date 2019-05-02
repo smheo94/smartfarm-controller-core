@@ -49,13 +49,14 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
 
 
     public static final String X_HEADER_GSM_KEY = "X-Smartfarm-Gsm-Key";
-    String systemType;
+    Boolean isSmartfarmSystem;
     String myGSMKey;
     String proxySubPath;
     GsmEnvMapper gsmEnvMapper;
-    public SmartFarmDataInterceptor(String config, String myGSMKey, GsmEnvMapper gsmMapper) {
-        this.systemType = config;
+    public SmartFarmDataInterceptor(Boolean isSmartfarmSystem, String proxySubPath, String myGSMKey, GsmEnvMapper gsmMapper) {
+        this.isSmartfarmSystem = isSmartfarmSystem;
 //        this.myGSMKey = "3785";
+        this.proxySubPath = proxySubPath;
         this.myGSMKey = myGSMKey;
         this.gsmEnvMapper = gsmMapper;
     }
@@ -74,7 +75,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
              	headerGsmKey = response.getHeader(X_HEADER_GSM_KEY);	
              }
              
-             if( SystemType.SYSTEM_TYPE_SMARTFARM.equalsIgnoreCase(systemType) ) {
+             if( isSmartfarmSystem ) {
                  if( handlerMethod.getMethod().getAnnotation(InterceptIgnoreGSMKey.class) ==null && (headerGsmKey == null || !Objects.equals(headerGsmKey, myGSMKey))) {
                      setErrorResult(response, String.format(ApplicationMessage.MISS_MATCHING_GSM_KEY, headerGsmKey),
                              HttpStatus.FORBIDDEN);
@@ -135,7 +136,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
             if(headerGsmKey == null){
             	headerGsmKey = response.getHeader(X_HEADER_GSM_KEY);	
             }
-            if( SystemType.SYSTEM_TYPE_SMARTFARM.equalsIgnoreCase(systemType) ) {
+            if( isSmartfarmSystem ) {
                 //스마트팜에서 Post 필터가 필요 없음
                 return;
             } else if( headerGsmKey == null) {
@@ -244,7 +245,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
         Integer port = gsmEnvVO.getSystemPort();
         String requestUrl = request.getRequestURI();
         URI uri = new URI("http", null, server, port, null, null, null);
-        uri = UriComponentsBuilder.fromUri(uri).path(requestUrl)
+        uri = UriComponentsBuilder.fromUri(uri).path(proxySubPath + requestUrl)
                 .query(request.getQueryString()).build(true).toUri();        
 
         HttpEntity httpEntity = getHttpEntity(annotationClass, request, response);

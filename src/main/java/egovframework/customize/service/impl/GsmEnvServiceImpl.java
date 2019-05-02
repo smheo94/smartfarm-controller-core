@@ -51,9 +51,9 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 //	}
 
 	@Override
-	public Map<String, Object> get(Integer gsmKey, boolean all) {
-		Map<String,Object> gsmMap = gsmEnvMapper.getGsmList(gsmKey,null,null,null, null).stream().findFirst().orElse(null);
-		List<HashMap<String, Object>> houseList = houseEnvService.list(gsmKey, all, true);
+	public Map<String, Object> get(Integer gsmKey, boolean all, Boolean isSmartfarmSystem) {
+		Map<String,Object> gsmMap = gsmEnvMapper.getGsmList(gsmKey,null,null,null, null, null).stream().findFirst().orElse(null);
+		List<HashMap<String, Object>> houseList = houseEnvService.list(gsmKey, all, true, isSmartfarmSystem);
 		gsmMap.put("houseList", houseList);
 		return gsmMap;
 	}
@@ -89,14 +89,14 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 	}
 */
 	@Override
-	public List<Map<String, Object>> list(boolean all,Integer userInfoId, Integer categoryId, String farmName, String authUserIdx) {
+	public List<Map<String, Object>> list(boolean all,Integer userInfoId, Integer categoryId, String farmName, String authUserIdx, Boolean isSmartfarmSystem) {
 		List<Map<String,Object>> gsmList = new ArrayList<>();
-		gsmList = gsmEnvMapper.getGsmList(null,userInfoId,categoryId,farmName, authUserIdx);
+		gsmList = gsmEnvMapper.getGsmList(null,userInfoId,categoryId,farmName, authUserIdx, isSmartfarmSystem);
 		for(Map<String,Object> gsm : gsmList){
 //			Integer gsmKey = (Integer)gsm.get("gsmKey");
 //			houseList = gsmEnvMapper.getHouseList(gsmKey);
 			Integer gsmKey = (Integer)gsm.get("gsmKey");
-			List<HashMap<String,Object>> houseList = houseEnvService.list(gsmKey, all, false);
+			List<HashMap<String,Object>> houseList = houseEnvService.list(gsmKey, all, false, isSmartfarmSystem);
 			gsm.put("houseList", houseList);			
 		}
 		return gsmList;

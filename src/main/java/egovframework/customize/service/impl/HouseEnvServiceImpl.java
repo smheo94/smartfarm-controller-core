@@ -80,7 +80,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 	}
 
 	@Override
-	public HashMap<String,Object> get(Integer gsmKey, Integer greenHouseId) {
+	public HashMap<String,Object> get(Integer gsmKey, Integer greenHouseId, Boolean isSmartfarmSystem) {
 		
 		HashMap<String,Object> result = new HashMap<String, Object>();
 		List<HashMap<String,Object>> houseDetail= new ArrayList<HashMap<String,Object>>();
@@ -96,9 +96,11 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 		houseDetail = houseEnvMapper.getHouseDetail(map);
 		for(int i=0; i<houseDetail.size();i++){
 			Integer houseId = (Integer)houseDetail.get(i).get("id");
-			cctvList = houseEnvMapper.getCctvList(houseId);
-			if(cctvList != null){
-				houseDetail.get(i).put("cctvList", cctvList);	
+			if( isSmartfarmSystem == false) {
+				cctvList = houseEnvMapper.getCctvList(houseId);
+			}
+			if (cctvList != null) {
+					houseDetail.get(i).put("cctvList", cctvList);
 			}
 			sunriseInfo = houseEnvMapper.getSunriseInfo(map);
 			if(sunriseInfo!=null){
@@ -118,7 +120,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 		return result;
 	}
 
-	public List<HashMap<String, Object>> list(Integer gsmKey, boolean all, boolean detail) {
+	public List<HashMap<String, Object>> list(Integer gsmKey, boolean all, boolean detail, Boolean isSmartfarmSystem) {
 		List<HashMap<String,Object>> result = new ArrayList<HashMap<String,Object>>();
 		List<HashMap<String,Object>> controllerList = new ArrayList<HashMap<String,Object>>();
 //		List<HashMap<String,Object>> cctvList = new ArrayList<HashMap<String,Object>>();
@@ -154,7 +156,9 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 				}
 				if(detail ) {
 					Integer houseId = (Integer)houseMap.get("id");
-					cctv = houseEnvMapper.getCctvList(houseId);
+					if( isSmartfarmSystem == false) {
+						cctv = houseEnvMapper.getCctvList(houseId);
+					}
 					if(cctv !=null){					
 						houseMap.put("cctvList",cctv);	
 					}
@@ -261,13 +265,13 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 	}
 
 	@Override
-	public List<HashMap<String, Object>> getWeatherCast(Integer houseId, String fromDate, String toDate) {
+	public List<HashMap<String, Object>> getWeatherCast(Integer houseId, String fromDate, String toDate, Boolean isSmartfarmSystem) {
 		HashMap<String,Object> param = new HashMap<>();
 		try{			
 			HashMap<String,Object> houseInfo = new HashMap<>();
 			List<HashMap<String,Object>> houseDetail = new ArrayList<>();
 			HashMap<String,Object> gridXY = new HashMap<>();
-			houseInfo = get(null, houseId);
+			houseInfo = get(null, houseId, isSmartfarmSystem);
 			houseDetail = (List<HashMap<String, Object>>) houseInfo.get("houseDetail");
 			Double longitude = Double.parseDouble(houseDetail.get(0).get("latitude").toString());
 			Double latitude = Double.parseDouble(houseDetail.get(0).get("longitude").toString());

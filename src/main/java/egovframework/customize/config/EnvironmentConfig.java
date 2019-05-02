@@ -21,7 +21,6 @@ import java.util.stream.Stream;
 
 @Configuration
 public class EnvironmentConfig {
-	public static final String SYSTEM_TYPE_SMARTFARM = "Smartfarm";
 	Logger LOG = LoggerFactory.getLogger("EnvironmentConfig");
 	@Bean
 	public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
@@ -37,7 +36,7 @@ public class EnvironmentConfig {
 	@Bean
 	public boolean UpdateDBSchema() {
 		Long version = 20181127L;
-		if( SystemType.SYSTEM_TYPE_SMARTFARM.equalsIgnoreCase(config.SYSTEM_TYPE) ) {
+		if( config.isSmartfarmSystem() ) {
 			final List<Method> methodList = Arrays.stream(mapper.getClass().getMethods()).sorted(Comparator.comparing(Method::getName)).collect(Collectors.toList());
 			for (Method m : methodList) {
 				try {
