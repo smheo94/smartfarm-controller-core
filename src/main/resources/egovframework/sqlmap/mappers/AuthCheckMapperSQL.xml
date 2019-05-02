@@ -6,4 +6,7 @@
 			IFNULL( fn_is_allow_user_gsm(#{gsm_key},  #{user_idx}), 0) AS allow_gsm,
 			IFNULL( fn_is_allow_user_house(#{house_id},  #{user_idx}), 0) AS allow_house
 	</select>
+	<select id="selectUserIdxForOauthClientId"  resultType="Integer">
+		SELECT idx FROM user_info WHERE user_id = #{user_id};
+	</select>
 </mapper>

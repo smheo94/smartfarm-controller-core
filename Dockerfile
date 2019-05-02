@@ -1,8 +1,7 @@
-FROM       arm32v7/tomcat:8
-RUN rm -rf /opt/tomcat/webapps/*
+FROM       tomcat:8-jre8-alpine
+RUN rm -rf /usr/local/tomcat/webapps/*
 ARG WAR_FILE
-ADD target/${WAR_FILE} /opt/tomcat/webapps/ROOT.war
-ADD docker/*.jar /opt/tomcat/lib/
-#ADD docker/server.xml /opt/tomcat/conf/server.xml
+ADD target/${WAR_FILE} /usr/local/tomcat/webapps/ROOT.war
+ADD docker/*.jar /usr/local/tomcat/lib/
 
 EXPOSE 8080

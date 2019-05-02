@@ -26,4 +26,5 @@ import java.util.List;
 @Mapper("authCheckMapper")
 public interface AuthCheckMapper {
 	List<HashMap<String, Object>> selectCheckAllowAuth(HashMap<String, Object> param);
+	Integer selectUserIdxForOauthClientId(String user_id);
 }
