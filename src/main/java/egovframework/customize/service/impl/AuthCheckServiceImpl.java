@@ -21,6 +21,7 @@ import egovframework.customize.service.AuthCheckService;
 import egovframework.customize.service.CategoryEnvService;
 import egovframework.customize.service.CategoryEnvVO;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,6 +42,16 @@ public class AuthCheckServiceImpl extends EgovAbstractServiceImpl implements Aut
 	@Autowired
 	SmartfarmInterceptorConfig config;
 
+	public String getClientUserIdx(String userIdx) {
+		if( !StringUtils.isNumeric(userIdx) ) {
+			Integer newClientUserId = authCheckMapper.selectUserIdxForOauthClientId(userIdx);
+			if( newClientUserId != null ) {
+				return String.valueOf(newClientUserId);
+			}
+		}
+		return userIdx;
+	}
+
 	@Override
 	public Boolean authCheck(Integer gsmKey, Integer houseId) {
 		if (config.isSmartfarmSystem()) {
@@ -51,6 +62,7 @@ public class AuthCheckServiceImpl extends EgovAbstractServiceImpl implements Aut
 		if (authentication == null) return false;
 		if (authentication.getPrincipal() == null) return false;
 		String userIdx = authentication.getPrincipal().toString();
+		userIdx = getClientUserIdx(userIdx);
 		HashMap<String, Object> param = new HashMap<>();
 		param.put("user_idx", userIdx);
 		param.put("gsm_key", gsmKey);
@@ -72,6 +84,7 @@ public class AuthCheckServiceImpl extends EgovAbstractServiceImpl implements Aut
 		if(authentication.getPrincipal()==null)
 			return null;
 		String userIdx = authentication.getPrincipal().toString();
+		userIdx = getClientUserIdx(userIdx);
 		return userIdx;
 	}
 }
