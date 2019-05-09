@@ -91,21 +91,21 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
              startTran = false;
              
              if( handlerMethod.getMethod().getAnnotation(InterceptPre.class) != null) {
-                System.out.printf( "제어기 연동이 필요 합니다.");
-                //TODO : 제어기에 데이터를 보낸다.
-                Integer gsmKey = Integer.valueOf(headerGsmKey);
-
-                ResponseEntity<ResponseResult> result = sendProxyRequest(gsmKey, InterceptPre.class, request, response);
-                boolean callResult = isSuccessResult(result);
-                if(  callResult == false  ) {
-                    //System.out.printf( "데이터 롤백을 진행 합니다.");
-                    response.setContentType("application/json");
-                    if( result != null ) {
-                        response.sendError(result.getStatusCode().value(), new ObjectMapper().writeValueAsString(result.getBody()));
-                    }
-                    //TODO: 더이상 진행하지 않고 오류를 Response에 셋팅합니다.
-                    return false;                    
-                }
+//                System.out.printf( "제어기 연동이 필요 합니다.");
+//                //TODO : 제어기에 데이터를 보낸다.
+//                Integer gsmKey = Integer.valueOf(headerGsmKey);
+//
+//                ResponseEntity<ResponseResult> result = sendProxyRequest(gsmKey, InterceptPre.class, request, response);
+//                boolean callResult = isSuccessResult(result);
+//                if(  callResult == false  ) {
+//                    //System.out.printf( "데이터 롤백을 진행 합니다.");
+//                    response.setContentType("application/json");
+//                    if( result != null ) {
+//                        response.sendError(result.getStatusCode().value(), new ObjectMapper().writeValueAsString(result.getBody()));
+//                    }
+//                    //TODO: 더이상 진행하지 않고 오류를 Response에 셋팅합니다.
+//                    return false;
+//                }
             } else if( handlerMethod.getMethod().getAnnotation(InterceptPost.class) != null ) {
                 System.out.printf( "DB 트렌젝션을 시작하세요. 롤백을 할 수 있어야 합니다.");
                 //TODO : DB 트렌젝션을 시작하세요. 롤백을 할 수 있어야 합니다.
@@ -150,7 +150,12 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
                 if (handlerMethod.getMethod().getAnnotation(InterceptPost.class) != null) {
                     System.out.printf("제어기에 데이터를 보냅니다.");
                     Integer gsmKey = Integer.valueOf(headerGsmKey);
-                    ResponseEntity<ResponseResult> result = sendProxyRequest(gsmKey, InterceptPost.class, request, wrapper);
+                    ResponseEntity<ResponseResult> result = null;
+                    if( handlerMethod.getMethod().getAnnotation(InterceptPre.class) != null) {
+                        result = sendProxyRequest(gsmKey, InterceptPre.class, request, wrapper);
+                    } else {
+                        result = sendProxyRequest(gsmKey, InterceptPost.class, request, wrapper);
+                    }
                     boolean callResult = isSuccessResult(result);
                     //TODO : 제어기에 데이터를 보냅니다.
                     if (!callResult && startTran) {
