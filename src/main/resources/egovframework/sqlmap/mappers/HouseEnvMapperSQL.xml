@@ -187,9 +187,10 @@
 	</select>
 	
 	<select id="getHouseDeviceList" parameterType="Integer" resultType="deviceEnvVO">
-		SELECT device.* 
+		SELECT device.* , cd_device_type.device_type , cd_device_type.device_type
 		FROM map_green_house_device  AS mghd
 		INNER JOIN device ON device.id = mghd.device_id
+		INNER JOIN cd_device_type ON device.device_type_id = cd_device_type.id
 		WHERE mghd.green_house_id = #{houseId}			
 	</select>
 	

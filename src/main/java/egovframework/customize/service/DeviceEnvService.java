@@ -12,7 +12,7 @@ public interface DeviceEnvService {
 	//DeviceEnvVO getDevice(Integer gsmKey, Integer controllerId);
 
 
-	Integer delete(Integer gsmKey, Integer controllerId);
+	Integer deleteControllerDeivces(Integer gsmKey, Integer controllerId);
 	
 	List<DeviceTypeVO> getDeviceTypeByHouseType(String houseType, String kind);
 	HashMap<String,Object >gethouseTypeKindInfo();

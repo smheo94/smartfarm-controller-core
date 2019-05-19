@@ -147,12 +147,12 @@ public class DeviceEnvController {
 	@ApiOperation(value = "구동모듈에 해당하는 Device 삭제: OLD( /gsm/{gsm_key}/{controllerId})")
 	@ResponseBody
 	@InterceptPre
-	public Result<DeviceEnvVO> delete(@PathVariable("gsm_key") Integer gsmKey,  @PathVariable("controllerId") Integer controllerId){
+	public Result<DeviceEnvVO> deleteControllerDeivces(@PathVariable("gsm_key") Integer gsmKey,  @PathVariable("controllerId") Integer controllerId){
 		try {
 			if( !authCheckService.authCheck(gsmKey, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
 			}
-			return new Result(deviceEnvService.delete(gsmKey, controllerId));
+			return new Result(deviceEnvService.deleteControllerDeivces(gsmKey, controllerId));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}

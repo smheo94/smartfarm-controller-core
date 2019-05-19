@@ -29,6 +29,6 @@ public interface GsmEnvService {
 	GsmThresholdVO gsmThresholdInsert(GsmThresholdVO gsmThresholdVO);
 	GsmThresholdVO gsmThresholdUpdate(GsmThresholdVO gsmThresholdVO);
 	GsmThresholdVO gsmThresholdGet(HashMap<String,Object> param);
-	
-	
+
+
 }

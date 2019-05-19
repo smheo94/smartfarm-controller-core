@@ -52,10 +52,11 @@
 		WHERE id = #{id};
 	</update>
 	
-	<delete id="delete">
+	<delete id="deleteControllerDeivces">
 		DELETE
 		FROM device
-		WHERE gsm_key = #{gsm_key} AND id = #{id};
+
+		WHERE gsm_key = #{gsm_key} AND controller_id = #{controller_id};
 	</delete>
 
 	<select id="list" parameterType="map" resultType="deviceEnvVO">
@@ -153,7 +154,7 @@
 	
 	<update id="updateVDeviceEnv" parameterType="vDeviceEnvVO">
 		UPDATE device_v_dep_device
-		SET
+
 			<if test="deviceId!=null">device_id = #{deviceId}</if>
 			<if test="parentDeviceId != null">,p_device_id = #{parentDeviceId}</if>
 			<if test="deviceNum != null">,device_num = #{deviceNum}</if>

@@ -56,6 +56,10 @@ public class GsmEnvController {
 	
 	@Resource(name = "gsmEnvService")
 	private GsmEnvService gsmEnvService;
+
+
+	@Resource(name = "autoSyncService")
+	private AutoSyncService autoSyncService;
 		
 	@Resource(name ="houseEnvService")
 	private HouseEnvService houseEnvService;
@@ -63,6 +67,8 @@ public class GsmEnvController {
 	@Resource(name="authCheckService")
 	private AuthCheckService authCheckService;
 
+	@Autowired
+	HttpServletRequest request;
 	@Autowired
 	SmartfarmInterceptorConfig config;
 	/**
@@ -217,7 +223,26 @@ public class GsmEnvController {
 	// 
 	// userInfoId로 제어기 조회
 	// userInfoId랑 매핑 끊기
-	
+
+
+	/**
+	 * @description userInfoId로 제어기 등록
+	 * @return
+	 */
+	@RequestMapping(value= "/{gsmKey}/autosync", method = RequestMethod.POST)
+	@ApiOperation("userInfoId로 제어기 등록.")
+	@ResponseBody
+	public Result autoSync(@RequestBody HashMap<String,Object> param, @PathVariable Integer gsmKey){
+		try {
+			if( !authCheckService.authCheck(gsmKey, null) ) {
+				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
+			}
+			return new Result(autoSyncService.autoSync(gsmKey, request));
+		} catch(Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		}
+	}
+
 	/**
 	 * @description userInfoId로 제어기 등록
 	 * @return

@@ -35,7 +35,7 @@ public interface DeviceEnvMapper {
 	Integer update( DeviceEnvVO vo);	
 //	DeviceEnvVO getDevice(Integer gsmKey, Integer controllerId);
 	List<DeviceEnvVO> list(Map<String, Object> map);
-	Integer delete(Map<String,Object> map);
+	Integer deleteControllerDeivces(Map<String,Object> map);
 
 
 	List<DeviceTypeVO> getDeviceTypeByHouseType(HashMap<String, Object> param);

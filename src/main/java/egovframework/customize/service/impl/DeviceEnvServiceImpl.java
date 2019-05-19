@@ -60,11 +60,11 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 	}
 
 	@Override
-	public Integer delete(Integer gsmKey, Integer deviceId) {
+	public Integer deleteControllerDeivces(Integer gsmKey, Integer controller_id) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("gsm_key",  gsmKey);
-		map.put("id",  deviceId);
-		return deviceEnvMapper.delete(map);
+		map.put("controller_id",  controller_id);
+		return deviceEnvMapper.deleteControllerDeivces(map);
 	}
 
 	@Override
