@@ -65,7 +65,9 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 
 	@Override
 	public Integer insert(GsmEnvVO gsmInfo) {
-		return gsmEnvMapper.insert(gsmInfo);
+		Integer gsmKey = gsmEnvMapper.insert(gsmInfo);
+		gsmEnvMapper.createGSMSeq(gsmInfo.getGsmKey());
+		return gsmKey;
 	}
 
 	@Override
