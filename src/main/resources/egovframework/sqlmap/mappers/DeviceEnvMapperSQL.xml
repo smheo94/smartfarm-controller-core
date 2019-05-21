@@ -24,7 +24,7 @@
 		</if>
 		)
 	 	<selectKey keyProperty="id" resultType ="int"> 
-	   		SELECT LAST_INSERT_ID() AS id;
+	   		SELECT LASTVAL(gsm_seq_${gsmKey}) AS id;
 	    </selectKey>
 	</insert>
 	

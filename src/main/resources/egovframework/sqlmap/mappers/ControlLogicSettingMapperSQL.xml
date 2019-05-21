@@ -287,7 +287,7 @@
         </if>
         );
         <selectKey keyProperty="controlSettingId" resultType="Integer" keyColumn="id">
-            SELECT LAST_INSERT_ID() AS id;
+            SELECT LASTVAL(gsm_seq_${tmpGsmKey}) AS id;
         </selectKey>
     </insert>
     <update id="updateControlSetting" parameterType="controlLogicSettingVO">
