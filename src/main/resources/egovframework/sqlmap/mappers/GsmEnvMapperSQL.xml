@@ -23,6 +23,12 @@
 			#{categoryId}
 		);
 	</insert>
+	<update id="createGSMSeq">
+		CREATE OR REPLACE SEQUENCE gsm_seq_${gsmKey}
+		START WITH ${gsmKey}00000
+		INCREMENT BY 1
+		CYCLE;
+	</update>
 	
 	<update id="update" parameterType="gsmEnvVO">	
 		UPDATE gsm_info

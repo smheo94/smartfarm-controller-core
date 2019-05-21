@@ -28,6 +28,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 @Mapper("gsmEnvMapper")
 public interface GsmEnvMapper {
+	void createGSMSeq(@Param("gsmKey") Integer gsmKey);
 	GsmEnvVO get(@Param("gsmKey") Integer gsmKey);
 	Integer delete(@Param("gsmKey") Integer gsmKey);
 	Integer insert(GsmEnvVO gsmInfo);

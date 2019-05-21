@@ -42,6 +42,8 @@ public class ControlLogicSettingVO {
 	public List<ControlLogicSettingCheckConditionVO> checkConditionList;
 	public List<ControlLogicSettingDeviceVO> deviceList;
 
+	public Integer tmpGsmKey;
+
 	public Map<String,Object> toMap() {
 		return ClassUtil.toHashMap(this);
 	}

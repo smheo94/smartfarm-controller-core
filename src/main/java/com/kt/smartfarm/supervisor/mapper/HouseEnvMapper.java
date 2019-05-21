@@ -37,7 +37,7 @@ public interface HouseEnvMapper {
 	Integer insert(HouseEnvVO map);
 	Integer delete(Map<String,Object> map);
 	Integer update(HouseEnvVO map);	
-	HouseEnvVO get(Integer gsmKey, Integer greenHouseId);
+	HouseEnvVO get(@Param("gsm_key")Integer gsmKey, @Param("green_house_id") Integer greenHouseId);
 	List<HouseEnvVO> list(Map<String,Object> map);
 	
 	List<HashMap<String, Object>> selectHouseTypeList();

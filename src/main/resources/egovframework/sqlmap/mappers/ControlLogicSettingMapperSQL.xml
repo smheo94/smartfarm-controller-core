@@ -27,6 +27,7 @@
 
     <resultMap id="ControlLogicSettingMap" type="controlLogicSettingVO">
         <id column="control_setting_id" property="controlSettingId"/>
+        <result column="tmp_gsm_key" property="tmpGsmKey"/>
         <result column="log_dt" property="logDt"/>
         <result column="green_house_id" property="greenHouseId"/>
         <result column="def_logic_id" property="logicId"/>
@@ -274,13 +275,13 @@
 
     <insert id="insertControlSetting" parameterType="controlLogicSettingVO" useGeneratedKeys="true">
         INSERT INTO control_setting ( green_house_id, logic_name, logic_id, logic_period_size, logic_env, logic_period_env, create_dt, update_dt,
-        auto_manual_mode, java_class_name
-        <if test="controlSettingId != null">
-            ,id
-        </if>
+        auto_manual_mode, java_class_name,id
         )
         VALUES(#{greenHouseId}, #{logicName}, #{logicId}, #{logicPeriodSize}, #{logicEnv}, #{logicPeriodEnv}, NOW(), NOW(),
         #{autoManualMode}, (SELECT java_class_name FROM control_logic WHERE id = #{logicId} )
+        <if test="controlSettingId == null">
+            ,NEXTVAL(gsm_seq_${tmpGsmKey})
+        </if>
         <if test="controlSettingId != null">
             ,#{controlSettingId}
         </if>

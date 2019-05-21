@@ -16,14 +16,15 @@
 	<insert id="insert" useGeneratedKeys="true" parameterType="houseEnvVO">
 		INSERT INTO green_house( 
        		product_method_id, green_house_type_id, house_name, latitude, longitude, description, build_date, last_update, addr_1, addr_2, zip, nutrient_common_id, change_gh, change_temperature, floor_space, house_horizontal, house_vertical, house_height, plant_spacing, crop_cnt, house_direction, select_temp_sensor, select_hum_sensor, gsm_key, house_name_i18n
-		<if test="id != null and id != -1">
 		,id
-		</if>
 		)
 		VALUES (
 			#{productMethodId},#{greenHouseTypeId},#{houseName},#{latitude},#{longitude},#{description},now(),now(),#{addr1},#{addr2},#{zip},1,1,1,#{floorSpace},#{houseHorizontal},#{houseVertical},#{houseHeight},#{plantSpacing},#{cropCnt},#{houseDirection},#{selectTempSensor},#{selectHumSensor},#{gsmKey},#{houseNameI18n}
 		<if test="id != null and id != -1">
 			,#{id}
+		</if>
+		<if test="id == null or id == -1">
+			,NEXTVAL(gsm_seq_${gsmKey})
 		</if>
 		);
 		<selectKey keyProperty="id" resultType="int">
@@ -90,6 +91,20 @@
 		;
 	</select>
 
+	<select id ="get" resultType="houseEnvVO">
+		SELECT
+		id, product_method_id, green_house_type_id, house_name,
+		latitude, longitude, description, build_date, last_update, addr_1,
+		addr_2, zip, nutrient_common_id, change_gh, change_temperature,
+		floor_space, house_horizontal, house_vertical, house_height,
+		plant_spacing, crop_cnt, house_direction, select_temp_sensor,
+		select_hum_sensor, gsm_key, house_name_i18n
+		FROM green_house
+		WHERE 1=1
+		<if test="gsm_key != null">AND  gsm_key = #{gsm_key}</if>
+		<if test="green_house_id != null">AND id = #{green_house_id}</if>
+	</select>
+
 	<select id="selectHouseTypeList" resultType="map">
 		SELECT 
 			id, type_name, description, last_update, type_name_i18n, house_type, root_type
@@ -139,6 +154,7 @@
 		 AND id = #{green_house_id}
 	</select>
 	 -->
+
 	 
 	<select id ="getHouseDetail" parameterType="map" resultType="map">
 		SELECT 

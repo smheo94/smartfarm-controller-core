@@ -13,6 +13,7 @@
 package egovframework.customize.service.impl;
 
 import com.kt.smartfarm.supervisor.mapper.ControlLogicSettingMapper;
+import com.kt.smartfarm.supervisor.mapper.HouseEnvMapper;
 import egovframework.customize.service.*;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.apache.ibatis.annotations.Param;
@@ -27,6 +28,9 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 
 	@Resource(name = "controlLogicSettingMapper")
 	ControlLogicSettingMapper mapper;
+
+	@Resource(name = "houseEnvMapper")
+	HouseEnvMapper houseEnvMapper;
 
 	@Override
 	public List<ControlLogicSettingVO> getLogicSetting(Integer gsmKey, Integer houseId, Integer controlSettingId) {
@@ -49,6 +53,8 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 		if(vo.getControlSettingId() !=null){
 			tempControlSettingId = vo.getControlSettingId();
 		}
+		final HouseEnvVO houseEnvVO = houseEnvMapper.get(null, vo.greenHouseId);
+		vo.setTmpGsmKey(houseEnvVO.getGsmKey());
 		mapper.insertControlSetting(vo);
 		if(vo.getControlSettingId() == 0){
 			vo.setControlSettingId(tempControlSettingId);	
