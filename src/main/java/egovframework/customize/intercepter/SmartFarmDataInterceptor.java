@@ -107,7 +107,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
 //                    return false;
 //                }
             } else if( handlerMethod.getMethod().getAnnotation(InterceptPost.class) != null ) {
-                System.out.printf( "DB 트렌젝션을 시작하세요. 롤백을 할 수 있어야 합니다.");
+                //System.out.printf( "DB 트렌젝션을 시작하세요. 롤백을 할 수 있어야 합니다.");
                 //TODO : DB 트렌젝션을 시작하세요. 롤백을 할 수 있어야 합니다.
                 startTran =true;
             }
@@ -129,6 +129,8 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
         ContentCachingResponseWrapper wrapper = WebUtils.getNativeResponse(response, ContentCachingResponseWrapper.class);
         HttpStatus responseStatus = HttpStatus.valueOf(response.getStatus());
         try {
+
+
             if( responseStatus.is4xxClientError() || responseStatus.is5xxServerError() ) {
                 return;
             }
@@ -136,6 +138,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
             if(headerGsmKey == null){
             	headerGsmKey = response.getHeader(X_HEADER_GSM_KEY);	
             }
+            LOG.debug("in postHandle : {} , {}, {}, {}", headerGsmKey, request.getRequestURI(), request.getMethod(), handler); ;
             if( isSmartfarmSystem ) {
                 //스마트팜에서 Post 필터가 필요 없음
                 return;
@@ -147,7 +150,8 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
             if (handler instanceof HandlerMethod) {
                 // there are cases where this handler isn't an instance of HandlerMethod, so the cast fails.
                 HandlerMethod handlerMethod = (HandlerMethod) handler;
-                if (handlerMethod.getMethod().getAnnotation(InterceptPost.class) != null) {
+                if (handlerMethod.getMethod().getAnnotation(InterceptPost.class) != null ||
+                        handlerMethod.getMethod().getAnnotation(InterceptPre.class) != null) {
                     System.out.printf("제어기에 데이터를 보냅니다.");
                     Integer gsmKey = Integer.valueOf(headerGsmKey);
                     ResponseEntity<ResponseResult> result = null;
