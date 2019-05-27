@@ -1,5 +1,6 @@
 package egovframework.customize.service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,4 +32,7 @@ public interface GsmEnvService {
 	GsmThresholdVO gsmThresholdGet(HashMap<String,Object> param);
 
 
+	Integer copyToNewGsm(HttpServletRequest request, Integer fromGsmKey, Integer toGsmKey);
+
+	Integer syncToSmartfarm(HttpServletRequest request, Integer gsmKey);
 }

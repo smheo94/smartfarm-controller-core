@@ -62,7 +62,12 @@ public interface ControlLogicSettingMapper {
 	Integer updateControlSettingEnv(Map<String, Object> param);
 	Integer deleteControlSetting(@Param("control_setting_id") Integer controlSettingId);
 	Integer delChkConditionSetting(Integer chkConditionId);
-	
+
+	Integer copyToNewGSMContolSetting(@Param("from_gsm_key") Integer fromGsmKey, @Param("to_gsm_key") Integer toGsmKey );
+	Integer copyToNewGSMContolSettingCheckCondition(@Param("from_gsm_key") Integer fromGsmKey, @Param("to_gsm_key") Integer toGsmKey );
+	Integer copyToNewGSMContolSettingCheckConditionDevice(@Param("from_gsm_key") Integer fromGsmKey, @Param("to_gsm_key") Integer toGsmKey );
+	Integer copyToNewGSMControlSettingDevice(@Param("from_gsm_key") Integer fromGsmKey, @Param("to_gsm_key") Integer toGsmKey );
+	Integer copyToNewGSMControlPreOrder(@Param("from_gsm_key") Integer fromGsmKey, @Param("to_gsm_key") Integer toGsmKey );
 	void updateLogicEnv(Map<String, Object> param);
 
 

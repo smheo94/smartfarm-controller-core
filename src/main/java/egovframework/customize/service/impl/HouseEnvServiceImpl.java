@@ -224,8 +224,14 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 		return result;	
 		
 	}
-	
-	@Override
+
+    @Override
+    public Integer copyToNewGSM(Integer fromGsmKey, Integer toGsmKey) {
+        houseEnvMapper.copyToNewGSM(fromGsmKey, toGsmKey);
+        return houseEnvMapper.copyToNewGSMMapGreenHouseDevice(fromGsmKey, toGsmKey);
+    }
+
+    @Override
 	public List<HashMap<String,Object>> groundDeviceList(Integer houseId) {
 		List<HashMap<String,Object>> tempDeviceList = new ArrayList<>();
 		List<HashMap<String,Object>> deviceList = new ArrayList<>();

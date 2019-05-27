@@ -49,7 +49,7 @@ public class DeviceEnvController {
 	 * @return
 	 **/
 	@SuppressWarnings("unchecked")
-	@RequestMapping(value= "", method = RequestMethod.POST)
+	@RequestMapping(value= {"", "/"}, method = RequestMethod.POST)
 	@ApiOperation(value = "구동기,센서 등록 : OLD( /gsm/{gsm_key}/")
 	@ResponseBody
 	@InterceptPost

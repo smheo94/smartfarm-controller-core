@@ -33,4 +33,5 @@ public interface HouseEnvService {
 	List<HashMap<String, Object>> getCctvsByHouseId(Integer houseId);
 	HashMap<String,Object> houseDeviceInfoList(Integer houseId);
 
+	Integer copyToNewGSM(Integer fromGsmKey, Integer toGsmKey);
 }

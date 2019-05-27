@@ -43,7 +43,9 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 	@Override
 	public List<DeviceEnvVO> insert(List<DeviceEnvVO> device) {			
 		try{
+            log.info("Insert List : {}", device);
 			for(DeviceEnvVO vo :device){
+			    log.info("Insert Device : {}", vo);
 				deviceEnvMapper.insert(vo);
 				if(vo.getRelationDeviceList() != null){
 					for(VDeviceEnvVO vDevice: vo.getRelationDeviceList()){
@@ -185,5 +187,11 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 			return null;
 		}
 	}
-  
+
+	@Override
+	public Integer copyToNewGSM(Integer fromGsmKey, Integer toGsmKey) {
+		deviceEnvMapper.copyToNewGSM(fromGsmKey, toGsmKey);
+		return deviceEnvMapper.copyToNewGSMVDeviceEnv(fromGsmKey, toGsmKey);
+	}
+
 }

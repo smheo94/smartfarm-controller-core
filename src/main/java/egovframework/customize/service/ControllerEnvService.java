@@ -11,4 +11,6 @@ public interface ControllerEnvService {
 	List<ControllerEnvVO> list(Integer gsmKey);
 	List<HashMap<String,Object>> listType();
 	List<ControllerEnvVO> controllerDeviceList(Integer gsmKey);
+
+	Integer copyToNewGSM(Integer fromGsmKey, Integer toGsmKey);
 }

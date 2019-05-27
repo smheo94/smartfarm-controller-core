@@ -50,4 +50,7 @@ public interface DeviceEnvMapper {
 	List<VDeviceEnvVO> getVDeviceEnvList(@Param("deviceId") Integer deviceId);
 	Integer deleteVDeviceEnv(Integer deviceId);
 	VDeviceEnvVO updateVDeviceEnv(VDeviceEnvVO vo);
+
+	Integer copyToNewGSM(@Param("from_gsm_key") Integer fromGsmKey, @Param("to_gsm_key") Integer toGsmKey );
+	Integer copyToNewGSMVDeviceEnv(@Param("from_gsm_key") Integer fromGsmKey, @Param("to_gsm_key") Integer toGsmKey );
 }

@@ -25,4 +25,6 @@ public interface ControlLogicSettingService {
 	Integer deleteControlLogicSettingDevice(Integer id);
 
 	void updateLogicEnv(Map<String, Object> param);
+
+	Integer copyToNewGSM(Integer fromGsmKey, Integer toGsmKey);
 }

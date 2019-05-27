@@ -16,6 +16,7 @@ import com.kt.smartfarm.supervisor.mapper.ControlLogicSettingMapper;
 import com.kt.smartfarm.supervisor.mapper.HouseEnvMapper;
 import egovframework.customize.service.*;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service("controlLogicSettingService")
 public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl implements ControlLogicSettingService {
 
@@ -47,8 +49,11 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 	{
 		return  mapper.getControlLogicSettingHistoryList(gsmKey, houseId, controlSettingId, fromData, toDate);
 	}
+
+
 	@Override
 	public ControlLogicSettingVO insertLogicSetting(ControlLogicSettingVO vo) {
+		log.info("Update Logic Setting :{}", vo);
 		Integer tempControlSettingId = null;
 		if(vo.getControlSettingId() !=null){
 			tempControlSettingId = vo.getControlSettingId();
@@ -69,6 +74,7 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 		if (vo.getCheckConditionList() != null) {
 			vo.getCheckConditionList().forEach(checkList -> {
 				checkList.setControlSettingId(vo.controlSettingId);
+				checkList.setTmpGsmKey(vo.tmpGsmKey);
 				mapper.insertControlSettingChkCondition(checkList);
 				if (checkList.getId() != null) {
 					mapper.insertControlSettingChkConditionDevice(checkList);
@@ -79,12 +85,9 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 			for(int i=0; i<vo.getDeviceList().size();i++){
 				ControlLogicSettingDeviceVO device = vo.getDeviceList().get(i);
 				device.setControlSettingId(vo.getControlSettingId());
+				device.setTmpGsmKey(vo.tmpGsmKey);
 				mapper.insertControlSettingDevice(device);
 			}
-//			vo.getDeviceList().forEach(device -> {
-//				device.setControlSettingId(vo.controlSettingId);
-//				mapper.insertControlSettingDevice(device);
-//			});
 		}
 		return vo;
 	}
@@ -112,9 +115,12 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 
 	@Override
 	public ControlLogicSettingVO updateLogicSetting(ControlLogicSettingVO vo) {
+		log.info("Update Logic Setting :{}", vo);
 		if (vo.getControlSettingId() == null) {
 			return vo;
 		}
+		final HouseEnvVO houseEnvVO = houseEnvMapper.get(null, vo.greenHouseId);
+		vo.setTmpGsmKey(houseEnvVO.getGsmKey());
 		mapper.updateControlSetting(vo);
 		if (vo.getPreOrderSettingId() != null) {
 			mapper.deleteControlSettingPreOrder(null, vo.controlSettingId);
@@ -122,6 +128,8 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 		}
 		if (vo.getCheckConditionList() != null) {
 			vo.getCheckConditionList().forEach(checkList -> {
+				checkList.setControlSettingId(vo.controlSettingId);
+				checkList.setTmpGsmKey(vo.tmpGsmKey);
 				int isExist = mapper.updateControlSettingChkCondition(checkList);
 				if (isExist == 0) {
 					mapper.insertControlSettingChkCondition(checkList);
@@ -137,11 +145,12 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 			vo.getDeviceList().size();
 			for (int i = 0, size = vo.getDeviceList().size(); i < size; i++) {
 				ControlLogicSettingDeviceVO device = vo.getDeviceList().get(i);
+				device.setControlSettingId(vo.getControlSettingId());
+				device.setTmpGsmKey(vo.tmpGsmKey);
 				Integer id = device.getId();
-				if (id == null) {
+				int isExist = mapper.updateControlSettingDevice(device);
+				if (isExist == 0) {
 					mapper.insertControlSettingDevice(device);
-				} else {
-					mapper.updateControlSettingDevice(device);
 				}
 			}
 		}
@@ -173,4 +182,13 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 		return mapper.deleteControlSettingDevice(id, null);
 	}
 
+	@Override
+	public Integer copyToNewGSM(Integer fromGsmKey, Integer toGsmKey) {
+		Integer result = mapper.copyToNewGSMContolSetting(fromGsmKey,toGsmKey);
+		mapper.copyToNewGSMContolSettingCheckCondition(fromGsmKey,toGsmKey);
+		mapper.copyToNewGSMContolSettingCheckConditionDevice(fromGsmKey,toGsmKey);
+		mapper.copyToNewGSMControlSettingDevice(fromGsmKey,toGsmKey);
+		mapper.copyToNewGSMControlPreOrder(fromGsmKey,toGsmKey);
+		return result;
+	}
 }

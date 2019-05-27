@@ -48,7 +48,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
 
 
 
-    public static final String X_HEADER_GSM_KEY = "X-Smartfarm-Gsm-Key";
+    public static final String X_HEADER_GSM_KEY = "x-smartfarm-gsm-key";
     Boolean isSmartfarmSystem;
     String myGSMKey;
     String proxySubPath;
@@ -138,11 +138,17 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
             if(headerGsmKey == null){
             	headerGsmKey = response.getHeader(X_HEADER_GSM_KEY);	
             }
-            LOG.debug("in postHandle : {} , {}, {}, {}", headerGsmKey, request.getRequestURI(), request.getMethod(), handler); ;
+
             if( isSmartfarmSystem ) {
                 //스마트팜에서 Post 필터가 필요 없음
                 return;
             } else if( headerGsmKey == null) {
+                if( (request.getMethod().equalsIgnoreCase(HttpMethod.POST.toString()) ||
+                    request.getMethod().equalsIgnoreCase(HttpMethod.DELETE.toString()) ||
+                    request.getMethod().equalsIgnoreCase(HttpMethod.PUT.toString()) )
+                    && (handler instanceof HandlerMethod) )  {
+                    LOG.warn("in HeaderGSMKEY NULL : {} , {}, {}, {}", headerGsmKey, request.getRequestURI(), request.getMethod(), handler);
+                }
                 //헤더가 없는경우 제어기로 내릴 수 없음
                 return;
             }
@@ -255,11 +261,11 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
         String requestUrl = request.getRequestURI();
         URI uri = new URI("http", null, server, port, null, null, null);
         uri = UriComponentsBuilder.fromUri(uri).path(proxySubPath + requestUrl)
-                .query(request.getQueryString()).build(true).toUri();        
+                .query(request.getQueryString()).build(true).toUri();
 
         HttpEntity httpEntity = getHttpEntity(annotationClass, request, response);
         if( httpEntity == null ) {
-               return null;
+            return null;
         }
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));

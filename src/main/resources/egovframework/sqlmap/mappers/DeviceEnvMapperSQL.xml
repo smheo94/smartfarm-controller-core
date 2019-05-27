@@ -162,5 +162,29 @@
 		WHERE
 			id=#{id}
 	</update>
+
+
+
+	<insert id="copyToNewGSM">
+		INSERT INTO device (
+		gsm_key, device_type_id,device_type_idx, nickname, device_type_nickname, green_house_id, controller_id,  mode, modbus_address1, modbus_address2, modbus_address3
+		, id
+		)
+		SELECT #{to_gsm_key}, device_type_id,device_type_idx, nickname, device_type_nickname, 0, (${to_gsm_key}  * 100000) + (controller_id %  100000) ,  1, modbus_address1, modbus_address2,
+			   modbus_address3
+		, (${to_gsm_key}  * 100000) + (id %  100000)
+	  	FROM device
+	    WHERE gsm_key = #{from_gsm_key}
+	</insert>
+
+
+	<insert id="copyToNewGSMVDeviceEnv">
+		INSERT INTO device_v_dep_device(p_device_id, device_num, device_insert_order, device_id)
+		SELECT
+		(${to_gsm_key}  * 100000) + (D.p_device_id %  100000), D.device_num, D.device_insert_order, (${to_gsm_key}  * 100000) + (D.device_id %  100000)
+		FROM device_v_dep_device D
+	    INNER JOIN device ON device.id = D.p_device_id
+		WHERE device.gsm_key = #{from_gsm_key}
+	</insert>
 	
 </mapper>

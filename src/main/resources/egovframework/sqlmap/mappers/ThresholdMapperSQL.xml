@@ -26,4 +26,12 @@
 		WHERE gsm_key = #{gsmKey} AND green_house_id = #{greenHouseId};
 	</delete>
 
+
+	<insert id ="copyToNewGSM">
+		REPLACE INTO gsm_threshold( gsm_key, green_house_id, device_type, device_type_idx, update_date, low_value, high_value )
+		SELECT #{to_gsm_key}, (${to_gsm_key}  * 100000) + (green_house_id %  100000), device_type, device_type_idx, update_date, low_value, high_value
+	    FROM  gsm_threshold
+	    WHERE gsm_key = #{from_gsm_key}
+	</insert>
+
 </mapper>

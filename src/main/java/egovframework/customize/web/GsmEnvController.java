@@ -16,15 +16,14 @@
 package egovframework.customize.web;
 
 import java.security.Principal;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
 import com.kt.smartfarm.supervisor.mapper.AuthCheckMapper;
 import egovframework.cmmn.SystemType;
-import egovframework.cmmn.util.Result;
-import egovframework.cmmn.util.InterceptPre;
-import egovframework.cmmn.util.InterceptIgnoreGSMKey;
-import egovframework.cmmn.util.InterceptPost;
+import egovframework.cmmn.util.*;
 import egovframework.customize.config.SmartfarmInterceptorConfig;
 import egovframework.customize.intercepter.SmartFarmDataInterceptor;
 import egovframework.customize.service.*;
@@ -111,10 +110,48 @@ public class GsmEnvController {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmInfo);
 			}
 			Integer result = gsmEnvService.insert(gsmInfo);
-			response.setHeader(SmartFarmDataInterceptor.X_HEADER_GSM_KEY, gsmInfo.getGsmKey().toString());			
+			response.setHeader(SmartFarmDataInterceptor.X_HEADER_GSM_KEY, gsmInfo.getGsmKey().toString());
 			return new Result(gsmInfo);
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, gsmInfo);
+		}
+	}
+
+
+	/**
+	 * @description 제어모듈 등록
+	 * @param fromGsmKey
+	 * @param toGsmKey	 *
+	 * @return
+	 */
+	@RequestMapping(value= "/{from_gsm_key}/copyTo/{to_gsm_key}", method = RequestMethod.POST)
+	@ResponseBody
+	@InterceptPost
+	@InterceptIgnoreGSMKey
+	public Result<GsmEnvVO> copyTo(HttpServletRequest request,HttpServletResponse response, @PathVariable("from_gsm_key") Integer fromGsmKey, @PathVariable("to_gsm_key") Integer toGsmKey){
+		try {
+			if( !authCheckService.authCheck(fromGsmKey, null) ) {
+				return new Result("Not Allowed", HttpStatus.FORBIDDEN, fromGsmKey);
+			}
+			if( !authCheckService.authCheck(toGsmKey, null) ) {
+				return new Result("Not Allowed", HttpStatus.FORBIDDEN, toGsmKey);
+			}
+			return new Result(gsmEnvService.copyToNewGsm(request, fromGsmKey, toGsmKey));
+		} catch(Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, Arrays.asList(fromGsmKey, toGsmKey));
+		}
+	}
+
+	@RequestMapping(value= "/{gsm_key}/sync", method = RequestMethod.POST)
+	@ResponseBody
+	public Result<GsmEnvVO> sync(HttpServletRequest request,HttpServletResponse response, @PathVariable("gsm_key") Integer gsmKey){
+		try {
+			if( !authCheckService.authCheck(gsmKey, null) ) {
+				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
+			}
+			return new Result(gsmEnvService.syncToSmartfarm(request, gsmKey));
+		} catch(Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, gsmKey);
 		}
 	}
 	
@@ -283,6 +320,9 @@ public class GsmEnvController {
 		}
 	}
 
+
+
+
 	@RequestMapping(value= "/threshold", method = RequestMethod.PUT)	
 	@ResponseBody
 	public Result gsmThresholdUpdate(@RequestBody GsmThresholdVO gsmThresholdVO){
@@ -310,4 +350,6 @@ public class GsmEnvController {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
 	}
+
+
 }

@@ -369,5 +369,26 @@
 			AND house_id = #{green_house_id}
 	
 	</select>
-	
+
+	<insert id="copyToNewGSM">
+		INSERT INTO green_house(
+		product_method_id, green_house_type_id, house_name, latitude, longitude, description, build_date, last_update, addr_1, addr_2, zip,
+		                        nutrient_common_id, change_gh, change_temperature, floor_space,
+		                        house_horizontal, house_vertical, house_height, plant_spacing, crop_cnt, house_direction, select_temp_sensor, select_hum_sensor,
+		                        gsm_key, house_name_i18n,id
+		)
+		SELECT product_method_id, green_house_type_id, house_name, latitude, longitude, description, build_date, last_update, addr_1, addr_2, zip,
+		       nutrient_common_id, change_gh, change_temperature, floor_space,
+		       house_horizontal, house_vertical, house_height, plant_spacing, crop_cnt, house_direction, select_temp_sensor, select_hum_sensor,
+		       #{to_gsm_key}, house_name_i18n	, (${to_gsm_key}  * 100000) + (id %  100000)
+		FROM green_house
+        WHERE gsm_key = #{from_gsm_key}
+	</insert>
+	<insert id="copyToNewGSMMapGreenHouseDevice">
+		INSERT INTO map_green_house_device (green_house_id, device_id)
+		SELECT (${to_gsm_key}  * 100000) + (green_house_id %  100000) , (${to_gsm_key}  * 100000) + (device_id %  100000)
+	    FROM map_green_house_device D
+	    INNER JOIN green_house GH on GH.id = D.green_house_id
+	    WHERE GH.gsm_key = #{from_gsm_key};
+	</insert>
 </mapper>

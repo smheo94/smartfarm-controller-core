@@ -23,6 +23,7 @@ import egovframework.customize.service.ArrayDeviceVO;
 import egovframework.customize.service.ControllerEnvVO;
 import egovframework.customize.service.DeviceEnvVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -40,4 +41,7 @@ public interface ControllerEnvMapper {
 	List<ControllerEnvVO> get(Map<String, Object> map);
 	
 	List<DeviceEnvVO> getDeviceList(Integer controller_id);
+
+
+	Integer copyToNewGSM(@Param("from_gsm_key") Integer fromGsmKey, @Param("to_gsm_key") Integer toGsmKey );
 }

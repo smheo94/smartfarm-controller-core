@@ -44,5 +44,6 @@ public interface GsmEnvMapper {
 	Integer gsmThresholdInsert(GsmThresholdVO gsmThresholdVO);
 	Integer gsmThresholdUpdate(GsmThresholdVO gsmThresholdVO);
 	GsmThresholdVO gsmThresholdGet(HashMap<String,Object> param);
-
+	Integer getNewGSMSeqValue(@Param("from_gsm_key") Integer fromGsmKey, @Param("to_gsm_key") Integer toGsmKey );
+	Integer setNewGSMSeqKey(@Param("to_gsm_key") Integer toGsmKey, @Param("set_val") Integer setValue );
 }

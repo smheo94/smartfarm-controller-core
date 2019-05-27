@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import egovframework.cmmn.util.ClassUtil;
 import lombok.Data;
 import lombok.Getter;
@@ -42,6 +43,7 @@ public class ControlLogicSettingVO {
 	public List<ControlLogicSettingCheckConditionVO> checkConditionList;
 	public List<ControlLogicSettingDeviceVO> deviceList;
 
+	@JsonIgnore
 	public Integer tmpGsmKey;
 
 	public Map<String,Object> toMap() {

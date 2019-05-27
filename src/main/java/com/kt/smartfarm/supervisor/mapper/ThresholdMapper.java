@@ -21,6 +21,7 @@ import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -46,4 +47,5 @@ public interface ThresholdMapper {
 	Integer insert(ThresholdVO thresholdVO);
 	//	Integer update(ThresholdVO thresholdVO);
 	Integer delete(Map<String,Object> param);
+	Integer copyToNewGSM(@Param("from_gsm_key") Integer fromGsmKey, @Param("to_gsm_key") Integer toGsmKey );
 }

@@ -1,5 +1,6 @@
 package egovframework.customize.service;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,4 +13,5 @@ public class ControlSettingOperatorVO {
     public String operatorGroup;
     public String name;
     public Integer displayOrder;
+
 }

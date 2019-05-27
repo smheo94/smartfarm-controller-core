@@ -74,6 +74,9 @@ public class ThresholdServiceImpl extends EgovAbstractServiceImpl implements Thr
 		transactionManager.commit(status);
 		return cnt;
 	}
+	public Integer copyToNewGSM(Integer fromGsmKey, Integer toGsmKey) {
+		return thresholdMapper.copyToNewGSM(fromGsmKey, toGsmKey);
+	}
 
 
 }

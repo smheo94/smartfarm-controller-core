@@ -69,11 +69,7 @@ public interface HouseEnvMapper {
 	
 	List<HashMap<String, Object>> getGroundDeviceList(Integer houseId);
 	List<DeviceTypeVO> getHouseDeviceTypeList(Integer houseId);
-	
-	
-	
-//	List<ProductMethodVO> selectProductMethodList(HashMap<String, Object> product);
-//	List<HashMap<String, Object>> getProductSpeciesAndCategory(String productName);
-	
-	
+
+	Integer copyToNewGSM(@Param("from_gsm_key") Integer fromGsmKey, @Param("to_gsm_key") Integer toGsmKey );
+	Integer copyToNewGSMMapGreenHouseDevice(@Param("from_gsm_key") Integer fromGsmKey, @Param("to_gsm_key") Integer toGsmKey );
 }

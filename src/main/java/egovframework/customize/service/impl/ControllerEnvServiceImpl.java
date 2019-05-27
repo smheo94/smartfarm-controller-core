@@ -110,5 +110,10 @@ public class ControllerEnvServiceImpl extends EgovAbstractServiceImpl implements
 		return controllerList;
 
 	}
-  
+
+	@Override
+	public Integer copyToNewGSM(Integer fromGsmKey, Integer toGsmKey) {
+		return controllerEnvMapper.copyToNewGSM(fromGsmKey,toGsmKey);
+	}
+
 }

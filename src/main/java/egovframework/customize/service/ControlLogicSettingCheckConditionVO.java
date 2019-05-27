@@ -1,5 +1,6 @@
 package egovframework.customize.service;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,4 +18,8 @@ public class ControlLogicSettingCheckConditionVO {
     String action;
     Double value;
     List<Integer> deviceIdList;
+
+
+    @JsonIgnore
+    public Integer tmpGsmKey;
 }

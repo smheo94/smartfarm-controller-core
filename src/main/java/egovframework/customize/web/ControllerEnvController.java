@@ -75,7 +75,7 @@ public class ControllerEnvController {
 	 * @param controller
 	 * @return
 	 */
-	@RequestMapping(value= "/", method = RequestMethod.POST)
+	@RequestMapping(value= {"", "/"}, method = RequestMethod.POST)
 	@ResponseBody
 	@InterceptPost
 	public Result<ControllerEnvVO> insert( @PathVariable("gsmKey") Integer gsmKey, @RequestBody ControllerEnvVO controller){

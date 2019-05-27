@@ -37,11 +37,11 @@ import java.util.Map;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Value("${security.oauth2.client.client-id}")
-	private String clientId;
+	public String clientId;
 	@Value("${security.oauth2.client.client-secret}")
-	private String clientSecret;
+	public String clientSecret;
 	@Value("${security.oauth2.resource.token-info-uri}")
-	private String tokenInfoUri;
+	public String tokenInfoUri;
 
 	@Value("${smartfarm.farm.auth-basic-id}")
 	private String authBasicAPIId;

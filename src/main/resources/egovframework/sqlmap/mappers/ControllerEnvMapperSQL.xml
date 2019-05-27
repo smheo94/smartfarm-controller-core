@@ -30,7 +30,14 @@
 			SELECT LASTVAL(gsm_seq_${gsmKey}) AS id;
 		</selectKey>
 	</insert>
-	
+
+	<insert id="copyToNewGSM">
+		INSERT INTO controller
+		(gsm_key, controller_info_id, controller_type, ip, `port`, controller_status,description,id	)
+		SELECT #{to_gsm_key}, controller_info_id, controller_type, ip, `port`, controller_status,description, (${to_gsm_key}  * 100000) + (id %  100000)
+		FROM controller WHERE gsm_key = #{from_gsm_key}
+	</insert>
+
 	<update id="update" parameterType="controllerEnvVO">
 		UPDATE controller
 		SET
