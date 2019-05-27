@@ -3,6 +3,7 @@ package egovframework.customize.config;
 import com.kt.smartfarm.supervisor.mapper.GsmEnvMapper;
 import egovframework.cmmn.SystemType;
 import egovframework.customize.intercepter.SmartFarmDataInterceptor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -13,6 +14,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import javax.annotation.Resource;
 
 @Configuration
+@Slf4j
 //@PropertySource("classpath:smartfarm-mgr-env.properties")
 //@PropertySource(value={"classpath:application.properties","classpath:smartfarm-mgr-env.properties"}, ignoreResourceNotFound=true)
 @PropertySource(value={"classpath:application.properties","file:/myapp/application.properties","file:/home/gsm/v4/conf/smartfarm-mgr-env.properties"}, ignoreResourceNotFound=true)
@@ -41,7 +43,7 @@ public class SmartfarmInterceptorConfig extends WebMvcConfigurerAdapter {
     @Override
     @DependsOn( {"propertyConfig"})
     public void addInterceptors(InterceptorRegistry registry) {
-        System.out.printf("Load Config : %s , %s, %s\t\n", GSM_KEY, SYSTEM_TYPE, DB_URL);
+        log.info("Load Config : {}, {}, {}", GSM_KEY, SYSTEM_TYPE, DB_URL);
 //        System.out.println("PASS */* = " + pass);
         registry.addInterceptor(new SmartFarmDataInterceptor(isSmartfarmSystem(), PROXY_SUB_PATH, GSM_KEY, gsmMapper)).addPathPatterns("/**");
 //        registry.addInterceptor(new SmartFarmDataInterceptor(SYSTEM_TYPE, GSM_KEY, gsmMapper)).addPathPatterns("/**");

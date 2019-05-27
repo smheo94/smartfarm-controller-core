@@ -1,6 +1,7 @@
 package egovframework.customize.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -32,7 +33,7 @@ import java.util.Map;
 
 @Configuration
 @EnableWebSecurity
-
+@Slf4j
 @PropertySource(value={"classpath:application.properties","file:/myapp/application.properties","file:/home/gsm/v4/conf/smartfarm-mgr-env.properties"}, ignoreResourceNotFound=true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -62,7 +63,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		// @formatter:off
-
+		log.info("LoadSecurityConfig : {} \t\n", tokenInfoUri);
 		http.headers().frameOptions().disable().and()
 			.requestMatcher(new BasicRequestMatcher())
 			.authorizeRequests()

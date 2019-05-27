@@ -34,7 +34,6 @@ public class SwaggerConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     public Docket api() {
-        System.out.println("------------------------------------------------------swaggerConfig");
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("egovframework.customize.web"))
