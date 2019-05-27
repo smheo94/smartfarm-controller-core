@@ -12,7 +12,7 @@
        else if ( status == 404 )
            message = "찾을 수 없습니다. + addMessage";
     }
-    out.println(String.format("{'reason':'%s'}", status, message));
+    out.println(String.format("{ \"reason\": \"%s\"}", status, message));
     //request.getAttribute("javax.servlet.error.status_code")
     //request.getAttribute("javax.servlet.error.message")
 %>
