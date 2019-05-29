@@ -15,7 +15,7 @@
  */
 package com.kt.smartfarm.supervisor.mapper;
 
-import egovframework.customize.service.ThresholdVO;
+import com.kt.smartfarm.service.ThresholdVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 
 import java.util.List;

@@ -15,7 +15,7 @@
  */                                                               
 package com.kt.smartfarm.supervisor.mapper;
 
-import egovframework.customize.service.*;
+import com.kt.smartfarm.service.*;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -34,7 +34,7 @@ public interface ControlLogicSettingMapper {
 //													   @Param("control_setting_id") Integer controlSettingId, @Param("log_dt") Long logDt);
 
 	List<ControlLogicSettingHistoryVO> getControlLogicSettingHistoryList(@Param("gsm_key") Integer gsmKey, @Param("green_house_id") Integer greenHouseId,
-																   @Param("control_setting_id") Integer controlSettingId
+                                                                         @Param("control_setting_id") Integer controlSettingId
 														, @Param("from_date") Long fromData, @Param("to_date") Long toDate);
 
 

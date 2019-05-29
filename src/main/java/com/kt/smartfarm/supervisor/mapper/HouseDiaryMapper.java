@@ -18,9 +18,8 @@ package com.kt.smartfarm.supervisor.mapper;
 import java.util.HashMap;
 import java.util.List;
 
-import egovframework.customize.service.HouseCropsDiaryVO;
-import egovframework.customize.service.HouseDiaryVO;
-import egovframework.customize.service.HousePictureDiaryVO;
+import com.kt.smartfarm.service.HouseCropsDiaryVO;
+import com.kt.smartfarm.service.HouseDiaryVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import org.springframework.stereotype.Repository;
 

@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kt.smartfarm.supervisor.mapper.HouseEnvMapper">
+	
+<!-- 	
+	<resultMap id="controllerEnv"
+		type="ControllerEnvVO">
+		<result property="id" column="id" javaType="Integer"/>		
+		<association property="controllerInfo" column="controllerInfoId" 
+		select="com.kt.smartfarm.customize.service.ControllerInfoMapper.select"></association>
+		
+	</resultMap>
+
+ -->
+ 
+	<insert id="insert" useGeneratedKeys="true" parameterType="houseEnvVO">
+		INSERT INTO green_house( 
+       		product_method_id, green_house_type_id, house_name, latitude, longitude, description, build_date, last_update, addr_1, addr_2, zip, nutrient_common_id, change_gh, change_temperature, floor_space, house_horizontal, house_vertical, house_height, plant_spacing, crop_cnt, house_direction, select_temp_sensor, select_hum_sensor, gsm_key, house_name_i18n
+		,id
+		)
+		VALUES (
+			#{productMethodId},#{greenHouseTypeId},#{houseName},#{latitude},#{longitude},#{description},now(),now(),#{addr1},#{addr2},#{zip},1,1,1,#{floorSpace},#{houseHorizontal},#{houseVertical},#{houseHeight},#{plantSpacing},#{cropCnt},#{houseDirection},#{selectTempSensor},#{selectHumSensor},#{gsmKey},#{houseNameI18n}
+		<if test="id != null and id != -1">
+			,#{id}
+		</if>
+		<if test="id == null or id == -1">
+			,NEXTVAL(gsm_seq_${gsmKey})
+		</if>
+		);
+		<selectKey keyProperty="id" resultType="int">
+			SELECT LASTVAL(gsm_seq_${gsmKey}) AS id;
+		</selectKey>
+	</insert>
+	
+	<insert id="insertHouseDeviceMap" parameterType="map">		
+		REPLACE INTO map_green_house_device
+		            (green_house_id, device_id)
+		VALUES (#{house_id}, #{device_id});
+	</insert>
+	<delete id="deleteHouseDeviceMap" parameterType="map">
+		DELETE
+		FROM map_green_house_device
+		WHERE green_house_id = #{house_id} AND device_id = #{device_id};
+	</delete>
+	<update id="update" parameterType="houseEnvVO">
+		UPDATE green_house
+		SET
+			<if test="productMethodId != null">	product_method_id = #{productMethodId}</if>
+			<if test="greenHouseTypeId != null">, green_house_type_id = #{greenHouseTypeId}</if>
+			<if test="houseName != null">,	house_name = #{houseName}</if>
+			<if test="latitude != null">,	latitude = #{latitude}</if>
+			<if test="longitude != null">,	longitude = #{longitude}</if>
+			<if test="description !=null">, description =#{description}</if>
+			<if test="addr1 != null">,	addr_1 = #{addr1}</if>
+			<if test="addr2 != null">,	addr_2 = #{addr2}</if>
+			<if test="zip != null">,	zip = #{zip}</if>
+			<if test="nutrientCommonId">, nutrient_common_id =#{nutrientCommonId}</if> 
+			<if test="changeGh != null">,	change_gh = #{changeGh}</if>
+			<if test="changeTemperature">,change_temperature =#{changeTemperature}</if>
+			<if test="floorSpace != null">,	floor_space = #{floorSpace}</if>
+			<if test="houseHorizontal">, house_horizontal =#{houseHorizontal}</if>
+			<if test="houseVertical != null">,	house_vertical = #{houseVertical}</if>
+			<if test="houseHeight">, house_height=#{houseHeight}</if>
+			<if test="plantSpacing != null">,	plant_spacing = #{plantSpacing}</if>
+			<if test="cropCnt != null">,	crop_cnt = #{cropCnt}</if>
+			<if test="houseDirection != null">,	house_direction = #{houseDirection}</if>
+			<if test="selectTempSensor != null">,select_temp_sensor = #{selectTempSensor}</if>
+			<if test="selectHumSensor != null">,select_hum_sensor = #{selectHumSensor}</if>	
+			<if test="houseNameI18n != null">,	house_name_i18n = #{houseNameI18n}</if>
+			,last_update = NOW()	
+		WHERE gsm_key = #{gsmKey} AND id = #{id};
+	</update>
+	
+	<delete id="delete">
+		DELETE
+		FROM green_house
+		WHERE gsm_key = #{gsmKey} AND id = #{id};
+	</delete>
+	
+	<select id="list" parameterType="map" resultType="houseEnvVO">
+		SELECT 
+			id, product_method_id, green_house_type_id, house_name,
+			latitude, longitude, description, build_date, last_update, addr_1,
+			addr_2, zip, nutrient_common_id, change_gh, change_temperature,
+			floor_space, house_horizontal, house_vertical, house_height,
+			plant_spacing, crop_cnt, house_direction, select_temp_sensor,
+			select_hum_sensor, gsm_key, house_name_i18n
+		FROM green_house
+		WHERE
+		 gsm_key = #{gsm_key}
+		;
+	</select>
+
+	<select id ="get" resultType="houseEnvVO">
+		SELECT
+		id, product_method_id, green_house_type_id, house_name,
+		latitude, longitude, description, build_date, last_update, addr_1,
+		addr_2, zip, nutrient_common_id, change_gh, change_temperature,
+		floor_space, house_horizontal, house_vertical, house_height,
+		plant_spacing, crop_cnt, house_direction, select_temp_sensor,
+		select_hum_sensor, gsm_key, house_name_i18n
+		FROM green_house
+		WHERE 1=1
+		<if test="gsm_key != null">AND  gsm_key = #{gsm_key}</if>
+		<if test="green_house_id != null">AND id = #{green_house_id}</if>
+	</select>
+
+	<select id="selectHouseTypeList" resultType="map">
+		SELECT 
+			id, type_name, description, last_update, type_name_i18n, house_type, root_type
+		FROM
+			cd_house_type
+	</select>
+
+	<select id="selectProductList" resultType="productVO">
+		SELECT id, product, product_species, product_category, description, input_date, update_date, author, VERSION, product_i18n, product_species_i18n, product_category_i18n
+		FROM cd_product
+	</select>
+	
+	
+	<select id="selectProductMethodList" resultType="productMethodVO">
+		SELECT id,product_id, growth_level, growth_level_description, growth_type, growth_level_i18n, growth_level_description_i18n, growth_type_i18n
+		FROM cd_product_method
+		WHERE product_id = #{productId}
+		ORDER BY growth_level
+	</select>
+	
+	<select id ="selectProductMethod" resultType="map">
+		SELECT     
+	    	cp.id AS productID,
+	    	cp.product_category AS productCategory,
+	    	cpm.growth_level AS productGrowthLevel,
+	    	cpm.id AS productMethodId,
+	    	cpm.growth_type AS growthType
+	    FROM cd_product  AS cp 
+	    INNER JOIN cd_product_method AS cpm ON cpm.product_id = cp.id
+	    WHERE product_species = #{species}
+	    GROUP BY cpm.growth_level
+	    ORDER BY cpm.id
+	</select>
+	
+	<!-- 
+	<select id ="getHouseDetail" parameterType="map" resultType="map">
+		SELECT 
+			id, product_method_id, green_house_type_id, house_name,
+			latitude, longitude, description, build_date, last_update, addr_1,
+			addr_2, zip, nutrient_common_id, change_gh, change_temperature,
+			floor_space, house_horizontal, house_vertical, house_height,
+			plant_spacing, crop_cnt, house_direction, select_temp_sensor,
+			select_hum_sensor, gsm_key, house_name_i18n
+		FROM green_house
+		WHERE
+		 gsm_key = #{gsm_key}
+		 AND id = #{green_house_id}
+	</select>
+	 -->
+
+	 
+	<select id ="getHouseDetail" parameterType="map" resultType="map">
+		SELECT 
+			id, product_method_id AS productMethodId, green_house_type_id as greenHouseTypeId, house_name as houseName,
+			latitude, longitude, description, build_date as buildDate, last_update as lastUpdate, addr_1 as addr1,
+			addr_2 as addr2, zip, change_gh as changeGh, change_temperature as changeTemperature,
+			floor_space as floorSpace, house_horizontal as houseHorizontal, house_vertical as houseVertical, house_height as houseHeight,
+			plant_spacing as plantSpacing, crop_cnt as cropCnt, house_direction as houseDirection, select_temp_sensor as selectTempSensor,
+			select_hum_sensor as selectHumSensor, gsm_key as gsmKey, house_name_i18n as houseNameI18n
+		FROM green_house		
+		WHERE 1=1
+		<if test="gsm_key != null">AND  gsm_key = #{gsm_key}</if>
+		<if test="green_house_id != null">AND id = #{green_house_id}</if>
+	</select>
+	
+	<select id ="getMappedDevice" resultType="int">
+		SELECT device_id 
+		FROM map_green_house_device AS mghd 
+		INNER JOIN green_house gh ON gh.id = mghd.green_house_id
+		WHERE gh.id = #{green_house_id} AND gh.gsm_key = #{gsm_key}
+	</select>
+	
+	
+	<select id ="getMappedController" resultType="map">
+		SELECT 
+			controller.id,
+			controller.gsm_key as gsmKey,
+			controller.controller_info_id as controllerInfoId,
+			controller.controller_type as controllerType,
+			controller.ip,
+			controller.PORT,
+			controller.controller_status as controllerStatus,
+			controller.description
+		FROM device
+		INNER JOIN controller ON controller.id = device.controller_id
+		 WHERE device.gsm_key = #{gsm_key}
+		 <if test="deviceIds != null">
+			<if test="deviceIds.size() == 0">
+				AND FALSE
+			</if>
+			<foreach collection="deviceIds" item="item"  index="index" separator=","	open="AND device.id IN (" close=")">
+						#{item}
+			</foreach>
+		</if>
+		 GROUP BY controller_id;
+	</select>
+	
+	<select id="getHouseDeviceList" parameterType="Integer" resultType="deviceEnvVO">
+		SELECT device.* , cd_device_type.device_type , cd_device_type.device_type
+		FROM map_green_house_device  AS mghd
+		INNER JOIN device ON device.id = mghd.device_id
+		INNER JOIN cd_device_type ON device.device_type_id = cd_device_type.id
+		WHERE mghd.green_house_id = #{houseId}			
+	</select>
+	
+	<select id="getHouseDeviceTypeList" parameterType="Integer" resultType="deviceTypeVO">
+		SELECT cdt.* 
+		FROM map_green_house_device  AS mghd
+		INNER JOIN device ON device.id = mghd.device_id
+		INNER JOIN cd_device_type AS cdt ON device.device_type_id = cdt.id
+		WHERE mghd.green_house_id = #{houseId}			
+	</select>
+	
+	<select id="getGroundDeviceList" parameterType="Integer" resultType="map">
+		SELECT device.* ,cpt.device_type AS dt, cpt.device_type_group AS dtg
+		FROM map_green_house_device  AS mghd
+		INNER JOIN device ON device.id = mghd.device_id
+		INNER JOIN cd_device_type cpt ON cpt.id = device.device_type_id
+		WHERE mghd.green_house_id = #{houseId}			
+	</select>
+	
+	
+	<insert id="insertCCTVSetting" parameterType="cctv" useGeneratedKeys="true">
+		INSERT INTO	cctv	
+           ( house_id, cctv_name, cctv_uid, cctv_pwd, cctv_ws_url, cctv_rtsp_url, is_rtsp_play, wowza_id)
+		VALUES(
+			#{houseId},#{cctvName},#{cctvUid},#{cctvPwd},#{cctvWsUrl},#{cctvRtspUrl}, #{isRtspPlay}, #{wowzaId}
+		)
+		<selectKey keyProperty="id" resultType="int">
+			SELECT LAST_INSERT_ID() AS id;
+		</selectKey>
+	</insert>
+	
+	<select id="getCctvList" parameterType="Integer" resultType="map">
+		SELECT 
+			cctv.id as id,  
+			house_id as houseId, 
+			cctv_name as cctvName, 
+			cctv_uid as cctvUid,
+			cctv_pwd as cctvPwd,
+			cctv_ws_url as cctvWsUrl,
+			cctv_rtsp_url as cctvRtspUrl,
+			is_rtsp_play as isRtspPlay,
+			wowza_id as wowzaId,
+			stream_url as wowzaStreamUrl,
+			rest_url as wowzaRestUrl
+		FROM cctv as cctv
+		LEFT OUTER JOIN wowza as wowza on cctv.wowza_id = wowza.id
+		WHERE house_id =#{houseId}
+	</select>
+	
+	<update id="updateCctv" parameterType="cctv">
+		UPDATE cctv
+		SET
+			<if test="cctvName != null"> cctv_name = #{cctvName}</if>
+			<if test="cctvUid != null">, cctv_uid = #{cctvUid}</if>
+			<if test="cctvPwd != null">, cctv_pwd = #{cctvPwd}</if>
+			<if test="cctvWsUrl != null">, cctv_ws_url = #{cctvWsUrl}</if>
+			<if test="cctvRtspUrl != null">, cctv_rtsp_url = #{cctvRtspUrl}</if>
+			<if test="isRtspPlay != null">, is_rtsp_play = #{isRtspPlay}</if>
+			<if test="wowzaId != null">, wowza_id = #{wowzaId}</if>
+		WHERE house_id = #{houseId} AND id = #{id};				
+	</update>
+	
+	<delete id='deleteCctv'>
+		DELETE from cctv where id=#{cctvId}
+	</delete>
+	
+	
+	<select id="getAllList" resultType="map">
+		SELECT id, product_method_id AS productMethodId, green_house_type_id as greenHouseTypeId, house_name as houseName,
+			latitude, longitude, description, build_date as buildDate, last_update as lastUpdate, addr_1 as addr1,
+			addr_2 as addr2, zip, nutrient_common_id as nutrientCommonId, change_gh as changeGh, change_temperature as changeTemperature,
+			floor_space as floorSpace, house_horizontal as houseHorizontal, house_vertical as houseVertical, house_height as houseHeight,
+			plant_spacing as plantSpacing, crop_cnt as cropCnt, house_direction as houseDirection, select_temp_sensor as selectTempSensor,
+			select_hum_sensor as selectHumSensor, gsm_key as gsmKey, house_name_i18n as houseNameI18n
+		FROM green_house
+	</select>
+	
+	<insert id="insertForecastData" parameterType="map"  useGeneratedKeys="true">
+		INSERT INTO weather_cast (
+			base_date, base_time, fcst_date, fcst_time, fcst_value, nx, ny, category, house_id
+		)
+		VALUES (
+			#{base_date}, #{base_time}, #{fcst_date}, #{fcst_time}, #{fcst_value}, #{nx}, #{ny}, #{category}, #{house_id}
+		)
+		<selectKey keyProperty="id" resultType="int">
+			SELECT LAST_INSERT_ID() AS id;
+		</selectKey>
+	</insert>
+	
+	<select id="getWeatherCast" parameterType="map" resultType="map">
+	<!-- 	SELECT 
+			house_id,
+			base_date,
+			base_time,
+			fcst_date,
+			fcst_time,
+			fcst_value,
+			nx,
+			ny,
+			category
+		FROM weather_cast
+		WHERE 1=1
+			AND house_id = #{house_id}
+			<if test="from_date!=null">
+			AND fcst_date BETWEEN #{from_date} AND #{to_date}
+			</if>
+			<if test="from_date==null">
+			AND fcst_date BETWEEN NOW() AND NOW() + INTERVAL 1 DAY
+			</if>
+		ORDER BY id; -->
+		SELECT 
+			house_id,
+			base_date,
+			base_time,
+			fcst_date,
+			fcst_time,
+			fcst_value,
+			nx,
+			ny,
+			category
+		FROM weather_cast
+		WHERE id IN (
+			SELECT 
+				MAX(id)
+			FROM weather_cast
+			WHERE 1=1
+				AND house_id = #{house_id}
+				<if test="from_date!=null">
+					AND fcst_date BETWEEN #{from_date} AND #{to_date}
+				</if>
+				<if test="from_date==null">				
+					AND fcst_date BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL 3 DAY
+				</if>
+    		GROUP BY house_id, fcst_date, fcst_time, category
+		)
+		ORDER BY id;
+	</select>
+	<select id="getWeatherCategory" resultType="map">
+		SELECT id, category, category_desc, sub_category_desc, unit
+		FROM cd_weather_category_type		
+	</select>	
+	
+	
+	<insert id="insertSunriseData" parameterType="map" useGeneratedKeys="true">
+		INSERT INTO sunrise_info(
+			house_id,loc_date,sunrise,sunset
+		)VALUES(
+			#{house_id},#{loc_date},#{sunrise},#{sunset}
+		)
+		<selectKey keyProperty="id" resultType="int">
+			SELECT LAST_INSERT_ID() AS id;
+		</selectKey>
+	</insert>
+	
+	<select id="getSunriseInfo" parameterType="map" resultType="map">
+		SELECT house_id,loc_date,sunrise,sunset
+		FROM sunrise_info
+		WHERE 
+			loc_date = CURRENT_DATE()
+			AND house_id = #{green_house_id}
+	
+	</select>
+
+	<insert id="copyToNewGSM">
+		INSERT INTO green_house(
+		product_method_id, green_house_type_id, house_name, latitude, longitude, description, build_date, last_update, addr_1, addr_2, zip,
+		                        nutrient_common_id, change_gh, change_temperature, floor_space,
+		                        house_horizontal, house_vertical, house_height, plant_spacing, crop_cnt, house_direction, select_temp_sensor, select_hum_sensor,
+		                        gsm_key, house_name_i18n,id
+		)
+		SELECT product_method_id, green_house_type_id, house_name, latitude, longitude, description, build_date, last_update, addr_1, addr_2, zip,
+		       nutrient_common_id, change_gh, change_temperature, floor_space,
+		       house_horizontal, house_vertical, house_height, plant_spacing, crop_cnt, house_direction, select_temp_sensor, select_hum_sensor,
+		       #{to_gsm_key}, house_name_i18n	, (${to_gsm_key}  * 100000) + (id %  100000)
+		FROM green_house
+        WHERE gsm_key = #{from_gsm_key}
+	</insert>
+	<insert id="copyToNewGSMMapGreenHouseDevice">
+		INSERT INTO map_green_house_device (green_house_id, device_id)
+		SELECT (${to_gsm_key}  * 100000) + (green_house_id %  100000) , (${to_gsm_key}  * 100000) + (device_id %  100000)
+	    FROM map_green_house_device D
+	    INNER JOIN green_house GH on GH.id = D.green_house_id
+	    WHERE GH.gsm_key = #{from_gsm_key};
+	</insert>
+</mapper>

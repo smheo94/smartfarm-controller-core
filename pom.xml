@@ -453,7 +453,7 @@
                 <configuration> 
                     <username>argos</username>
                     <password>gksfutneh</password>
-                    <repository>repo.docker.vivans.net:5000/${project.artifactId}</repository>
+                    <repository>repo.docker.vivans.net/${project.artifactId}</repository>
                     <!--<tag>${project.version}</tag>-->
                     <buildArgs>
                         <WAR_FILE>${project.build.finalName}.war</WAR_FILE>

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kt.smartfarm.supervisor.mapper.DeviceEnvMapper">
+	
+<!-- 
+	<resultMap id="deviceEnv"
+		type="DeviceEnvVO">
+		<result column="id" javaType="Integer"/>		
+	</resultMap> -->
+
+
+	<insert id="insert" useGeneratedKeys="true" parameterType="deviceEnvVO">
+		INSERT INTO device (
+			gsm_key, device_type_id,device_type_idx, nickname, device_type_nickname, green_house_id, controller_id,  mode, modbus_address1, modbus_address2, modbus_address3
+			, id
+		)
+	  	VALUES(
+	  		#{gsmKey}, #{deviceTypeId}, #{deviceTypeIdx} ,#{nickname}, #{deviceTypeNickname}, 0, #{controllerId}, 1, #{modbusAddress1}, #{modbusAddress2}, #{modbusAddress3}
+		<if test="id == null">
+			,NEXTVAL(gsm_seq_${gsmKey})
+		</if>
+		<if test="id != null">
+			,#{id}
+		</if>
+		)
+	 	<selectKey keyProperty="id" resultType ="int"> 
+	   		SELECT LASTVAL(gsm_seq_${gsmKey}) AS id;
+	    </selectKey>
+	</insert>
+	
+	<update id="update" parameterType="deviceEnvVO">
+		UPDATE device
+		SET
+			<if test="deviceTypeId != null"> device_type_id = #{deviceTypeId} </if>
+			<if test="deviceTypeIdx != null">,device_type_idx = #{deviceTypeIdx} </if>
+			<if test="controllerId != null">,controller_id = #{controllerId} </if>
+			<if test="nickname != null">,nickname = #{nickname} </if>
+			<if test="deviceTypeNickname != null">,device_type_nickname = #{deviceTypeNickname} </if>			
+			<if test="xPosition != null">,x_position = #{xPosition} </if>
+			<if test="yPosition != null">,y_position = #{yPosition} </if>
+			<if test="x2Position != null">,x2_position = #{x2Position} </if>
+			<if test="y2Position != null">,y2_position = #{y2Position} </if>
+			<if test="memo != null">,memo = #{memo} </if>
+			<if test="modbusAddress1 != null">,modbus_address1 = #{modbusAddress1} </if>
+			<if test="modbusAddress2 != null">,modbus_address2 = #{modbusAddress2} </if>
+			<if test="modbusAddress3 != null">,modbus_address3 = #{modbusAddress3} </if>
+			<if test="noStopControl != null">,no_stop_control = #{noStopControl} </if>
+			<if test="mode != null">,MODE = #{mode} </if>
+			<if test="updateDate != null">,update_date = NOW() </if>
+			<if test="autoManualMode != null">,auto_manual_mode = #{autoManualMode} </if>
+			<if test="status != null">,STATUS = #{status} </if>			
+		WHERE id = #{id};
+	</update>
+	
+	<delete id="deleteControllerDeivces">
+		DELETE
+		FROM device
+
+		WHERE gsm_key = #{gsm_key} AND controller_id = #{controller_id};
+	</delete>
+
+	<select id="list" parameterType="map" resultType="deviceEnvVO">
+		SELECT 
+			device.id, device_type_id, device_type_idx, user_info_id, gsm_key,
+			green_house_id, controller_id, nickname, device_type_nickname,
+			device.description, setup_date, x_position, y_position, x2_position,
+			y2_position, memo, modbus_address1, modbus_address2, modbus_address3,
+			no_stop_control, MODE, update_date, auto_manual_mode, STATUS
+			,CDT.device_type, CDT.device_type_group, CDT.device_type_name, CDT.description AS device_type_description, CDT.kind, CDT.dcac,
+			CDT.round_number,CDT.topic_group,CDT.reset_point,CDT.accum_m,CDT.accum_h,CDT.accum_d,CDT.op_time,CDT.value_type			
+		FROM device
+		INNER JOIN cd_device_type CDT ON CDT.id = device.device_type_id
+		<where>
+			<if test="gsm_key != null">AND gsm_key = #{gsm_key}</if>
+			<if test="controller_id != null">AND controller_id = #{controller_id}</if>
+			<if test="device_id != null">AND device.id = #{device_id}</if>
+		</where>	
+	</select>
+
+	<select id="getDeviceTypeByHouseType" resultType="deviceTypeVO">
+		SELECT 
+			id, NAME, description, last_update, device_type,
+			device_type_name, device_type_group, kind, is_physical_device,
+			manufacturer, model_name, model_spec, model_version, is_master,
+			use_house_type, default_address1, default_address2, default_address3,
+			dcac, min_value, MAX_VALUE, description_i18n, device_type_name_i18n,unit,
+			round_number,topic_group,reset_point,accum_m,accum_h,accum_d,op_time,value_type
+		FROM cd_device_type
+		<where>
+		<if test="kind != null" >
+			AND kind = #{kind}
+			AND
+			use_house_type IN
+			<foreach collection="idsList" item="item" index="index" separator=","	open="(" close=")">
+					#{item}
+			</foreach>
+		</if>	
+		</where>
+	</select>
+	
+	<select id="getHouseType" resultType="String">
+		SELECT DISTINCT use_house_type  FROM cd_device_type ORDER BY use_house_type
+	</select>
+	
+	<select id="getKind" resultType="String">
+		SELECT DISTINCT kind FROM cd_device_type ORDER BY kind
+	</select>
+	
+	<select id="getDeviceTypeList" resultType="map">
+	SELECT *
+	FROM
+	cd_device_type
+	ORDER BY kind
+	</select>
+	
+	<select id="getVDeviceList" resultType="vDeviceInfoVO">
+		SELECT 
+			id,
+			device_type_id, 
+			device_num, 
+			device_type_param_name, 
+			required, 
+			able_array, 
+			description, 
+			display_order, 
+			is_used
+		FROM cd_device_type_v_device_dep_device 
+	</select>
+
+	<select id="getVDeviceEnvList" resultType="vDeviceEnvVO" >
+		SELECT
+			id, p_device_id, device_num, device_insert_order, device_id
+		FROM device_v_dep_device
+		WHERE p_device_id = #{deviceId}
+	</select>
+
+	<insert id="insertVDeviceEnv" useGeneratedKeys="true" parameterType="vDeviceEnvVO">
+		INSERT INTO device_v_dep_device(
+			p_device_id, device_num, device_insert_order, device_id
+		)
+		VALUES(
+			#{parentDeviceId}, #{deviceNum}, #{deviceInsertOrder}, #{deviceId}
+		);
+		<selectKey keyProperty="id" resultType ="int">
+			SELECT LAST_INSERT_ID() AS value;
+		</selectKey>
+	</insert>
+	
+	<delete id="deleteVDeviceEnv" parameterType="Integer">
+		DELETE 
+		FROM device_v_dep_device 
+		WHERE id=#{id}
+	</delete>
+	
+	<update id="updateVDeviceEnv" parameterType="vDeviceEnvVO">
+		UPDATE device_v_dep_device
+
+			<if test="deviceId!=null">device_id = #{deviceId}</if>
+			<if test="parentDeviceId != null">,p_device_id = #{parentDeviceId}</if>
+			<if test="deviceNum != null">,device_num = #{deviceNum}</if>
+			<if test="deviceInsertOrder != null">,device_insert_order = #{deviceInsertOrder}</if>			
+		WHERE
+			id=#{id}
+	</update>
+
+
+
+	<insert id="copyToNewGSM">
+		INSERT INTO device (
+		gsm_key, device_type_id,device_type_idx, nickname, device_type_nickname, green_house_id, controller_id,  mode, modbus_address1, modbus_address2, modbus_address3
+		, id
+		)
+		SELECT #{to_gsm_key}, device_type_id,device_type_idx, nickname, device_type_nickname, 0, (${to_gsm_key}  * 100000) + (controller_id %  100000) ,  1, modbus_address1, modbus_address2,
+			   modbus_address3
+		, (${to_gsm_key}  * 100000) + (id %  100000)
+	  	FROM device
+	    WHERE gsm_key = #{from_gsm_key}
+	</insert>
+
+
+	<insert id="copyToNewGSMVDeviceEnv">
+		INSERT INTO device_v_dep_device(p_device_id, device_num, device_insert_order, device_id)
+		SELECT
+		(${to_gsm_key}  * 100000) + (D.p_device_id %  100000), D.device_num, D.device_insert_order, (${to_gsm_key}  * 100000) + (D.device_id %  100000)
+		FROM device_v_dep_device D
+	    INNER JOIN device ON device.id = D.p_device_id
+		WHERE device.gsm_key = #{from_gsm_key}
+	</insert>
+	
+</mapper>

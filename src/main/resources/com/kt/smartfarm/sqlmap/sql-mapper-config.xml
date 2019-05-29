@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<!--  mapepr 에서 사용 할 model alias 설정 paging 이 필요없다면 sampleDaefault쪽은 없애면된다. -->
+<configuration>
+	<!-- underscore 형식을 camelCase 형식으로  -->
+	<settings>
+        <setting name="mapUnderscoreToCamelCase" value="true" />
+     </settings>
+    <typeAliases>
+		<typeAlias alias="commonEnvVO" type="com.kt.smartfarm.service.CommonEnvVO"/>
+		<typeAlias alias="controllerEnvVO" type="com.kt.smartfarm.service.ControllerEnvVO" />
+		<typeAlias alias="deviceEnvVO" type="com.kt.smartfarm.service.DeviceEnvVO"/>
+		<typeAlias alias="deviceTypeVO" type="com.kt.smartfarm.service.DeviceTypeVO"/>
+		<typeAlias alias="houseEnvVO" type="com.kt.smartfarm.service.HouseEnvVO"/>
+		<typeAlias alias="gsmEnvVO" type="com.kt.smartfarm.service.GsmEnvVO"/>
+		
+		<typeAlias alias="productVO" type="com.kt.smartfarm.service.ProductVO"/>
+		<typeAlias alias="productMethodVO" type="com.kt.smartfarm.service.ProductMethodVO"/>
+		
+		<typeAlias alias="categoryEnvVO" type="com.kt.smartfarm.service.CategoryEnvVO"/>
+		<typeAlias alias="controlLogicVO" type="com.kt.smartfarm.service.ControlLogicVO"/>
+		<typeAlias alias="controlLogicDeviceVO" type="com.kt.smartfarm.service.ControlLogicDeviceVO"/>
+		
+		<typeAlias alias="thresholdVO" type="com.kt.smartfarm.service.ThresholdVO"/>
+		
+		<typeAlias alias="houseDiaryVO" type="com.kt.smartfarm.service.HouseDiaryVO"/>
+		<typeAlias alias="housePicDiaryVO" type="com.kt.smartfarm.service.HousePictureDiaryVO"/>
+		<typeAlias alias="cropsDiaryVO" type="com.kt.smartfarm.service.HouseCropsDiaryVO"/>
+		<typeAlias alias="vDeviceInfoVO" type="com.kt.smartfarm.service.VDeviceInfoVO"/>
+		<typeAlias alias="vDeviceEnvVO" type="com.kt.smartfarm.service.VDeviceEnvVO"/>
+
+		<typeAlias alias="controlLogicSettingVO" type="com.kt.smartfarm.service.ControlLogicSettingVO"/>
+		<typeAlias alias="controlLogicSettingHistoryVO" type="com.kt.smartfarm.service.ControlLogicSettingHistoryVO"/>
+		<typeAlias alias="controlLogicSettingDeviceVO" type="com.kt.smartfarm.service.ControlLogicSettingDeviceVO"/>
+
+		<typeAlias alias="controlLogicSettingCheckConditionVO" type="com.kt.smartfarm.service.ControlLogicSettingCheckConditionVO"/>
+		<typeAlias alias="controlSettingOperatorVO" type="com.kt.smartfarm.service.ControlSettingOperatorVO"/>
+		
+		<typeAlias alias="cctv" type="com.kt.smartfarm.service.CCTVSettingVO"/>
+		<typeAlias alias="gsmThresholdVO" type="com.kt.smartfarm.service.GsmThresholdVO"/>
+
+    </typeAliases>
+</configuration>

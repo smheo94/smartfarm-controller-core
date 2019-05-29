@@ -15,11 +15,10 @@
  */
 package com.kt.smartfarm.supervisor.mapper;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import egovframework.customize.service.ControllerInfoVO;
+import com.kt.smartfarm.service.ControllerInfoVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import org.springframework.stereotype.Repository;
 

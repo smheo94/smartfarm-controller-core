@@ -15,11 +15,7 @@
  */
 package com.kt.smartfarm.supervisor.mapper;
 
-import java.util.HashMap;
-import java.util.List;
-
-import egovframework.customize.service.SampleDefaultVO;
-import egovframework.customize.service.SampleVO;
+import com.kt.smartfarm.service.SampleVO;
 
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import org.springframework.stereotype.Repository;

@@ -19,10 +19,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import egovframework.customize.service.DeviceEnvVO;
-import egovframework.customize.service.DeviceTypeVO;
-import egovframework.customize.service.VDeviceEnvVO;
-import egovframework.customize.service.VDeviceInfoVO;
+import com.kt.smartfarm.service.DeviceEnvVO;
+import com.kt.smartfarm.service.DeviceTypeVO;
+import com.kt.smartfarm.service.VDeviceEnvVO;
+import com.kt.smartfarm.service.VDeviceInfoVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

@@ -20,12 +20,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import egovframework.customize.service.CCTVSettingVO;
-import egovframework.customize.service.DeviceEnvVO;
-import egovframework.customize.service.DeviceTypeVO;
-import egovframework.customize.service.HouseEnvVO;
-import egovframework.customize.service.ProductMethodVO;
-import egovframework.customize.service.ProductVO;
+import com.kt.smartfarm.service.CCTVSettingVO;
+import com.kt.smartfarm.service.DeviceEnvVO;
+import com.kt.smartfarm.service.DeviceTypeVO;
+import com.kt.smartfarm.service.HouseEnvVO;
+import com.kt.smartfarm.service.ProductVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 
 import org.apache.ibatis.annotations.Param;
