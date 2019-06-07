@@ -21,7 +21,7 @@ public class MapUtils {
                 value = camelizeMap((Map<String, Object>)value);
             }
             if( ent.getKey() instanceof  String ) {
-                result.put(StringUtil.camelize((String)ent.getKey(), true), value);
+                result.put(StringUtil.camelize(ent.getKey(), true), value);
             } else {
                 result.put(ent.getKey(), value);
             }

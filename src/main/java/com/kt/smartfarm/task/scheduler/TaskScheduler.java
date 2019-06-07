@@ -143,7 +143,7 @@ public class TaskScheduler {
 		if(SYSTEM_TYPE.equalsIgnoreCase("supervisor")){
 			List<HashMap<String,Object>> houseList = new ArrayList<>();
 			DateUtil dateUtil = new DateUtil();
-			String regDay = dateUtil.getCurrentDateString();		
+			String regDay = DateUtil.getCurrentDateString();
 			houseList = houseEnvService.getAllList();
 			for(int i=0; i<houseList.size(); i++){
 				if(houseList.get(i).get("latitude") != null && houseList.get(i).get("longitude") != null){
@@ -178,7 +178,7 @@ public class TaskScheduler {
 				        
 				        JSONObject json = new JSONObject(sb.toString());
 				        JSONObject body = json.getJSONObject("response").getJSONObject("body").getJSONObject("items").getJSONObject("item");
-				        hm.put("house_id", (Integer)houseList.get(i).get("id"));
+				        hm.put("house_id", houseList.get(i).get("id"));
 				        hm.put("sunrise", body.get("sunrise"));
 				        hm.put("sunset", body.get("sunset"));
 				        hm.put("loc_date", body.get("locdate").toString());
@@ -192,7 +192,7 @@ public class TaskScheduler {
 	}
 	
 	private String getBaseTime(String regTimeString) {
-		final int standardTime[] = {2,5,8,11,14,17,20,23};
+		final int[] standardTime = {2, 5, 8, 11, 14, 17, 20, 23};
 		String regTimeToString="";
 		int regTime = Integer.parseInt(regTimeString);		
 		int tempTime= 0;

@@ -152,9 +152,9 @@ public class ClassUtil  {
 	{
 		try {
 			if( value == null ) {
-				return (T)defaultValue;
+				return defaultValue;
 			}
-			return (T)type.cast(value);
+			return type.cast(value);
 		} catch(ClassCastException e)  {
 			return getT(value, type, defaultValue, e);
 		}

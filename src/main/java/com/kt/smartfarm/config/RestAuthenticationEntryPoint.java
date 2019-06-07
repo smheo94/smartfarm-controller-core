@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +31,7 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint
             Map<String, Object> data = new HashMap<>();
             data.put("timestamp", Calendar.getInstance().getTime());
             data.put("reason", "오류가 발생했습니다. 관리자에게 문의해 주세요");
-            response.getOutputStream().write(objectMapper.writeValueAsString(data).getBytes("UTF-8"));
+            response.getOutputStream().write(objectMapper.writeValueAsString(data).getBytes(StandardCharsets.UTF_8));
         } catch(Exception e) {
             response.getOutputStream().print("오류가 발생했습니다. 관리자에게 문의해 주세요");
         }

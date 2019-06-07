@@ -182,8 +182,8 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 	@Override
     public Integer syncToSmartfarm(HttpServletRequest request, Integer gsmKey) {
 		final Map<String, Object> gsmInfo = this.get(gsmKey, true, true);
-		List<Map<String,Object>> houseList = (List<Map<String,Object>>)gsmInfo.get("houseList");;
-		List<Map<String,Object>> controllerList = (List<Map<String,Object>>)gsmInfo.get("controllerList");;
+		List<Map<String,Object>> houseList = (List<Map<String,Object>>)gsmInfo.get("houseList");
+		List<Map<String,Object>> controllerList = (List<Map<String,Object>>)gsmInfo.get("controllerList");
 		final List<ControllerEnvVO> contorollerEnvList = controllerEnvService.controllerDeviceList(gsmKey);
 		if( contorollerEnvList != null ) {
 			contorollerEnvList.forEach(c -> {
@@ -257,7 +257,6 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 			restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
 
 			log.debug("sendPost : {} , {}, {}", gsmKey, uri, request.getMethod());
-			;
 			final ResponseEntity<ResponseResult> returnValue = restTemplate.exchange(uri, method, httpEntity, ResponseResult.class);
 			return returnValue;
 		} catch(Exception e ) {

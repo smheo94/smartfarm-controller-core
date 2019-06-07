@@ -77,10 +77,7 @@ public final class StringUtil  {
 
 	// Examine whether strings are empty.
 	public static boolean isNull( String str ) {
-		if ( str == null ) {
-			return true;
-		}
-		return false;
+		return str == null;
 	} // end isNull( String )
 
 
@@ -92,10 +89,7 @@ public final class StringUtil  {
 		if ( isNull( str ) ) {
 			return true;
 		}
-		if ( str.length() <= 0 ) {
-			return true;
-		}
-		return false;
+		return str.length() <= 0;
 	} // end isEmpty( String )
 
 
@@ -242,9 +236,9 @@ public final class StringUtil  {
     	if ( ip == null || ip.split("[.]").length != 4 ){
     		return ip;
     	}
-    		
 
-    	String arr[] = ip.split("[.]");
+
+		String[] arr = ip.split("[.]");
 
     	return String.format("%s.%s.***.***", arr[0], arr[1]);
     }
@@ -402,7 +396,7 @@ public final class StringUtil  {
     int srcSize = 0;
 //    Vector vResult = new Vector();
     int nCount = 0, nLastIndex = 0;
-    String returnValue[]=null;
+	  String[] returnValue = null;
     try
     {
       // The location of the " delim " located at the rear.
@@ -435,7 +429,7 @@ public final class StringUtil  {
         {
           nLastIndex = locSrc.indexOf(delim);
           returnValue[nCount] =locSrc.substring(0,nLastIndex);
-          locSrc = locSrc.substring(nLastIndex + delim.length(), locSrc.length());
+          locSrc = locSrc.substring(nLastIndex + delim.length());
           nCount ++;
         }
         returnValue[nCount]=locSrc;
@@ -475,7 +469,7 @@ public final class StringUtil  {
 	  {
 		  int rnd = (int)Math.round(Math.random()*1000) % str.length();
 
-		  sb.append(str.substring(rnd, rnd+1));
+		  sb.append(str, rnd, rnd+1);
 	  }
 	  return sb.toString();
   }
@@ -641,7 +635,7 @@ public final class StringUtil  {
 		String[] arr = str.split("[&]");
 		for(String nv : arr )
 		{
-			String nvs[] = nv.split("[=]");
+			String[] nvs = nv.split("[=]");
 			String key = nvs[0];
 			String val = "";
 			if ( nvs.length == 2 ){

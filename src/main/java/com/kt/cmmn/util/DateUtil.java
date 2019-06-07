@@ -71,7 +71,7 @@ public class DateUtil {
 		} else if( obj instanceof Long ) {
 			resultDate = new Date((Long)obj);
 		} else if(obj instanceof Double ) {
-			resultDate = new Date( Long.parseLong(((Double)obj).toString() ));
+			resultDate = new Date( Long.parseLong(obj.toString() ));
 		} else if(obj instanceof Date ) {
 			resultDate = (Date)obj;
 		} else {
@@ -612,7 +612,7 @@ public class DateUtil {
 	 * @exception Exception
 	 */
 	public static int yearsBetween(String from, String to, String format) {
-		return (int) (daysBetween(from, to, format) / 365);
+		return (daysBetween(from, to, format) / 365);
 	}
 
 	/**
@@ -1222,11 +1222,11 @@ public class DateUtil {
 		StringBuffer endTimeLo = new StringBuffer();
 		if (strStartTime.length() > strEndTime.length()) {
 			endTimeLo.append(strEndTime);
-			endTimeLo.append(sPad.substring(0,strStartTime.length() - strEndTime.length()));
+			endTimeLo.append(sPad, 0, strStartTime.length() - strEndTime.length());
 		}
 		if (strStartTime.length() < strEndTime.length()) {
 			startTimeLo.append(strStartTime);
-			startTimeLo.append(sPad.substring(0,strEndTime.length() - strStartTime.length()));
+			startTimeLo.append(sPad, 0, strEndTime.length() - strStartTime.length());
 		}
 		long startTime = Long.parseLong(startTimeLo.toString());
 		long endTime = Long.parseLong(endTimeLo.toString());

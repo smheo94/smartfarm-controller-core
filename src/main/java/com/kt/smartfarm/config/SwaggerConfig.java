@@ -73,7 +73,7 @@ public class SwaggerConfig extends WebMvcConfigurerAdapter {
 
     private List<SecurityContext> securityContexts() {
         List<SecurityContext> securityContexts = new ArrayList<>();
-        String paths[] = {"/env.*"};
+        String[] paths = {"/env.*"};
         for (String path: paths) {
             securityContexts.add(SecurityContext.builder()
                     .securityReferences(Arrays.asList(new SecurityReference("Authorization", scopes())))

@@ -64,12 +64,11 @@ public class AuthCheckServiceImpl extends EgovAbstractServiceImpl implements Aut
 		param.put("house_id", houseId);
 		List<HashMap<String, Object>> result = authCheckMapper.selectCheckAllowAuth(param);
 		if (result != null) {
-			Integer allowGsm = (Integer)ClassUtil.castToSomething(result.get(0).get("allow_gsm"), Integer.class);
-			Integer allowHouse = (Integer)ClassUtil.castToSomething( result.get(0).get("allow_house"), Integer.class);
+			Integer allowGsm = ClassUtil.castToSomething(result.get(0).get("allow_gsm"), Integer.class);
+			Integer allowHouse = ClassUtil.castToSomething( result.get(0).get("allow_house"), Integer.class);
 			if (gsmKey != null && allowGsm != 1) return false;
-			if (houseId != null && allowHouse != 1) return false;
-			return true;
-		}
+            return houseId == null || allowHouse == 1;
+        }
 		return false;
 	}
 	public String getAuthUserIdx() {

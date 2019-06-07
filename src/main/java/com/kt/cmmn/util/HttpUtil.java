@@ -8,6 +8,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
 import org.json.JSONObject;
@@ -42,7 +43,7 @@ public class HttpUtil {
 	}
 	
 	// API별 Connection 생성
-	private HttpURLConnection getRestAPiConnection(String controllerUrl, String method, String api, String body) throws MalformedURLException, IOException {
+	private HttpURLConnection getRestAPiConnection(String controllerUrl, String method, String api, String body) throws IOException {
 		URL url = new URL(controllerUrl+api );
 					
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -57,15 +58,15 @@ public class HttpUtil {
 		
 		if( body != null && body.length() > 0 ) {
 			OutputStream os = conn.getOutputStream();
-			os.write(body.getBytes("utf-8"));
+			os.write(body.getBytes(StandardCharsets.UTF_8));
 			os.flush();
 		} 
 		return conn;
 	}
 	
 	private String getRestApiResponseData(String result, HttpURLConnection conn)
-			throws UnsupportedEncodingException, IOException {
-		BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(),"UTF-8"));
+			throws IOException {
+		BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
 		String inputLine="";
 		String data ="";
 		StringBuffer response = new StringBuffer();

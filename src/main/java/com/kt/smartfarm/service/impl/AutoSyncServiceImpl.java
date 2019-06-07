@@ -74,10 +74,10 @@ public class AutoSyncServiceImpl extends EgovAbstractServiceImpl implements Auto
 				try {
 					HttpEntity httpEntity = new HttpEntity<String>(null, headers);
 					uri = UriComponentsBuilder.fromUri(uri).path(String.format("/env/control_logic_setting/%s", logicSettingVO.controlSettingId)).build(true).toUri();
-					ResponseEntity<ResponseResult> returnValue = restTemplate.exchange(uri, HttpMethod.DELETE.valueOf(request.getMethod()), httpEntity, ResponseResult.class);
+					ResponseEntity<ResponseResult> returnValue = restTemplate.exchange(uri, HttpMethod.valueOf(request.getMethod()), httpEntity, ResponseResult.class);
 					httpEntity = new HttpEntity<String>( objMapper.writeValueAsString(logicSettingVO), headers);
 					uri = UriComponentsBuilder.fromUri(uri).path(String.format("/env/control_logic_setting", logicSettingVO.controlSettingId)).build(true).toUri();
-					returnValue = restTemplate.exchange(uri, HttpMethod.POST.valueOf(request.getMethod()), httpEntity, ResponseResult.class);
+					returnValue = restTemplate.exchange(uri, HttpMethod.valueOf(request.getMethod()), httpEntity, ResponseResult.class);
 				} catch (JsonProcessingException e) {
 					log.error("autoSync Error : {}", e);
 					return 0;

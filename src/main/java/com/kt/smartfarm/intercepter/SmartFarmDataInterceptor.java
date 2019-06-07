@@ -124,8 +124,10 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
         ContentCachingResponseWrapper wrapper = WebUtils.getNativeResponse(response, ContentCachingResponseWrapper.class);
         HttpStatus responseStatus = HttpStatus.valueOf(response.getStatus());
         try {
-
-
+            if( isSmartfarmSystem ) {
+                //스마트팜에서 Post 필터가 필요 없음
+                return;
+            }
             if( responseStatus.is4xxClientError() || responseStatus.is5xxServerError() ) {
                 return;
             }
@@ -133,26 +135,21 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
             if(headerGsmKey == null){
             	headerGsmKey = response.getHeader(X_HEADER_GSM_KEY);	
             }
-
-            if( isSmartfarmSystem ) {
-                //스마트팜에서 Post 필터가 필요 없음
-                return;
-            } else if( headerGsmKey == null) {
-                if( (request.getMethod().equalsIgnoreCase(HttpMethod.POST.toString()) ||
-                    request.getMethod().equalsIgnoreCase(HttpMethod.DELETE.toString()) ||
-                    request.getMethod().equalsIgnoreCase(HttpMethod.PUT.toString()) )
-                    && (handler instanceof HandlerMethod) )  {
-                    LOG.warn("in HeaderGSMKEY NULL : {} , {}, {}, {}", headerGsmKey, request.getRequestURI(), request.getMethod(), handler);
-                }
-                //헤더가 없는경우 제어기로 내릴 수 없음
-                return;
-            }
-
             if (handler instanceof HandlerMethod) {
                 // there are cases where this handler isn't an instance of HandlerMethod, so the cast fails.
                 HandlerMethod handlerMethod = (HandlerMethod) handler;
                 if (handlerMethod.getMethod().getAnnotation(InterceptPost.class) != null ||
                         handlerMethod.getMethod().getAnnotation(InterceptPre.class) != null) {
+                    if( headerGsmKey == null) {
+                        if( (request.getMethod().equalsIgnoreCase(HttpMethod.POST.toString()) ||
+                                request.getMethod().equalsIgnoreCase(HttpMethod.DELETE.toString()) ||
+                                request.getMethod().equalsIgnoreCase(HttpMethod.PUT.toString()) )
+                                && (handler instanceof HandlerMethod) )  {
+                            LOG.warn("in HeaderGSMKEY NULL : {} , {}, {}, {}", headerGsmKey, request.getRequestURI(), request.getMethod(), handler);
+                        }
+                        //헤더가 없는경우 제어기로 내릴 수 없음
+                        return;
+                    }
                     System.out.printf("제어기에 데이터를 보냅니다.");
                     Integer gsmKey = Integer.valueOf(headerGsmKey);
                     ResponseEntity<ResponseResult> result = null;
@@ -236,9 +233,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
         final ResponseResult body = result.getBody();
         if( body != null ) {
             final HttpStatus resultStatus = HttpStatus.valueOf(body.status);
-            if( resultStatus.is4xxClientError() || resultStatus.is5xxServerError() ) {
-                return false;
-            }
+            return !resultStatus.is4xxClientError() && !resultStatus.is5xxServerError();
         }
         return true;
     }
@@ -265,7 +260,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
 
-        LOG.debug("Send Proxy Request : {} , {}, {}", gsmKey, uri, request.getMethod()); ;
+        LOG.debug("Send Proxy Request : {} , {}, {}", gsmKey, uri, request.getMethod());
         final ResponseEntity<ResponseResult> returnValue = restTemplate.exchange(uri, HttpMethod.valueOf(request.getMethod()), httpEntity, ResponseResult.class);
         return returnValue;
     }
