@@ -53,4 +53,6 @@ public interface DeviceEnvMapper {
 
 	Integer copyToNewGSM(@Param("from_gsm_key") Integer fromGsmKey, @Param("to_gsm_key") Integer toGsmKey );
 	Integer copyToNewGSMVDeviceEnv(@Param("from_gsm_key") Integer fromGsmKey, @Param("to_gsm_key") Integer toGsmKey );
+
+    Integer deleteDevice(Integer deviceId);
 }

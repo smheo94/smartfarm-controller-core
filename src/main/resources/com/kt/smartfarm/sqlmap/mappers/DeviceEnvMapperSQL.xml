@@ -8,7 +8,9 @@
 		<result column="id" javaType="Integer"/>		
 	</resultMap> -->
 
-
+	<delete id="deleteDevice">
+	delete FROM device WHERE id = #{deviceId}
+	</delete>
 	<insert id="insert" useGeneratedKeys="true" parameterType="deviceEnvVO">
 		INSERT INTO device (
 			gsm_key, device_type_id,device_type_idx, nickname, device_type_nickname, green_house_id, controller_id,  mode, modbus_address1, modbus_address2, modbus_address3

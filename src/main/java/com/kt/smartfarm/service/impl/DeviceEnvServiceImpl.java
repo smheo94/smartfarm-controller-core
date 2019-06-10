@@ -170,6 +170,7 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 	@Override
 	public VDeviceEnvVO updateVDeviceEnv(VDeviceEnvVO vo) {
 		try{
+			log.debug("updateVDeviceEnv :{} ", vo);
 			return deviceEnvMapper.updateVDeviceEnv(vo);
 		}catch(Exception e){
 			log.debug(e.getMessage());
@@ -180,7 +181,20 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 	@Override
 	public Integer deleteVDeviceEnv(Integer id) {
 		try{
+			log.debug("deleteVDeviceEnv :{} ", id);
 			return deviceEnvMapper.deleteVDeviceEnv(id);
+		}catch(Exception e){
+			log.debug(e.getMessage());
+			return null;
+		}
+	}
+
+
+	@Override
+	public Integer deleteDevice(Integer deviceId) {
+		try{
+			log.debug("Delete Device :{}", deviceId);
+			return deviceEnvMapper.deleteDevice(deviceId);
 		}catch(Exception e){
 			log.debug(e.getMessage());
 			return null;
@@ -189,6 +203,7 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 
 	@Override
 	public Integer copyToNewGSM(Integer fromGsmKey, Integer toGsmKey) {
+		log.debug("copyToNewGSM :{} --> {}", fromGsmKey, toGsmKey);
 		deviceEnvMapper.copyToNewGSM(fromGsmKey, toGsmKey);
 		return deviceEnvMapper.copyToNewGSMVDeviceEnv(fromGsmKey, toGsmKey);
 	}

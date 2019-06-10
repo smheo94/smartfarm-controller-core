@@ -24,6 +24,7 @@ import com.kt.smartfarm.service.*;
 import javax.annotation.Resource;
 
 import io.swagger.annotations.ApiOperation;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -223,6 +224,25 @@ public class DeviceEnvController {
 										   @RequestParam(value = "withVDeviceList", required = false) Boolean withVDeviceList){
 		try {
 			return new Result(deviceEnvService.getDevice(deviceId, withVDeviceList));
+		} catch(Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		}
+	}
+
+
+	/**
+	 * @description 장치조회
+	 * @param deviceId
+	 * @return
+	 */
+	@RequestMapping(value= "/{deviceId}", method = RequestMethod.DELETE)
+	@ResponseBody
+	public Result<DeviceEnvVO> deleteDevice(@PathVariable("deviceId") Integer deviceId, @Param("gsmKey") Integer gsmKey){
+		try {
+			if( !authCheckService.authCheck(gsmKey, null) ) {
+				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
+			}
+			return new Result(deviceEnvService.deleteDevice(deviceId));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}

@@ -28,4 +28,6 @@ public interface DeviceEnvService {
 	Integer deleteVDeviceEnv(Integer deviceId);
 
 	Integer copyToNewGSM(Integer fromGsmKey, Integer toGsmKey);
+
+	Integer deleteDevice(Integer deviceId);
 }
