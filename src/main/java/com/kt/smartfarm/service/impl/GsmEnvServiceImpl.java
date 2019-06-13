@@ -164,7 +164,9 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 
         //deviceEnvService.copyToNewGSMVDeviceEnv(fromGsmKey, toGsmKey);
         controlLogicSettingService.copyToNewGSM(fromGsmKey,toGsmKey);
-		return syncToSmartfarm(request, toGsmKey);
+		return HttpStatus.OK.value();
+		//20190613 권용식 부장 요청으로 싱크는 별개로 진행
+		//return syncToSmartfarm(request, toGsmKey);
     }
 
     private final String CONTROLLER_INSERT_URL = "/env/%s/controller/";
