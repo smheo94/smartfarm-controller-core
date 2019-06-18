@@ -13,6 +13,7 @@ public interface HouseEnvService {
 	HouseEnvVO update(HouseEnvVO house);
 	HashMap<String,Object>  get(Integer gsmKey, Integer greenHouseId, Boolean isSmartfarmSystem);
 	List<HashMap<String, Object>> list(Integer gsmKey, boolean all, boolean detail, Boolean isSmartfarmSystem);
+	List<HashMap<String, Object>> list(Integer gsmKey, boolean all, boolean detail, Boolean isSmartfarmSystem, Boolean isCCTVOnly);
 	List<HashMap<String,Object>> selectHouseTypeList();
 	List<ProductVO> selectProductList();
 	HashMap<String,Object> insertHouseDeviceMap(HashMap<String, Object> map);

@@ -51,6 +51,7 @@ public interface HouseEnvMapper {
 //	List<HashMap<String, Object>> getMappedDevice(Map<String, Object> map);
 	List<Integer> getMappedDevice(Map<String, Object> map);
 	List<HashMap<String, Object>> getMappedController(Map<String, Object> map);
+	List<HashMap<String, Object>> getNutrientController(Map<String, Object> map);
 	List<DeviceEnvVO> getHouseDeviceList(Integer houseId);
 	
 	HashMap<String, Object> insertCCTVSetting(CCTVSettingVO vo);

@@ -176,7 +176,21 @@
 		INNER JOIN green_house gh ON gh.id = mghd.green_house_id
 		WHERE gh.id = #{green_house_id} AND gh.gsm_key = #{gsm_key}
 	</select>
-	
+	<select id ="getNutrientController" resultType="map">
+		SELECT
+		controller.id,
+		controller.gsm_key as gsmKey,
+		controller.controller_info_id as controllerInfoId,
+		controller.controller_type as controllerType,
+		controller.ip,
+		controller.PORT,
+		controller.controller_status as controllerStatus,
+		controller.description
+		FROM controller
+		WHERE controller.gsm_key = #{gsm_key}
+		AND controller.controller_info_id >= 30 AND 40  > controller.controller_info_id;
+
+	</select>
 	
 	<select id ="getMappedController" resultType="map">
 		SELECT 

@@ -26,6 +26,7 @@ import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,15 +104,22 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 	}
 
 	@Override
-	public List<Map<String, Object>> list(boolean all,Integer userInfoId, Integer categoryId, String farmName, String authUserIdx, Boolean isSmartfarmSystem) {
+	public List<Map<String, Object>> list(boolean all,Integer userInfoId, Integer categoryId, String farmName, String authUserIdx, Boolean isSmartfarmSystem, Boolean isCCTVOnly) {
 		List<Map<String,Object>> gsmList = new ArrayList<>();
 		gsmList = gsmEnvMapper.getGsmList(null,userInfoId,categoryId,farmName, authUserIdx, isSmartfarmSystem);
 		for(Map<String,Object> gsm : gsmList){
 //			Integer gsmKey = (Integer)gsm.get("gsmKey");
 //			houseList = gsmEnvMapper.getHouseList(gsmKey);
 			Integer gsmKey = (Integer)gsm.get("gsmKey");
-			List<HashMap<String,Object>> houseList = houseEnvService.list(gsmKey, all, false, isSmartfarmSystem);
+			List<HashMap<String,Object>> houseList = houseEnvService.list(gsmKey, all, false, isSmartfarmSystem, isCCTVOnly);
+			if( isCCTVOnly && (houseList == null  || houseList.size() == 0 ))  {
+				//CCTV가 없으면 리스트를 줄 필요가 없음
+				continue;
+			}
 			gsm.put("houseList", houseList);			
+		}
+		if( isCCTVOnly )  {
+			return gsmList.stream().filter( g -> g.get("houseList") != null ).collect(Collectors.toList());
 		}
 		return gsmList;
 	}

@@ -225,14 +225,18 @@ public class GsmEnvController {
 			,@RequestParam(value = "userInfoId", required = false) Integer userInfoId
 			,@RequestParam(value = "categoryId", required = false) Integer categoryId
 			,@RequestParam(value = "farmName", required = false) String farmName
+			,@RequestParam(value = "hasCCTV", required = false) Boolean hasCCTVOnly
 			){
 		try {
 		    if( all == null ) {
                 all = true;
             }
+		    if( hasCCTVOnly == null ) {
+		    	hasCCTVOnly = false;
+			}
 			String authUserIdx = authCheckService.getAuthUserIdx();
 		    Boolean isSmartfarm = config.isSmartfarmSystem();
-			return new Result(gsmEnvService.list(all,userInfoId,categoryId,farmName, authUserIdx, isSmartfarm));
+			return new Result(gsmEnvService.list(all,userInfoId,categoryId,farmName, authUserIdx, isSmartfarm, hasCCTVOnly));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}

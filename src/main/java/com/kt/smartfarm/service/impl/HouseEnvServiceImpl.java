@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,7 +81,6 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 
 	@Override
 	public HashMap<String,Object> get(Integer gsmKey, Integer greenHouseId, Boolean isSmartfarmSystem) {
-		
 		HashMap<String,Object> result = new HashMap<String, Object>();
 		List<HashMap<String,Object>> houseDetail= new ArrayList<HashMap<String,Object>>();
 		List<HashMap<String,Object>> controllerList = new ArrayList<HashMap<String,Object>>();		
@@ -110,6 +110,10 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 		
 		map.put("deviceIds", deviceIds);
 		controllerList = houseEnvMapper.getMappedController(map);
+		List<HashMap<String,Object>> nutrientControllerList  = houseEnvMapper.getNutrientController(map);
+		if(  nutrientControllerList != null && nutrientControllerList.size() > 0 ) {
+			controllerList.addAll(nutrientControllerList);
+		}
 		List<ControlLogicSettingVO> logicList = controlLogicMapper.getControlLogicSetting(gsmKey, greenHouseId, null);
 //		result.put("deviceList", deviceList);
 		result.put("controllerList", controllerList);
@@ -118,8 +122,10 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 		
 		return result;
 	}
-
 	public List<HashMap<String, Object>> list(Integer gsmKey, boolean all, boolean detail, Boolean isSmartfarmSystem) {
+		return list(gsmKey, all, detail, isSmartfarmSystem, false);
+	}
+	public List<HashMap<String, Object>> list(Integer gsmKey, boolean all, boolean detail, Boolean isSmartfarmSystem, Boolean isCCTVOnly) {
 		List<HashMap<String,Object>> result = new ArrayList<HashMap<String,Object>>();
 		List<HashMap<String,Object>> controllerList = new ArrayList<HashMap<String,Object>>();
 //		List<HashMap<String,Object>> cctvList = new ArrayList<HashMap<String,Object>>();
@@ -130,7 +136,6 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 		List<HashMap<String,Object>> cctv = new ArrayList<>(); 
 		if(gsmKey == null){
 			result = houseEnvMapper.getHouseDetail(map);
-			return result;
 		}else{
 			map.put("gsm_key",  gsmKey);
 			result = houseEnvMapper.getHouseDetail(map);
@@ -151,25 +156,35 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 							controllerList.get(j).put("deviceList", mappedDeviceList);
 						}
 					}
+					List<HashMap<String,Object>> nutrientControllerList  = houseEnvMapper.getNutrientController(map);
+					if(  nutrientControllerList != null && nutrientControllerList.size() > 0 ) {
+						controllerList.addAll(nutrientControllerList);
+					}
 					houseMap.put("controllerList", controllerList);
 				}
+
 				if(detail ) {
-					Integer houseId = (Integer)houseMap.get("id");
-					if( isSmartfarmSystem == false) {
-						cctv = houseEnvMapper.getCctvList(houseId);
-					}
-					if(cctv !=null){					
-						houseMap.put("cctvList",cctv);	
-					}
 					sunriseInfo = houseEnvMapper.getSunriseInfo(map);
 					if(sunriseInfo!=null){
 						houseMap.put("sunriseInfo", sunriseInfo);
 					}
 				}
+				if( isCCTVOnly || detail ) {
+					Integer houseId = (Integer)houseMap.get("id");
+					if( isSmartfarmSystem == false) {
+						cctv = houseEnvMapper.getCctvList(houseId);
+					}
+					if(cctv !=null && cctv.size() > 0 ){
+						houseMap.put("cctvList",cctv);
+					}
+				}
 			}
-
-			return result;
+			if( isCCTVOnly && result != null && result.size() > 0 ) {
+			return result.stream().filter( h ->  { List cctvList =  (List)h.get("cctvList"); return cctvList != null && cctvList.size() > 0; })
+					.collect(Collectors.toList());
+			}
 		}
+		return result;
 	}
 
 	@Override

@@ -19,7 +19,7 @@ public interface GsmEnvService {
 
 	Integer update(GsmEnvVO gsmInfo);
 
-	List<Map<String, Object>> list(boolean all, Integer userInfoId, Integer categoryId, String farmName, String authUserIdx, Boolean isSmartfarmSystem);
+	List<Map<String, Object>> list(boolean all, Integer userInfoId, Integer categoryId, String farmName, String authUserIdx, Boolean isSmartfarmSystem, Boolean hasCCTVOnly);
 
 	List<GsmEnvVO> notMappedList();
 
