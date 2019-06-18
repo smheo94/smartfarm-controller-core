@@ -20,12 +20,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import egovframework.customize.service.CCTVSettingVO;
-import egovframework.customize.service.DeviceEnvVO;
-import egovframework.customize.service.DeviceTypeVO;
-import egovframework.customize.service.HouseEnvVO;
-import egovframework.customize.service.ProductMethodVO;
-import egovframework.customize.service.ProductVO;
+import com.kt.smartfarm.service.CCTVSettingVO;
+import com.kt.smartfarm.service.DeviceEnvVO;
+import com.kt.smartfarm.service.DeviceTypeVO;
+import com.kt.smartfarm.service.HouseEnvVO;
+import com.kt.smartfarm.service.ProductVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 
 import org.apache.ibatis.annotations.Param;
@@ -52,6 +51,7 @@ public interface HouseEnvMapper {
 //	List<HashMap<String, Object>> getMappedDevice(Map<String, Object> map);
 	List<Integer> getMappedDevice(Map<String, Object> map);
 	List<HashMap<String, Object>> getMappedController(Map<String, Object> map);
+	List<HashMap<String, Object>> getNutrientController(Map<String, Object> map);
 	List<DeviceEnvVO> getHouseDeviceList(Integer houseId);
 	
 	HashMap<String, Object> insertCCTVSetting(CCTVSettingVO vo);

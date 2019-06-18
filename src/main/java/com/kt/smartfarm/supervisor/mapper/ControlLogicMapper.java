@@ -17,10 +17,9 @@ package com.kt.smartfarm.supervisor.mapper;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import egovframework.customize.service.ControlLogicDeviceVO;
-import egovframework.customize.service.ControlLogicVO;
+import com.kt.smartfarm.service.ControlLogicDeviceVO;
+import com.kt.smartfarm.service.ControlLogicVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

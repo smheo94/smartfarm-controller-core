@@ -15,7 +15,6 @@
  */
 package com.kt.smartfarm.supervisor.mapper;
 
-import egovframework.customize.service.CategoryEnvVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import org.springframework.stereotype.Repository;
 

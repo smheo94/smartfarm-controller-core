@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kt.smartfarm.supervisor.mapper.CategoryEnvMapper">
+	
+	
+	<!-- <resultMap id="controllerEnv"
+		type="ControllerEnvVO">
+		<result property="id" column="id" javaType="Integer"/>
+	</resultMap> -->
+
+	<insert id="insert" useGeneratedKeys="true" parameterType="categoryEnvVO">
+		INSERT INTO gsm_category
+		(id, name, level, pid, order)
+		VALUES (#{id}, #{name}, #{level}, #{pid},#{order});
+		<selectKey keyProperty="id" resultType="int">
+		SELECT LAST_INSERT_ID() AS id;
+		</selectKey>
+	</insert>
+	
+	<update id="update" parameterType="categoryEnvVO">
+		UPDATE gsm_category
+		SET
+		<if test="name != null">name = #{name},</if>		
+		<if test="level != null">level = #{level},</if>	
+		<if test="pid != null">pid = #{pid},</if>		
+		<if test="order != null">order = #{order}</if>
+		WHERE id = #{id};
+	</update>
+	
+	<delete id="delete">
+		DELETE
+		FROM gsm_category
+		WHERE id = #{id};
+	</delete>
+	
+	<select id="list" resultType="categoryEnvVO">
+		SELECT id, name, level, pid, order
+		FROM gsm_category
+		;
+	</select>
+	
+	<select id="selectCategoryDetail" resultType="categoryEnvVO" parameterType="map">
+		SELECT id, name, level, pid, order
+		FROM gsm_category		
+		WHERE id = #{category_id}
+		;
+	</select>
+</mapper>
