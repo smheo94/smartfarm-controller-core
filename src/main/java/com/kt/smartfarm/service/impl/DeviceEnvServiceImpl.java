@@ -17,8 +17,11 @@ import com.kt.smartfarm.service.DeviceEnvVO;
 import com.kt.smartfarm.service.DeviceTypeVO;
 import com.kt.smartfarm.service.VDeviceEnvVO;
 import com.kt.smartfarm.service.VDeviceInfoVO;
+import com.mysql.jdbc.MysqlErrorNumbers;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,15 +47,32 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 		try{
             log.info("Insert List : {}", device);
 			for(DeviceEnvVO vo :device){
-			    log.info("Insert Device : {}", vo);
-				deviceEnvMapper.insert(vo);
-				if(vo.getRelationDeviceList() != null){
-					for(VDeviceEnvVO vDevice: vo.getRelationDeviceList()){
-						vDevice.setParentDeviceId(vo.getId());
-						deviceEnvMapper.insertVDeviceEnv(vDevice);
-					}	
+				log.info("Insert Device : {}", vo);
+				try {
+					deviceEnvMapper.insert(vo);
+				} catch (Exception se) {
+					if( se instanceof MySQLIntegrityConstraintViolationException ) {
+						if (((MySQLIntegrityConstraintViolationException)se).getErrorCode() == MysqlErrorNumbers.ER_DUP_ENTRY) {
+							log.warn("중복 오류 발생 : {}", se.getMessage());
+							continue;
+						}
+					}
 				}
-				
+				if (vo.getRelationDeviceList() != null) {
+					for (VDeviceEnvVO vDevice : vo.getRelationDeviceList()) {
+						vDevice.setParentDeviceId(vo.getId());
+						try {
+							deviceEnvMapper.insertVDeviceEnv(vDevice);
+						} catch (Exception se) {
+							if (se instanceof MySQLIntegrityConstraintViolationException) {
+								if (((MySQLIntegrityConstraintViolationException) se).getErrorCode() == MysqlErrorNumbers.ER_DUP_ENTRY) {
+									log.warn("중복 오류 발생 : {}", se.getMessage());
+									continue;
+								}
+							}
+						}
+					}
+				}
 			}			
 		}catch(Exception e){
 			log.debug(e.getMessage());

@@ -129,7 +129,7 @@
 		FROM house_diary as hd		
 		WHERE hd.id = #{id}					
 	</select>
-	
+
 	<select id="getHouseDiaryFile" parameterType="map" resultType="map">
 		SELECT
 			file_name,
