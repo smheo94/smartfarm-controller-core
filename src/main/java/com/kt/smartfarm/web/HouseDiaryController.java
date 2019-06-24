@@ -16,10 +16,7 @@
 package com.kt.smartfarm.web;
 
 import com.kt.cmmn.util.Result;
-import com.kt.smartfarm.service.AuthCheckService;
-import com.kt.smartfarm.service.HouseCropsDiaryVO;
-import com.kt.smartfarm.service.HouseDiaryService;
-import com.kt.smartfarm.service.HouseDiaryVO;
+import com.kt.smartfarm.service.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /*
  * mgrEnv
@@ -87,6 +85,19 @@ public class HouseDiaryController {
 			return new Result(houseDiaryService.insertDiaryFile(contentType,id,file));
 		}catch(Exception e){
 			
+			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
+
+
+	@RequestMapping(value= "/diaryFile", method = RequestMethod.DELETE, consumes = { "*/*" })
+	@ResponseBody
+	public Result insertDiaryFile(@RequestParam("content_type") String contentType, @RequestParam("id") Integer id,
+								  @RequestBody FileIdxListVO fileIdList){
+		try{
+			return new Result(houseDiaryService.deleteDiaryFileList(contentType,id,fileIdList.fileIdxList));
+		}catch(Exception e){
+
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
@@ -247,7 +258,7 @@ public class HouseDiaryController {
 	
 	/**
 	 * @description 사진일지 리스트 
-	 * @param id
+	 * @param houseId
 	 * @return
 	 */
 	@RequestMapping(value= "/imageDiary/{houseId}", method = RequestMethod.GET)
