@@ -251,7 +251,7 @@
 <!--		FROM house_diary_file-->
 <!--		WHERE house_diary_idx = #{id};-->
 <!--	</delete>-->
-		
+
 	
 	
 	<insert id="insertCropsDiary" useGeneratedKeys="true" parameterType="cropsDiaryVO">
@@ -316,7 +316,7 @@
 <!--		FROM crops_diary_file-->
 <!--		WHERE crops_diary_idx = #{id};-->
 <!--	</delete>-->
-	
+
 	<!-- <select id="getMonthlyCropsDiaryList" parameterType="map" resultType="map">
 		SELECT 
 			cd.id, 

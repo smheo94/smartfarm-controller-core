@@ -48,6 +48,17 @@ public class DeviceEnvVO {
     String deviceTypeDescription;
     String kind;
     String dcac;
+    String opmodeError;
+	String valueExchange;
+
+	Integer roundNumber;
+	String topicGroup;
+	Double resetPoint;
+	Integer accumM;
+	Integer accumH;
+	Integer accumD;
+	Integer opTime;
+	Integer valueType;
 
 	List<VDeviceEnvVO> relationDeviceList;
 
