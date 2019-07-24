@@ -1,8 +1,11 @@
 package com.kt.cmmn.util;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -1459,5 +1462,134 @@ public class DateUtil {
 		return createDate(Integer.parseInt(date.substring(0, 4)),
 				Integer.parseInt(date.substring(4, 6)),
 				Integer.parseInt(date.substring(6, 8)));
+	}
+
+
+
+	public static String getDateStrOnly(long date) {
+		return getDateStrOnly(new Date(date));
+	}
+
+	public static String getDateStrOnly(Date date) {
+		if (date == null)
+			return "";
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		return sdf.format(date);
+	}
+
+	public static String getTimeStrOnly(long date) {
+		return getTimeStrOnly(new Date(date));
+	}
+
+	public static String getTimeStrOnly(Date date) {
+		if (date == null)
+			return "";
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+		return sdf.format(date);
+	}
+
+	public static Date getDateFromStr(String dateTimeStr) {
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat(GeneralDateTimeFormat);
+			return sdf.parse(dateTimeStr);
+		} catch (Exception e) {
+			//e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static Date getDateFromStr(String dateTimeStr, String formatString) {
+		try {
+			if(dateTimeStr !=null && formatString != null && dateTimeStr.length() > formatString.length()) {
+				dateTimeStr = dateTimeStr.substring(0, formatString.length());
+			}
+			if( dateTimeStr != null ) {
+				SimpleDateFormat sdf = new SimpleDateFormat(formatString);
+				return sdf.parse(dateTimeStr);
+			}
+		} catch (Exception e) {
+			// e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static long getCurrentDateTime() {
+		//return System.nanoTime() / 1000000;
+		return System.currentTimeMillis();
+	}
+
+	/*
+	 * Windows 용 // Linux 는 따로 만들어야 함
+	 */
+	public static boolean setLocalTime(Date newTime, int leastInterval) {
+		long subtime = Calendar.getInstance().getTime().getTime() - newTime.getTime();
+		if (subtime > leastInterval || subtime < (0 - leastInterval)) {
+			try {
+				// String output, err;
+				String dateStr = getDateStrOnly(newTime);
+				String timeStr = getTimeStrOnly(newTime);
+				String[] cmdDate = { "cmd.exe", "/c", "date", dateStr };
+				String[] cmdTime = { "cmd.exe", "/c", "time", timeStr };
+				Runtime.getRuntime().exec(cmdDate);
+				Runtime.getRuntime().exec(cmdTime);
+			} catch (IOException e1) {
+				// e1.printStackTrace();
+				return false;
+			}
+			return true;
+		}
+		return true;
+	}
+
+
+	public static Date getDateHourOnly(Date date) {
+		return new Date( (date.getTime() / (60 * 60000)) * (60 * 60000) );
+	}
+
+	public static Date getDateHourOnly() {
+		Calendar cal = Calendar.getInstance();
+		return new Date( (cal.getTime().getTime() / (60 * 60000)) * (60 * 60000) );
+	}
+
+	public static Date getDateMinuteTimeOnly(Date date) {
+		return new Date( date.getTime() / 60000 * 60000 );
+	}
+
+	public static Date getDateMinuteTimeOnly() {
+		Calendar cal = Calendar.getInstance();
+		return new Date(cal.getTime().getTime() / 60000 * 60000 );
+	}
+
+	public static Date getDateOnly(Date date) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		return cal.getTime();
+	}
+
+	public static Date getDateOnly() {
+		return getDateOnly( new Date(getCurrentDateTime()) );
+	}
+
+	public static Date getMonthOnly(Date date) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.set(Calendar.DAY_OF_MONTH, 1);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		return cal.getTime();
+	}
+	public static Date getMonthOnly() {
+		return getMonthOnly( new Date(getCurrentDateTime()) );
+	}
+
+	public static Date localDateTimeToDate(LocalDateTime dateTime) {
+		return Date.from(dateTime.atZone(ZoneId.systemDefault())
+				.toInstant());
 	}
 }

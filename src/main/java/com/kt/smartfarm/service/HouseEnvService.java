@@ -28,7 +28,7 @@ public interface HouseEnvService {
 	List<HashMap<String,Object>> groundDeviceList(Integer houseId);
 
 	// CCTV
-	HashMap<String, Object> insertCctv(CCTVSettingVO cctv);
+	Integer insertCctv(CCTVSettingVO cctv);
 	Integer deleteCctv(Integer id);
 	Integer updateCctv(CCTVSettingVO cctv);
 	List<HashMap<String, Object>> getCctvsByHouseId(Integer houseId);

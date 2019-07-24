@@ -12,6 +12,7 @@
  */
 package com.kt.smartfarm.service.impl;
 
+import com.kt.cmmn.util.SunriseSunset;
 import com.kt.smartfarm.service.HouseEnvVO;
 import com.kt.smartfarm.service.ProductVO;
 import com.kt.smartfarm.service.CCTVSettingVO;
@@ -84,7 +85,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 		HashMap<String,Object> result = new HashMap<String, Object>();
 		List<HashMap<String,Object>> houseDetail= new ArrayList<HashMap<String,Object>>();
 		List<HashMap<String,Object>> controllerList = new ArrayList<HashMap<String,Object>>();		
-		List<HashMap<String,Object>> cctvList = new ArrayList<HashMap<String,Object>>();
+
 		HashMap<String,Object> sunriseInfo = new HashMap<>();
 		List<Integer> deviceIds = new ArrayList<Integer>();		
 		Map<String, Object> map = new HashMap<>();
@@ -93,18 +94,27 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 		map.put("green_house_id",  greenHouseId);
 		
 		houseDetail = houseEnvMapper.getHouseDetail(map);
+
 		for(int i=0; i<houseDetail.size();i++){
-			Integer houseId = (Integer)houseDetail.get(i).get("id");
+			List<HashMap<String,Object>> cctvList = new ArrayList<HashMap<String,Object>>();
+			Map<String,Object> houseDetailMap = houseDetail.get(i);
+			Integer houseId = (Integer)houseDetailMap.get("id");
 			if( isSmartfarmSystem == false) {
 				cctvList = houseEnvMapper.getCctvList(houseId);
 			}
-			if (cctvList != null) {
-					houseDetail.get(i).put("cctvList", cctvList);
+			houseDetailMap.put("cctvList", cctvList);
+			Double latitude = (Double)houseDetailMap.get("latitude");
+			Double longitude = (Double)houseDetailMap.get("longitude");
+			SunriseSunset sunriseSunset =  SunriseSunset.SUNRIZESUNSET;
+			if( latitude != null && longitude != null) {
+				sunriseSunset = new SunriseSunset(latitude, longitude);
+
 			}
-			sunriseInfo = houseEnvMapper.getSunriseInfo(map);
-			if(sunriseInfo!=null){
-				houseDetail.get(i).put("sunriseInfo", sunriseInfo);
-			}
+			houseDetailMap.put("sunriseInfo", sunriseSunset.getSunriseSunSetMap());
+//			sunriseInfo = houseEnvMapper.getSunriseInfo(map);
+//			if(sunriseInfo!=null){
+//				houseDetailMap.put("sunriseInfo", sunriseInfo);
+//			}
 		}
 		deviceIds = houseEnvMapper.getMappedDevice(map);
 		
@@ -127,13 +137,9 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 	}
 	public List<HashMap<String, Object>> list(Integer gsmKey, boolean all, boolean detail, Boolean isSmartfarmSystem, Boolean isCCTVOnly) {
 		List<HashMap<String,Object>> result = new ArrayList<HashMap<String,Object>>();
-		List<HashMap<String,Object>> controllerList = new ArrayList<HashMap<String,Object>>();
-//		List<HashMap<String,Object>> cctvList = new ArrayList<HashMap<String,Object>>();
-		List<DeviceEnvVO> mappedDeviceList;
 		List<Integer> deviceIds = new ArrayList<Integer>();
 		Map<String, Object> map = new HashMap<>();
 		HashMap<String,Object> sunriseInfo = new HashMap<>();
-		List<HashMap<String,Object>> cctv = new ArrayList<>(); 
 		if(gsmKey == null){
 			result = houseEnvMapper.getHouseDetail(map);
 		}else{
@@ -141,6 +147,9 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 			result = houseEnvMapper.getHouseDetail(map);
 
 			for(int i=0; i<result.size(); i++){
+				List<HashMap<String,Object>> controllerList = new ArrayList<HashMap<String,Object>>();
+				List<HashMap<String,Object>> cctv = new ArrayList<>();
+				List<DeviceEnvVO> mappedDeviceList = new ArrayList<>();
 				final HashMap<String, Object> houseMap = result.get(i);
 				map.put("green_house_id",houseMap.get("id"));
 				deviceIds = houseEnvMapper.getMappedDevice(map);
@@ -158,25 +167,31 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 					}
 					List<HashMap<String,Object>> nutrientControllerList  = houseEnvMapper.getNutrientController(map);
 					if(  nutrientControllerList != null && nutrientControllerList.size() > 0 ) {
+						nutrientControllerList.forEach( c -> c.put("deviceList", new ArrayList()));
 						controllerList.addAll(nutrientControllerList);
 					}
 					houseMap.put("controllerList", controllerList);
 				}
 
 				if(detail ) {
-					sunriseInfo = houseEnvMapper.getSunriseInfo(map);
-					if(sunriseInfo!=null){
-						houseMap.put("sunriseInfo", sunriseInfo);
+					Double latitude = (Double)houseMap.get("latitude");
+					Double longitude = (Double)houseMap.get("longitude");
+					SunriseSunset sunriseSunset =  SunriseSunset.SUNRIZESUNSET;
+					if( latitude != null && longitude != null) {
+						sunriseSunset = new SunriseSunset(latitude, longitude);
 					}
+					houseMap.put("sunriseInfo", sunriseSunset.getSunriseSunSetMap());
+//					sunriseInfo = houseEnvMapper.getSunriseInfo(map);
+//					if(sunriseInfo!=null){
+//						houseMap.put("sunriseInfo", sunriseInfo);
+//					}
 				}
 				if( isCCTVOnly || detail ) {
 					Integer houseId = (Integer)houseMap.get("id");
 					if( isSmartfarmSystem == false) {
 						cctv = houseEnvMapper.getCctvList(houseId);
 					}
-					if(cctv !=null && cctv.size() > 0 ){
-						houseMap.put("cctvList",cctv);
-					}
+					houseMap.put("cctvList",cctv);
 				}
 			}
 			if( isCCTVOnly && result != null && result.size() > 0 ) {
@@ -366,7 +381,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 	}
 	
 	@Override
-	public HashMap<String, Object> insertCctv(CCTVSettingVO cctv) {
+	public Integer insertCctv(CCTVSettingVO cctv) {
 		return houseEnvMapper.insertCCTVSetting(cctv);
 	}
 

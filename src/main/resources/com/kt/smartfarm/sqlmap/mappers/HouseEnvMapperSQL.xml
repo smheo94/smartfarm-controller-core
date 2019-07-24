@@ -246,8 +246,8 @@
            ( house_id, cctv_name, cctv_uid, cctv_pwd, cctv_ws_url, cctv_rtsp_url, is_rtsp_play, wowza_id)
 		VALUES(
 			#{houseId},#{cctvName},#{cctvUid},#{cctvPwd},#{cctvWsUrl},#{cctvRtspUrl},
-			IF(#{isRtspPlay} = 'true', 1, IF( #{isRtspPlay} = 'false' , 0, #{isRtspPlay})),
-			#{wowzaId}
+			IF( #{isRtspPlay} IS NULL, 0, IF(#{isRtspPlay} = 'true', 1, IF( #{isRtspPlay} = 'false' , 0, #{isRtspPlay}))),
+			IF( #{wowzaId} IS NULL , 1, #{wowzaId})
 		)
 		<selectKey keyProperty="id" resultType="int">
 			SELECT LAST_INSERT_ID() AS id;
