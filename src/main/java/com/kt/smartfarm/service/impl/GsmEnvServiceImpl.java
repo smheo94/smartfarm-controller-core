@@ -105,8 +105,7 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 
 	@Override
 	public List<Map<String, Object>> list(boolean all,Integer userInfoId, Integer categoryId, String farmName, String authUserIdx, Boolean isSmartfarmSystem, Boolean isCCTVOnly) {
-		List<Map<String,Object>> gsmList = new ArrayList<>();
-		gsmList = gsmEnvMapper.getGsmList(null,userInfoId,categoryId,farmName, authUserIdx, isSmartfarmSystem);
+		List<Map<String,Object>> gsmList = gsmEnvMapper.getGsmList(null,userInfoId,categoryId,farmName, authUserIdx, isSmartfarmSystem);
 		for(Map<String,Object> gsm : gsmList){
 //			Integer gsmKey = (Integer)gsm.get("gsmKey");
 //			houseList = gsmEnvMapper.getHouseList(gsmKey);
@@ -193,7 +192,7 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
     public Integer syncToSmartfarm(HttpServletRequest request, Integer gsmKey) {
 		final Map<String, Object> gsmInfo = this.get(gsmKey, true, true);
 		List<Map<String,Object>> houseList = (List<Map<String,Object>>)gsmInfo.get("houseList");
-		List<Map<String,Object>> controllerList = (List<Map<String,Object>>)gsmInfo.get("controllerList");
+		//List<Map<String,Object>> controllerList = (List<Map<String,Object>>)gsmInfo.get("controllerList");
 		final List<ControllerEnvVO> contorollerEnvList = controllerEnvService.controllerDeviceList(gsmKey);
 		if( contorollerEnvList != null ) {
 			contorollerEnvList.forEach(c -> {

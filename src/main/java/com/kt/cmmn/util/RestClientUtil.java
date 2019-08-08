@@ -19,16 +19,22 @@ public class RestClientUtil {
             new ParameterizedTypeReference<HashMap<String, Object>>() {};
     private static ResponseEntity<HashMap<String, Object>> restTemplatePost(RestTemplate client , String url, HttpMethod method, Map<String, Object> data,
                                                                             boolean toCamel) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        if( data != null  ) {
-            if (toCamel) {
-                data = MapUtils.camelizeMap(data);
+        ResponseEntity<HashMap<String, Object>> result = null;
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            if (data != null) {
+                if (toCamel && data instanceof Map) {
+                    data = MapUtils.camelizeMap((Map) data);
+                }
             }
+            HttpEntity param = new HttpEntity<>(data, headers);
+            result = client.exchange(url, method, param, hashmapResponseType);
+        } catch(Exception e) {
+            log.warn("RestClient Error : {}, {}, {}", url, method, e );
         }
-        HttpEntity<Map<String,Object>> param = new HttpEntity<>(data, headers);
-        ResponseEntity<HashMap<String, Object> > result = client.exchange(url, method, param, hashmapResponseType);
         return result;
+
     }
 
     public static ResponseEntity<HashMap<String, Object>> post(String url, Map<String, Object> data, boolean toCamel) {

@@ -82,11 +82,11 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 	@Override
 	public HashMap<String,Object> get(Integer gsmKey, Integer greenHouseId, Boolean isSmartfarmSystem) {
 		HashMap<String,Object> result = new HashMap<String, Object>();
-		List<HashMap<String,Object>> houseDetail= new ArrayList<HashMap<String,Object>>();
-		List<HashMap<String,Object>> controllerList = new ArrayList<HashMap<String,Object>>();		
+		List<HashMap<String,Object>> houseDetail= null;
+		List<HashMap<String,Object>> controllerList = null;
 		List<HashMap<String,Object>> cctvList = new ArrayList<HashMap<String,Object>>();
-		HashMap<String,Object> sunriseInfo = new HashMap<>();
-		List<Integer> deviceIds = new ArrayList<Integer>();		
+		HashMap<String,Object> sunriseInfo = null;
+		List<Integer> deviceIds = null;
 		Map<String, Object> map = new HashMap<>();
 		
 		map.put("gsm_key",  gsmKey);
@@ -126,13 +126,11 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 		return list(gsmKey, all, detail, isSmartfarmSystem, false);
 	}
 	public List<HashMap<String, Object>> list(Integer gsmKey, boolean all, boolean detail, Boolean isSmartfarmSystem, Boolean isCCTVOnly) {
-		List<HashMap<String,Object>> result = new ArrayList<HashMap<String,Object>>();
+		List<HashMap<String,Object>> result = null;
 		List<HashMap<String,Object>> controllerList = new ArrayList<HashMap<String,Object>>();
 //		List<HashMap<String,Object>> cctvList = new ArrayList<HashMap<String,Object>>();
 		List<DeviceEnvVO> mappedDeviceList;
-		List<Integer> deviceIds = new ArrayList<Integer>();
 		Map<String, Object> map = new HashMap<>();
-		HashMap<String,Object> sunriseInfo = new HashMap<>();
 		List<HashMap<String,Object>> cctv = new ArrayList<>(); 
 		if(gsmKey == null){
 			result = houseEnvMapper.getHouseDetail(map);
@@ -143,7 +141,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 			for(int i=0; i<result.size(); i++){
 				final HashMap<String, Object> houseMap = result.get(i);
 				map.put("green_house_id",houseMap.get("id"));
-				deviceIds = houseEnvMapper.getMappedDevice(map);
+				List<Integer> deviceIds  = houseEnvMapper.getMappedDevice(map);
 				houseMap.put("selectedDeviceList", deviceIds);
 				if( all ) {
 					map.put("deviceIds", deviceIds);
@@ -164,7 +162,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 				}
 
 				if(detail ) {
-					sunriseInfo = houseEnvMapper.getSunriseInfo(map);
+					HashMap<String,Object> sunriseInfo  = houseEnvMapper.getSunriseInfo(map);
 					if(sunriseInfo!=null){
 						houseMap.put("sunriseInfo", sunriseInfo);
 					}
