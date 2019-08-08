@@ -38,6 +38,7 @@ public class ControlLogicSettingVO {
 	public Integer preOrderSettingId;
 	public Object sensorData;
 	public Integer defaultPeriodSize;
+	public Integer viewOrder;
 	public List<ControlLogicSettingCheckConditionVO> checkConditionList;
 	public List<ControlLogicSettingDeviceVO> deviceList;
 

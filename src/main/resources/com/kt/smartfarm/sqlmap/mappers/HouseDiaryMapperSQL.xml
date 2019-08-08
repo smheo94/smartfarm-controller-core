@@ -25,11 +25,11 @@
 	</insert>
 
 
-	<select id="selectHouseDiaryFile" resultType="houseDiaryVO">
-		SELECT house_diary_idx, file_name, update_date
-		FROM house_diary_file
-		WHERE house_diary_idx = #{id} AND file_name = #{fileName};
-	</select>
+<!--	<select id="selectHouseDiaryFile" resultType="houseDiaryVO">-->
+<!--		SELECT house_diary_idx, file_name, update_date-->
+<!--		FROM house_diary_file-->
+<!--		WHERE house_diary_idx = #{id} AND file_name = #{fileName};-->
+<!--	</select>-->
 
 
 	<insert id="insertCropsDiaryFile" parameterType="cropsDiaryVO">
@@ -60,29 +60,29 @@
 	</update>
 
 
-	<select id="selectCropsDiaryFile" resultType="cropsDiaryVO">
-		SELECT crops_diary_idx, file_name, update_date
-		FROM crops_diary_file
-		WHERE crops_diary_idx = #{id} AND file_name = #{fileName};
-	</select>
+<!--	<select id="selectCropsDiaryFile" resultType="cropsDiaryVO">-->
+<!--		SELECT crops_diary_idx, file_name, update_date-->
+<!--		FROM crops_diary_file-->
+<!--		WHERE crops_diary_idx = #{id} AND file_name = #{fileName};-->
+<!--	</select>-->
 
-	<update id="updateHouseDiaryFile" parameterType="houseDiaryVO">
-		UPDATE house_diary_file
-		SET
-			file_name = #{fileName},
-			file = #{file},
-			update_date = NOW()
-		WHERE house_diary_idx=#{id}
-	</update>
+<!--	<update id="updateHouseDiaryFile" parameterType="houseDiaryVO">-->
+<!--		UPDATE house_diary_file-->
+<!--		SET-->
+<!--			file_name = #{fileName},-->
+<!--			file = #{file},-->
+<!--			update_date = NOW()-->
+<!--		WHERE house_diary_idx=#{id}-->
+<!--	</update>-->
 
-	<update id="updateCropsDiaryFile" parameterType="cropsDiaryVO">
-		UPDATE crops_diary_file
-		SET
-			file_name = #{fileName},
-			file = #{file},
-			update_date = NOW()
-		WHERE crops_diary_idx=#{id}
-	</update>
+<!--	<update id="updateCropsDiaryFile" parameterType="cropsDiaryVO">-->
+<!--		UPDATE crops_diary_file-->
+<!--		SET-->
+<!--			file_name = #{fileName},-->
+<!--			file = #{file},-->
+<!--			update_date = NOW()-->
+<!--		WHERE crops_diary_idx=#{id}-->
+<!--	</update>-->
 
 	<!-- 
 	<select id="getHouseDiaryDetail" parameterType="map" resultType="map">
@@ -130,17 +130,20 @@
 		WHERE hd.id = #{id}					
 	</select>
 
+
 	<select id="getHouseDiaryFile" parameterType="map" resultType="map">
 		SELECT
+			file_idx,
 			file_name,
 			file,
 			update_date
-		FROM house_diary_file		
-		WHERE house_diary_idx = #{id}					
+		FROM house_diary_file
+		WHERE house_diary_idx = #{id}
 	</select>
 
 	<select id="getCropsDiaryFile" parameterType="map" resultType="map">
 		SELECT
+			file_idx,
 			file_name,
 			file,
 			update_date
@@ -229,12 +232,27 @@
 		FROM house_diary
 		WHERE id = #{id};
 	</delete>
+
+
+
 	<delete id="deleteHouseDiaryFile" parameterType="map">
-		DELETE
-		FROM house_diary_file
-		WHERE house_diary_idx = #{id};
+		DELETE FROM  house_diary_file
+		WHERE house_diary_idx = #{id}
+		<if test="file_all == null">
+			AND <if test="file_idx_list == null"> 1 = 2	</if>
+			<if test="file_idx_list != null">
+				<foreach collection="file_idx_list" open="file_idx IN (" close=")" item="file_idx_list" index="file_idx_list" separator=",">
+					#{file_idx_list}
+				</foreach>
+			</if>
+		</if>
 	</delete>
-		
+<!--	<delete id="deleteHouseDiaryFile" parameterType="map">-->
+<!--		DELETE-->
+<!--		FROM house_diary_file-->
+<!--		WHERE house_diary_idx = #{id};-->
+<!--	</delete>-->
+
 	
 	
 	<insert id="insertCropsDiary" useGeneratedKeys="true" parameterType="cropsDiaryVO">
@@ -280,13 +298,26 @@
 		FROM crops_diary
 		WHERE id = #{id};
 	</delete>
-	
+
 	<delete id="deleteCropsDiaryFile" parameterType="map">
-		DELETE
-		FROM crops_diary_file
-		WHERE crops_diary_idx = #{id};
+		DELETE FROM  crops_diary_file
+		WHERE crops_diary_idx = #{id}
+		<if test="file_all == null">
+		AND
+		<if test="file_idx_list == null"> 1 = 2	</if>
+		<if test="file_idx_list != null">
+			<foreach collection="file_idx_list" open="file_idx IN (" close=")" item="file_idx_list" index="file_idx_list" separator=",">
+				#{file_idx_list}
+			</foreach>
+		</if>
+		</if>
 	</delete>
-	
+<!--	<delete id="deleteCropsDiaryFile" parameterType="map">-->
+<!--		DELETE-->
+<!--		FROM crops_diary_file-->
+<!--		WHERE crops_diary_idx = #{id};-->
+<!--	</delete>-->
+
 	<!-- <select id="getMonthlyCropsDiaryList" parameterType="map" resultType="map">
 		SELECT 
 			cd.id, 

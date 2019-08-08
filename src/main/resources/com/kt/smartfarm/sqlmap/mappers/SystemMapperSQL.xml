@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kt.smartfarm.supervisor.mapper.SystemMapper">
+	<select id ="getAppVersion" parameterType="map" resultType="HashMap">
+		SELECT app_version, app_name, app_type, download_url, update_date
+		FROM app_history
+		WHERE 1 = 1
+		<if test="appName != null">AND app_name = #{appName}</if>
+		ORDER BY update_date DESC
+		LIMIT 1;
+	</select>
+</mapper>

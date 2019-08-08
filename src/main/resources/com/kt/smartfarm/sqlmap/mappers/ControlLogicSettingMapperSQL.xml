@@ -42,6 +42,7 @@
         <result column="default_period_size" property="defaultPeriodSize"/>
         <result column="pre_order_setting_id" property="preOrderSettingId"/>
         <result column="pre_order_setting_id" property="preOrderSettingId"/>
+        <result column="view_order" property="viewOrder"/>
         <collection property="checkConditionList" javaType="java.util.ArrayList"
                     ofType="controlLogicSettingCheckConditionVO" column="control_setting_id"
                     select="getCheckConditions"/>
@@ -79,7 +80,7 @@
         /* 설정된 제어로직을 조회 , 선행 제어로직 포함 */
         SELECT CL.id AS def_logic_id, CL.name AS def_logic_name, CL.java_class_name, CL.default_period_size,
         CS.id AS control_setting_id, CS.green_house_id, CS.logic_name, CS.logic_env, CS.logic_period_env, CS.logic_period_size, CS.auto_manual_mode, CS.update_dt,
-        CS.create_dt,CSPO.pre_order_setting_id,
+        CS.view_order, CS.create_dt,CSPO.pre_order_setting_id,
         GH.gsm_key
         FROM control_logic CL
         INNER JOIN control_setting CS ON CL.id = CS.logic_id
@@ -98,6 +99,7 @@
             </if>
 
         </where>
+        ORDER BY view_order;
     </select>
 
     <select id="getControlLogicSettingHistoryList" resultMap="ControlLogicSettingHistoryMap">
@@ -221,7 +223,7 @@
 
 
     <insert id="insertControlSettingDevice" parameterType="controlLogicSettingDeviceVO" useGeneratedKeys="true">
-        INSERT INTO control_setting_device ( control_setting_id, logic_id, device_num, device_insert_order, device_id,id)
+        INSERT INTO control_setting_device ( control_setting_id, logic_id, device_num, device_insert_order, device_id,id  )
         VALUES( #{controlSettingId}, #{logicId}, #{deviceNum}, #{deviceInsertOrder}, #{deviceId}
         <if test="id == null">
             ,NEXTVAL(gsm_seq_${tmpGsmKey})
@@ -274,6 +276,9 @@
     <insert id="insertControlSetting" parameterType="controlLogicSettingVO" useGeneratedKeys="true">
         INSERT INTO control_setting ( green_house_id, logic_name, logic_id, logic_period_size, logic_env, logic_period_env, create_dt, update_dt,
         auto_manual_mode, java_class_name,id
+        <if test="viewOrder != null">
+        , view_order
+        </if>
         )
         VALUES(#{greenHouseId}, #{logicName}, #{logicId}, #{logicPeriodSize}, #{logicEnv}, #{logicPeriodEnv}, NOW(), NOW(),
         #{autoManualMode}, (SELECT java_class_name FROM control_logic WHERE id = #{logicId} )
@@ -282,6 +287,9 @@
         </if>
         <if test="controlSettingId != null">
             ,#{controlSettingId}
+        </if>
+        <if test="viewOrder != null">
+            , #{viewOrder}
         </if>
         );
         <selectKey keyProperty="controlSettingId" resultType="Integer" keyColumn="id">
@@ -293,6 +301,9 @@
             control_setting
         set logic_name = #{logicName}, logic_id = #{logicId}, logic_period_size = #{logicPeriodSize}, logic_env = #{logicEnv}
                 , logic_period_env = #{logicPeriodEnv},  update_dt = NOW(), auto_manual_mode = #{autoManualMode}
+        <if test="viewOrder != null">
+            , view_order = #{viewOrder}
+        </if>
         where id = #{controlSettingId};
     </update>
     <delete id="deleteControlSetting">
@@ -329,10 +340,10 @@
     <update id="updateLogicEnv">
         UPDATE control_setting
         <set>
-            <if test="logic_env != null"> logic_env = #{logic_env} </if>
-            <if test="logic_period_env != null">,logic_period_env = #{logic_period_env}</if>
-            <if test="auto_manual_mode != null">,auto_manual_mode = #{auto_manual_mode}</if>
-            <if test="update_dt != null">,update_dt = #{update_dt}</if>
+            <if test="logic_env != null">logic_env = #{logic_env},</if>
+            <if test="logic_period_env != null">logic_period_env = #{logic_period_env},</if>
+            <if test="auto_manual_mode != null">auto_manual_mode = #{auto_manual_mode},</if>
+            <if test="update_dt != null">update_dt = IF(#{update_dt} IS NULL, NOW(), FROM_UNIXTIME(#{update_dt} / 1000) )</if>
         </set>
         WHERE id = #{control_setting_id};
     </update>

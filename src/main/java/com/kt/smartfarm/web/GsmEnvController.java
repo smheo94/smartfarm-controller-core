@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -310,6 +311,7 @@ public class GsmEnvController {
 	
 	@RequestMapping(value= "/threshold", method = RequestMethod.POST)	
 	@ResponseBody
+	@InterceptPost
 	public Result gsmThresholdInsert(@RequestBody GsmThresholdVO gsmThresholdVO){
 		try {
 			if( !authCheckService.authCheck(gsmThresholdVO.getGsmKey(), null) ) {
@@ -324,8 +326,9 @@ public class GsmEnvController {
 
 
 
-	@RequestMapping(value= "/threshold", method = RequestMethod.PUT)	
+	@RequestMapping(value= "/threshold", method = RequestMethod.PUT)
 	@ResponseBody
+	@InterceptPost
 	public Result gsmThresholdUpdate(@RequestBody GsmThresholdVO gsmThresholdVO){
 		try {
 			if( !authCheckService.authCheck(gsmThresholdVO.getGsmKey(), null) ) {

@@ -46,7 +46,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 			// @formatter:off
 			http.authorizeRequests().antMatchers(HttpMethod.OPTIONS).permitAll()
 					.antMatchers("/index.jsp", "/swagger-resources/**", "/swagger-ui.html", "/v2/api-docs", "/webjars/**").permitAll() // Swagger Support
-					.antMatchers("/otp/**", "/userInfo/resetPassword", "/userInfo/device").permitAll() // OTP 코드 생성, 검증, 비밀번호 변경
+					.antMatchers("/otp/**", "/userInfo/resetPassword", "/userInfo/device", "/**/openapi/**").permitAll() // OTP 코드 생성, 검증, 비밀번호 변경
 					.anyRequest().authenticated()
 					.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 					.and().httpBasic().authenticationEntryPoint(authEntryPoint)

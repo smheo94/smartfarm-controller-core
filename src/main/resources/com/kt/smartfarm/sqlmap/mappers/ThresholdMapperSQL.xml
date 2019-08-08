@@ -3,21 +3,21 @@
 <mapper namespace="com.kt.smartfarm.supervisor.mapper.ThresholdMapper">
 
 	<select id ="getThreshold" parameterType="map" resultType="thresholdVO">
-		SELECT 
-			gsm_key, green_house_id, update_date, device_type, device_type_idx, low_value, high_value
-  		FROM gsm_threshold
-  		WHERE 1 = 1
-  		<if test="gsmKey != null">AND gsm_key = #{gsmKey}</if>
+		SELECT
+		gsm_key, green_house_id, update_date, device_type, device_type_idx, low_value, high_value
+		FROM gsm_threshold
+		WHERE 1 = 1
+		<if test="gsmKey != null">AND gsm_key = #{gsmKey}</if>
 		<if test="greenHouseId != null">AND green_house_id = #{greenHouseId}</if>
 		<if test="deviceType != null">AND device_type = #{deviceType}</if>
 		<if test="deviceTypeIdx != null">AND device_type_idx = #{deviceTypeIdx}</if>
 	</select>
-	
+
 	<insert id ="insert" parameterType="thresholdVO">
 		INSERT INTO gsm_threshold( gsm_key, green_house_id, device_type, device_type_idx, update_date, low_value, high_value )
 		VALUES (#{gsmKey}, #{greenHouseId}, #{deviceType}, #{deviceTypeIdx}, NOW(), #{lowValue}, #{highValue})
 		ON DUPLICATE KEY UPDATE
-		update_date = NOW(), low_value = #{lowValue}, high_value = #{highValue}
+							 update_date = NOW(), low_value = #{lowValue}, high_value = #{highValue}
 	</insert>
 
 	<delete id="delete" parameterType="map">
@@ -30,8 +30,10 @@
 	<insert id ="copyToNewGSM">
 		REPLACE INTO gsm_threshold( gsm_key, green_house_id, device_type, device_type_idx, update_date, low_value, high_value )
 		SELECT #{to_gsm_key}, (${to_gsm_key}  * 100000) + (green_house_id %  100000), device_type, device_type_idx, update_date, low_value, high_value
-	    FROM  gsm_threshold
-	    WHERE gsm_key = #{from_gsm_key}
+		FROM  gsm_threshold
+		WHERE gsm_key = #{from_gsm_key}
 	</insert>
 
 </mapper>
+
+

@@ -15,9 +15,11 @@ public interface HouseDiaryService {
 	HouseDiaryVO updateHouseDiary(HouseDiaryVO houseDiaryVO);
 	HouseCropsDiaryVO insertCropsDiary(HouseCropsDiaryVO houseCropsVO);
 	HouseCropsDiaryVO updateCropsDiary(HouseCropsDiaryVO houseCropsVO);
-	
+
+	Integer deleteDiaryFileList(String contentType, Integer id, List<Integer> fileIdxList);
+
 	Object insertDiaryFile(String contentType, Integer id, MultipartFile[] file);
-	Object updateDiaryFile(String contentType, Integer id, MultipartFile[] file);
+//	Object updateDiaryFile(String contentType, Integer id, MultipartFile[] file);
 	
 	Integer deleteHouseDiary(Integer id);
 	Integer deleteCropsDiary(Integer id);
