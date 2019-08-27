@@ -83,11 +83,11 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 	@Override
 	public HashMap<String,Object> get(Integer gsmKey, Integer greenHouseId, Boolean isSmartfarmSystem) {
 		HashMap<String,Object> result = new HashMap<String, Object>();
-		List<HashMap<String,Object>> houseDetail= new ArrayList<HashMap<String,Object>>();
-		List<HashMap<String,Object>> controllerList = new ArrayList<HashMap<String,Object>>();		
+        List<HashMap<String, Object>> houseDetail = null;
+        List<HashMap<String, Object>> controllerList = null;
 
-		HashMap<String,Object> sunriseInfo = new HashMap<>();
-		List<Integer> deviceIds = new ArrayList<Integer>();		
+        HashMap<String, Object> sunriseInfo = null;
+        List<Integer> deviceIds = null;
 		Map<String, Object> map = new HashMap<>();
 		
 		map.put("gsm_key",  gsmKey);
@@ -137,9 +137,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 	}
 	public List<HashMap<String, Object>> list(Integer gsmKey, boolean all, boolean detail, Boolean isSmartfarmSystem, Boolean isCCTVOnly) {
 		List<HashMap<String,Object>> result = new ArrayList<HashMap<String,Object>>();
-		List<Integer> deviceIds = new ArrayList<Integer>();
 		Map<String, Object> map = new HashMap<>();
-		HashMap<String,Object> sunriseInfo = new HashMap<>();
 		if(gsmKey == null){
 			result = houseEnvMapper.getHouseDetail(map);
 		}else{
@@ -152,7 +150,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 				List<DeviceEnvVO> mappedDeviceList = new ArrayList<>();
 				final HashMap<String, Object> houseMap = result.get(i);
 				map.put("green_house_id",houseMap.get("id"));
-				deviceIds = houseEnvMapper.getMappedDevice(map);
+                List<Integer> deviceIds = houseEnvMapper.getMappedDevice(map);
 				houseMap.put("selectedDeviceList", deviceIds);
 				if( all ) {
 					map.put("deviceIds", deviceIds);
@@ -181,10 +179,6 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 						sunriseSunset = new SunriseSunset(latitude, longitude);
 					}
 					houseMap.put("sunriseInfo", sunriseSunset.getSunriseSunSetMap());
-//					sunriseInfo = houseEnvMapper.getSunriseInfo(map);
-//					if(sunriseInfo!=null){
-//						houseMap.put("sunriseInfo", sunriseInfo);
-//					}
 				}
 				if( isCCTVOnly || detail ) {
 					Integer houseId = (Integer)houseMap.get("id");

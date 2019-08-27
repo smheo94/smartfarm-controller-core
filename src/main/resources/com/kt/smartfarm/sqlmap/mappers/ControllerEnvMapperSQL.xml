@@ -92,7 +92,22 @@
 			<if test="id != null"> AND controller.id = #{id}</if>
 		</where>	
 	</select>
-	
+    <select id="getDependencyDeviceTypeList" parameterType="Integer" resultType="controllerDepDeviceTypeVO">
+        SELECT A.id
+             , A.controller_info_id
+             , A.device_type_id
+             , A.device_type_num
+             , A.auto_create
+             , A.default_name
+             , IF(A.default_address1 IS NOT NULL, A.default_address1, B.default_address1) AS default_address1
+             , IF(A.default_address2 IS NOT NULL, A.default_address2, B.default_address2) AS default_address2
+             , IF(A.default_address3 IS NOT NULL, A.default_address3, B.default_address3) AS default_address3
+             , B.device_type
+             , B.device_type_name
+        FROM cd_controller_info_dep_device_type A
+                 INNER JOIN cd_device_type B ON A.device_type_id = B.id
+        WHERE controller_id = #{controller_id}
+    </select>
 	<select id="getDeviceList" parameterType="Integer" resultType="deviceEnvVO">
 		SELECT
 			id,

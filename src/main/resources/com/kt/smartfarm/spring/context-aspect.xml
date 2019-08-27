@@ -55,7 +55,7 @@
 		</property>
 	</bean>
 
-	<bean id="egovHandler" class="com.kt.cmmn.EgovSampleExcepHndlr" />
+    <bean id="egovHandler" class="com.kt.cmmn.EgovSampleOthersExcepHndlr"/>
 	<bean id="otherHandler" class="com.kt.cmmn.EgovSampleOthersExcepHndlr" />
 	
 </beans>

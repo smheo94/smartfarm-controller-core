@@ -12,8 +12,10 @@
  */
 package com.kt.smartfarm.service.impl;
 
+import com.kt.smartfarm.service.ControllerDepDeviceTypeVO;
 import com.kt.smartfarm.service.ControllerEnvService;
 import com.kt.smartfarm.service.ControllerEnvVO;
+import com.kt.smartfarm.service.DeviceEnvVO;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
 import java.util.HashMap;
@@ -40,7 +42,23 @@ public class ControllerEnvServiceImpl extends EgovAbstractServiceImpl implements
 	@Override
 	public ControllerEnvVO insert(ControllerEnvVO vo) {				
 		controllerEnvMapper.insert(vo);
+        final List<ControllerDepDeviceTypeVO> dependencyDeviceTypeList = controllerEnvMapper.getDependencyDeviceTypeList(vo.getControllerInfoId());
+        if (dependencyDeviceTypeList != null && dependencyDeviceTypeList.size() > 0) {
+            dependencyDeviceTypeList.stream().filter(d -> d.getAutoCreate() == 1).forEach(d -> {
 
+                DeviceEnvVO device = new DeviceEnvVO();
+                device.setControllerId(vo.getId());
+                device.setGsmKey(vo.getGsmKey());
+                device.setDeviceTypeId(d.getDeviceTypeId());
+                device.setModbusAddress1(d.getDefaultAddress1());
+                device.setModbusAddress2(d.getDefaultAddress2());
+                device.setModbusAddress3(d.getDefaultAddress3());
+                device.setDeviceTypeNickname(d.getDeviceTypeName());
+                device.setNickname(d.getDefaultName());
+                device.setDeviceTypeIdx(deviceEnvMapper.selectMaxDeviceTypeIdx(device));
+                deviceEnvMapper.insert(device);
+            });
+        }
 		return vo;
 	}
 

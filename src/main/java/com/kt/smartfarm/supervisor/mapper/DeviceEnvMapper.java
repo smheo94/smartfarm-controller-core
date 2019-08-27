@@ -37,6 +37,7 @@ public interface DeviceEnvMapper {
 	List<DeviceEnvVO> list(Map<String, Object> map);
 	Integer deleteControllerDeivces(Map<String,Object> map);
 
+    Integer selectMaxDeviceTypeIdx(DeviceEnvVO vo);
 
 	List<DeviceTypeVO> getDeviceTypeByHouseType(HashMap<String, Object> param);
 	String[] getHouseType();

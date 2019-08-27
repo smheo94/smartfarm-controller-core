@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.kt.smartfarm.service.ArrayDeviceVO;
+import com.kt.smartfarm.service.ControllerDepDeviceTypeVO;
 import com.kt.smartfarm.service.ControllerEnvVO;
 import com.kt.smartfarm.service.DeviceEnvVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
@@ -41,6 +42,8 @@ public interface ControllerEnvMapper {
 	List<ControllerEnvVO> get(Map<String, Object> map);
 	
 	List<DeviceEnvVO> getDeviceList(Integer controller_id);
+
+    List<ControllerDepDeviceTypeVO> getDependencyDeviceTypeList(String controller_info_id);
 
 
 	Integer copyToNewGSM(@Param("from_gsm_key") Integer fromGsmKey, @Param("to_gsm_key") Integer toGsmKey );

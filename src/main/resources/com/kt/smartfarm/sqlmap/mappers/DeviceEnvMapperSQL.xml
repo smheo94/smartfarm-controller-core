@@ -1,16 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kt.smartfarm.supervisor.mapper.DeviceEnvMapper">
-	
-<!-- 
-	<resultMap id="deviceEnv"
-		type="DeviceEnvVO">
-		<result column="id" javaType="Integer"/>		
-	</resultMap> -->
+
+    <!--
+        <resultMap id="deviceEnv"
+            type="DeviceEnvVO">
+            <result column="id" javaType="Integer"/>
+        </resultMap> -->
 
 	<delete id="deleteDevice">
 	delete FROM device WHERE id = #{deviceId}
 	</delete>
+    <select id="selectMaxDeviceTypeIdx" resultType="Integer" parameterType="deviceEnvVO">
+        SELECT value
+        FROM (
+                 SELECT MAX(device_type_idx) + 1 AS value
+                 FROM device
+                 WHERE gsm_key = #{gsmKey}
+                   and device_type_id = #{deviceTypeId}
+                 UNION ALL
+                 SELECT 1 AS value
+             ) A
+        LIMIT 1;
+    </select>
 	<insert id="insert" useGeneratedKeys="true" parameterType="deviceEnvVO">
 		INSERT INTO device (
 			gsm_key, device_type_id,device_type_idx, nickname, device_type_nickname, green_house_id, controller_id,  mode, modbus_address1, modbus_address2, modbus_address3
@@ -29,8 +41,8 @@
 	   		SELECT LASTVAL(gsm_seq_${gsmKey}) AS id;
 	    </selectKey>
 	</insert>
-	
-	<update id="update" parameterType="deviceEnvVO">
+
+    <update id="update" parameterType="deviceEnvVO">
 		UPDATE device
 		SET
 			<if test="deviceTypeId != null"> device_type_id = #{deviceTypeId} </if>
