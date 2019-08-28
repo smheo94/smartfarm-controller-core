@@ -12,16 +12,10 @@
 	delete FROM device WHERE id = #{deviceId}
 	</delete>
     <select id="selectMaxDeviceTypeIdx" resultType="Integer" parameterType="deviceEnvVO">
-        SELECT value
-        FROM (
-                 SELECT MAX(device_type_idx) + 1 AS value
-                 FROM device
-                 WHERE gsm_key = #{gsmKey}
-                   and device_type_id = #{deviceTypeId}
-                 UNION ALL
-                 SELECT 1 AS value
-             ) A
-        LIMIT 1;
+		 SELECT IF( MAX(device_type_idx) IS NULL, 1,  MAX(device_type_idx)  + 1  ) AS VALUE
+		 FROM device
+		 WHERE gsm_key = #{gsmKey}
+		 and device_type_id = #{deviceTypeId}
     </select>
 	<insert id="insert" useGeneratedKeys="true" parameterType="deviceEnvVO">
 		INSERT INTO device (
