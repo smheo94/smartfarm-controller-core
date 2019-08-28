@@ -18,18 +18,20 @@ import com.kt.smartfarm.service.ControllerEnvVO;
 import com.kt.smartfarm.service.DeviceEnvVO;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import com.kt.smartfarm.supervisor.mapper.ControllerEnvMapper;
 import com.kt.smartfarm.supervisor.mapper.DeviceEnvMapper;
 
-
+@Slf4j
 @Service("controllerEnvService")
 public class ControllerEnvServiceImpl extends EgovAbstractServiceImpl implements ControllerEnvService {
 
@@ -42,10 +44,13 @@ public class ControllerEnvServiceImpl extends EgovAbstractServiceImpl implements
 	@Override
 	public ControllerEnvVO insert(ControllerEnvVO vo) {				
 		controllerEnvMapper.insert(vo);
+		if( vo.getDeviceList() == null) {
+			vo.setDeviceList( new ArrayList<>());
+		}
         final List<ControllerDepDeviceTypeVO> dependencyDeviceTypeList = controllerEnvMapper.getDependencyDeviceTypeList(vo.getControllerInfoId());
-        if (dependencyDeviceTypeList != null && dependencyDeviceTypeList.size() > 0) {
+        if (dependencyDeviceTypeList != null && dependencyDeviceTypeList.size() > 0 && vo.getDeviceList().size() == 0) {
+        	//아직 안들어간경우에만 넣자.
             dependencyDeviceTypeList.stream().filter(d -> d.getAutoCreate() == 1).forEach(d -> {
-
                 DeviceEnvVO device = new DeviceEnvVO();
                 device.setControllerId(vo.getId());
                 device.setGsmKey(vo.getGsmKey());
@@ -57,8 +62,17 @@ public class ControllerEnvServiceImpl extends EgovAbstractServiceImpl implements
                 device.setNickname(d.getDefaultName());
                 device.setDeviceTypeIdx(deviceEnvMapper.selectMaxDeviceTypeIdx(device));
                 deviceEnvMapper.insert(device);
+				vo.getDeviceList().add(device);
             });
-        }
+        } else if( vo.getDeviceList().size() > 0 ) {
+        	vo.getDeviceList().forEach( d -> {
+				try {
+					deviceEnvMapper.insert(d);
+				} catch (Exception e) {
+					log.info("Device Insert Fail in Controller : {}, {}", d, e.getMessage());
+				}
+			});
+		}
 		return vo;
 	}
 
