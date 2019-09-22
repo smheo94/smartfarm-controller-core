@@ -115,9 +115,11 @@
  			debug_stop_event as debugStopEvent, debug_stop_crops as debugStopCrops, debug_stop_device_auto_control as debugStopDeviceAutoContorl, debug_stop_ims as debugStopIms,
  			delay_auto_control_start as delayAutoControlStart, package_version as packageVersion, schema_version as schemaVersion, nutrient_monitoring_interval as nutrientMonitoringInterval,
  			farm_nickname_i18n as farmNicknameI18n, user_id as userId, farm_db_id as farmDbId, category_id as categoryId
-		FROM gsm_info 
-		WHERE 
-			gsm_key = #{gsmKey}
+		FROM gsm_info
+		<if test="gsmKey != -1">
+			WHERE 	gsm_key = #{gsmKey}
+		</if>
+		LIMIT 1;
 	</select>
 
 	<select id="getAuthGSMList" resultType="Integer">

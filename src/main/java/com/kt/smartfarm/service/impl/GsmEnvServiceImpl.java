@@ -95,10 +95,15 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 			}
 			GsmEnvVO gsmInfo = gsmEnvMapper.get(gsmKey);
 			if( gsmInfo == null || gsmInfo.getGsmKey() == 0 ) {
-				gsmInfo = new GsmEnvVO();
-				gsmInfo.setGsmKey(gsmKey);
-				insert(gsmInfo);
-				log.info("Create new GsmInfo : {}", gsmKey);
+				gsmInfo = gsmEnvMapper.get(-1);
+				if( gsmInfo == null ) {
+					gsmInfo = new GsmEnvVO();
+					gsmInfo.setGsmKey(gsmKey);
+					insert(gsmInfo);
+					log.info("Create new GsmInfo : {}", gsmKey);
+				} else {
+					log.info("Already exists GSM : {}", gsmInfo);
+				}
 			}
 		}
 	}

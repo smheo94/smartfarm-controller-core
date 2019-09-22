@@ -146,6 +146,8 @@ public class ClassUtil  {
 	}
 
 	public static <T>  T castToSomething(Object value, Class<T> type) {
+		if( value == null)
+			return (T)null;
 		return castToSomething(value, type, null);
 	}
 	public static <T>  T castToSomething(Object value, Class<T> type, T defaultValue)
