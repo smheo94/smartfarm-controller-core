@@ -15,6 +15,7 @@ package com.kt.smartfarm.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kt.smartfarm.config.SmartfarmInterceptorConfig;
 import com.kt.smartfarm.service.*;
 import com.kt.smartfarm.supervisor.mapper.*;
 import com.kt.cmmn.util.ClassUtil;
@@ -37,6 +38,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
@@ -68,11 +70,38 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 
 	@Autowired
 	SecurityConfig securityConfig;
+
+	@Autowired
+	SmartfarmInterceptorConfig smartfarmConfig;
+
 	@Override
 	public List<Map<String, Object>> gsmOfDeviceList(Integer gsmKey) {
 		return gsmEnvMapper.gsmOfDeviceList(gsmKey);
 	}
 
+	@PostConstruct
+	public void initGsmKeyOnSmartfarm() {
+		if( smartfarmConfig.isSmartfarmSystem() ) {
+			Integer gsmKey = 0;
+			try {
+				String gsmKeyValue = smartfarmConfig.GSM_KEY;
+				gsmKey = Integer.parseInt(gsmKeyValue);
+			} catch (Exception e) {
+				log.warn("Load GSM Key Error !!!", e);
+			}
+			if( gsmKey == 0 ) {
+				//gsmKey가 0로면 할일이 없음
+				return;
+			}
+			GsmEnvVO gsmInfo = gsmEnvMapper.get(gsmKey);
+			if( gsmInfo == null || gsmInfo.getGsmKey() == 0 ) {
+				gsmInfo = new GsmEnvVO();
+				gsmInfo.setGsmKey(gsmKey);
+				insert(gsmInfo);
+				log.info("Create new GsmInfo : {}", gsmKey);
+			}
+		}
+	}
 //	@Override
 //	public GsmEnvVO get(Integer gsmKey) {
 //		return gsmEnvMapper.get(gsmKey);
