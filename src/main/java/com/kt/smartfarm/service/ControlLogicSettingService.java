@@ -5,6 +5,7 @@ import java.util.Map;
 
 public interface ControlLogicSettingService {
 	List<ControlLogicSettingVO> getLogicSetting(Integer gsmKey, Integer houseId, Integer controlSettingId);
+	List<ControlLogicSettingVO> getLogicSetting(Integer gsmKey, Integer houseId, Integer controlSettingId, List<Long> logicId);
 
 //	ControlLogicSettingHistoryVO getControlLogicSettingHIstoryDetail(Integer gsmKey, Integer houseId, Integer controlSettingId, Long logDt);
 

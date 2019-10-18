@@ -27,7 +27,8 @@ import java.util.Map;
 @Mapper("controlLogicSettingMapper")
 public interface ControlLogicSettingMapper {
 	List<ControlLogicSettingVO> getControlLogicSetting(@Param("gsm_key") Integer gsmKey, @Param("green_house_id") Integer greenHouseId,
-													   @Param("control_setting_id") Integer controlSettingId);
+													   @Param("control_setting_id") Integer controlSettingId, @Param("logic_id")  List<Long> logicId);
+
 
 
 //	ControlLogicSettingHistoryVO getControlLogicSettingHistoryDetail(@Param("gsm_key") Integer gsmKey, @Param("green_house_id") Integer greenHouseId,

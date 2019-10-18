@@ -25,6 +25,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,6 +48,17 @@ public class SystemController {
 	public Result<Map<String,Object>> getLastVersion(@RequestParam("app_name") String appName){
 		try {
 			return new Result(systemService.getAppVersion(appName));
+		} catch(Exception e) {
+			return new Result( e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, null);
+		}
+	}
+
+
+	@RequestMapping(value= "/data/", method = RequestMethod.GET)
+	@ResponseBody
+	public Result<Map<String,Object>> getData(@RequestBody HashMap<String,Object> param){
+		try {
+			return new Result(systemService.getAnyQueryResult(param));
 		} catch(Exception e) {
 			return new Result( e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, null);
 		}

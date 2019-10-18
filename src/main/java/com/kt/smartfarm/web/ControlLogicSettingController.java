@@ -44,16 +44,19 @@ public class ControlLogicSettingController {
 
 	@RequestMapping(value = "/gsm/{gsmKey}/house/{houseId}", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<List<ControlLogicSettingVO>> list(@PathVariable("gsmKey") Integer gsmKey, @PathVariable("houseId") Integer houseId) {
+	public Result<List<ControlLogicSettingVO>> list(@PathVariable("gsmKey") Integer gsmKey, @PathVariable("houseId") Integer houseId, @RequestParam(required = false, name="logicId") List<Long> logicId) {
 		try {
 			if( !authCheckService.authCheck(gsmKey, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
 			}
-			return new Result(service.getLogicSetting(gsmKey, houseId, null));
+			return new Result(service.getLogicSetting(gsmKey, houseId, null, logicId));
 		} catch (Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
 	}
+
+
+
 
 
 	@RequestMapping(value = "/gsm/{gsmKey}/house/{houseId}/settingId/{controlSettingId}/history", method = RequestMethod.GET)

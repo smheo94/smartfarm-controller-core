@@ -97,7 +97,9 @@
             <if test="control_setting_id != null">
                 AND CS.id = #{control_setting_id}
             </if>
-
+            <if test="logic_id != null">
+                <foreach collection="logic_id" open="AND CL.id IN (" close=")" separator="," item="item" index="idx">#{item}</foreach>
+            </if>
         </where>
         ORDER BY view_order;
     </select>

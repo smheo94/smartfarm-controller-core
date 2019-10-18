@@ -124,7 +124,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 		if(  nutrientControllerList != null && nutrientControllerList.size() > 0 ) {
 			controllerList.addAll(nutrientControllerList);
 		}
-		List<ControlLogicSettingVO> logicList = controlLogicMapper.getControlLogicSetting(gsmKey, greenHouseId, null);
+		List<ControlLogicSettingVO> logicList = controlLogicMapper.getControlLogicSetting(gsmKey, greenHouseId, null, null);
 //		result.put("deviceList", deviceList);
 		result.put("controllerList", controllerList);
 		result.put("houseDetail", houseDetail);

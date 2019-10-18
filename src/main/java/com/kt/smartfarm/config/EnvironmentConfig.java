@@ -23,7 +23,7 @@ public class EnvironmentConfig {
 		return new PropertySourcesPlaceholderConfigurer();
 	}
 
-	@Resource(name="dBSchemaMapper")
+	@Resource(name="dbSchemaMapper")
 	DBSchemaMapper mapper;
 
 	@Autowired

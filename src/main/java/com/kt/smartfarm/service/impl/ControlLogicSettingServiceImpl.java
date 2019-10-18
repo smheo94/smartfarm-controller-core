@@ -35,7 +35,11 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 
 	@Override
 	public List<ControlLogicSettingVO> getLogicSetting(Integer gsmKey, Integer houseId, Integer controlSettingId) {
-		return mapper.getControlLogicSetting(gsmKey, houseId, controlSettingId);
+		return mapper.getControlLogicSetting(gsmKey, houseId, controlSettingId, null);
+	}
+	@Override
+	public List<ControlLogicSettingVO> getLogicSetting(Integer gsmKey, Integer houseId, Integer controlSettingId, List<Long> logicId) {
+		return mapper.getControlLogicSetting(gsmKey, houseId, controlSettingId, logicId);
 	}
 
 //	@Override
@@ -93,7 +97,7 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 
 	@Override
 	public Integer delLogicSetting(Integer controlSettingId) {
-		List<ControlLogicSettingVO> logicSettingVOList = mapper.getControlLogicSetting(null, null, controlSettingId);
+		List<ControlLogicSettingVO> logicSettingVOList = mapper.getControlLogicSetting(null, null, controlSettingId, null);
 		if (logicSettingVOList == null || logicSettingVOList.size() == 0 || logicSettingVOList.get(0) == null) {
 			return 0;
 		}
