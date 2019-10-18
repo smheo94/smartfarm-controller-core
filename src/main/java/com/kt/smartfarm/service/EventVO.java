@@ -27,6 +27,7 @@ public class EventVO {
 	String controllerType;
 	String controllerStatus;
 	String description;
+	String properties;
 	Integer port;
 	ControllerInfoVO controllerInfo;
 	

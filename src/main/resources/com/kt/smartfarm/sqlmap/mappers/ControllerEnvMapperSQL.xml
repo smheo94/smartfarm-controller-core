@@ -15,10 +15,10 @@
 	<insert id="insert" useGeneratedKeys="true" parameterType="controllerEnvVO">
 		INSERT INTO controller
 		(gsm_key, controller_info_id, controller_type, ip, PORT, controller_status,
-		description,id
+		description,id,properties
 		)
 		VALUES (#{gsmKey}, #{controllerInfoId}, #{controllerType}, #{ip},
-		#{port}, #{controllerStatus}, #{description}
+		#{port}, #{controllerStatus}, #{description}, #{properties}
 		<if test="id == null">
 			,NEXTVAL(gsm_seq_${gsmKey})
 		</if>
@@ -33,8 +33,8 @@
 
 	<insert id="copyToNewGSM">
 		INSERT INTO controller
-		(gsm_key, controller_info_id, controller_type, ip, `port`, controller_status,description,id	)
-		SELECT #{to_gsm_key}, controller_info_id, controller_type, ip, `port`, controller_status,description, (${to_gsm_key}  * 100000) + (id %  100000)
+		(gsm_key, controller_info_id, controller_type, ip, `port`, controller_status,description,properties,id	)
+		SELECT #{to_gsm_key}, controller_info_id, controller_type, ip, `port`, controller_status,description,properties,(${to_gsm_key}  * 100000) + (id %  100000)
 		FROM controller WHERE gsm_key = #{from_gsm_key}
 	</insert>
 
@@ -47,6 +47,7 @@
 		<if test="port != null">,PORT = #{port}</if>		
 		<if test="controllerStatus != null">,controller_status = #{controllerStatus}</if>		
 		<if test="description != null">,description = #{description}</if>
+		<if test="properties != null">properties = #{properties}</if>
 		WHERE gsm_key = #{gsmKey} AND id = #{id};
 	</update>
 	<delete id="delete">
@@ -57,7 +58,7 @@
 	
 	<select id="list" resultMap="controllerEnv" parameterType="map">
 		SELECT id, gsm_key, controller_info_id, controller_type, ip, port,
-		controller_status, description
+		controller_status, description, properties
 		FROM controller
 		<where>
 			AND gsm_key = #{gsm_key}

@@ -185,7 +185,9 @@
 		controller.ip,
 		controller.PORT,
 		controller.controller_status as controllerStatus,
-		controller.description
+		controller.description,
+		controller.properties
+
 		FROM controller
 		WHERE controller.gsm_key = #{gsm_key}
 		AND controller.controller_info_id >= 30 AND 40  > controller.controller_info_id;
@@ -201,7 +203,8 @@
 			controller.ip,
 			controller.PORT,
 			controller.controller_status as controllerStatus,
-			controller.description
+			controller.description,
+		    controller.properties
 		FROM device
 		INNER JOIN controller ON controller.id = device.controller_id
 		 WHERE device.gsm_key = #{gsm_key}
