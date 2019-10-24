@@ -15,7 +15,7 @@
 	<insert id="insert" useGeneratedKeys="true" parameterType="controllerEnvVO">
 		INSERT INTO controller
 		(gsm_key, controller_info_id, controller_type, ip, PORT, controller_status,
-		description,,properties,id
+		description,properties,id
 		)
 		VALUES (#{gsmKey}, #{controllerInfoId}, #{controllerType}, #{ip},
 		#{port}, #{controllerStatus}, #{description}, #{properties}
