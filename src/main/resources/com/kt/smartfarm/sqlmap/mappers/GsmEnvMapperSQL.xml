@@ -2,7 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kt.smartfarm.supervisor.mapper.GsmEnvMapper">
 
-
+	<resultMap id="gsmEnvVOMap" type="gsmEnvVO" autoMapping="true">
+		<result column="properties" property="properties" typeHandler="com.kt.cmmn.util.JsonTypeHandler"/>
+	</resultMap>
 	<insert id="insert" parameterType="gsmEnvVO">
 		REPLACE INTO gsm_info (
 			gsm_key,
@@ -11,7 +13,8 @@
 			system_host, 
 			system_port, 		
 			farm_nickname_i18n,
-			category_id
+			category_id,
+		    properties
 		)
 		VALUES (
 			#{gsmKey}, 
@@ -20,7 +23,8 @@
 			#{systemHost}, 
 			#{systemPort},		
 			#{farmNicknameI18n},
-			#{categoryId}
+			#{categoryId},
+			'${@com.kt.cmmn.util.MapUtils@toJson(properties)}'
 		);
 	</insert>
 	<update id="createGSMSeq">
@@ -75,6 +79,7 @@
 			<if test="farmDbId != null"> , farm_db_id = #{farmDbId}</if>
 			<if test="categoryId != null"> , category_id = #{categoryId}</if>
 			<if test="monitoringProcessInterval != null"> ,monitoring_process_interval = #{monitoringProcessInterval}</if>
+			<if test="properties != null">,properties = '${@com.kt.cmmn.util.MapUtils@toJson(properties)}' </if>
 		WHERE gsm_key = #{gsmKey}
 	</update>
 	
@@ -85,7 +90,7 @@
 	</delete>
 
 	
-	<select id="gsmOfDeviceList" resultType="map">
+	<select id="gsmOfDeviceList" resultMap="gsmEnvVOMap">
 		/*gsmOfDeviceList*/
 		SELECT
 			gsm_info.gsm_key as gsmKey, gsm_info.user_info_id as userInfoId, is_mine as isMine, area_code as areaCode,
@@ -95,7 +100,7 @@
  			monitoring_interval as monitoringInterval, history_save_db_interval as historySaveDbInterval, sensor_current_retention_period as sensorCurrentRetentionPeriod,
  			debug_stop_event as debugStopEvent, debug_stop_crops as debugStopCrops, debug_stop_device_auto_control as debugStopDeviceAutoContorl, debug_stop_ims as debugStopIms,
  			delay_auto_control_start as delayAutoControlStart, package_version as packageVersion, schema_version as schemaVersion, nutrient_monitoring_interval as nutrientMonitoringInterval,
- 			farm_nickname_i18n as farmNicknameI18n, user_id as userId, farm_db_id as farmDbId, category_id as categoryId, COUNT(device.id) AS deviceCount
+ 			farm_nickname_i18n as farmNicknameI18n, user_id as userId, farm_db_id as farmDbId, category_id as categoryId, COUNT(device.id) AS deviceCount, properties
 		FROM gsm_info
 		LEFT OUTER JOIN device ON gsm_info.gsm_key = device.gsm_key
 		<where>
@@ -104,7 +109,7 @@
 		GROUP BY gsm_info.gsm_key;
 	</select>
 	
-	<select id="get" resultType="gsmEnvVO" >
+	<select id="get" resultMap="gsmEnvVOMap" >
 		/*get*/
 		SELECT
 			gsm_info.gsm_key as gsmKey, gsm_info.user_info_id as userInfoId, is_mine as isMine, area_code as areaCode,
@@ -114,7 +119,7 @@
  			monitoring_interval as monitoringInterval, history_save_db_interval as historySaveDbInterval, sensor_current_retention_period as sensorCurrentRetentionPeriod,
  			debug_stop_event as debugStopEvent, debug_stop_crops as debugStopCrops, debug_stop_device_auto_control as debugStopDeviceAutoContorl, debug_stop_ims as debugStopIms,
  			delay_auto_control_start as delayAutoControlStart, package_version as packageVersion, schema_version as schemaVersion, nutrient_monitoring_interval as nutrientMonitoringInterval,
- 			farm_nickname_i18n as farmNicknameI18n, user_id as userId, farm_db_id as farmDbId, category_id as categoryId
+ 			farm_nickname_i18n as farmNicknameI18n, user_id as userId, farm_db_id as farmDbId, category_id as categoryId, properties
 		FROM gsm_info
 		<if test="gsmKey != -1">
 			WHERE 	gsm_key = #{gsmKey}
@@ -150,7 +155,7 @@
 		WHERE user_info_id = #{authUserIdx} OR (SELECT roles_id FROM user_info_roles WHERE roles_id = 100 AND user_idx = #{authUserIdx})
 	</select>
 
-	<select id="getGsmList" resultType="map" >
+	<select id="getGsmList" resultMap="gsmEnvVOMap" >
 		/*getGsmList*/
 		SELECT
 			gsm_info.gsm_key as gsmKey, gsm_info.user_info_id as userInfoId, is_mine as isMine, area_code as areaCode,
@@ -159,7 +164,7 @@
  			mqtt_broker_host as mqttbrokerHost, mqtt_broker_port as mqttBrokerPort, server_read_time as serverReadTime, product_interval as productInterval,
  			monitoring_interval as monitoringInterval, history_save_db_interval as historySaveDbInterval,
  			delay_auto_control_start as delayAutoControlStart, package_version as packageVersion, schema_version as schemaVersion, nutrient_monitoring_interval as nutrientMonitoringInterval,
- 			farm_nickname_i18n as farmNicknameI18n, user_id as userId, farm_db_id as farmDbId, category_id as categoryId
+ 			farm_nickname_i18n as farmNicknameI18n, user_id as userId, farm_db_id as farmDbId, category_id as categoryId, properties
 		FROM gsm_info
 		<where>
 			<if test="gsmKey != null"> AND gsm_info.gsm_key = #{gsmKey}</if>
@@ -198,28 +203,28 @@
 		</where>
 	</select>
 
-	<select id="getHouseList" resultType="houseEnvVO">
-		/*getHouseList*/
-		SELECT 
-			id, product_method_id, green_house_type_id, house_name,
-			latitude, longitude, description, build_date, last_update, addr_1,
-			addr_2, zip, nutrient_common_id, change_gh, change_temperature,
-			floor_space, house_horizontal, house_vertical, house_height,
-			plant_spacing, crop_cnt, house_direction, select_temp_sensor,
-			select_hum_sensor, green_house.gsm_key, house_name_i18n
-		FROM green_house
-		INNER JOIN gsm_info ON green_house.gsm_key = gsm_info.gsm_key
-		WHERE green_house.gsm_key = #{gsmKey}
-	</select>
+<!--	<select id="getHouseList" resultType="houseEnvVO">-->
+<!--		/*getHouseList*/-->
+<!--		SELECT -->
+<!--			id, product_method_id, green_house_type_id, house_name,-->
+<!--			latitude, longitude, description, build_date, last_update, addr_1,-->
+<!--			addr_2, zip, nutrient_common_id, change_gh, change_temperature,-->
+<!--			floor_space, house_horizontal, house_vertical, house_height,-->
+<!--			plant_spacing, crop_cnt, house_direction, select_temp_sensor,-->
+<!--			select_hum_sensor, green_house.gsm_key, house_name_i18n-->
+<!--		FROM green_house-->
+<!--		INNER JOIN gsm_info ON green_house.gsm_key = gsm_info.gsm_key-->
+<!--		WHERE green_house.gsm_key = #{gsmKey}-->
+<!--	</select>-->
 	
-	<select id="notMappedList" resultType="gsmEnvVO">
+	<select id="notMappedList" resultMap="gsmEnvVOMap">
 		SELECT
 			gsm_key, user_info_id, is_mine, area_code, farm_nickname, update_date, owner_user_info_id, master_system_host, 
 			master_system_port, system_host, system_port, vpn_system_host, vpn_system_port, cropsurl, imsurl, mqtt_broker_host, 
 			mqtt_broker_port, server_read_time, product_interval, monitoring_interval, history_save_db_interval, 
 			sensor_current_retention_period, debug_stop_event, debug_stop_crops, debug_stop_device_auto_control, 
 			debug_stop_ims, delay_auto_control_start, package_version, schema_version, nutrient_monitoring_interval, 
-			farm_nickname_i18n, user_id, farm_db_id, category_id, monitoring_process_interval
+			farm_nickname_i18n, user_id, farm_db_id, category_id, monitoring_process_interval, properties
 		FROM
 			gsm_info
 		WHERE 
@@ -233,19 +238,19 @@
 		WHERE gsm_key = #{gsmKey}
 	</update>
 	
-	<select id="getGsmInfoByUser" parameterType="Integer" resultType="gsmEnvVO">
-		SELECT
-			gsm_key, user_info_id, is_mine, area_code, farm_nickname, update_date, owner_user_info_id, master_system_host, 
-			master_system_port, system_host, system_port, vpn_system_host, vpn_system_port, cropsurl, imsurl, mqtt_broker_host, 
-			mqtt_broker_port, server_read_time, product_interval, monitoring_interval, history_save_db_interval, 
-			sensor_current_retention_period, debug_stop_event, debug_stop_crops, debug_stop_device_auto_control, 
-			debug_stop_ims, delay_auto_control_start, package_version, schema_version, nutrient_monitoring_interval, 
-			farm_nickname_i18n, user_id, farm_db_id, category_id, monitoring_process_interval
-		FROM
-			gsm_info
-		WHERE 
-			user_info_id = #{userInfoId}
-	</select>
+<!--	<select id="getGsmInfoByUser" parameterType="Integer" resultType="gsmEnvVOMap">-->
+<!--		SELECT-->
+<!--			gsm_key, user_info_id, is_mine, area_code, farm_nickname, update_date, owner_user_info_id, master_system_host, -->
+<!--			master_system_port, system_host, system_port, vpn_system_host, vpn_system_port, cropsurl, imsurl, mqtt_broker_host, -->
+<!--			mqtt_broker_port, server_read_time, product_interval, monitoring_interval, history_save_db_interval, -->
+<!--			sensor_current_retention_period, debug_stop_event, debug_stop_crops, debug_stop_device_auto_control, -->
+<!--			debug_stop_ims, delay_auto_control_start, package_version, schema_version, nutrient_monitoring_interval, -->
+<!--			farm_nickname_i18n, user_id, farm_db_id, category_id, monitoring_process_interval, properties-->
+<!--		FROM-->
+<!--			gsm_info-->
+<!--		WHERE -->
+<!--			user_info_id = #{userInfoId}-->
+<!--	</select>-->
 
 
 	<select id ="gsmThresholdGet" parameterType="map" resultType="gsmThresholdVO">

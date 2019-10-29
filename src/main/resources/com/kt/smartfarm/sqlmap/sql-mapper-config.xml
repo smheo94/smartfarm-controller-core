@@ -44,4 +44,5 @@
 		<typeAlias alias="gsmThresholdVO" type="com.kt.smartfarm.service.GsmThresholdVO"/>
 
     </typeAliases>
+
 </configuration>

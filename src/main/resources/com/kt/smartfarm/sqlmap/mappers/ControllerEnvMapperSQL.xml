@@ -6,10 +6,15 @@
 	<resultMap id="controllerEnv"
 		type="com.kt.smartfarm.service.ControllerEnvVO">
 		<result property="id" column="id" javaType="Integer"/>
+		<result column="properties" property="properties" typeHandler="com.kt.cmmn.util.JsonTypeHandler"/>
 		<collection property="deviceList" javaType="java.util.ArrayList" ofType="deviceEnvVO" column="controller_id" select="getDeviceList"/>
 		<!-- <association property="controllerInfo" column="controllerInfoId" 
 		select="com.kt.smartfarm.customize.service.ControllerInfoMapper.select"></association>
 		-->
+	</resultMap>
+
+	<resultMap id="deviceEnvVOControllerMap" type="deviceEnvVO" autoMapping="true">
+		<result column="properties" property="properties" typeHandler="com.kt.cmmn.util.JsonTypeHandler"/>
 	</resultMap>
 
 	<insert id="insert" useGeneratedKeys="true" parameterType="controllerEnvVO">
@@ -18,14 +23,13 @@
 		description,properties,id
 		)
 		VALUES (#{gsmKey}, #{controllerInfoId}, #{controllerType}, #{ip},
-		#{port}, #{controllerStatus}, #{description}, #{properties}
+		#{port}, #{controllerStatus}, #{description}, '${@com.kt.cmmn.util.MapUtils@toJson(properties)}'
 		<if test="id == null">
 			,NEXTVAL(gsm_seq_${gsmKey})
 		</if>
 		<if test="id != null">
 			,#{id}
 		</if>
-
 		);
 		<selectKey keyProperty="id" resultType="int">
 			SELECT LASTVAL(gsm_seq_${gsmKey}) AS id;
@@ -48,7 +52,7 @@
 		<if test="port != null">,PORT = #{port}</if>		
 		<if test="controllerStatus != null">,controller_status = #{controllerStatus}</if>		
 		<if test="description != null">,description = #{description}</if>
-		<if test="properties != null">properties = #{properties}</if>
+		<if test="properties != null">properties = '${@com.kt.cmmn.util.MapUtils@toJson(properties)}'</if>
 		WHERE gsm_key = #{gsmKey} AND id = #{id};
 	</update>
 	<delete id="delete">
@@ -110,7 +114,7 @@
                  INNER JOIN cd_device_type B ON A.device_type_id = B.id
         WHERE A.controller_info_id = #{controller_info_id}
     </select>
-	<select id="getDeviceList" parameterType="Integer" resultType="deviceEnvVO">
+	<select id="getDeviceList" parameterType="Integer" resultMap="deviceEnvVOControllerMap">
 		SELECT
 			id,
 			device_type_id,
@@ -136,7 +140,8 @@
 			update_date,
 			auto_manual_mode,
 			`status`,
-			device_type
+			device_type,
+		    properties
 		FROM device
 		WHERE controller_id = #{controller_id}
 	</select>

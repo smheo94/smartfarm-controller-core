@@ -1,9 +1,11 @@
 package com.kt.smartfarm.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.kt.cmmn.util.ClassUtil;
+import com.kt.cmmn.util.MapUtils;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -50,7 +52,19 @@ public class GsmEnvVO {
 	Integer monitoringProcessInterval;
 	ThresholdVO threshold;
 	Integer device_count;
+	Integer deviceCount;
 
+	Map<String,Object> properties;
+//	String trdPtCompanyName;
+//	public void setTrdPtId(String value) {
+//		this.trdPtCompanyName = value;
+//		makeProperties();
+//	}
+//	public void makeProperties() {
+//		HashMap<String,Object> propertiesMap = new HashMap<>();
+//		propertiesMap.put("trdPtCompanyName", trdPtCompanyName);
+//		properties = MapUtils.toJson(propertiesMap);
+//	}
 	List<HouseEnvVO> houseList;
 
 	public Map<String,Object> toMap() {

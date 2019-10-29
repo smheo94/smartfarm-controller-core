@@ -15,6 +15,7 @@ package com.kt.smartfarm.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kt.cmmn.util.MapUtils;
 import com.kt.smartfarm.config.SmartfarmInterceptorConfig;
 import com.kt.smartfarm.service.*;
 import com.kt.smartfarm.supervisor.mapper.*;
@@ -75,7 +76,7 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 	SmartfarmInterceptorConfig smartfarmConfig;
 
 	@Override
-	public List<Map<String, Object>> gsmOfDeviceList(Integer gsmKey) {
+	public List<GsmEnvVO> gsmOfDeviceList(Integer gsmKey) {
 		return gsmEnvMapper.gsmOfDeviceList(gsmKey);
 	}
 
@@ -114,7 +115,8 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 
 	@Override
 	public Map<String, Object> get(Integer gsmKey, boolean all, Boolean isSmartfarmSystem) {
-		Map<String,Object> gsmMap = gsmEnvMapper.getGsmList(gsmKey,null,null,null, null, null).stream().findFirst().orElse(null);
+		GsmEnvVO gsmEnv = gsmEnvMapper.getGsmList(gsmKey,null,null,null, null, null).stream().findFirst().orElse(null);
+		Map<String,Object> gsmMap = MapUtils.convertToMap(gsmEnv);
 		List<HashMap<String, Object>> houseList = houseEnvService.list(gsmKey, all, true, isSmartfarmSystem);
 		gsmMap.put("houseList", houseList);
 		return gsmMap;
@@ -139,7 +141,11 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 
 	@Override
 	public List<Map<String, Object>> list(boolean all,Integer userInfoId, Integer categoryId, String farmName, String authUserIdx, Boolean isSmartfarmSystem, Boolean isCCTVOnly) {
-        List<Map<String, Object>> gsmList = gsmEnvMapper.getGsmList(null, userInfoId, categoryId, farmName, authUserIdx, isSmartfarmSystem);
+        List<GsmEnvVO> gsmEnvList = gsmEnvMapper.getGsmList(null, userInfoId, categoryId, farmName, authUserIdx, isSmartfarmSystem);
+        if( gsmEnvList == null && gsmEnvList.size() == 0 ) {
+        	return new ArrayList<>();
+		}
+		List<Map<String, Object>> gsmList = gsmEnvList.stream().map( g -> MapUtils.convertToMap(g) ).collect(Collectors.toList());
 		for(Map<String,Object> gsm : gsmList){
 //			Integer gsmKey = (Integer)gsm.get("gsmKey");
 //			houseList = gsmEnvMapper.getHouseList(gsmKey);
@@ -170,10 +176,10 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 		return gsmEnvMapper.userRegistGSM(param);		
 	}
 
-	@Override
-	public List<GsmEnvVO> getGsmInfoByUser(Integer userInfoId) {
-		return gsmEnvMapper.getGsmInfoByUser(userInfoId);
-	}
+//	@Override
+//	public List<GsmEnvVO> getGsmInfoByUser(Integer userInfoId) {
+//		return gsmEnvMapper.getGsmInfoByUser(userInfoId);
+//	}
 
 	@Override
 	public GsmThresholdVO gsmThresholdInsert(GsmThresholdVO gsmThresholdVO) {
