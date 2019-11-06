@@ -167,6 +167,9 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 	public List<VDeviceEnvVO> insertVDeviceEnv(List<VDeviceEnvVO> voList) {
 		try{
 			for(VDeviceEnvVO vo :voList){
+				deviceEnvMapper.deleteVDeviceEnv(null, vo.getParentDeviceId());
+			}
+			for(VDeviceEnvVO vo :voList){
 				deviceEnvMapper.insertVDeviceEnv(vo);
 			}
 		}catch(Exception e){
@@ -199,10 +202,10 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 	}
 
 	@Override
-	public Integer deleteVDeviceEnv(Integer id) {
+	public Integer deleteVDeviceEnv(Integer id, Integer pDeviceId) {
 		try{
-			log.debug("deleteVDeviceEnv :{} ", id);
-			return deviceEnvMapper.deleteVDeviceEnv(id);
+			log.debug("deleteVDeviceEnv :{}/{} ", id, pDeviceId);
+			return deviceEnvMapper.deleteVDeviceEnv(id, pDeviceId);
 		}catch(Exception e){
 			log.debug(e.getMessage());
 			return null;
