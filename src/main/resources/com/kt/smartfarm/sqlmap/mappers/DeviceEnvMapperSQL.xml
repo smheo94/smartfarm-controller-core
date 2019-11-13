@@ -167,7 +167,7 @@
 	<update id="updateVDeviceEnv" parameterType="vDeviceEnvVO">
 		UPDATE device_v_dep_device
 
-			<if test="deviceId!=null">device_id = #{deviceId}</if>
+			<if test="deviceId != null">device_id = #{deviceId}</if>
 			<if test="parentDeviceId != null">,p_device_id = #{parentDeviceId}</if>
 			<if test="deviceNum != null">,device_num = #{deviceNum}</if>
 			<if test="deviceInsertOrder != null">,device_insert_order = #{deviceInsertOrder}</if>			

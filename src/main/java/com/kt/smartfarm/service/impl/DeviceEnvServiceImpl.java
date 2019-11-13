@@ -167,7 +167,7 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 	public List<VDeviceEnvVO> insertVDeviceEnv(List<VDeviceEnvVO> voList) {
 		try{
 			for(VDeviceEnvVO vo :voList){
-				deviceEnvMapper.deleteVDeviceEnv(null, vo.getParentDeviceId());
+				deviceEnvMapper.deleteVDeviceEnv(vo.getId(), vo.getParentDeviceId());
 			}
 			for(VDeviceEnvVO vo :voList){
 				deviceEnvMapper.insertVDeviceEnv(vo);
