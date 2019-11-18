@@ -12,6 +12,7 @@
  */
 package com.kt.smartfarm.service.impl;
 
+import com.kt.cmmn.util.AuthorityChecker;
 import com.kt.smartfarm.service.AuthCheckService;
 import com.kt.smartfarm.supervisor.mapper.AuthCheckMapper;
 import com.kt.cmmn.util.ClassUtil;
@@ -47,6 +48,9 @@ public class AuthCheckServiceImpl extends EgovAbstractServiceImpl implements Aut
 		return userIdx;
 	}
 
+	public AuthorityChecker getAuthCheck() {
+		return new AuthorityChecker();
+	}
 	@Override
 	public Boolean authCheck(Integer gsmKey, Integer houseId) {
 		if (config.isSmartfarmSystem()) {

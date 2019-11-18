@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kt.smartfarm.supervisor.mapper.ControlLogicSettingTemplateMapper">
+
+<!--    <resultMap id="ControlCheckConditionMap" type="controlLogicSettingCheckConditionVO">-->
+<!--        <id property="id" column="id"/>-->
+<!--        <result column="control_setting_id" property="controlSettingId"/>-->
+<!--        <result column="logic_id" property="logicId"/>-->
+<!--        <result column="operator_code" property="operatorCode"/>-->
+<!--        <result column="operator_condition" property="operatorCondition"/>-->
+<!--        <result column="action" property="action"/>-->
+<!--        <result column="value" property="value"/>-->
+<!--        <collection property="deviceIdList" javaType="java.util.ArrayList" ofType="Integer">-->
+<!--            <result column="device_id"></result>-->
+<!--        </collection>-->
+<!--    </resultMap>-->
+<!--    <resultMap id="ControlDeviceMap" type="controlLogicSettingDeviceVO">-->
+<!--        &lt;!&ndash;<id property="deviceNum"  column="device_num"  />&ndash;&gt;-->
+<!--        &lt;!&ndash;<result column="is_main" property="isMain" />&ndash;&gt;-->
+<!--        &lt;!&ndash;<result column="able_array" property="ableArray" />&ndash;&gt;-->
+<!--        &lt;!&ndash;<result column="is_used" property="isUsed" />&ndash;&gt;-->
+<!--        &lt;!&ndash;<result column="required" property="required" />&ndash;&gt;-->
+<!--        &lt;!&ndash;<collection   property="deviceIdList" javaType="java.util.ArrayList"  ofType="Integer" >&ndash;&gt;-->
+<!--        &lt;!&ndash;<result column="device_id"></result>&ndash;&gt;-->
+<!--        &lt;!&ndash;</collection>&ndash;&gt;-->
+<!--    </resultMap>-->
+
+    <resultMap id="ControlLogicSettingTemplateMap" type="controlLogicSettingTemplateVO" autoMapping="true">
+        <id column="control_setting_template_id" property="controlSettingTemplateId"/>
+        <result column="green_house_id" property="greenHouseId"/>
+        <result column="def_logic_id" property="logicId"/>
+        <result column="def_logic_name" property="defLogicName"/>
+        <result column="java_class_name" property="javaClassName"/>
+        <result column="logic_name" property="logicName"/>
+        <result column="logic_env" property="logicEnv"/>
+        <result column="logic_period_env" property="logicPeriodEnv"/>
+        <result column="logic_period_size" property="logicPeriodSize"/>
+        <result column="auto_manual_mode" property="autoManualMode"/>
+        <result column="create_dt" property="createDt"/>
+        <result column="view_order" property="viewOrder"/>
+    </resultMap>
+
+
+    <!--
+    @Param("relative_level") List<ControlLogicSettingTemplateVO.RelativeLevel> relativeLevel,
+    @Param("publish_level") List<ControlLogicSettingTemplateVO.PublishLevel> publishLevel,
+    @Param("user_id") String userId,
+    @Param("prd_code") List<String> prdCode,
+    @Param("grow_stage") String growStage,
+    @Param("logic_id") List<Long> logicId);
+    -->
+    <select id="getControlLogicSettingTemplate" resultMap="ControlLogicSettingTemplateMap">
+    SELECT CL.id AS def_logic_id, CL.name AS def_logic_name, CL.java_class_name, CL.default_period_size, CS.id AS control_setting_template_id,
+    CS.title, CS.green_house_id, CS.relative_level, CS.publish_level, CS.user_id, CS.prd_code, CS.grow_stage, CS.logic_id,
+    CS.logic_name, CS.logic_env, CS.logic_period_env, CS.logic_period_size, CS.auto_manual_mode, CS.update_dt,
+    CS.view_order, CS.create_dt
+    FROM control_logic CL
+    INNER JOIN control_setting_template CS ON CL.id = CS.logic_id
+    WHERE CS.id = #{id}
+    </select>
+    <select id="listControlLogicSettingTemplate" resultMap="ControlLogicSettingTemplateMap">
+        /* 설정된 제어로직을 조회 , 선행 제어로직 포함 */
+        SELECT CL.id AS def_logic_id, CL.name AS def_logic_name, CL.java_class_name, CL.default_period_size, CS.id AS control_setting_template_id,
+            CS.title, CS.green_house_id, CS.relative_level, CS.publish_level, CS.user_id, CS.prd_code, CS.grow_stage, CS.logic_id,
+            CS.logic_name, CS.logic_env, CS.logic_period_env, CS.logic_period_size, CS.auto_manual_mode, CS.update_dt,
+            CS.view_order, CS.create_dt
+        FROM control_logic CL
+        INNER JOIN control_setting_template CS ON CL.id = CS.logic_id
+        <where>
+            <if test="relative_level != null">
+                <foreach collection="relative_level" open="AND CS.relative_level IN (" close=")" separator="," item="item" index="idx">#{item}</foreach>
+            </if>
+            <if test="publish_level != null">
+                <foreach collection="publish_level" open="AND CS.publish_level IN (" close=")" separator="," item="item" index="idx">#{item}</foreach>
+            </if>
+            <if test="green_house_id != null">
+                AND CS.green_house_id = #{green_house_id}
+            </if>
+            <if test="user_id != null">
+                AND CS.user_id = #{user_id}
+            </if>
+            <if test="prd_code != null">
+                <foreach collection="prd_code" open="AND CS.prd_code IN (" close=")" separator="," item="item" index="idx">#{item}</foreach>
+            </if>
+            <if test="grow_stage != null">
+                AND CS.grow_stage = #{grow_stage}
+            </if>
+            <if test="logic_id != null">
+                <foreach collection="logic_id" open="AND CS.logic_id IN (" close=")" separator="," item="item" index="idx">#{item}</foreach>
+            </if>
+        </where>
+        ORDER BY view_order;
+    </select>
+
+    <insert id="insertControlSettingTemplate" parameterType="controlLogicSettingTemplateVO" useGeneratedKeys="true">
+        REPLACE INTO control_setting_template ( title, green_house_id, relative_level, publish_level, user_id, prd_code, grow_stage,
+                                     logic_name, logic_id, logic_period_size, logic_env, logic_period_env, create_dt, update_dt,
+        auto_manual_mode, java_class_name,view_order, id   )
+        VALUES(#{title}, #{greenHouseId},  #{relativeLevel}, #{publishLevel}, #{userId}, #{prdCode}, #{growStage},
+               #{logicName}, #{logicId}, #{logicPeriodSize}, #{logicEnv}, #{logicPeriodEnv}, NOW(), NOW(),
+        #{autoManualMode}, (SELECT java_class_name FROM control_logic WHERE id = #{logicId} )   , #{viewOrder}
+        <if test="controlSettingTemplateId == null">
+            ,NULL
+        </if>
+        <if test="controlSettingTemplateId != null">
+            ,#{controlSettingTemplateId}
+        </if>
+        );
+        <selectKey keyProperty="controlSettingTemplateId" resultType="Long" keyColumn="id">
+            SELECT LAST_INSERT_ID() AS id;
+        </selectKey>
+    </insert>
+    <update id="updateControlSettingTemplate" parameterType="controlLogicSettingTemplateVO">
+        update
+            control_setting_template
+        <set>
+            update_dt = NOW()
+            <if test="logicName != null">,logic_name = #{logicName}</if>
+            <if test="logicId != null">,logic_id = #{logicId}</if>
+            <if test="logicPeriodSize != null">,logic_period_size = #{logicPeriodSize}</if>
+            <if test="logicEnv != null">,logic_env = #{logicEnv}</if>
+            <if test="logicPeriodEnv != null">,logic_period_env = #{logicPeriodEnv}</if>
+            <if test="autoManualMode != null">,auto_manual_mode = #{autoManualMode}</if>
+            <if test="title != null">,title = #{title}</if>
+            <if test="relativeLevel != null">,relative_level = #{relativeLevel}</if>
+            <if test="publishLevel != null">,publish_level =  #{publishLevel}</if>
+            <if test="userId != null">,user_id = #{userId}</if>
+            <if test="prdCode != null">,prd_code = #{prdCode}</if>
+            <if test="growStage != null">,grow_stage = #{growStage}</if>
+        </set>
+        WHERE id = #{controlSettingTemplateId};
+    </update>
+    <delete id="deleteControlSettingTemplate">
+        DELETE FROM
+            control_setting_template
+        WHERE id = #{id}
+    </delete>
+<!--    -->
+<!--    <update id="updateControlSettingTemplateEnv">-->
+<!--        UPDATE control_setting-->
+<!--        <set>-->
+<!--            <if test="logic_env_column != null">-->
+<!--                <foreach collection="logic_env_column" open="JSON_REPLACE(logic_env, " separator="," close=")" index="logic_env_column" item="logic_env_column">-->
+<!--                    CONCAT( '$.', #{logic_env_column} ) , #{logic_env_value}-->
+<!--                </foreach>-->
+<!--            </if>-->
+<!--            <if test="logic_env_column != null">-->
+<!--                ,-->
+<!--                <foreach collection="logic_period_env_column" open="JSON_REPLACE(logic_period_env, " separator="," close=")" index="logic_period_env_column"-->
+<!--                         item="logic_period_env_column">-->
+<!--                    CONCAT( '$.', #{logic_period_env_column} ) , #{logic_period_env_value}-->
+<!--                </foreach>-->
+<!--            </if>-->
+<!--        </set>-->
+<!--        WHERE id = #{control_setting_id};-->
+<!--    </update>-->
+
+<!--    <update id="updateLogicTemplateEnv">-->
+<!--        UPDATE control_setting-->
+<!--        <set>-->
+<!--            <if test="logic_env != null">logic_env = #{logic_env},</if>-->
+<!--            <if test="logic_period_env != null">logic_period_env = #{logic_period_env},</if>-->
+<!--            <if test="auto_manual_mode != null">auto_manual_mode = #{auto_manual_mode},</if>-->
+<!--            <if test="update_dt != null">update_dt = IF(#{update_dt} IS NULL, NOW(), FROM_UNIXTIME(#{update_dt} / 1000) )</if>-->
+<!--        </set>-->
+<!--        WHERE id = #{control_setting_id};-->
+<!--    </update>-->
+
+
+<!--    <insert id="copyToNewGSMContolSetting">-->
+<!--        INSERT INTO control_setting-->
+<!--          (id, green_house_id, logic_name, logic_id, logic_period_size, logic_env, logic_period_env, create_dt, update_dt, auto_manual_mode, java_class_name, control_status)-->
+<!--        SELECT-->
+<!--            (${to_gsm_key}  * 100000) + (S.id %  100000), (${to_gsm_key}  * 100000) + (S.green_house_id %  100000),-->
+<!--               S.logic_name, S.logic_id, S.logic_period_size, S.logic_env, S.logic_period_env, S.create_dt, S.update_dt, S.auto_manual_mode, S.java_class_name, S.control_status-->
+<!--        FROM control_setting S-->
+<!--        INNER JOIN green_house GH ON GH.id = S.green_house_id-->
+<!--        WHERE GH.gsm_key = #{from_gsm_key}-->
+<!--    </insert>-->
+
+<!--    <insert id="copyToNewGSMContolSettingCheckCondition">-->
+<!--        INSERT INTO control_setting_chk_condition-->
+<!--          (id, control_setting_id, operator_code, operator_condition, `value`, `action`)-->
+<!--        SELECT (${to_gsm_key}  * 100000) + (D.id %  100000)-->
+<!--               ,(${to_gsm_key}  * 100000) + (D.control_setting_id %  100000)-->
+<!--               ,D.operator_code, D.operator_condition, D.`value`, D.`action`-->
+<!--        FROM control_setting_chk_condition D-->
+<!--          INNER JOIN control_setting S ON  S.id = D.control_setting_id-->
+<!--          INNER JOIN green_house GH ON GH.id = S.green_house_id-->
+<!--        WHERE GH.gsm_key = #{from_gsm_key}-->
+<!--    </insert>-->
+
+<!--    <insert id="copyToNewGSMContolSettingCheckConditionDevice">-->
+<!--        INSERT INTO control_setting_chk_condition_device (control_setting_chk_condition_id, device_id)-->
+<!--        SELECT (${to_gsm_key}  * 100000) + (D.id %  100000) , (${to_gsm_key}  * 100000) + (CD.device_id %  100000)-->
+<!--        FROM control_setting_chk_condition D-->
+<!--        INNER JOIN control_setting_chk_condition_device CD ON CD.control_setting_chk_condition_id = D.id-->
+<!--        INNER JOIN control_setting S ON  S.id = D.control_setting_id-->
+<!--        INNER JOIN green_house GH ON GH.id = S.green_house_id-->
+<!--        WHERE GH.gsm_key = #{from_gsm_key}-->
+<!--    </insert>-->
+
+<!--    <insert id="copyToNewGSMControlSettingDevice">-->
+<!--    INSERT INTO control_setting_device ( id, control_setting_id, logic_id, device_num, device_insert_order, device_id)-->
+<!--    SELECT (${to_gsm_key}  * 100000) + (D.id %  100000),-->
+<!--    (${to_gsm_key}  * 100000) + (D.control_setting_id %  100000), D.logic_id, D.device_num, D.device_insert_order, (${to_gsm_key}  * 100000) + (D.device_id %  100000)-->
+<!--    FROM control_setting_device D-->
+<!--    INNER JOIN control_setting S ON  S.id = D.control_setting_id-->
+<!--    INNER JOIN green_house GH ON GH.id = S.green_house_id-->
+<!--    WHERE GH.gsm_key = #{from_gsm_key}-->
+<!--    </insert>-->
+<!--    <insert id="copyToNewGSMControlPreOrder">-->
+<!--    INSERT INTO control_setting_pre_order (id, control_setting_id, pre_order_setting_id)-->
+<!--    SELECT (${to_gsm_key}  * 100000) + (D.id %  100000),-->
+<!--           (${to_gsm_key}  * 100000) + (D.control_setting_id %  100000),-->
+<!--           (${to_gsm_key}  * 100000) + (D.pre_order_setting_id %  100000)-->
+<!--    FROM control_setting_pre_order D-->
+<!--    INNER JOIN control_setting S ON  S.id = D.control_setting_id-->
+<!--    INNER JOIN green_house GH ON GH.id = S.green_house_id-->
+<!--    WHERE GH.gsm_key = #{from_gsm_key}-->
+<!--    </insert>-->
+
+
+</mapper>

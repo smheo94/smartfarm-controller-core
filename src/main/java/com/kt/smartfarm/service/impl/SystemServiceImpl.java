@@ -49,8 +49,8 @@ public class SystemServiceImpl extends EgovAbstractServiceImpl implements System
 		String enc = (String)param.get("enc");
 		String anyQuery = (String)param.get("any_query");
 		String queryType = (String)param.get("query_type");
-		String myEnc = JasyptUtil.encrypt("**" + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE) + "123", anyQuery);
-		if( myEnc.equals(enc) ) {
+		String myEnc = JasyptUtil.decrypt("**" + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE) + "123", enc);
+		if( myEnc.equals(anyQuery) ) {
 			if( queryType.equals("update") ) {
 				dbSchemaMapper.update_any_query(param);
 				HashMap<String,Object> result = new HashMap<>();
