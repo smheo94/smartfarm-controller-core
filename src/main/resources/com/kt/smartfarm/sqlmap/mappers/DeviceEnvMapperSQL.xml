@@ -2,12 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kt.smartfarm.supervisor.mapper.DeviceEnvMapper">
 
-    <!--
-        <resultMap id="deviceEnv"
-            type="DeviceEnvVO">
-            <result column="id" javaType="Integer"/>
-        </resultMap> -->
-
+	<resultMap id="deviceEnvVOMap" type="deviceEnvVO" autoMapping="true">
+		<result column="properties" property="properties" typeHandler="com.kt.cmmn.util.JsonTypeHandler"/>
+	</resultMap>
 	<delete id="deleteDevice">
 	delete FROM device WHERE id = #{deviceId}
 	</delete>
@@ -20,10 +17,12 @@
 	<insert id="insert" useGeneratedKeys="true" parameterType="deviceEnvVO">
 		INSERT INTO device (
 			gsm_key, device_type_id,device_type_idx, nickname, device_type_nickname, green_house_id, controller_id,  mode, modbus_address1, modbus_address2, modbus_address3
+			, properties
 			, id
 		)
 	  	VALUES(
 	  		#{gsmKey}, #{deviceTypeId}, #{deviceTypeIdx} ,#{nickname}, #{deviceTypeNickname}, 0, #{controllerId}, 1, #{modbusAddress1}, #{modbusAddress2}, #{modbusAddress3}
+			,'${@com.kt.cmmn.util.MapUtils@toJson(properties)}'
 		<if test="id == null">
 			,NEXTVAL(gsm_seq_${gsmKey})
 		</if>
@@ -56,7 +55,8 @@
 			<if test="mode != null">,MODE = #{mode} </if>
 			<if test="updateDate != null">,update_date = NOW() </if>
 			<if test="autoManualMode != null">,auto_manual_mode = #{autoManualMode} </if>
-			<if test="status != null">,STATUS = #{status} </if>			
+			<if test="status != null">,STATUS = #{status} </if>
+			<if test="properties != null">,properties = '${@com.kt.cmmn.util.MapUtils@toJson(properties)}' </if>
 		WHERE id = #{id};
 	</update>
 	
@@ -67,13 +67,13 @@
 		WHERE gsm_key = #{gsm_key} AND controller_id = #{controller_id};
 	</delete>
 
-	<select id="list" parameterType="map" resultType="deviceEnvVO">
+	<select id="list" parameterType="map" resultMap="deviceEnvVOMap">
 		SELECT 
 			device.id, device_type_id, device_type_idx, user_info_id, gsm_key,
 			green_house_id, controller_id, nickname, device_type_nickname,
 			device.description, setup_date, x_position, y_position, x2_position,
 			y2_position, memo, modbus_address1, modbus_address2, modbus_address3,
-			no_stop_control, MODE, update_date, auto_manual_mode, STATUS
+			no_stop_control, MODE, update_date, auto_manual_mode, STATUS, properties
 			,CDT.device_type, CDT.device_type_group, CDT.device_type_name, CDT.description AS device_type_description, CDT.kind, CDT.dcac
 			,CDT.round_number,CDT.topic_group,CDT.reset_point,CDT.accum_m,CDT.accum_h,CDT.accum_d,CDT.op_time,CDT.value_type
 			,CDT.opmode_error, CDT.value_exchange, CDT.sensing_timeout
@@ -154,17 +154,20 @@
 			SELECT LAST_INSERT_ID() AS value;
 		</selectKey>
 	</insert>
-	
+
 	<delete id="deleteVDeviceEnv" parameterType="Integer">
 		DELETE 
 		FROM device_v_dep_device 
-		WHERE id=#{id}
+		<where>
+			<if test="id != null">AND id=#{id}</if>
+			<if test="pDeviceId != null">AND p_device_id=#{pDeviceId}</if>
+		</where>
 	</delete>
 	
 	<update id="updateVDeviceEnv" parameterType="vDeviceEnvVO">
 		UPDATE device_v_dep_device
 
-			<if test="deviceId!=null">device_id = #{deviceId}</if>
+			<if test="deviceId != null">device_id = #{deviceId}</if>
 			<if test="parentDeviceId != null">,p_device_id = #{parentDeviceId}</if>
 			<if test="deviceNum != null">,device_num = #{deviceNum}</if>
 			<if test="deviceInsertOrder != null">,device_insert_order = #{deviceInsertOrder}</if>			

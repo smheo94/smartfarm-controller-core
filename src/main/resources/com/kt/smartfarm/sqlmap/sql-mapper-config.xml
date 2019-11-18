@@ -33,6 +33,8 @@
 		<typeAlias alias="vDeviceInfoVO" type="com.kt.smartfarm.service.VDeviceInfoVO"/>
 		<typeAlias alias="vDeviceEnvVO" type="com.kt.smartfarm.service.VDeviceEnvVO"/>
 
+		<typeAlias alias="controlLogicSettingTemplateVO" type="com.kt.smartfarm.service.ControlLogicSettingTemplateVO"/>
+
 		<typeAlias alias="controlLogicSettingVO" type="com.kt.smartfarm.service.ControlLogicSettingVO"/>
 		<typeAlias alias="controlLogicSettingHistoryVO" type="com.kt.smartfarm.service.ControlLogicSettingHistoryVO"/>
 		<typeAlias alias="controlLogicSettingDeviceVO" type="com.kt.smartfarm.service.ControlLogicSettingDeviceVO"/>
@@ -44,4 +46,5 @@
 		<typeAlias alias="gsmThresholdVO" type="com.kt.smartfarm.service.GsmThresholdVO"/>
 
     </typeAliases>
+
 </configuration>

@@ -1,10 +1,14 @@
 package com.kt.smartfarm.service;
 
+import com.kt.cmmn.util.MapUtils;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.logging.log4j.core.util.JsonUtils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -59,6 +63,20 @@ public class DeviceEnvVO {
 	Integer accumD;
 	Integer opTime;
 	Integer valueType;
+	Map<String,Object> properties;
+//	String properties;
+//
+//	String trdPtId;
+//
+//	public void setTrdPtId(String value) {
+//		this.trdPtId = value;
+//		makeProperties();
+//	}
+//	public void makeProperties() {
+//		HashMap<String,Object> propertiesMap = new HashMap<>();
+//		propertiesMap.put("trd_pt_id", trdPtId);
+//		properties = MapUtils.toJson(propertiesMap);
+//	}
 
 	List<VDeviceEnvVO> relationDeviceList;
 

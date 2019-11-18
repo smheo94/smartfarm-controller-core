@@ -11,6 +11,7 @@ import com.kt.cmmn.util.InterceptPre;
 import com.kt.cmmn.util.Result;
 import com.kt.smartfarm.message.ApplicationMessage;
 import com.kt.smartfarm.service.GsmEnvVO;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
@@ -38,6 +39,7 @@ import java.util.Objects;
 
 import static com.kt.smartfarm.message.ApplicationMessage.NOT_FOUND_GSM_INFO;
 
+@Slf4j
 public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
     private static final Logger LOG = LoggerFactory.getLogger(SmartFarmDataInterceptor.class);
 
@@ -150,7 +152,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
                         //헤더가 없는경우 제어기로 내릴 수 없음
                         return;
                     }
-                    System.out.printf("제어기에 데이터를 보냅니다.");
+                    log.info("제어기에 데이터를 보냅니다. , {}", handlerMethod.getMethod() );
                     Integer gsmKey = Integer.valueOf(headerGsmKey);
                     ResponseEntity<ResponseResult> result = null;
                     if( handlerMethod.getMethod().getAnnotation(InterceptPre.class) != null) {

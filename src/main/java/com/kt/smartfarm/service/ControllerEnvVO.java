@@ -27,7 +27,7 @@ public class ControllerEnvVO {
 	String controllerType; // 양액기 = 1 / 구동기 = 0
 	String controllerStatus;
 	String description;
-	String properties;
+	Map<String,Object> properties;
 	Integer port;
 	ControllerInfoVO controllerInfo;
 	

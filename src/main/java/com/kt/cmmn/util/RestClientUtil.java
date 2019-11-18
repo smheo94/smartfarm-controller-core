@@ -33,7 +33,7 @@ public class RestClientUtil {
             HttpEntity param = new HttpEntity<>(data, headers);
             result = client.exchange(url, method, param, hashmapResponseType);
         } catch(Exception e) {
-            log.info("RestClient : {}", Thread.currentThread().getId());
+            //log.info("RestClient : {}", Thread.currentThread().getId());
             log.warn("RestClient Error : {}, {}, {}", url, method, e );
         }
         return result;

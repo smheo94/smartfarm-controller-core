@@ -7,7 +7,7 @@ import java.util.Map;
 
 public interface GsmEnvService {
 
-	List<Map<String,Object>> gsmOfDeviceList(Integer gsmKey);
+	List<GsmEnvVO> gsmOfDeviceList(Integer gsmKey);
 
 	//GsmEnvVO get(Integer gsmKey);
 
@@ -25,7 +25,7 @@ public interface GsmEnvService {
 
 	Integer userRegistGSM(HashMap<String, Object> param, Integer gsmKey);
 
-	List<GsmEnvVO> getGsmInfoByUser(Integer userInfoId);
+//	List<GsmEnvVO> getGsmInfoByUser(Integer userInfoId);
 
 	GsmThresholdVO gsmThresholdInsert(GsmThresholdVO gsmThresholdVO);
 	GsmThresholdVO gsmThresholdUpdate(GsmThresholdVO gsmThresholdVO);

@@ -169,6 +169,7 @@ public class DeviceEnvController {
 	@InterceptPost
 	public Result<List<VDeviceEnvVO>> vDeviceList(@PathVariable("deviceId") Integer deviceId, @RequestBody List<VDeviceEnvVO> vo){
 		try {
+			vo.stream().forEach(v -> v.setParentDeviceId(deviceId));
 			return new Result(deviceEnvService.insertVDeviceEnv(vo));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
@@ -180,6 +181,7 @@ public class DeviceEnvController {
 	@InterceptPre
 	public Result<VDeviceEnvVO> updateVDeviceList(@PathVariable("deviceId") Integer deviceId, @RequestBody VDeviceEnvVO vo){
 		try {
+			vo.setParentDeviceId(deviceId);
 			return new Result(deviceEnvService.updateVDeviceEnv(vo));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
@@ -191,7 +193,7 @@ public class DeviceEnvController {
 	@InterceptPre
 	public Result<VDeviceEnvVO> deleteVDeviceList(@PathVariable("id") Integer id){
 		try {
-			return new Result(deviceEnvService.deleteVDeviceEnv(id));
+			return new Result(deviceEnvService.deleteVDeviceEnv(id, null));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
