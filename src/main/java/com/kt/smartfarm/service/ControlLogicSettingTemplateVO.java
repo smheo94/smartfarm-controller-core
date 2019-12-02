@@ -47,6 +47,9 @@ public class ControlLogicSettingTemplateVO {
 	public Date createDt;
 	public Date updateDt;
 	public Integer viewOrder;
+	public String mclassname;
+	public String lclassname;
+	public String userName;
 	public Map<String,Object> toMap() {
 		return ClassUtil.toHashMap(this);
 	}

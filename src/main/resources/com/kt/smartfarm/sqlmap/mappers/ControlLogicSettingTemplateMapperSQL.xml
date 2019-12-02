@@ -52,7 +52,7 @@
     <select id="getControlLogicSettingTemplate" resultMap="ControlLogicSettingTemplateMap">
     SELECT CL.id AS def_logic_id, CL.name AS def_logic_name, CL.java_class_name, CL.default_period_size, CS.id AS control_setting_template_id,
     CS.title, CS.green_house_id, CS.relative_level, CS.publish_level, CS.user_id, CS.prd_code, CS.grow_stage, CS.logic_id,
-    CS.logic_name, CS.logic_env, CS.logic_period_env, CS.logic_period_size, CS.auto_manual_mode, CS.update_dt,
+    CS.logic_name, CS.logic_env, CS.logic_period_env, CS.logic_period_size, CS.auto_manual_mode, CS.update_dt, CS.template_description,
     CS.view_order, CS.create_dt
     FROM control_logic CL
     INNER JOIN control_setting_template CS ON CL.id = CS.logic_id
@@ -62,10 +62,15 @@
         /* 설정된 제어로직을 조회 , 선행 제어로직 포함 */
         SELECT CL.id AS def_logic_id, CL.name AS def_logic_name, CL.java_class_name, CL.default_period_size, CS.id AS control_setting_template_id,
             CS.title, CS.green_house_id, CS.relative_level, CS.publish_level, CS.user_id, CS.prd_code, CS.grow_stage, CS.logic_id,
-            CS.logic_name, CS.logic_env, CS.logic_period_env, CS.logic_period_size, CS.auto_manual_mode, CS.update_dt,
+            CS.logic_name, CS.logic_env, CS.logic_period_env, CS.logic_period_size, CS.auto_manual_mode, CS.update_dt, CS.template_description,
             CS.view_order, CS.create_dt
+            ,CPM.mclassname, CPL.lclassname
+            ,U.user_name
         FROM control_logic CL
         INNER JOIN control_setting_template CS ON CL.id = CS.logic_id
+        LEFT JOIN cd_prd_mclass CPM ON CPM.mclasscode = CS.prd_code
+        LEFT JOIN cd_prd_lclass CPL ON CPL.lclasscode = CPM.lclasscode
+        LEFT JOIN user_info U ON U.idx = CS.user_id
         <where>
             <if test="relative_level != null">
                 <foreach collection="relative_level" open="AND CS.relative_level IN (" close=")" separator="," item="item" index="idx">#{item}</foreach>
@@ -94,10 +99,10 @@
 
     <insert id="insertControlSettingTemplate" parameterType="controlLogicSettingTemplateVO" useGeneratedKeys="true">
         REPLACE INTO control_setting_template ( title, green_house_id, relative_level, publish_level, user_id, prd_code, grow_stage,
-                                     logic_name, logic_id, logic_period_size, logic_env, logic_period_env, create_dt, update_dt,
+                                     logic_name, logic_id, logic_period_size, logic_env, logic_period_env, create_dt, update_dt, template_description
         auto_manual_mode, java_class_name,view_order, id   )
         VALUES(#{title}, #{greenHouseId},  #{relativeLevel}, #{publishLevel}, #{userId}, #{prdCode}, #{growStage},
-               #{logicName}, #{logicId}, #{logicPeriodSize}, #{logicEnv}, #{logicPeriodEnv}, NOW(), NOW(),
+               #{logicName}, #{logicId}, #{logicPeriodSize}, #{logicEnv}, #{logicPeriodEnv}, NOW(), NOW(), #{templateDescription},
         #{autoManualMode}, (SELECT java_class_name FROM control_logic WHERE id = #{logicId} )   , #{viewOrder}
         <if test="controlSettingTemplateId == null">
             ,NULL
@@ -121,6 +126,7 @@
             <if test="logicEnv != null">,logic_env = #{logicEnv}</if>
             <if test="logicPeriodEnv != null">,logic_period_env = #{logicPeriodEnv}</if>
             <if test="autoManualMode != null">,auto_manual_mode = #{autoManualMode}</if>
+            <if test="templateDescription != null">,template_description = #{templateDescription}</if>
             <if test="title != null">,title = #{title}</if>
             <if test="relativeLevel != null">,relative_level = #{relativeLevel}</if>
             <if test="publishLevel != null">,publish_level =  #{publishLevel}</if>
