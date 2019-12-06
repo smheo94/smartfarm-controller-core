@@ -156,17 +156,20 @@
 			SELECT LAST_INSERT_ID() AS value;
 		</selectKey>
 	</insert>
-	
+
 	<delete id="deleteVDeviceEnv" parameterType="Integer">
 		DELETE 
 		FROM device_v_dep_device 
-		WHERE id=#{id}
+		<where>
+			<if test="id != null">AND id=#{id}</if>
+			<if test="pDeviceId != null">AND p_device_id=#{pDeviceId}</if>
+		</where>
 	</delete>
 	
 	<update id="updateVDeviceEnv" parameterType="vDeviceEnvVO">
 		UPDATE device_v_dep_device
 
-			<if test="deviceId!=null">device_id = #{deviceId}</if>
+			<if test="deviceId != null">device_id = #{deviceId}</if>
 			<if test="parentDeviceId != null">,p_device_id = #{parentDeviceId}</if>
 			<if test="deviceNum != null">,device_num = #{deviceNum}</if>
 			<if test="deviceInsertOrder != null">,device_insert_order = #{deviceInsertOrder}</if>			

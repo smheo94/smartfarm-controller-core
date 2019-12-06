@@ -356,10 +356,10 @@
 			FROM weather_cast
 			WHERE 1=1
 				AND house_id = #{house_id}
-				<if test="from_date!=null">
+				<if test="from_date != null">
 					AND fcst_date BETWEEN #{from_date} AND #{to_date}
 				</if>
-				<if test="from_date==null">				
+				<if test="from_date == null">
 					AND fcst_date BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL 3 DAY
 				</if>
     		GROUP BY house_id, fcst_date, fcst_time, category

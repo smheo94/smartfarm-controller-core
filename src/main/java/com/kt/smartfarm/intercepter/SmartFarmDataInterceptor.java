@@ -2,15 +2,12 @@ package com.kt.smartfarm.intercepter;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kt.cmmn.util.*;
 import com.kt.smartfarm.supervisor.mapper.GsmEnvMapper;
 
-import com.kt.cmmn.util.InterceptIgnoreGSMKey;
-import com.kt.cmmn.util.InterceptPost;
-import com.kt.cmmn.util.InterceptPre;
-
-import com.kt.cmmn.util.Result;
 import com.kt.smartfarm.message.ApplicationMessage;
 import com.kt.smartfarm.service.GsmEnvVO;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
@@ -38,6 +35,7 @@ import java.util.Objects;
 
 import static com.kt.smartfarm.message.ApplicationMessage.NOT_FOUND_GSM_INFO;
 
+@Slf4j
 public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
     private static final Logger LOG = LoggerFactory.getLogger(SmartFarmDataInterceptor.class);
 
@@ -69,7 +67,12 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
              if(headerGsmKey == null){
              	headerGsmKey = response.getHeader(X_HEADER_GSM_KEY);	
              }
-             
+             boolean preIntercept = handlerMethod.getMethod().getAnnotation(InterceptPre.class) != null;
+             boolean postIntercept = handlerMethod.getMethod().getAnnotation(InterceptPost.class) != null;
+             if( preIntercept || postIntercept ) {
+                 AuthorityChecker authChecker = new AuthorityChecker();
+                 log.info("Modify Data : ");
+             }
              if( isSmartfarmSystem ) {
                  if( handlerMethod.getMethod().getAnnotation(InterceptIgnoreGSMKey.class) ==null && (headerGsmKey == null || !Objects.equals(headerGsmKey, myGSMKey))) {
                      setErrorResult(response, String.format(ApplicationMessage.MISS_MATCHING_GSM_KEY, headerGsmKey),
@@ -85,7 +88,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
              }
              startTran = false;
              
-             if( handlerMethod.getMethod().getAnnotation(InterceptPre.class) != null) {
+             if( preIntercept) {
 //                System.out.printf( "제어기 연동이 필요 합니다.");
 //                //TODO : 제어기에 데이터를 보낸다.
 //                Integer gsmKey = Integer.valueOf(headerGsmKey);
@@ -101,7 +104,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
 //                    //TODO: 더이상 진행하지 않고 오류를 Response에 셋팅합니다.
 //                    return false;
 //                }
-            } else if( handlerMethod.getMethod().getAnnotation(InterceptPost.class) != null ) {
+            } else if( postIntercept ) {
                 //System.out.printf( "DB 트렌젝션을 시작하세요. 롤백을 할 수 있어야 합니다.");
                 //TODO : DB 트렌젝션을 시작하세요. 롤백을 할 수 있어야 합니다.
                 startTran =true;
@@ -150,7 +153,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
                         //헤더가 없는경우 제어기로 내릴 수 없음
                         return;
                     }
-                    System.out.printf("제어기에 데이터를 보냅니다.");
+                    log.info("제어기에 데이터를 보냅니다. , {}", handlerMethod.getMethod() );
                     Integer gsmKey = Integer.valueOf(headerGsmKey);
                     ResponseEntity<ResponseResult> result = null;
                     if( handlerMethod.getMethod().getAnnotation(InterceptPre.class) != null) {

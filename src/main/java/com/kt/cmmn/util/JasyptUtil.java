@@ -22,4 +22,12 @@ public class JasyptUtil {
         pbeEnc.setPassword(password);
         return pbeEnc.encrypt(text);
     }
+
+    public static String decrypt(String password, String encText) {
+        String algorithm = "PBEWithMD5AndDES";
+        StandardPBEStringEncryptor pbeEnc = new StandardPBEStringEncryptor();
+        pbeEnc.setAlgorithm(algorithm);
+        pbeEnc.setPassword(password);
+        return pbeEnc.decrypt(encText);
+    }
 }

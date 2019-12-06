@@ -25,7 +25,7 @@ public interface DeviceEnvService {
 	List<VDeviceEnvVO> getVDeviceEnvList(Integer deviceId);
 	
 	VDeviceEnvVO updateVDeviceEnv(VDeviceEnvVO vo);
-	Integer deleteVDeviceEnv(Integer deviceId);
+	Integer deleteVDeviceEnv(Integer id, Integer pDeviceId);
 
 	Integer copyToNewGSM(Integer fromGsmKey, Integer toGsmKey);
 

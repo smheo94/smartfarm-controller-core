@@ -34,6 +34,8 @@
 		<typeAlias alias="vDeviceEnvVO" type="com.kt.smartfarm.service.VDeviceEnvVO"/>
 		<typeAlias alias="eDeviceEnvVO" type="com.kt.smartfarm.service.EDeviceEnvVO"/>
 
+		<typeAlias alias="controlLogicSettingTemplateVO" type="com.kt.smartfarm.service.ControlLogicSettingTemplateVO"/>
+
 		<typeAlias alias="controlLogicSettingVO" type="com.kt.smartfarm.service.ControlLogicSettingVO"/>
 		<typeAlias alias="controlLogicSettingHistoryVO" type="com.kt.smartfarm.service.ControlLogicSettingHistoryVO"/>
 		<typeAlias alias="controlLogicSettingDeviceVO" type="com.kt.smartfarm.service.ControlLogicSettingDeviceVO"/>
