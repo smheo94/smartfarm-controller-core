@@ -100,7 +100,7 @@
     <insert id="insertControlSettingTemplate" parameterType="controlLogicSettingTemplateVO" useGeneratedKeys="true">
         REPLACE INTO control_setting_template ( title, green_house_id, relative_level, publish_level, user_id, prd_code, grow_stage,
                                      logic_name, logic_id, logic_period_size, logic_env, logic_period_env, create_dt, update_dt, template_description
-        auto_manual_mode, java_class_name,view_order, id   )
+        ,auto_manual_mode, java_class_name,view_order, id   )
         VALUES(#{title}, #{greenHouseId},  #{relativeLevel}, #{publishLevel}, #{userId}, #{prdCode}, #{growStage},
                #{logicName}, #{logicId}, #{logicPeriodSize}, #{logicEnv}, #{logicPeriodEnv}, NOW(), NOW(), #{templateDescription},
         #{autoManualMode}, (SELECT java_class_name FROM control_logic WHERE id = #{logicId} )   , #{viewOrder}

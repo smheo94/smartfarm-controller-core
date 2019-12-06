@@ -220,10 +220,19 @@
 			hd.end_date,			
 			hd.content_type,
 			hd.content
-		FROM house_diary as hd		
-		WHERE green_house_id = #{green_house_id}
-			<if test="start_date!=null and end_date!=null">AND start_date BETWEEN #{start_date} AND #{end_date}</if> 
-			<if test="start_date!=null and end_date!=null">AND end_date BETWEEN #{start_date} AND #{end_date}</if>			
+		FROM house_diary as hd
+		INNER JOIN green_house AS gh ON gh.id = hd.green_house_id
+		<where>
+			<if test="gsm_key !=null">gh.gsm_key = #{gsm_key}</if>
+			<if test="gsm_key_list !=null">
+				<foreach collection="gsm_key_list" item="item" separator="," open="AND gh.gsm_key IN (" close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="green_house_id !=null">AND hd.green_house_id = #{green_house_id}</if>
+			<if test="start_date !=null and end_date!=null">AND start_date BETWEEN #{start_date} AND #{end_date}</if>
+			<if test="start_date !=null and end_date!=null">AND end_date BETWEEN #{start_date} AND #{end_date}</if>
+		</where>
 	</select>
 	
 	
@@ -360,11 +369,20 @@
 			cd.start_date, 
 			cd.content_type,						
 			cd.content
-		FROM crops_diary as cd		
-		WHERE green_house_id = #{green_house_id}
-		<if test="start_date!=null and end_date!=null">
-			AND start_date BETWEEN #{start_date} AND #{end_date}
-		</if>
+		FROM crops_diary as cd
+		INNER JOIN green_house AS gh ON gh.id = cd.green_house_id
+		<where>
+			<if test="gsm_key !=null">gh.gsm_key = #{gsm_key}</if>
+			<if test="gsm_key_list !=null">
+				<foreach collection="gsm_key_list" item="item" separator="," open="AND gh.gsm_key IN (" close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="green_house_id !=null">AND cd.green_house_id = #{green_house_id}</if>
+			<if test="start_date!=null and end_date!=null">
+				AND start_date BETWEEN #{start_date} AND #{end_date}
+			</if>
+		</where>
 	</select>
 		
 	<select id="getCategoryList22" resultType="map">

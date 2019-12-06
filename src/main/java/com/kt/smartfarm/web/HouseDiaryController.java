@@ -143,9 +143,28 @@ public class HouseDiaryController {
 	public Result MonthlyHouseDiaryList(@PathVariable("greenHouseId") Integer greenHouseId,
 			@RequestParam(value="year",required=false) Integer year, @RequestParam(value="month",required=false) Integer month){
 		try{
-			return new Result(houseDiaryService.getMonthlyHouseDiaryList(greenHouseId,year,month));
+			return new Result(houseDiaryService.getMonthlyHouseDiaryList(null, null, greenHouseId,year,month));
 		}catch(Exception e){
 			
+			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
+
+
+	/**
+	 * @description 작업일지, 가계부 월별,전체 리스트
+	 * @param gsmKey
+	 * @return
+	 */
+	@RequestMapping(value= "/list", method = RequestMethod.GET)
+	@ResponseBody
+	public Result MonthlyHouseDiaryListByGSM(@RequestParam(value="gsmKey", required=false) Integer gsmKey,
+											 @RequestParam(value = "gsmKeyList", required=false) List<Integer> gsmKeyList,
+										@RequestParam(value="year",required=false) Integer year, @RequestParam(value="month",required=false) Integer month){
+		try{
+			return new Result(houseDiaryService.getMonthlyHouseDiaryList(gsmKeyList, gsmKey,null, year,month));
+		}catch(Exception e){
+
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}

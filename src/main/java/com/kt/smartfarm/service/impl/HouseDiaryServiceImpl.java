@@ -219,12 +219,18 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 
 
 	@Override
-	public HashMap<String,Object> getMonthlyHouseDiaryList(Integer houseId,Integer year, Integer month) {
+	public HashMap<String,Object> getMonthlyHouseDiaryList(List<Integer> gsmKeyList,  Integer gsmKey, Integer houseId,Integer year, Integer month) {
 		HashMap<String,Object> param = new HashMap<>();
 		HashMap<String,Object> result = new HashMap<>();
 		if(year != null && month != null){
 			param = getMonthDate(year,month);	
-		}		
+		}
+		if( gsmKey != null) {
+			param.put("gsm_key", gsmKey);
+		}
+		if( gsmKeyList != null) {
+			param.put("gsm_key_llist", gsmKeyList);
+		}
 		param.put("green_house_id", houseId);
 		List<HashMap<String,Object>> diaryList =houseDiaryMapper.getMonthlyHouseDiaryList(param);
 		List<HashMap<String,Object>> cropsDiaryList =houseDiaryMapper.getMonthlyCropsDiaryList(param);
@@ -233,6 +239,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 		return result;
 		
 	}
+
 /*
  	//하나로 통합 
 	@Override
