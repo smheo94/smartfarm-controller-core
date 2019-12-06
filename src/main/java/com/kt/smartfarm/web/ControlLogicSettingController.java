@@ -26,6 +26,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -117,6 +118,39 @@ public class ControlLogicSettingController {
 		}
 	}
 
+    @RequestMapping(value = "/new_list", method = RequestMethod.POST)
+    @ResponseBody
+    @InterceptPost
+    public Result<List<ControlLogicSettingVO>> insert(@RequestBody List<ControlLogicSettingVO> voList) {
+        try {
+            if( voList.get(0) == null ) {
+                return new Result("Not Allowed", HttpStatus.FORBIDDEN, null);
+            }
+            List<ControlLogicSettingVO> resultList = new ArrayList<>();
+            voList.stream().forEach( vo -> resultList.add(service.insertLogicSetting(vo)));
+            return new Result(resultList);
+        } catch (Exception e) {
+            return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+        }
+
+    }
+
+    @RequestMapping(value = "/update_list", method = RequestMethod.PUT)
+    @ResponseBody
+    @InterceptPost
+    public Result<List<ControlLogicSettingVO>> update(@PathVariable("controlSettingId") Integer controlSettingId, @RequestBody List<ControlLogicSettingVO> voList) {
+        try {
+            if( voList.get(0) == null ) {
+                return new Result("Not Allowed", HttpStatus.FORBIDDEN, null);
+            }
+            List<ControlLogicSettingVO> resultList = new ArrayList<>();
+            voList.stream().forEach( vo -> resultList.add(service.updateLogicSetting(vo)));
+            return new Result(resultList);
+        } catch (Exception e) {
+            return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+        }
+    }
+
 	@RequestMapping(value = "/{controlSettingId}", method = RequestMethod.PUT)
 	@ResponseBody
 	@InterceptPost
@@ -200,74 +234,5 @@ public class ControlLogicSettingController {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, deviceId);
 		}
 	}
-	//
-	// @SuppressWarnings("unchecked")
-	// @RequestMapping(value= "/{controllerId}", method = RequestMethod.PUT)
-	// @ResponseBody
-	// public Result<DeviceEnvVO> update(@PathVariable("gsm_key") Integer gsmKey,
-	// @PathVariable("controllerId") String controllerId, @RequestBody
-	// List<DeviceEnvVO> device){
-	// try {
-	// return new Result(controlLogicEnvService.update(device)); // gsmKey,
-	// controllerId, deviceId 기준으로 업데이트
-	// } catch(Exception e) {
-	// return new Result(e.getMessage(), HttpStatus.CONFLICT, device);
-	// }
-	// }
-	//
-	// /**
-	// * 제어로직 전체 list
-	// * @param gsmKey
-	// * @param controllerId
-	// * @return
-	// */
-	// @RequestMapping(value= "/list", method = RequestMethod.GET)
-	// @ResponseBody
-	// public Result<HashMap<String,Object>> list(){
-	// try {
-	// return new Result(controlLogicEnvService.list());
-	// } catch(Exception e) {
-	// return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
-	// }
-	// }
-	//
-	// /**
-	// * @description 제어로직 프로퍼티 조회
-	// * @return
-	// */
-	// @RequestMapping(value= "/properties", method = RequestMethod.GET)
-	// @ResponseBody
-	// public Result<HashMap<String,Object>> getLogicProperties(){
-	// try {
-	// return new Result(controlLogicEnvService.getLogicProperties());
-	// } catch(Exception e) {
-	// return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
-	// }
-	// }
-	//
-	//
-	//
-	//
-	// @RequestMapping(value= "/{house_id}", method = RequestMethod.GET)
-	// @ResponseBody
-	// public Result<DeviceEnvVO> get(@PathVariable("gsm_key") Integer gsmKey,
-	// @PathVariable("house_id") Integer houseId){
-	// try {
-	// return new Result(controlLogicEnvService.getRegList(gsmKey,houseId));
-	// } catch(Exception e) {
-	// return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
-	// }
-	// }
-	//
-	// @RequestMapping(value= "/{controllerId}", method = RequestMethod.DELETE)
-	// @ResponseBody
-	// public Result<DeviceEnvVO> delete(@PathVariable("gsm_key") Integer gsmKey,
-	// @PathVariable("controllerId") Integer controllerId){
-	// try {
-	// return new Result(controlLogicEnvService.delete(gsmKey, controllerId));
-	// } catch(Exception e) {
-	// return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
-	// }
-	// }
 
 }

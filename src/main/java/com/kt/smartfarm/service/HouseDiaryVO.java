@@ -4,13 +4,16 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Data
 @Getter
 @Setter
 public class HouseDiaryVO {
 
 	Integer id;
-	Integer greenHouseId; // 
+	Integer greenHouseId; //
+	List<Integer> houseIdList;
 	String title; // 작업일지 명 ( 농장이름 + 작물 + 종류 )
 	String content; // 내용
 	String work; // 종류
