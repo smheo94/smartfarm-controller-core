@@ -41,9 +41,9 @@ public class CategoryEnvController {
 	
 	@RequestMapping(value= "/", method = RequestMethod.PUT)
 	@ResponseBody
-	public Result<CategoryEnvVO> update(@RequestBody CategoryEnvVO category){		
+	public Result<CategoryEnvVO> update(@RequestBody CategoryEnvVO category){
 		try {
-			
+
 			return new Result(categoryEnvService.update(category));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, category);

@@ -19,10 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.kt.smartfarm.service.DeviceEnvVO;
-import com.kt.smartfarm.service.DeviceTypeVO;
-import com.kt.smartfarm.service.VDeviceEnvVO;
-import com.kt.smartfarm.service.VDeviceInfoVO;
+import com.kt.smartfarm.service.*;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -56,4 +53,15 @@ public interface DeviceEnvMapper {
 	Integer copyToNewGSMVDeviceEnv(@Param("from_gsm_key") Integer fromGsmKey, @Param("to_gsm_key") Integer toGsmKey );
 
     Integer deleteDevice(Integer deviceId);
+
+	//List<EDeviceEnvVO> getElectricDeviceEnvList(@Param("deviceId") Integer deviceId);
+
+	Integer insertEDeviceEnv(EDeviceEnvVO vo);
+	EDeviceEnvVO updateEDeviceEnv(EDeviceEnvVO vo);
+	//??
+	List<EDeviceEnvVO> getEDeviceEnvList(@Param("deviceId") Integer deviceId);
+	Integer deleteEDeviceEnv(Integer deviceId);
+	Integer deleteVDevicesEnv(Integer parentDeviceId);
+
+
 }

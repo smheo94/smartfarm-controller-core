@@ -23,6 +23,8 @@ import com.kt.cmmn.util.Result;
 import com.kt.smartfarm.service.*;
 import javax.annotation.Resource;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.http.HttpStatus;
@@ -70,12 +72,13 @@ public class DeviceEnvController {
 	@ApiOperation(value = "GMS 에 저장된 전체 Device 가져오기")
 	@ResponseBody
 	public Result<List<DeviceEnvVO>> list(@PathVariable("gsm_key") Integer gsmKey,
-										  @RequestParam("withVDeviceList") Boolean withVDeviceList){
+										  @RequestParam("withVDeviceList") Boolean withVDeviceList,
+										  @RequestParam("withEDeviceList") Boolean withEDeviceList){
 		try {
 			if( !authCheckService.authCheck(gsmKey, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
 			}
-			return new Result(deviceEnvService.list(gsmKey, null, withVDeviceList));
+			return new Result(deviceEnvService.list(gsmKey, null, withVDeviceList, withEDeviceList));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
@@ -119,7 +122,7 @@ public class DeviceEnvController {
 			if( !authCheckService.authCheck(gsmKey, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
 			}
-			return new Result(deviceEnvService.list(gsmKey, controllerId, withVDeviceList));
+			return new Result(deviceEnvService.list(gsmKey, controllerId, withVDeviceList, null));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
@@ -257,4 +260,92 @@ public class DeviceEnvController {
 //			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 //		}
 //	}
+
+	/**
+	 * @author yechae
+	 * @description 전류감지기 등록(electric currnet)
+	 * @param vo
+	 * @return
+	 */
+	@RequestMapping(value= "/{deviceId}/electricdevices", method = RequestMethod.POST)
+	@ApiOperation(value="전류 감지기 등록")
+	@ResponseBody
+	@InterceptPost
+	public Result<List<VDeviceEnvVO>> eDeviceList(@PathVariable("deviceId") Integer deviceId, @RequestBody List<EDeviceEnvVO> vo){
+		try {
+			return new Result(deviceEnvService.insertEDeviceEnv(vo));
+		} catch(Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		}
+	}
+	/**
+	 * @author yechae
+	 * @description 전류감지기 수정(electric currnet)
+	 * @param deviceId, vo
+	 * @return
+	 */
+
+	@RequestMapping(value= "/{deviceId}/electricdevice", method = RequestMethod.PUT)
+	@ApiOperation(value="전류 감지기 수정")
+	@ResponseBody
+	@InterceptPre
+	public Result<VDeviceEnvVO> updateEDeviceList(@PathVariable("deviceId") Integer deviceId, @RequestBody VDeviceEnvVO vo){
+		try {
+			return new Result(deviceEnvService.updateVDeviceEnv(vo));
+		} catch(Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		}
+	}
+	/**
+	 * @author yechae
+	 * @description 전류감지기 삭제 by deviceId(electric currnet)
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value= "/{id}/electricdevice", method = RequestMethod.DELETE)
+	@ApiOperation(value = "전류 감지기 id로 전류감지기 삭제 ")
+	@ResponseBody
+	@InterceptPre
+	public Result<VDeviceEnvVO> deleteEDevice(@PathVariable("id") Integer id){
+		try {
+			return new Result(deviceEnvService.deleteVDeviceEnv(id));
+		} catch(Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		}
+	}
+	/**
+	 * @author yechae
+	 * @description 전류감지기 조회(electric current)
+	 * @param deviceId
+	 * @return
+	 */
+	@RequestMapping(value= "/{deviceId}/electricdevices", method = RequestMethod.GET)
+	@ApiOperation(value = "전류감지기 조회")
+	@ResponseBody
+	public Result<List<VDeviceInfoVO>> eDeviceList(@PathVariable("deviceId") Integer deviceId){
+		try {
+			return new Result(deviceEnvService.getVDeviceEnvList(deviceId));
+		} catch(Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		}
+	}
+
+    /**
+     * @author yechae
+     * @description 전류감지기 삭제 by p_id(electric currnet)
+     * @param pid
+     * @return
+     */
+    @RequestMapping(value= "/{pid}/electricdevices", method = RequestMethod.DELETE)
+	@ApiOperation(value = "p_device_id로 전류 감지기 전체 삭제")
+    @ResponseBody
+    @InterceptPre
+    public Result<VDeviceEnvVO> deleteEDevices(@PathVariable("pid") Integer pid){
+        try {
+            return new Result(deviceEnvService.deleteEDevicesEnv(pid));
+        } catch(Exception e) {
+            return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+        }
+    }
+
 }

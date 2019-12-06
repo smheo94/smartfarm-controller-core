@@ -50,7 +50,6 @@ public class ControllerEnvServiceImpl extends EgovAbstractServiceImpl implements
 		}
         final List<ControllerDepDeviceTypeVO> dependencyDeviceTypeList = controllerEnvMapper.getDependencyDeviceTypeList(vo.getControllerInfoId());
         if (dependencyDeviceTypeList != null && dependencyDeviceTypeList.size() > 0 && vo.getDeviceList().size() == 0) {
-        	//아직 안들어간경우에만 넣자.
             dependencyDeviceTypeList.stream().filter(d -> d.getAutoCreate() == 1).forEach(d -> {
                 DeviceEnvVO device = new DeviceEnvVO();
                 device.setControllerId(vo.getId());
@@ -126,9 +125,9 @@ public class ControllerEnvServiceImpl extends EgovAbstractServiceImpl implements
 			map.put("controller_id", controllerId);
 			controller.setDeviceList(deviceEnvMapper.list(map));
 			controller.getDeviceList().forEach( d ->d.setRelationDeviceList(deviceEnvMapper.getVDeviceEnvList(d.getId())));
+			controller.getDeviceList().forEach( d -> d.setElectricDeviceList(deviceEnvMapper.getEDeviceEnvList(d.getId())));
 		}
 		return controllerList;
-
 	}
 
 	@Override
