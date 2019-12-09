@@ -73,7 +73,7 @@ public class DeviceEnvController {
 	@ResponseBody
 	public Result<List<DeviceEnvVO>> list(@PathVariable("gsm_key") Integer gsmKey,
 										  @RequestParam("withVDeviceList") Boolean withVDeviceList,
-										  @RequestParam("withEDeviceList") Boolean withEDeviceList){
+										  @RequestParam(required = false) Boolean withEDeviceList){
 		try {
 			if( !authCheckService.authCheck(gsmKey, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
