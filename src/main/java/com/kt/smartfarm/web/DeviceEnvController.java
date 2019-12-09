@@ -291,9 +291,9 @@ public class DeviceEnvController {
 	@ApiOperation(value="전류 감지기 수정")
 	@ResponseBody
 	@InterceptPre
-	public Result<VDeviceEnvVO> updateEDeviceList(@PathVariable("deviceId") Integer deviceId, @RequestBody VDeviceEnvVO vo){
+	public Result<VDeviceEnvVO> updateEDeviceList(@PathVariable("deviceId") Integer deviceId, @RequestBody EDeviceEnvVO vo){
 		try {
-			return new Result(deviceEnvService.updateVDeviceEnv(vo));
+			return new Result(deviceEnvService.updateEDeviceEnv(vo));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
