@@ -143,7 +143,7 @@
 			cd.cctv_image_url,
 			cd.weather			
 		FROM crops_diary as cd
-		INNER JOIN crops_diary_map AS cdm on cdm.diary_id = hd.id
+		INNER JOIN crops_diary_map AS cdm on cdm.diary_id = cd.id
 		<!-- LEFT OUTER JOIN crops_diary_file AS cdf ON cdf.crops_diary_idx = cd.id -->
 		WHERE cd.id = #{id}
 
@@ -276,7 +276,7 @@
 			cd.content_type,						
 			cd.content
 		FROM crops_diary as cd
-		INNER JOIN crops_diary_map AS cdm on cdm.diary_id = hd.id
+		INNER JOIN crops_diary_map AS cdm on cdm.diary_id = cd.id
 		INNER JOIN green_house AS gh ON gh.id = cdm.green_house_id
 		<where>
 			<if test="gsm_key !=null">gh.gsm_key = #{gsm_key}</if>
