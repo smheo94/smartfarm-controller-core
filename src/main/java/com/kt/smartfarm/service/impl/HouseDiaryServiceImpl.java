@@ -34,7 +34,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 			houseDiaryMapper.insertHouseDiaryHouseMap(houseDiaryVO);
 
 		}catch(Exception e){
-			log.debug(e.getMessage());
+			log.warn("insertHouseDiary" , e);
 		}
 		return houseDiaryVO;
 	}
@@ -45,7 +45,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 			houseDiaryMapper.insertCropsDiary(houseCropsVO);
 			houseDiaryMapper.insertCropsDiaryHouseMap(houseCropsVO);
 		}catch(Exception e){
-			log.debug("insertCropsDiary Exception : "+e);
+			log.warn("insertCropsDiary" , e);
 		}
 		return houseCropsVO;
 	}
@@ -62,7 +62,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 				return houseDiaryMapper.deleteCropsDiaryFile(param);
 			}
 		} catch(Exception e) {
-			log.debug("deleterDiaryFile Error");
+			log.warn("deleteDiaryFileList" , e);
 			return -1;
 		}
 		return 0;
@@ -105,7 +105,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 			}
 
 		}catch(Exception e){
-			log.debug("insertDiaryFile Error = " + e);
+			log.warn("insertDiaryFile" , e);
 		}
 		return result;
 	}
@@ -120,8 +120,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 			houseDiaryMapper.deleteHouseDiaryHouseMap(param);
 			houseDiaryMapper.insertHouseDiaryHouseMap(houseDiaryVO);
 		}catch(Exception e){
-			log.debug(e.getMessage());
-			log.debug("updateHouseDiary Error : " + e);
+			log.warn("updateHouseDiary" , e);
 		}		
 		return houseDiaryVO;
 	}
@@ -136,7 +135,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 			houseDiaryMapper.deleteCropsDiaryHouseMap(param);
 			houseDiaryMapper.insertCropsDiaryHouseMap(houseCropsVO);
 		}catch(Exception e){
-			log.debug("updateCropsDiary Exception : "+e);
+			log.warn("updateCropsDiary" , e);
 		}		
 		return houseCropsVO;
 	}
@@ -153,8 +152,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 			result = houseDiaryMapper.getHouseDiaryDetail(param);			
 			result.put("houseDiaryFile", houseDiaryMapper.getHouseDiaryFile(param));
 		}catch(Exception e){
-			log.debug(e.getMessage());
-			log.debug("getHouseDiaryDetail Exception : " + e);
+			log.warn("getHouseDiaryDetail" , e);
 		}		
 		return result;
 	}
