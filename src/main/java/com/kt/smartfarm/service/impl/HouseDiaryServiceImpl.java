@@ -29,6 +29,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 	@Override
 	public HouseDiaryVO insertHouseDiary(HouseDiaryVO houseDiaryVO) {
 		try{
+			log.info("Insert House Diary : {}", houseDiaryVO);
 			houseDiaryMapper.insertHouseDiary(houseDiaryVO);
 			houseDiaryMapper.insertHouseDiaryHouseMap(houseDiaryVO);
 
@@ -40,6 +41,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 	@Override
 	public HouseCropsDiaryVO insertCropsDiary(HouseCropsDiaryVO houseCropsVO) {
 		try{
+			log.info("Insert Crops Diary : {}", houseCropsVO);
 			houseDiaryMapper.insertCropsDiary(houseCropsVO);
 			houseDiaryMapper.insertCropsDiaryHouseMap(houseCropsVO);
 		}catch(Exception e){
@@ -50,6 +52,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 	@Override
 	public Integer deleteDiaryFileList(String contentType, Integer id, List<Integer> fileIdList) {
 		try {
+			log.info("Delete Diary File : {}, {}, {}", contentType, id, fileIdList);
 			HashMap<String, Object> param = new HashMap<>();
 			param.put("id", id);
 			param.put("file_idx_list", fileIdList);
@@ -66,6 +69,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 	}
 	@Override
 	public Integer insertDiaryFile(String contentType, Integer id, MultipartFile[] file) {
+		log.info("Insert Diary Diary : {}, {}, {}", contentType, id, file);
 		Integer result=0;
 		try{
 			//deleteDiaryFIleNotExists(file, id);
@@ -109,6 +113,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 	@Override
 	public HouseDiaryVO updateHouseDiary(HouseDiaryVO houseDiaryVO) {
 		try{
+			log.info("Update House Diary : {}", houseDiaryVO);
 			houseDiaryMapper.updateHouseDiary(houseDiaryVO);
 			HashMap<String,Object> param = new HashMap<>();
 			param.put("id", houseDiaryVO.getId());
@@ -123,6 +128,8 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 	@Override
 	public HouseCropsDiaryVO updateCropsDiary(HouseCropsDiaryVO houseCropsVO) {
 		try{
+
+			log.info("Update Crops Diary : {}", houseCropsVO);
 			houseDiaryMapper.updateCropsDiary(houseCropsVO);
 			HashMap<String,Object> param = new HashMap<>();
 			param.put("id", houseCropsVO.getId());
@@ -219,6 +226,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 	@Override
 	public Integer deleteHouseDiary(Integer id) {
 		try{
+			log.info("Delete House Diary : {}", id);
 			HashMap<String,Object> param = new HashMap<>();
 			param.put("id", id);
 			param.put("file_all", true);
@@ -232,6 +240,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 	}
 	@Override
 	public Integer deleteCropsDiary(Integer id) {
+		log.info("Delete Crops Diary : {}", id);
 		HashMap<String,Object> param = new HashMap<>();
 		param.put("id", id);
 		param.put("file_all", true);

@@ -310,7 +310,7 @@ public class DeviceEnvController {
 	@InterceptPre
 	public Result<VDeviceEnvVO> deleteEDevice(@PathVariable("id") Integer id){
 		try {
-			return new Result(deviceEnvService.deleteVDeviceEnv(id));
+			return new Result(deviceEnvService.deleteVDeviceEnv(id, null));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
