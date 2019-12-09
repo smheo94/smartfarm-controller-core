@@ -310,7 +310,7 @@ public class DeviceEnvController {
 	@InterceptPre
 	public Result<VDeviceEnvVO> deleteEDevice(@PathVariable("id") Integer id){
 		try {
-			return new Result(deviceEnvService.deleteVDeviceEnv(id, null));
+			return new Result(deviceEnvService.deleteEDeviceEnv(id));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
@@ -326,7 +326,7 @@ public class DeviceEnvController {
 	@ResponseBody
 	public Result<List<VDeviceInfoVO>> eDeviceList(@PathVariable("deviceId") Integer deviceId){
 		try {
-			return new Result(deviceEnvService.getVDeviceEnvList(deviceId));
+			return new Result(deviceEnvService.getEDeviceEnvList(deviceId));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
