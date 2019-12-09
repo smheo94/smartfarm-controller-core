@@ -295,6 +295,20 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
+        <!--yechae-->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.9.5</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>3.2.3.RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+        <!--yechae-->
 
     </dependencies>
 
@@ -445,7 +459,7 @@
             <plugin>
                 <groupId>com.spotify</groupId>
                 <artifactId>dockerfile-maven-plugin</artifactId>
-                <version>1.4.3</version>
+                <version>1.4.12</version>
                 <dependencies>
                     <dependency>
                         <groupId>javax.activation</groupId>
