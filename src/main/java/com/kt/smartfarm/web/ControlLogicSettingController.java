@@ -138,7 +138,7 @@ public class ControlLogicSettingController {
     @RequestMapping(value = "/update_list", method = RequestMethod.PUT)
     @ResponseBody
     @InterceptPost
-    public Result<List<ControlLogicSettingVO>> update(@PathVariable("controlSettingId") Integer controlSettingId, @RequestBody List<ControlLogicSettingVO> voList) {
+    public Result<List<ControlLogicSettingVO>> update(@RequestBody List<ControlLogicSettingVO> voList) {
         try {
             if( voList.get(0) == null ) {
                 return new Result("Not Allowed", HttpStatus.FORBIDDEN, null);
