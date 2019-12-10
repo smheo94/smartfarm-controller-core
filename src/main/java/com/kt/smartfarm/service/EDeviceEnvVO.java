@@ -9,7 +9,6 @@ import lombok.Setter;
 @Data
 @Getter
 @Setter
-@AllArgsConstructor
 public class EDeviceEnvVO {
     Integer id;
     Integer parentDeviceId;
