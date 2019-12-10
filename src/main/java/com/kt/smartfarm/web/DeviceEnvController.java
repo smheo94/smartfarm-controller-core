@@ -273,7 +273,7 @@ public class DeviceEnvController {
 	@ApiOperation(value="전류 감지기 등록")
 	@ResponseBody
 	@InterceptPost
-	public Result<List<VDeviceEnvVO>> eDeviceList(@PathVariable("deviceId") Integer deviceId, @RequestBody List<EDeviceEnvVO> vo){
+	public Result<List<VDeviceEnvVO>> insertEDeviceList(@PathVariable("deviceId") Integer deviceId, @RequestBody List<EDeviceEnvVO> vo){
 		try {
 			return new Result(deviceEnvService.insertEDeviceEnv(vo));
 		} catch(Exception e) {
@@ -305,7 +305,7 @@ public class DeviceEnvController {
 	 * @return
 	 */
 	@RequestMapping(value= "/{id}/electricdevice", method = RequestMethod.DELETE)
-	@ApiOperation(value = "전류 감지기 id로 전류감지기 삭제 ")
+	@ApiOperation(value = "전류 감지기 삭제 ")
 	@ResponseBody
 	@InterceptPre
 	public Result<VDeviceEnvVO> deleteEDevice(@PathVariable("id") Integer id){
@@ -335,16 +335,16 @@ public class DeviceEnvController {
     /**
      * @author yechae
      * @description 전류감지기 삭제 by p_id(electric currnet)
-     * @param pid
+     * @param deviceId
      * @return
      */
-    @RequestMapping(value= "/{pid}/electricdevices", method = RequestMethod.DELETE)
-	@ApiOperation(value = "p_device_id로 전류 감지기 전체 삭제")
+    @RequestMapping(value= "/{deviceId}/electricdevices", method = RequestMethod.DELETE)
+	@ApiOperation(value = "Device의 전류 감지기 전체 삭제")
     @ResponseBody
     @InterceptPre
-    public Result<VDeviceEnvVO> deleteEDevices(@PathVariable("pid") Integer pid){
+    public Result<VDeviceEnvVO> deleteEDevices(@PathVariable("deviceId") Integer deviceId){
         try {
-            return new Result(deviceEnvService.deleteEDevicesEnv(pid));
+            return new Result(deviceEnvService.deleteEDevicesEnv(deviceId));
         } catch(Exception e) {
             return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
         }
