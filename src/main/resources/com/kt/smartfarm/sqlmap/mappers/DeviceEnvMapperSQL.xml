@@ -204,7 +204,7 @@
 	<!-- yechae -->
 	<select id="getEDeviceEnvList" resultType="eDeviceEnvVO" >
 		SELECT
-			id, p_device_id, device_id
+			id, p_device_id as parentDeviceId, device_id
 		FROM device_electric_dep_device
 		WHERE p_device_id = #{deviceId}
 	</select>
