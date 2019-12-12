@@ -3,12 +3,18 @@
 <mapper namespace="com.kt.smartfarm.supervisor.mapper.HouseDiaryMapper">
 	<resultMap id="houseDiaryMap" type="houseDiaryVO" autoMapping="true">
 		<id column="id" property="id"/>
-		<collection property="houseIdList" column="house_id_list" javaType="java.util.List" />
+		<result column="work" property="work"/>
+		<collection property="houseIdList" javaType="java.util.ArrayList"  ofType="Integer">
+            <result column="house_id_list"></result>
+        </collection>
 	</resultMap>
 
 	<resultMap id="cropsDiaryMap" type="cropsDiaryVO" autoMapping="true">
 		<id column="id" property="id"/>
-		<collection property="houseIdList" column="house_id_list" javaType="java.util.List" />
+		<result column="work" property="work"/>
+        <collection property="houseIdList" javaType="java.util.ArrayList"  ofType="Integer">
+            <result column="house_id_list"></result>
+        </collection>
 	</resultMap>
 
 	<insert id="insertHouseDiaryHouseMap" useGeneratedKeys="true" parameterType="houseDiaryVO">
@@ -150,15 +156,24 @@
 	</select>
 
 	<select id="getMonthlyHouseDiaryList" parameterType="map" resultMap="houseDiaryMap">
-		SELECT 
+		SELECT
 			hd.id,
 			hd.green_house_id,
-		    hdm.green_house_id AS house_id_list,
-			hd.title,			
+			hdm.green_house_id AS house_id_list,
+			hd.title,
+			hd.content,
+			hd.work,
+			hd.etc,
 			hd.start_date,
-			hd.end_date,			
+			hd.end_date,
+			hd.crops,
+			hd.harvest,
+			hd.income,
+			hd.spend,
 			hd.content_type,
-			hd.content
+			hd.work_time,
+			hd.cctv_image_url,
+			hd.weather
 		FROM house_diary as hd
 		INNER JOIN house_diary_map AS hdm on hdm.diary_id = hd.id
 		INNER JOIN green_house AS gh ON gh.id = hdm.green_house_id
@@ -267,14 +282,30 @@
 		</if>
 	</delete>
 	<select id="getMonthlyCropsDiaryList" parameterType="map" resultMap="cropsDiaryMap">
-		SELECT 
-			cd.id, 
-			cd.title,
+		SELECT
+			cd.id,
 			cd.green_house_id,
-		    cdm.green_house_id AS house_id_list,
-			cd.start_date, 
-			cd.content_type,						
-			cd.content
+			cdm.green_house_id AS house_id_list,
+			cd.leaf_width,
+			cd.stem,
+			cd.harvest,
+			cd.fruit_set,
+			cd.gether_set,
+			cd.fruit_height,
+			cd.bloom,
+			cd.fruit_number,
+			cd.aver_weight,
+			cd.grow_length,
+			cd.leaf_size,
+			cd.leaf_num,
+			cd.start_date,
+			cd.upload_file,
+			cd.content,
+			cd.title,
+			cd.crops,
+			cd.content_type,
+			cd.cctv_image_url,
+			cd.weather
 		FROM crops_diary as cd
 		INNER JOIN crops_diary_map AS cdm on cdm.diary_id = cd.id
 		INNER JOIN green_house AS gh ON gh.id = cdm.green_house_id

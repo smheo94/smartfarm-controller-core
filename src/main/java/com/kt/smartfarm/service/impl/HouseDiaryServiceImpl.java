@@ -30,6 +30,9 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 	public HouseDiaryVO insertHouseDiary(HouseDiaryVO houseDiaryVO) {
 		try{
 			log.info("Insert House Diary : {}", houseDiaryVO);
+            if( houseDiaryVO.getGreenHouseId() != null && ( houseDiaryVO.getHouseIdList() == null  || houseDiaryVO.getHouseIdList().size() == 0 ) )  {
+                houseDiaryVO.setHouseIdList(Arrays.asList(houseDiaryVO.getGreenHouseId()));
+            }
 			houseDiaryMapper.insertHouseDiary(houseDiaryVO);
 			houseDiaryMapper.insertHouseDiaryHouseMap(houseDiaryVO);
 
@@ -42,6 +45,9 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 	public HouseCropsDiaryVO insertCropsDiary(HouseCropsDiaryVO houseCropsVO) {
 		try{
 			log.info("Insert Crops Diary : {}", houseCropsVO);
+            if( houseCropsVO.getGreenHouseId() != null && ( houseCropsVO.getHouseIdList() == null  || houseCropsVO.getHouseIdList().size() == 0 ) )  {
+                houseCropsVO.setHouseIdList(Arrays.asList(houseCropsVO.getGreenHouseId()));
+            }
 			houseDiaryMapper.insertCropsDiary(houseCropsVO);
 			houseDiaryMapper.insertCropsDiaryHouseMap(houseCropsVO);
 		}catch(Exception e){
