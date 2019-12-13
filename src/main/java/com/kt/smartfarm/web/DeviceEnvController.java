@@ -274,7 +274,7 @@ public class DeviceEnvController {
 	@ApiOperation(value="전류 감지기 등록")
 	@ResponseBody
 	@InterceptPost
-	public Result<List<VDeviceEnvVO>> insertEDeviceList(@PathVariable("deviceId") Integer deviceId, @RequestBody List<EDeviceEnvVO> vo){
+	public Result<List<EDeviceEnvVO>> insertEDeviceList(@PathVariable("deviceId") Integer deviceId, @RequestBody List<EDeviceEnvVO> vo){
 		try {
 			return new Result(deviceEnvService.insertEDeviceEnv(vo));
 		} catch(Exception e) {
@@ -292,7 +292,7 @@ public class DeviceEnvController {
 	@ApiOperation(value="전류 감지기 수정")
 	@ResponseBody
 	@InterceptPre
-	public Result<VDeviceEnvVO> updateEDeviceList(@PathVariable("deviceId") Integer deviceId, @RequestBody EDeviceEnvVO vo){
+	public Result<EDeviceEnvVO> updateEDeviceList(@PathVariable("deviceId") Integer deviceId, @RequestBody EDeviceEnvVO vo){
 		try {
 			return new Result(deviceEnvService.updateEDeviceEnv(vo));
 		} catch(Exception e) {
@@ -309,7 +309,7 @@ public class DeviceEnvController {
 	@ApiOperation(value = "전류 감지기 삭제 ")
 	@ResponseBody
 	@InterceptPre
-	public Result<VDeviceEnvVO> deleteEDevice(@PathVariable("id") Integer id){
+	public Result<EDeviceEnvVO> deleteEDevice(@PathVariable("id") Integer id){
 		try {
 			return new Result(deviceEnvService.deleteEDeviceEnv(id));
 		} catch(Exception e) {
@@ -325,7 +325,7 @@ public class DeviceEnvController {
 	@RequestMapping(value= "/{deviceId}/electricdevices", method = RequestMethod.GET)
 	@ApiOperation(value = "전류감지기 조회")
 	@ResponseBody
-	public Result<List<VDeviceInfoVO>> eDeviceList(@PathVariable("deviceId") Integer deviceId){
+	public Result<List<EDeviceEnvVO>> eDeviceList(@PathVariable("deviceId") Integer deviceId){
 		try {
 			return new Result(deviceEnvService.getEDeviceEnvList(deviceId));
 		} catch(Exception e) {
@@ -343,7 +343,7 @@ public class DeviceEnvController {
 	@ApiOperation(value = "Device의 전류 감지기 전체 삭제")
     @ResponseBody
     @InterceptPre
-    public Result<VDeviceEnvVO> deleteEDevices(@PathVariable("deviceId") Integer deviceId){
+    public Result<EDeviceEnvVO> deleteEDevices(@PathVariable("deviceId") Integer deviceId){
         try {
             return new Result(deviceEnvService.deleteEDevicesEnv(deviceId));
         } catch(Exception e) {

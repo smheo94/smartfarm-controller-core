@@ -221,6 +221,9 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 	private final String DEVICE_INSERT_URL = "/env/device";
 	private final String DEVICE_RELATION_DELETE_URL = "/env/device/%s/relationdevices";
 	private final String DEVICE_RELATION_INSERT_URL = "/env/device/%s/relationdevices";
+
+	private final String DEVICE_ELECTRIC_DEP_DELETE_URL = "/env/device/%s/electricdevices";
+	private final String DEVICE_ELECTRIC_DEP_INSERT_URL = "/env/device/%s/electricdevices";
 	private final String HOUSE_INSERT_URL = "/env/%s/house";
 	private final String HOUSE_UPDATE_URL = "/env/%s/house";
 	private final String HOUSE_DEVICE_LINK_DELETE_URL = "/env/%s/house/linkDevice";
@@ -242,9 +245,15 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 					sendRestBodyData(request, String.format(DEVICE_INSERT_URL), HttpMethod.POST, gsmKey, c.getDeviceList());
 					c.getDeviceList().forEach(d -> {
 						sendRestBodyData(request, String.format(DEVICE_RELATION_DELETE_URL, d.getId()), HttpMethod.DELETE, gsmKey, null);
+						sendRestBodyData(request, String.format(DEVICE_ELECTRIC_DEP_DELETE_URL, d.getId()), HttpMethod.DELETE, gsmKey, null);
 						final List<VDeviceEnvVO> vDeviceEnvList = deviceEnvService.getVDeviceEnvList(d.getId());
 						if( vDeviceEnvList.size() > 0 ) {
 							sendRestBodyData(request, String.format(DEVICE_RELATION_INSERT_URL, d.getId()), HttpMethod.POST, gsmKey, vDeviceEnvList);
+						}
+
+						final List<EDeviceEnvVO> eDeviceEnvList = deviceEnvService.getEDeviceEnvList(d.getId());
+						if( eDeviceEnvList.size() > 0 ) {
+							sendRestBodyData(request, String.format(DEVICE_ELECTRIC_DEP_INSERT_URL, d.getId()), HttpMethod.POST, gsmKey, eDeviceEnvList);
 						}
 					});
 				}

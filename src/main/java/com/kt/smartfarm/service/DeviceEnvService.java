@@ -32,7 +32,6 @@ public interface DeviceEnvService {
 	Integer deleteDevice(Integer deviceId);
 
 
-
 	List<EDeviceEnvVO> insertEDeviceEnv(List<EDeviceEnvVO> vo);
 
 	List<EDeviceEnvVO> getEDeviceEnvList(Integer deviceId);

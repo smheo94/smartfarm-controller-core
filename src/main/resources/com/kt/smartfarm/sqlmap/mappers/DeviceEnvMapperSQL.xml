@@ -140,7 +140,7 @@
 
 	<select id="getVDeviceEnvList" resultType="vDeviceEnvVO" >
 		SELECT
-			id, p_device_id, device_num, device_insert_order, device_id
+			id, p_device_id AS parent_device_id, device_num, device_insert_order, device_id
 		FROM device_v_dep_device
 		WHERE p_device_id = #{deviceId}
 	</select>
@@ -152,7 +152,7 @@
 		)
 		VALUES(
 			#{parentDeviceId}, #{deviceNum}, #{deviceInsertOrder}, #{deviceId}
-			<if test="id != null">#{id}</if>
+			<if test="id != null">,#{id}</if>
 		);
 		<selectKey keyProperty="id" resultType ="int">
 			SELECT LAST_INSERT_ID() AS value;
@@ -172,7 +172,6 @@
 	
 	<update id="updateVDeviceEnv" parameterType="vDeviceEnvVO">
 		UPDATE device_v_dep_device
-
 			<if test="deviceId != null">device_id = #{deviceId}</if>
 			<if test="parentDeviceId != null">,p_device_id = #{parentDeviceId}</if>
 			<if test="deviceNum != null">,device_num = #{deviceNum}</if>
