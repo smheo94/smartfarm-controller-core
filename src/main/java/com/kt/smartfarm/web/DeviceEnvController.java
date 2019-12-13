@@ -273,7 +273,7 @@ public class DeviceEnvController {
 	@ApiOperation(value="전류 감지기 등록")
 	@ResponseBody
 	@InterceptPost
-	public Result<List<VDeviceEnvVO>> insertEDeviceList(@PathVariable("deviceId") Integer deviceId, @RequestBody List<EDeviceEnvVO> vo){
+	public Result<List<EDeviceEnvVO>> insertEDeviceList(@PathVariable("deviceId") Integer deviceId, @RequestBody List<EDeviceEnvVO> vo){
 		try {
 			return new Result(deviceEnvService.insertEDeviceEnv(vo));
 		} catch(Exception e) {
