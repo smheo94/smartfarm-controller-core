@@ -196,7 +196,7 @@ public class DeviceEnvController {
 	@InterceptPre
 	public Result<VDeviceEnvVO> deleteVDeviceList(@PathVariable("id") Integer id){
 		try {
-			return new Result(deviceEnvService.deleteVDeviceEnv(id, null));
+			return new Result(deviceEnvService.deleteVDeviceEnv(id, null, null, null));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
@@ -242,6 +242,7 @@ public class DeviceEnvController {
 	 */
 	@RequestMapping(value= "/{deviceId}", method = RequestMethod.DELETE)
 	@ResponseBody
+	@InterceptPre
 	public Result<DeviceEnvVO> deleteDevice(@PathVariable("deviceId") Integer deviceId, @Param("gsmKey") Integer gsmKey){
 		try {
 			if( !authCheckService.authCheck(gsmKey, null) ) {

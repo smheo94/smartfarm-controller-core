@@ -15,7 +15,7 @@ public interface DeviceEnvService {
 	Integer deleteControllerDeivces(Integer gsmKey, Integer controllerId);
 	
 	List<DeviceTypeVO> getDeviceTypeByHouseType(String houseType, String kind);
-	HashMap<String,Object >gethouseTypeKindInfo();
+	HashMap<String,Object > getHouseTypeKindInfo();
 	List<HashMap<String,Object>> getDeviceTypeList();
 	
 	List<VDeviceInfoVO> getVDeviceList();
@@ -25,7 +25,7 @@ public interface DeviceEnvService {
 	List<VDeviceEnvVO> getVDeviceEnvList(Integer deviceId);
 	
 	VDeviceEnvVO updateVDeviceEnv(VDeviceEnvVO vo);
-	Integer deleteVDeviceEnv(Integer id, Integer pDeviceId);
+	Integer deleteVDeviceEnv(Integer id, Integer pDeviceId,  Integer deviceNum , Integer deviceInsertOrder);
 
 	Integer copyToNewGSM(Integer fromGsmKey, Integer toGsmKey);
 
