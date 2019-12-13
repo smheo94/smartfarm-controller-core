@@ -1,6 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kt.smartfarm.supervisor.mapper.HouseDiaryMapper">
+	<resultMap id="houseDiaryMap" type="houseDiaryVO" autoMapping="true">
+		<id column="id" property="id"/>
+		<result column="work" property="work"/>
+		<collection property="houseIdList" javaType="java.util.ArrayList"  ofType="Integer">
+            <result column="house_id_list"></result>
+        </collection>
+	</resultMap>
+
+	<resultMap id="cropsDiaryMap" type="cropsDiaryVO" autoMapping="true">
+		<id column="id" property="id"/>
+		<result column="work" property="work"/>
+        <collection property="houseIdList" javaType="java.util.ArrayList"  ofType="Integer">
+            <result column="house_id_list"></result>
+        </collection>
+	</resultMap>
+
+	<insert id="insertHouseDiaryHouseMap" useGeneratedKeys="true" parameterType="houseDiaryVO">
+		INSERT INTO house_diary_map ( diary_id, green_house_id )
+		VALUES
+		<foreach collection="houseIdList" separator="," item="itemHouseId">
+			( #{id}, #{itemHouseId} )
+		</foreach>
+	</insert>
+
+	<delete id="deleteHouseDiaryHouseMap" parameterType="map">
+		DELETE FROM house_diary_map WHERE diary_id = #{id};
+	</delete>
+
 
 	<insert id="insertHouseDiary" useGeneratedKeys="true" parameterType="houseDiaryVO">
 		INSERT INTO house_diary
@@ -23,14 +51,6 @@
 			#{id},#{fileName},#{file},NOW()
 		)
 	</insert>
-
-
-<!--	<select id="selectHouseDiaryFile" resultType="houseDiaryVO">-->
-<!--		SELECT house_diary_idx, file_name, update_date-->
-<!--		FROM house_diary_file-->
-<!--		WHERE house_diary_idx = #{id} AND file_name = #{fileName};-->
-<!--	</select>-->
-
 
 	<insert id="insertCropsDiaryFile" parameterType="cropsDiaryVO">
 		INSERT INTO crops_diary_file(
@@ -59,59 +79,11 @@
 		WHERE id=#{id} AND green_house_id = #{greenHouseId}
 	</update>
 
-
-<!--	<select id="selectCropsDiaryFile" resultType="cropsDiaryVO">-->
-<!--		SELECT crops_diary_idx, file_name, update_date-->
-<!--		FROM crops_diary_file-->
-<!--		WHERE crops_diary_idx = #{id} AND file_name = #{fileName};-->
-<!--	</select>-->
-
-<!--	<update id="updateHouseDiaryFile" parameterType="houseDiaryVO">-->
-<!--		UPDATE house_diary_file-->
-<!--		SET-->
-<!--			file_name = #{fileName},-->
-<!--			file = #{file},-->
-<!--			update_date = NOW()-->
-<!--		WHERE house_diary_idx=#{id}-->
-<!--	</update>-->
-
-<!--	<update id="updateCropsDiaryFile" parameterType="cropsDiaryVO">-->
-<!--		UPDATE crops_diary_file-->
-<!--		SET-->
-<!--			file_name = #{fileName},-->
-<!--			file = #{file},-->
-<!--			update_date = NOW()-->
-<!--		WHERE crops_diary_idx=#{id}-->
-<!--	</update>-->
-
-	<!-- 
-	<select id="getHouseDiaryDetail" parameterType="map" resultType="map">
-		SELECT 
-			id,
-			green_house_id,
-			title,
-			content,
-			work,
-			etc,
-			start_date,
-			end_date,
-			crops,
-			harvest,
-			income,
-			spend,
-			content_type,
-			work_time,
-			cctv_image_url,
-			weather
-		FROM house_diary
-		WHERE id = #{id}
-	</select>
-	 -->
-	
-	<select id="getHouseDiaryDetail" parameterType="map" resultType="map">
+	<select id="getHouseDiaryDetail" parameterType="map" resultMap="houseDiaryMap">
 		SELECT 
 			hd.id,
 			hd.green_house_id,
+			hdm.green_house_id AS house_id_list,
 			hd.title,
 			hd.content,
 			hd.work,
@@ -126,10 +98,10 @@
 			hd.work_time,
 			hd.cctv_image_url,
 			hd.weather			
-		FROM house_diary as hd		
+		FROM house_diary as hd
+	    INNER JOIN house_diary_map AS hdm on hdm.diary_id = hd.id
 		WHERE hd.id = #{id}					
 	</select>
-
 
 	<select id="getHouseDiaryFile" parameterType="map" resultType="map">
 		SELECT
@@ -151,10 +123,11 @@
 		WHERE crops_diary_idx = #{id}
 	</select>
 	
-	<select id="getCropsDiaryDetail" parameterType="map" resultType="map">
+	<select id="getCropsDiaryDetail" parameterType="map" resultMap="cropsDiaryMap">
 		SELECT 
 			cd.id, 
-			cd.green_house_id, 
+			cd.green_house_id,
+			cdm.green_house_id AS house_id_list,
 			cd.leaf_width, 
 			cd.stem, 
 			cd.harvest, 
@@ -176,20 +149,20 @@
 			cd.cctv_image_url,
 			cd.weather			
 		FROM crops_diary as cd
+		INNER JOIN crops_diary_map AS cdm on cdm.diary_id = cd.id
 		<!-- LEFT OUTER JOIN crops_diary_file AS cdf ON cdf.crops_diary_idx = cd.id -->
 		WHERE cd.id = #{id}
 
 	</select>
-		
 
-	<!-- 
-	<select id="getMonthlyHouseDiaryList" parameterType="map" resultType="houseDiaryVO">
-		SELECT 
+	<select id="getMonthlyHouseDiaryList" parameterType="map" resultMap="houseDiaryMap">
+		SELECT
 			hd.id,
 			hd.green_house_id,
+			hdm.green_house_id AS house_id_list,
 			hd.title,
 			hd.content,
-			hd.WORK,
+			hd.work,
 			hd.etc,
 			hd.start_date,
 			hd.end_date,
@@ -200,30 +173,21 @@
 			hd.content_type,
 			hd.work_time,
 			hd.cctv_image_url,
-			hd.weather,
-			hdf.file_name,
-			hdf.file,
-			hdf.update_date
+			hd.weather
 		FROM house_diary as hd
-		LEFT OUTER JOIN house_diary_file AS hdf ON hdf.house_diary_idx = hd.id
-		WHERE green_house_id = #{green_house_id}
-			<if test="start_date!=null and end_date!=null">AND start_date BETWEEN #{start_date} AND #{end_date}</if> 
-			<if test="start_date!=null and end_date!=null">AND end_date BETWEEN #{start_date} AND #{end_date}</if>			
-	</select> -->
-	
-	<select id="getMonthlyHouseDiaryList" parameterType="map" resultType="map">
-		SELECT 
-			hd.id,
-			hd.green_house_id,
-			hd.title,			
-			hd.start_date,
-			hd.end_date,			
-			hd.content_type,
-			hd.content
-		FROM house_diary as hd		
-		WHERE green_house_id = #{green_house_id}
-			<if test="start_date!=null and end_date!=null">AND start_date BETWEEN #{start_date} AND #{end_date}</if> 
-			<if test="start_date!=null and end_date!=null">AND end_date BETWEEN #{start_date} AND #{end_date}</if>			
+		INNER JOIN house_diary_map AS hdm on hdm.diary_id = hd.id
+		INNER JOIN green_house AS gh ON gh.id = hdm.green_house_id
+		<where>
+			<if test="gsm_key !=null">gh.gsm_key = #{gsm_key}</if>
+			<if test="gsm_key_list !=null">
+				<foreach collection="gsm_key_list" item="item" separator="," open="AND gh.gsm_key IN (" close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="green_house_id !=null">AND gh.id = #{green_house_id}</if>
+			<if test="start_date !=null and end_date!=null">AND start_date BETWEEN #{start_date} AND #{end_date}</if>
+			<if test="start_date !=null and end_date!=null">AND end_date BETWEEN #{start_date} AND #{end_date}</if>
+		</where>
 	</select>
 	
 	
@@ -247,14 +211,19 @@
 			</if>
 		</if>
 	</delete>
-<!--	<delete id="deleteHouseDiaryFile" parameterType="map">-->
-<!--		DELETE-->
-<!--		FROM house_diary_file-->
-<!--		WHERE house_diary_idx = #{id};-->
-<!--	</delete>-->
 
-	
-	
+	<insert id="insertCropsDiaryHouseMap" useGeneratedKeys="true" parameterType="cropsDiaryVO">
+		INSERT INTO crops_diary_map ( diary_id, green_house_id )
+			VALUES
+			<foreach collection="houseIdList" separator="," item="itemHouseId">
+				( #{id}, #{itemHouseId} )
+			</foreach>
+	</insert>
+
+	<delete id="deleteCropsDiaryHouseMap" parameterType="map">
+		DELETE FROM crops_diary_map WHERE diary_id = #{id};
+	</delete>
+
 	<insert id="insertCropsDiary" useGeneratedKeys="true" parameterType="cropsDiaryVO">
 		INSERT INTO crops_diary(
 				green_house_id, leaf_width, stem, harvest, fruit_set, gether_set, fruit_height, bloom, fruit_number, aver_weight, grow_length, leaf_size, leaf_num, start_date, upload_file, content, title, crops, content_type,cctv_image_url,weather
@@ -312,59 +281,46 @@
 		</if>
 		</if>
 	</delete>
-<!--	<delete id="deleteCropsDiaryFile" parameterType="map">-->
-<!--		DELETE-->
-<!--		FROM crops_diary_file-->
-<!--		WHERE crops_diary_idx = #{id};-->
-<!--	</delete>-->
-
-	<!-- <select id="getMonthlyCropsDiaryList" parameterType="map" resultType="map">
-		SELECT 
-			cd.id, 
-			cd.green_house_id, 
-			cd.leaf_width, 
-			cd.stem, 
-			cd.harvest, 
-			cd.fruit_set, 
-			cd.gether_set, 
-			cd.fruit_height, 
-			cd.bloom, 
-			cd.fruit_number, 
-			cd.aver_weight, 
-			cd.grow_length, 
-			cd.leaf_size, 
-			cd.leaf_num, 
-			cd.start_date, 
-			cd.upload_file, 
-			cd.content, 
-			cd.title, 
+	<select id="getMonthlyCropsDiaryList" parameterType="map" resultMap="cropsDiaryMap">
+		SELECT
+			cd.id,
+			cd.green_house_id,
+			cdm.green_house_id AS house_id_list,
+			cd.leaf_width,
+			cd.stem,
+			cd.harvest,
+			cd.fruit_set,
+			cd.gether_set,
+			cd.fruit_height,
+			cd.bloom,
+			cd.fruit_number,
+			cd.aver_weight,
+			cd.grow_length,
+			cd.leaf_size,
+			cd.leaf_num,
+			cd.start_date,
+			cd.upload_file,
+			cd.content,
+			cd.title,
 			cd.crops,
 			cd.content_type,
 			cd.cctv_image_url,
-			cd.weather_json,
-			cdf.file_name,
-			cdf.file,
-			cdf.update_date			
+			cd.weather
 		FROM crops_diary as cd
-		LEFT OUTER JOIN crops_diary_file AS cdf ON cdf.crops_diary_idx = cd.id
-		WHERE green_house_id = #{house_id}
-		<if test="start_date!=null and end_date!=null">
-			AND start_date BETWEEN #{start_date} AND #{end_date}
-		</if>
-	</select> -->
-	<select id="getMonthlyCropsDiaryList" parameterType="map" resultType="map">
-		SELECT 
-			cd.id, 
-			cd.title,
-			cd.green_house_id, 
-			cd.start_date, 
-			cd.content_type,						
-			cd.content
-		FROM crops_diary as cd		
-		WHERE green_house_id = #{green_house_id}
-		<if test="start_date!=null and end_date!=null">
-			AND start_date BETWEEN #{start_date} AND #{end_date}
-		</if>
+		INNER JOIN crops_diary_map AS cdm on cdm.diary_id = cd.id
+		INNER JOIN green_house AS gh ON gh.id = cdm.green_house_id
+		<where>
+			<if test="gsm_key !=null">gh.gsm_key = #{gsm_key}</if>
+			<if test="gsm_key_list !=null">
+				<foreach collection="gsm_key_list" item="item" separator="," open="AND gh.gsm_key IN (" close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="green_house_id !=null">AND cdm.green_house_id = #{green_house_id}</if>
+			<if test="start_date!=null and end_date!=null">
+				AND start_date BETWEEN #{start_date} AND #{end_date}
+			</if>
+		</where>
 	</select>
 		
 	<select id="getCategoryList22" resultType="map">

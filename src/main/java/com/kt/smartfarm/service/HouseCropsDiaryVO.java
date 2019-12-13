@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Data
 @Getter
 @Setter
@@ -13,6 +15,7 @@ public class HouseCropsDiaryVO {
 
 	Integer id;
 	Integer greenHouseId;
+	List<Integer> houseIdList;
 	Double leafWidth; 	// 잎 길이
 	Double stem;		// 줄기굵기
 	Double harvest;		// 수확량(kg)

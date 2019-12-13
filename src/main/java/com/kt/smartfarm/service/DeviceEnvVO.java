@@ -1,12 +1,9 @@
 package com.kt.smartfarm.service;
 
-import com.kt.cmmn.util.MapUtils;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.logging.log4j.core.util.JsonUtils;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -78,8 +75,9 @@ public class DeviceEnvVO {
 //		properties = MapUtils.toJson(propertiesMap);
 //	}
 
-	List<VDeviceEnvVO> relationDeviceList;
 
+	List<VDeviceEnvVO> relationDeviceList;
+	List<EDeviceEnvVO> electricDeviceList;
 	public String getDeviceTypeKey() {
 		return deviceType + "$" + deviceTypeIdx;
 	}

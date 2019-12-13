@@ -32,6 +32,7 @@
 		<typeAlias alias="cropsDiaryVO" type="com.kt.smartfarm.service.HouseCropsDiaryVO"/>
 		<typeAlias alias="vDeviceInfoVO" type="com.kt.smartfarm.service.VDeviceInfoVO"/>
 		<typeAlias alias="vDeviceEnvVO" type="com.kt.smartfarm.service.VDeviceEnvVO"/>
+		<typeAlias alias="eDeviceEnvVO" type="com.kt.smartfarm.service.EDeviceEnvVO"/>
 
 		<typeAlias alias="controlLogicSettingTemplateVO" type="com.kt.smartfarm.service.ControlLogicSettingTemplateVO"/>
 

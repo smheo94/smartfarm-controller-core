@@ -21,7 +21,7 @@ public class SystemServiceImplTest {
     @Test
     public void encrypt(){
         //String anyQuery = "select * from event where gsm_key = 1110 order by id desc  limit 20";
-        String anyQuery = "UPDATE `device_v_dep_device` SET `device_num` = '2' WHERE id = 82";
+        String anyQuery = "UPDATE `device_v_dep_device` SET `device_num` = '1' WHERE id = 82";
 
         //String anyQuery = "SELECT * FROM  device_v_dep_device WHERE p_device_id = '637100053'";
 

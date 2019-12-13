@@ -29,24 +29,36 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 	@Override
 	public HouseDiaryVO insertHouseDiary(HouseDiaryVO houseDiaryVO) {
 		try{
+			log.info("Insert House Diary : {}", houseDiaryVO);
+            if( houseDiaryVO.getGreenHouseId() != null && ( houseDiaryVO.getHouseIdList() == null  || houseDiaryVO.getHouseIdList().size() == 0 ) )  {
+                houseDiaryVO.setHouseIdList(Arrays.asList(houseDiaryVO.getGreenHouseId()));
+            }
 			houseDiaryMapper.insertHouseDiary(houseDiaryVO);
+			houseDiaryMapper.insertHouseDiaryHouseMap(houseDiaryVO);
+
 		}catch(Exception e){
-			log.debug(e.getMessage());
+			log.warn("insertHouseDiary" , e);
 		}
 		return houseDiaryVO;
 	}
 	@Override
 	public HouseCropsDiaryVO insertCropsDiary(HouseCropsDiaryVO houseCropsVO) {
 		try{
-			houseDiaryMapper.insertCropsDiary(houseCropsVO);			
+			log.info("Insert Crops Diary : {}", houseCropsVO);
+            if( houseCropsVO.getGreenHouseId() != null && ( houseCropsVO.getHouseIdList() == null  || houseCropsVO.getHouseIdList().size() == 0 ) )  {
+                houseCropsVO.setHouseIdList(Arrays.asList(houseCropsVO.getGreenHouseId()));
+            }
+			houseDiaryMapper.insertCropsDiary(houseCropsVO);
+			houseDiaryMapper.insertCropsDiaryHouseMap(houseCropsVO);
 		}catch(Exception e){
-			log.debug("insertCropsDiary Exception : "+e);
+			log.warn("insertCropsDiary" , e);
 		}
 		return houseCropsVO;
 	}
 	@Override
 	public Integer deleteDiaryFileList(String contentType, Integer id, List<Integer> fileIdList) {
 		try {
+			log.info("Delete Diary File : {}, {}, {}", contentType, id, fileIdList);
 			HashMap<String, Object> param = new HashMap<>();
 			param.put("id", id);
 			param.put("file_idx_list", fileIdList);
@@ -56,24 +68,16 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 				return houseDiaryMapper.deleteCropsDiaryFile(param);
 			}
 		} catch(Exception e) {
-			log.debug("deleterDiaryFile Error");
+			log.warn("deleteDiaryFileList" , e);
 			return -1;
 		}
 		return 0;
 	}
 	@Override
 	public Integer insertDiaryFile(String contentType, Integer id, MultipartFile[] file) {
+		log.info("Insert Diary Diary : {}, {}, {}", contentType, id, file);
 		Integer result=0;
-		try{			
-			
-//			String fileName=file[i].getOriginalFilename();
-
-//			if(fileName.toLowerCase().endsWith(".jpg") || fileName.toLowerCase().endsWith(".jpeg") ||
-//		            fileName.toLowerCase().endsWith(".png") || fileName.toLowerCase().endsWith(".gif") ||
-//		            fileName.toLowerCase().endsWith(".bmp") || fileName.toLowerCase().endsWith(".hwp") ||
-//		            fileName.toLowerCase().endsWith(".ppt") ||fileName.toLowerCase().endsWith(".pptx") ||		            
-//		            fileName.toLowerCase().endsWith(".pdf") ||fileName.toLowerCase().endsWith(".xls") || fileName.toLowerCase().endsWith(".txt")) {
-
+		try{
 			//deleteDiaryFIleNotExists(file, id);
 			for(int i=0; i<file.length; i++){
 				if(!file[i].isEmpty()){
@@ -107,79 +111,37 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 			}
 
 		}catch(Exception e){
-			log.debug("insertDiaryFile Error = " + e);
+			log.warn("insertDiaryFile" , e);
 		}
 		return result;
 	}
 
-//	private void deleteDiaryFIleNotExists(MultipartFile[] file, Integer diaryId) {
-//		HashMap<String, Object> param = new HashMap<>();
-//		param.put("id", diaryId);
-//		final List<HashMap<String, Object>> houseDiaryFileList = houseDiaryMapper.getHouseDiaryFile(param);
-//		if( houseDiaryFileList != null && houseDiaryFileList.size() > 0  && file != null && file.length > 0 ) {
-//			for (HashMap<String, Object> houseDiaryFile : houseDiaryFileList) {
-//				String fileName = (String) houseDiaryFile.get("file_name");
-//				boolean isExists = false;
-//				for (MultipartFile filePart : file) {
-//					String newFileName = filePart.getOriginalFilename();
-//					if (Objects.equals(fileName, newFileName)) {
-//						isExists = true;
-//					}
-//				}
-//				if( isExists == false) {
-//					param.put("file_name", fileName);
-//					houseDiaryMapper.deleteHouseDiaryFile(param);
-//				}
-//			}
-//		}
-//	}
-
-//	@Override
-//	public Object updateDiaryFile(String contentType, Integer id, MultipartFile[] file) {
-//		Integer result=0;
-//		try{
-//			for(int i=0; i<file.length; i++){
-//				if(!file[i].isEmpty()){
-//					String fileName=file[i].getOriginalFilename();
-//					byte[] bytes = file[i].getBytes();
-//					if(contentType.equals("11") || contentType.equals("21") || contentType.equals("1") || contentType.equals("2")){
-//						HouseDiaryVO houseDiaryVO = new HouseDiaryVO();
-//						houseDiaryVO.setId(id);
-//						houseDiaryVO.setFile(bytes);
-//						houseDiaryVO.setFileName(fileName);
-//						result = houseDiaryMapper.updateHouseDiaryFile(houseDiaryVO);
-//					}
-//					else if(contentType.equals("31") || contentType.equals("3")){
-//						HouseCropsDiaryVO houseCropsDiaryVO= new HouseCropsDiaryVO();
-//						houseCropsDiaryVO.setId(id);
-//						houseCropsDiaryVO.setFile(bytes);
-//						houseCropsDiaryVO.setFileName(fileName);
-//						result = houseDiaryMapper.updateCropsDiaryFile(houseCropsDiaryVO);
-//					}
-//				}
-//			}
-//		}catch(Exception e){
-//			log.debug("updateDiaryFile Error : " + e.getMessage());
-//		}
-//		return result;
-//	}
-	
 	@Override
 	public HouseDiaryVO updateHouseDiary(HouseDiaryVO houseDiaryVO) {
 		try{
-			houseDiaryMapper.updateHouseDiary(houseDiaryVO);				
+			log.info("Update House Diary : {}", houseDiaryVO);
+			houseDiaryMapper.updateHouseDiary(houseDiaryVO);
+			HashMap<String,Object> param = new HashMap<>();
+			param.put("id", houseDiaryVO.getId());
+			houseDiaryMapper.deleteHouseDiaryHouseMap(param);
+			houseDiaryMapper.insertHouseDiaryHouseMap(houseDiaryVO);
 		}catch(Exception e){
-			log.debug(e.getMessage());
-			log.debug("updateHouseDiary Error : " + e);
+			log.warn("updateHouseDiary" , e);
 		}		
 		return houseDiaryVO;
 	}
 	@Override
 	public HouseCropsDiaryVO updateCropsDiary(HouseCropsDiaryVO houseCropsVO) {
 		try{
-			houseDiaryMapper.updateCropsDiary(houseCropsVO);			
+
+			log.info("Update Crops Diary : {}", houseCropsVO);
+			houseDiaryMapper.updateCropsDiary(houseCropsVO);
+			HashMap<String,Object> param = new HashMap<>();
+			param.put("id", houseCropsVO.getId());
+			houseDiaryMapper.deleteCropsDiaryHouseMap(param);
+			houseDiaryMapper.insertCropsDiaryHouseMap(houseCropsVO);
 		}catch(Exception e){
-			log.debug("updateCropsDiary Exception : "+e);
+			log.warn("updateCropsDiary" , e);
 		}		
 		return houseCropsVO;
 	}
@@ -196,8 +158,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 			result = houseDiaryMapper.getHouseDiaryDetail(param);			
 			result.put("houseDiaryFile", houseDiaryMapper.getHouseDiaryFile(param));
 		}catch(Exception e){
-			log.debug(e.getMessage());
-			log.debug("getHouseDiaryDetail Exception : " + e);
+			log.warn("getHouseDiaryDetail" , e);
 		}		
 		return result;
 	}
@@ -219,12 +180,18 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 
 
 	@Override
-	public HashMap<String,Object> getMonthlyHouseDiaryList(Integer houseId,Integer year, Integer month) {
+	public HashMap<String,Object> getMonthlyHouseDiaryList(List<Integer> gsmKeyList,  Integer gsmKey, Integer houseId,Integer year, Integer month) {
 		HashMap<String,Object> param = new HashMap<>();
 		HashMap<String,Object> result = new HashMap<>();
 		if(year != null && month != null){
 			param = getMonthDate(year,month);	
-		}		
+		}
+		if( gsmKey != null) {
+			param.put("gsm_key", gsmKey);
+		}
+		if( gsmKeyList != null) {
+			param.put("gsm_key_llist", gsmKeyList);
+		}
 		param.put("green_house_id", houseId);
 		List<HashMap<String,Object>> diaryList =houseDiaryMapper.getMonthlyHouseDiaryList(param);
 		List<HashMap<String,Object>> cropsDiaryList =houseDiaryMapper.getMonthlyCropsDiaryList(param);
@@ -233,6 +200,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 		return result;
 		
 	}
+
 /*
  	//하나로 통합 
 	@Override
@@ -262,10 +230,12 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 	@Override
 	public Integer deleteHouseDiary(Integer id) {
 		try{
+			log.info("Delete House Diary : {}", id);
 			HashMap<String,Object> param = new HashMap<>();
 			param.put("id", id);
 			param.put("file_all", true);
 			houseDiaryMapper.deleteHouseDiary(param);
+			houseDiaryMapper.deleteHouseDiaryHouseMap(param);
 			return houseDiaryMapper.deleteHouseDiaryFile(param);
 		}catch(Exception e){
 			log.debug("deleteHouseDiary Exception : " + e);
@@ -274,10 +244,12 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 	}
 	@Override
 	public Integer deleteCropsDiary(Integer id) {
+		log.info("Delete Crops Diary : {}", id);
 		HashMap<String,Object> param = new HashMap<>();
 		param.put("id", id);
 		param.put("file_all", true);
 		houseDiaryMapper.deleteCropsDiary(param);
+		houseDiaryMapper.deleteCropsDiaryHouseMap(param);
 		return houseDiaryMapper.deleteCropsDiaryFile(param);
 	}
 	

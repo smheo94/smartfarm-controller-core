@@ -83,7 +83,9 @@
 			<if test="gsm_key != null">AND gsm_key = #{gsm_key}</if>
 			<if test="controller_id != null">AND controller_id = #{controller_id}</if>
 			<if test="device_id != null">AND device.id = #{device_id}</if>
-		</where>	
+			<if test="device_type_id != null">AND device_type_id=#{device_type_id}</if>
+
+	</where>
 	</select>
 
 	<select id="getDeviceTypeByHouseType" resultType="deviceTypeVO">
@@ -146,9 +148,11 @@
 	<insert id="insertVDeviceEnv" useGeneratedKeys="true" parameterType="vDeviceEnvVO">
 		INSERT INTO device_v_dep_device(
 			p_device_id, device_num, device_insert_order, device_id
+			<if test="id != null">,id</if>
 		)
 		VALUES(
 			#{parentDeviceId}, #{deviceNum}, #{deviceInsertOrder}, #{deviceId}
+			<if test="id != null">#{id}</if>
 		);
 		<selectKey keyProperty="id" resultType ="int">
 			SELECT LAST_INSERT_ID() AS value;
@@ -161,6 +165,8 @@
 		<where>
 			<if test="id != null">AND id=#{id}</if>
 			<if test="pDeviceId != null">AND p_device_id=#{pDeviceId}</if>
+			<if test="deviceNum != null">AND device_num=#{deviceNum}</if>
+			<if test="deviceInsertOrder != null">AND device_insert_order=#{deviceInsertOrder}</if>
 		</where>
 	</delete>
 	
@@ -198,5 +204,54 @@
 	    INNER JOIN device ON device.id = D.p_device_id
 		WHERE device.gsm_key = #{from_gsm_key}
 	</insert>
+
+	<!-- yechae -->
+	<select id="getEDeviceEnvList" resultType="eDeviceEnvVO" >
+		SELECT
+			id, p_device_id as parentDeviceId, device_id
+		FROM device_electric_dep_device
+		WHERE p_device_id = #{deviceId}
+	</select>
+
+
+
+	<insert id="insertEDeviceEnv" useGeneratedKeys="true" parameterType="eDeviceEnvVO">
+		INSERT INTO device_electric_dep_device(
+		p_device_id, device_id
+		)
+		VALUES(
+		#{parentDeviceId}, #{deviceId}
+		);
+		<selectKey keyProperty="id" resultType ="int">
+			SELECT LAST_INSERT_ID() AS value;
+		</selectKey>
+	</insert>
+
+	<delete id="deleteEDeviceEnv" parameterType="Integer">
+		DELETE
+		FROM device_electric_dep_device
+		WHERE id=#{id}
+	</delete>
+
+	<update id="updateEDeviceEnv" parameterType="eDeviceEnvVO">
+		UPDATE device_electric_dep_device
+		SET
+			<if test="deviceId!=null">device_id = #{deviceId}</if>
+			<if test="parentDeviceId != null">,p_device_id = #{parentDeviceId}</if>
+		WHERE
+		id=#{id}
+	</update>
+
+	<delete id="deleteVDevicesEnv">
+		DELETE
+		FROM device_electric_dep_device
+		where id
+		in (
+			SELECT id
+			from device_electric_dep_device
+			where p_device_id=#{parentDeviceId}
+		);
+	</delete>
+	<!-- yechae -->
 	
 </mapper>

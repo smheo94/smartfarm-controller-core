@@ -12,11 +12,7 @@
  */
 package com.kt.smartfarm.service.impl;
 
-import com.kt.smartfarm.service.DeviceEnvService;
-import com.kt.smartfarm.service.DeviceEnvVO;
-import com.kt.smartfarm.service.DeviceTypeVO;
-import com.kt.smartfarm.service.VDeviceEnvVO;
-import com.kt.smartfarm.service.VDeviceInfoVO;
+import com.kt.smartfarm.service.*;
 import com.mysql.jdbc.MysqlErrorNumbers;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
@@ -39,20 +35,20 @@ import javax.annotation.Resource;
 public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements DeviceEnvService {
 
 	private static final Logger log = LoggerFactory.getLogger(DeviceEnvServiceImpl.class);
-	@Resource(name="deviceEnvMapper")
+	@Resource(name = "deviceEnvMapper")
 	DeviceEnvMapper deviceEnvMapper;
-	
+
 	@Override
-	public List<DeviceEnvVO> insert(List<DeviceEnvVO> device) {			
-		try{
-            log.info("Insert List : {}", device);
-			for(DeviceEnvVO vo :device){
+	public List<DeviceEnvVO> insert(List<DeviceEnvVO> device) {
+		try {
+			log.info("Insert List : {}", device);
+			for (DeviceEnvVO vo : device) {
 				log.info("Insert Device : {}", vo);
 				try {
 					deviceEnvMapper.insert(vo);
 				} catch (Exception se) {
-					if( se instanceof MySQLIntegrityConstraintViolationException ) {
-						if (((MySQLIntegrityConstraintViolationException)se).getErrorCode() == MysqlErrorNumbers.ER_DUP_ENTRY) {
+					if (se instanceof MySQLIntegrityConstraintViolationException) {
+						if (((MySQLIntegrityConstraintViolationException) se).getErrorCode() == MysqlErrorNumbers.ER_DUP_ENTRY) {
 							log.warn("중복 오류 발생 : {}", se.getMessage());
 							continue;
 						}
@@ -73,8 +69,8 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 						}
 					}
 				}
-			}			
-		}catch(Exception e){
+			}
+		} catch (Exception e) {
 			log.debug(e.getMessage());
 		}
 		return device;
@@ -83,16 +79,16 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 	@Override
 	public Integer deleteControllerDeivces(Integer gsmKey, Integer controller_id) {
 		Map<String, Object> map = new HashMap<>();
-		map.put("gsm_key",  gsmKey);
-		map.put("controller_id",  controller_id);
+		map.put("gsm_key", gsmKey);
+		map.put("controller_id", controller_id);
 		return deviceEnvMapper.deleteControllerDeivces(map);
 	}
 
 	@Override
 	public List<DeviceEnvVO> update(List<DeviceEnvVO> device) {
-		for(DeviceEnvVO vo :device){
-			deviceEnvMapper.update(vo);	
-		}		
+		for (DeviceEnvVO vo : device) {
+			deviceEnvMapper.update(vo);
+		}
 		return device;
 	}
 
@@ -105,25 +101,33 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 //	}
 
 	@Override
-	public List<DeviceEnvVO> list(Integer gsmKey, Integer controllerId, Boolean withVDeviceList) {
+	public List<DeviceEnvVO> list(Integer gsmKey, Integer controllerId, Boolean withVDeviceList, Boolean withEDeviceList) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("gsm_key", gsmKey);
 		map.put("controller_id", controllerId);
+
+		if (withEDeviceList != null && withEDeviceList) {
+			int eDeviceId = 11401;
+			map.put("device_type_id", eDeviceId);
+		}
+
 		final List<DeviceEnvVO> deviceList = deviceEnvMapper.list(map);
+
 		if (withVDeviceList) {
 			for (DeviceEnvVO vo : deviceList) {
 				vo.setRelationDeviceList(getVDeviceEnvList(vo.getId()));
 			}
 		}
+
 		return deviceList;
 	}
 
 	@Override
 	public DeviceEnvVO getDevice(Integer deviceId, Boolean withVDeviceList) {
 		Map<String, Object> map = new HashMap<>();
-		map.put("device_id",  deviceId);
+		map.put("device_id", deviceId);
 		DeviceEnvVO device = deviceEnvMapper.list(map).stream().findFirst().orElse(null);
-		if( withVDeviceList ) {
+		if (withVDeviceList) {
 			device.setRelationDeviceList(getVDeviceEnvList(deviceId));
 		}
 		return device;
@@ -131,22 +135,22 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 
 	@Override
 	public List<DeviceTypeVO> getDeviceTypeByHouseType(String houseType, String kind) {
-		String [] controllerTypeArr = houseType.split(",");
-		Integer [] controllerTypeList =new Integer[controllerTypeArr.length];
-		List<Integer> idsList = new ArrayList<>();	
-		for(int i=0; i<controllerTypeList.length; i++){
+		String[] controllerTypeArr = houseType.split(",");
+		Integer[] controllerTypeList = new Integer[controllerTypeArr.length];
+		List<Integer> idsList = new ArrayList<>();
+		for (int i = 0; i < controllerTypeList.length; i++) {
 			idsList.add(Integer.parseInt(controllerTypeArr[i]));
 		}
-		HashMap<String,Object> param = new HashMap<>();
+		HashMap<String, Object> param = new HashMap<>();
 		param.put("kind", kind);
 		param.put("idsList", idsList);
 		return deviceEnvMapper.getDeviceTypeByHouseType(param);
 	}
 
 	@Override
-	public HashMap<String, Object> gethouseTypeKindInfo() {
-		HashMap<String,Object> result = new HashMap<>();
-		
+	public HashMap<String, Object> getHouseTypeKindInfo() {
+		HashMap<String, Object> result = new HashMap<>();
+
 		result.put("houseType", deviceEnvMapper.getHouseType());
 		result.put("kind", deviceEnvMapper.getKind());
 		return result;
@@ -160,21 +164,24 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 
 	@Override
 	public List<VDeviceInfoVO> getVDeviceList() {
-		return deviceEnvMapper.getVDeviceList();		
+		return deviceEnvMapper.getVDeviceList();
 	}
 
 	@Override
 	public List<VDeviceEnvVO> insertVDeviceEnv(List<VDeviceEnvVO> voList) {
+
 		try{
 			for(VDeviceEnvVO vo :voList){
-				deviceEnvMapper.deleteVDeviceEnv(vo.getId(), vo.getParentDeviceId());
+
+				deviceEnvMapper.deleteVDeviceEnv(null, vo.getParentDeviceId(), vo.getDeviceNum(), vo.getDeviceInsertOrder());
 			}
 			for(VDeviceEnvVO vo :voList){
+
 				deviceEnvMapper.insertVDeviceEnv(vo);
 			}
-		}catch(Exception e){
+		} catch (Exception e) {
 			log.debug(e.getMessage());
-		}		
+		}
 		return voList;
 	}
 
@@ -189,23 +196,23 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 		return null;
 	}
 
-	
+
 	@Override
 	public VDeviceEnvVO updateVDeviceEnv(VDeviceEnvVO vo) {
-		try{
+		try {
 			log.debug("updateVDeviceEnv :{} ", vo);
 			return deviceEnvMapper.updateVDeviceEnv(vo);
-		}catch(Exception e){
+		} catch (Exception e) {
 			log.debug(e.getMessage());
 			return null;
-		}		
+		}
 	}
 
 	@Override
-	public Integer deleteVDeviceEnv(Integer id, Integer pDeviceId) {
+	public Integer deleteVDeviceEnv(Integer id, Integer pDeviceId, Integer deviceNum, Integer deviceInsertOrder) {
 		try{
-			log.debug("deleteVDeviceEnv :{}/{} ", id, pDeviceId);
-			return deviceEnvMapper.deleteVDeviceEnv(id, pDeviceId);
+			log.debug("deleteVDeviceEnv :{}/{}/{}/{} ", id, pDeviceId, deviceNum, deviceInsertOrder);
+			return deviceEnvMapper.deleteVDeviceEnv(id, pDeviceId, deviceNum, deviceInsertOrder);
 		}catch(Exception e){
 			log.debug(e.getMessage());
 			return null;
@@ -215,10 +222,10 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 
 	@Override
 	public Integer deleteDevice(Integer deviceId) {
-		try{
+		try {
 			log.debug("Delete Device :{}", deviceId);
 			return deviceEnvMapper.deleteDevice(deviceId);
-		}catch(Exception e){
+		} catch (Exception e) {
 			log.debug(e.getMessage());
 			return null;
 		}
@@ -230,5 +237,65 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 		deviceEnvMapper.copyToNewGSM(fromGsmKey, toGsmKey);
 		return deviceEnvMapper.copyToNewGSMVDeviceEnv(fromGsmKey, toGsmKey);
 	}
+
+	//yechae
+	@Override
+	public List<EDeviceEnvVO> insertEDeviceEnv(List<EDeviceEnvVO> voList) {
+		try {
+			for (EDeviceEnvVO vo : voList) {
+				deviceEnvMapper.insertEDeviceEnv(vo);
+			}
+		} catch (Exception e) {
+			log.debug(e.getMessage());
+		}
+		return voList;
+	}
+
+	@Override
+	public List<EDeviceEnvVO> getEDeviceEnvList(Integer deviceId) {
+		try {
+			return deviceEnvMapper.getEDeviceEnvList(deviceId);
+
+		} catch (Exception e) {
+			log.debug(e.getMessage());
+		}
+		return null;
+	}
+
+	@Override
+	public EDeviceEnvVO updateEDeviceEnv(EDeviceEnvVO vo) {
+		try {
+			log.debug("updateEDeviceEnv :{} ", vo);
+			return deviceEnvMapper.updateEDeviceEnv(vo);
+		} catch (Exception e) {
+			log.debug(e.getMessage());
+			return null;
+		}
+	}
+
+	@Override
+	public Integer deleteEDeviceEnv(Integer id) {
+		try {
+			log.debug("deleteEDeviceEnv :{} ", id);
+			return deviceEnvMapper.deleteEDeviceEnv(id);
+		} catch (Exception e) {
+			log.debug(e.getMessage());
+			return null;
+		}
+	}
+
+	@Override
+	public Integer deleteEDevicesEnv(Integer parentDeviceId) {
+		try {
+			log.debug("deleteEDevicesEnv : pid = {}", parentDeviceId);
+			//수정
+			return deviceEnvMapper.deleteVDevicesEnv(parentDeviceId);
+		} catch (Exception e) {
+			log.debug(e.getMessage());
+			return null;
+		}
+	}
+
+
 
 }

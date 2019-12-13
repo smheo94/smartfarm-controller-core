@@ -32,6 +32,8 @@ public interface HouseDiaryMapper {
 //	List<HashMap<String, Object>> selectDiaryMonthly(HashMap<String, Object> param);
 	
 	Integer insertHouseDiary(HouseDiaryVO houseDiaryVO);
+	Integer insertHouseDiaryHouseMap(HouseDiaryVO houseDiaryVO);
+	Integer deleteHouseDiaryHouseMap(HashMap<String,Object> param);
 	Integer insertHouseDiaryFile(HouseDiaryVO houseDiaryVO);
 //	HouseDiaryVO selectHouseDiaryFile(HouseDiaryVO houseDiaryVO);
 	Integer updateHouseDiary(HouseDiaryVO houseDiaryVO);
@@ -47,9 +49,11 @@ public interface HouseDiaryMapper {
 	List<HashMap<String,Object>> getCropsDiaryFile(HashMap<String, Object> param);
 	
 	List<HashMap<String,Object>> getMonthlyHouseDiaryList(HashMap<String, Object> param);
-	
-	
-	void insertCropsDiary(HouseCropsDiaryVO houseCropsVO);
+
+
+	Integer insertCropsDiary(HouseCropsDiaryVO houseCropsVO);
+	Integer insertCropsDiaryHouseMap(HouseCropsDiaryVO houseDiaryVO);
+	Integer deleteCropsDiaryHouseMap(HashMap<String,Object> param);
 	Integer insertCropsDiaryFile(HouseCropsDiaryVO houseCropsVO);
 //	HouseCropsDiaryVO selectCropsDiaryFile(HouseCropsDiaryVO houseDiaryVO);
 	void updateCropsDiary(HouseCropsDiaryVO houseCropsVO);

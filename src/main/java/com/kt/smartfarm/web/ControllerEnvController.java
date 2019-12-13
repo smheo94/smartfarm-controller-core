@@ -61,7 +61,6 @@ public class ControllerEnvController {
 	@InterceptPre
 	public Result<ControllerEnvVO> update(@PathVariable("gsmKey") Integer gsmKey, @PathVariable("controllerId") String controllerId, @RequestBody ControllerEnvVO controller){
 		try {
-			
 			return new Result(controllerEnvService.update(controller));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, controller);
