@@ -148,9 +148,11 @@
 	<insert id="insertVDeviceEnv" useGeneratedKeys="true" parameterType="vDeviceEnvVO">
 		INSERT INTO device_v_dep_device(
 			p_device_id, device_num, device_insert_order, device_id
+			<if test="id != null">,id</if>
 		)
 		VALUES(
 			#{parentDeviceId}, #{deviceNum}, #{deviceInsertOrder}, #{deviceId}
+			<if test="id != null">#{id}</if>
 		);
 		<selectKey keyProperty="id" resultType ="int">
 			SELECT LAST_INSERT_ID() AS value;
@@ -163,6 +165,8 @@
 		<where>
 			<if test="id != null">AND id=#{id}</if>
 			<if test="pDeviceId != null">AND p_device_id=#{pDeviceId}</if>
+			<if test="deviceNum != null">AND device_num=#{deviceNum}</if>
+			<if test="deviceInsertOrder != null">AND device_insert_order=#{deviceInsertOrder}</if>
 		</where>
 	</delete>
 	
@@ -182,7 +186,7 @@
 	<insert id="copyToNewGSM">
 		INSERT INTO device (
 		gsm_key, device_type_id,device_type_idx, nickname, device_type_nickname, green_house_id, controller_id,  mode, modbus_address1, modbus_address2, modbus_address3
-		, id,
+		, id
 		)
 		SELECT #{to_gsm_key}, device_type_id,device_type_idx, nickname, device_type_nickname, 0, (${to_gsm_key}  * 100000) + (controller_id %  100000) ,  1, modbus_address1, modbus_address2,
 			   modbus_address3

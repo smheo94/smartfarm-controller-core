@@ -85,7 +85,7 @@ public class CodeDataController {
 	@ResponseBody
 	public Result<HashMap<String,Object>> houseTypeKindInfo(){
 		try {
-			return new Result(deviceEnvService.gethouseTypeKindInfo());
+			return new Result(deviceEnvService.getHouseTypeKindInfo());
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}

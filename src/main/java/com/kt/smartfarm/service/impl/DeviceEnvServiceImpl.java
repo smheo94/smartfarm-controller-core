@@ -148,7 +148,7 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 	}
 
 	@Override
-	public HashMap<String, Object> gethouseTypeKindInfo() {
+	public HashMap<String, Object> getHouseTypeKindInfo() {
 		HashMap<String, Object> result = new HashMap<>();
 
 		result.put("houseType", deviceEnvMapper.getHouseType());
@@ -172,7 +172,8 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 
 		try{
 			for(VDeviceEnvVO vo :voList){
-				deviceEnvMapper.deleteVDeviceEnv(vo.getId(), vo.getParentDeviceId());
+
+				deviceEnvMapper.deleteVDeviceEnv(null, vo.getParentDeviceId(), vo.getDeviceNum(), vo.getDeviceInsertOrder());
 			}
 			for(VDeviceEnvVO vo :voList){
 
@@ -208,10 +209,10 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 	}
 
 	@Override
-	public Integer deleteVDeviceEnv(Integer id, Integer pDeviceId) {
+	public Integer deleteVDeviceEnv(Integer id, Integer pDeviceId, Integer deviceNum, Integer deviceInsertOrder) {
 		try{
-			log.debug("deleteVDeviceEnv :{}/{} ", id, pDeviceId);
-			return deviceEnvMapper.deleteVDeviceEnv(id, pDeviceId);
+			log.debug("deleteVDeviceEnv :{}/{}/{}/{} ", id, pDeviceId, deviceNum, deviceInsertOrder);
+			return deviceEnvMapper.deleteVDeviceEnv(id, pDeviceId, deviceNum, deviceInsertOrder);
 		}catch(Exception e){
 			log.debug(e.getMessage());
 			return null;
