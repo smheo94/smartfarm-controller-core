@@ -41,11 +41,11 @@ public interface HouseDiaryMapper {
 	Integer deleteHouseDiary(HashMap<String,Object> param);
 	Integer deleteHouseDiaryFile(HashMap<String,Object> param);
 	
-	HashMap<String,Object> getHouseDiaryDetail(HashMap<String, Object> param);
+	HouseDiaryVO getHouseDiaryDetail(HashMap<String, Object> param);
 	List<HashMap<String,Object>> getHouseDiaryFile(HashMap<String, Object> param);
 
-	
-	HashMap<String,Object> getCropsDiaryDetail(HashMap<String, Object> param);
+
+	HouseCropsDiaryVO getCropsDiaryDetail(HashMap<String, Object> param);
 	List<HashMap<String,Object>> getCropsDiaryFile(HashMap<String, Object> param);
 	
 	List<HashMap<String,Object>> getMonthlyHouseDiaryList(HashMap<String, Object> param);

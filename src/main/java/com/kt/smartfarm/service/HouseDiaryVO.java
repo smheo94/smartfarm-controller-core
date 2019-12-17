@@ -4,7 +4,9 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Getter
@@ -30,5 +32,7 @@ public class HouseDiaryVO {
 	String weather;
 	byte[] file;
 	String fileName;
+
+	List<HashMap<String,Object>> houseDiaryFile;
 	
 }
