@@ -106,7 +106,7 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 		map.put("gsm_key", gsmKey);
 		map.put("controller_id", controllerId);
 
-		if (withEDeviceList != null && withEDeviceList) {
+		if (!withVDeviceList && withEDeviceList) {
 			int eDeviceId = 11401;
 			map.put("device_type_id", eDeviceId);
 		}
