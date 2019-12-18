@@ -150,13 +150,13 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 	
 	
 	@Override
-	public HashMap<String,Object> getHouseDiaryDetail(Integer id) {
-		HashMap<String,Object> result = new HashMap<>();
+	public HouseDiaryVO getHouseDiaryDetail(Integer id) {
+		HouseDiaryVO result = null;
 		try{			
 			HashMap<String,Object> param = new HashMap<>();			
 			param.put("id", id);
-			result = houseDiaryMapper.getHouseDiaryDetail(param);			
-			result.put("houseDiaryFile", houseDiaryMapper.getHouseDiaryFile(param));
+			result = houseDiaryMapper.getHouseDiaryDetail(param);
+			result.setHouseDiaryFile( houseDiaryMapper.getHouseDiaryFile(param));
 		}catch(Exception e){
 			log.warn("getHouseDiaryDetail" , e);
 		}		
@@ -164,13 +164,13 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 	}
 	
 	@Override
-	public HashMap<String,Object> getCropsDiaryDetail(Integer id) {
-		HashMap<String,Object> result = new HashMap<>();
+	public HouseCropsDiaryVO getCropsDiaryDetail(Integer id) {
+		HouseCropsDiaryVO result = null;
 		try{			
 			HashMap<String,Object> param = new HashMap<>();			
 			param.put("id", id);
 			result = houseDiaryMapper.getCropsDiaryDetail(param);
-			result.put("houseDiaryFile", houseDiaryMapper.getCropsDiaryFile(param));
+			result.setHouseDiaryFile( houseDiaryMapper.getCropsDiaryFile(param));
 		}catch(Exception e){
 			log.debug(e.getMessage());
 			log.debug("getCropsDiaryDetail Exception : " + e);

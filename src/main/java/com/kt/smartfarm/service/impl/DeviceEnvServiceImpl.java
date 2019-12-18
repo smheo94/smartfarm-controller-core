@@ -201,7 +201,9 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 	public VDeviceEnvVO updateVDeviceEnv(VDeviceEnvVO vo) {
 		try {
 			log.debug("updateVDeviceEnv :{} ", vo);
-			return deviceEnvMapper.updateVDeviceEnv(vo);
+			deviceEnvMapper.deleteVDeviceEnv(null, vo.getParentDeviceId(), vo.getDeviceNum(), vo.getDeviceInsertOrder());
+			deviceEnvMapper.insertVDeviceEnv(vo);
+			return vo;
 		} catch (Exception e) {
 			log.debug(e.getMessage());
 			return null;
