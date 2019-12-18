@@ -76,7 +76,7 @@
 			income =#{income},
 			spend =#{spend}
 		</set>
-		WHERE id=#{id} AND green_house_id = #{greenHouseId}
+		WHERE id=#{id}
 	</update>
 
 	<select id="getHouseDiaryDetail" parameterType="map" resultMap="houseDiaryMap">
@@ -259,7 +259,7 @@
 		<if test="crops != null">crops = #{crops},</if>
 		<if test="contentType != null">content_type = #{contentType}</if>
 		</set>
-		WHERE id = #{id} AND green_house_id = #{greenHouseId};
+		WHERE id = #{id}
 	</update>
 	
 	<delete id="deleteCropsDiary" parameterType="map">
