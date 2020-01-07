@@ -4,6 +4,8 @@ package com.kt.smartfarm.service.impl;
 import com.kt.smartfarm.service.HouseCropsDiaryVO;
 import com.kt.smartfarm.service.HouseDiaryService;
 import com.kt.smartfarm.service.HouseDiaryVO;
+import com.kt.smartfarm.supervisor.model.PushHistory;
+import com.kt.smartfarm.supervisor.repository.PushHistoryRepository;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
 import java.util.*;
@@ -12,6 +14,11 @@ import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.core.support.RepositoryFactorySupport;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,7 +31,12 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 
 	@Resource(name="houseDiaryMapper")
     private HouseDiaryMapper	houseDiaryMapper;
-
+//
+//	@Autowired
+//	RepositoryFactorySupport factory = Application;
+	//@Resource(name="pushHistoryRepository")
+	@Autowired
+	private PushHistoryRepository pushRepository;
 
 	@Override
 	public HouseDiaryVO insertHouseDiary(HouseDiaryVO houseDiaryVO) {
@@ -287,4 +299,12 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 		}		
 		return imageDiaryList;
 	}
+
+	@Override
+	public Page<PushHistory> getImageDiaryListV2(Integer gsmKey, Integer houseId, Long fromDate, Long toDate, Pageable pageable) {
+		//PushHistoryRepository pushRepository = factory.getRepository(PushHistoryRepository.class);
+		return pushRepository.findAllAny(gsmKey, houseId, fromDate, toDate);
+	}
+
+
 }
