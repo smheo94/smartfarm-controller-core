@@ -9,12 +9,6 @@
 	<name>smartfarm-mgr-env</name>
 	<url>http://www.egovframe.go.kr</url>
 
-	<licenses>
-        <license>
-            <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-        </license>
-    </licenses>
     <profiles>
         <profile>
             <id>dev-center</id>
@@ -79,8 +73,6 @@
 	</repositories>
 
 	<dependencies>
-
-
 		<!-- 표준프레임워크 실행환경 -->
         <dependency>
 		    <groupId>egovframework.rte</groupId>
@@ -219,7 +211,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
-            <version>4.2.4.RELEASE</version>
+            <version>4.3.25.RELEASE</version>
         </dependency>
 		<dependency>
 		    <groupId>commons-fileupload</groupId>
@@ -249,17 +241,17 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
-            <version>4.1.0.RELEASE</version>
+            <version>4.2.13.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
-            <version>4.1.0.RELEASE</version>
+            <version>4.2.13.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
-            <version>4.1.0.RELEASE</version>
+            <version>4.2.13.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security.oauth</groupId>
