@@ -70,7 +70,7 @@
 	<select id="list" parameterType="map" resultMap="deviceEnvVOMap">
 		SELECT 
 			device.id, device_type_id, device_type_idx, user_info_id, gsm_key,
-			green_house_id, controller_id, nickname, device_type_nickname,
+		    device.green_house_id, controller_id, nickname, device_type_nickname,
 			device.description, setup_date, x_position, y_position, x2_position,
 			y2_position, memo, modbus_address1, modbus_address2, modbus_address3,
 			no_stop_control, MODE, update_date, auto_manual_mode, STATUS, properties
