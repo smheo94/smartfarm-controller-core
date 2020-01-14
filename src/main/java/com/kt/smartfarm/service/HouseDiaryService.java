@@ -1,12 +1,9 @@
 package com.kt.smartfarm.service;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.HashMap;
 import java.util.List;
-
-import com.kt.smartfarm.supervisor.model.PushHistory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.web.multipart.MultipartFile;
 
 public interface HouseDiaryService {
 
@@ -38,6 +35,5 @@ public interface HouseDiaryService {
 	HashMap<String,Object> getHouseCropsInfo(Integer greenHouseId);
 	List<HashMap<String,Object>> getImageDiaryList(Integer houseId);
 
-
-	Page<PushHistory> getImageDiaryListV2(Integer gsmKey, Integer houseId, Long fromDate, Long toDate, Pageable pageable);
+	List<HashMap<String, Object>>  getImageDiaryListV2(Integer gsmKey, Integer houseId, Long fromDate, Long toDate, Integer page, Integer size);
 }

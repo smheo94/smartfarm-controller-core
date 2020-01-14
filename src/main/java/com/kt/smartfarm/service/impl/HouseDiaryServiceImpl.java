@@ -4,25 +4,15 @@ package com.kt.smartfarm.service.impl;
 import com.kt.smartfarm.service.HouseCropsDiaryVO;
 import com.kt.smartfarm.service.HouseDiaryService;
 import com.kt.smartfarm.service.HouseDiaryVO;
-import com.kt.smartfarm.supervisor.model.PushHistory;
-import com.kt.smartfarm.supervisor.repository.PushHistoryRepository;
+import com.kt.smartfarm.supervisor.mapper.HouseDiaryMapper;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
-
-import java.util.*;
-
-import javax.annotation.Resource;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.core.support.RepositoryFactorySupport;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.kt.smartfarm.supervisor.mapper.HouseDiaryMapper;
+import javax.annotation.Resource;
+import java.util.*;
 
 
 @Service("houseDiaryService")
@@ -31,12 +21,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 
 	@Resource(name="houseDiaryMapper")
     private HouseDiaryMapper	houseDiaryMapper;
-//
-//	@Autowired
-//	RepositoryFactorySupport factory = Application;
-	//@Resource(name="pushHistoryRepository")
-	@Autowired
-	private PushHistoryRepository pushRepository;
+
 
 	@Override
 	public HouseDiaryVO insertHouseDiary(HouseDiaryVO houseDiaryVO) {
@@ -292,7 +277,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 		List<HashMap<String,Object>> imageDiaryList = new ArrayList<HashMap<String,Object>>();
 		try{			
 			HashMap<String,Object> param = new HashMap<>();
-			param.put("houseId", houseId);
+			param.put("house_id", houseId);
 			imageDiaryList = houseDiaryMapper.getImageDiaryList(param);	
 		}catch(Exception e){
 			log.debug("getImageDiaryList Error = " + e.getMessage());			
@@ -301,9 +286,27 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 	}
 
 	@Override
-	public Page<PushHistory> getImageDiaryListV2(Integer gsmKey, Integer houseId, Long fromDate, Long toDate, Pageable pageable) {
-		//PushHistoryRepository pushRepository = factory.getRepository(PushHistoryRepository.class);
-		return pushRepository.findAllAny(gsmKey, houseId, fromDate, toDate);
+	public List<HashMap<String, Object>>  getImageDiaryListV2(Integer gsmKey, Integer houseId, Long fromDate, Long toDate, Integer page, Integer size) {
+        List<HashMap<String,Object>> imageDiaryList = new ArrayList<HashMap<String,Object>>();
+        try{
+            HashMap<String,Object> param = new HashMap<>();
+            param.put("gsm_key", gsmKey);
+            param.put("house_id", houseId);
+            if( fromDate != null && fromDate > 0  ) {
+                param.put("from_date", new Date(fromDate));
+            }
+            if( toDate != null && toDate > 0) {
+                param.put("to_date", new Date(toDate));
+            }
+            if( page != null ) {
+                param.put("page_start", page * (size == null ? 10 : 0));
+                param.put("page_end", (size == null ? 10 : 0));
+            }
+            imageDiaryList = houseDiaryMapper.getImageDiaryList(param);
+        }catch(Exception e){
+            log.debug("getImageDiaryList Error = " + e.getMessage());
+        }
+        return imageDiaryList;
 	}
 
 

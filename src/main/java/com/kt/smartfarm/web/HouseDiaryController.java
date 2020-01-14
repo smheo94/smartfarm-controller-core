@@ -18,12 +18,8 @@ package com.kt.smartfarm.web;
 import com.kt.cmmn.util.Result;
 import com.kt.smartfarm.service.*;
 
-import com.kt.smartfarm.supervisor.model.PushHistory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -304,7 +300,7 @@ public class HouseDiaryController {
 
     @RequestMapping(value= "/imageDiary/v2/", method = RequestMethod.GET)
     @ResponseBody
-    public Result<Page<PushHistory>> getImageDiaryList(
+    public Result getImageDiaryList(
                                     @RequestParam(required = false, name = "gsmKey") Integer gsmKey,
                                     @RequestParam(required = false, name = "houseId") Integer houseId,
                                     @RequestParam(required = false, name = "fromDate") Long fromDate,
@@ -313,9 +309,14 @@ public class HouseDiaryController {
                                     @RequestParam(required = false, name = "page") Integer page
     ) throws HttpStatusCodeException {
         try{
-			Pageable pageable = PageRequest.of(Optional.ofNullable(page).orElse(0), Optional.ofNullable(size).orElse(10));
-            //error message가 null 이고 push_type이 9인것들
-            return new Result(houseDiaryService.getImageDiaryListV2(gsmKey, houseId, fromDate, toDate, pageable));
+
+			try{
+				//error message가 null 이고 push_type이 9인것들
+				return new Result(houseDiaryService.getImageDiaryListV2(gsmKey, houseId, fromDate, toDate, size, page));
+			}catch(Exception e){
+
+				return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+			}
         }catch(Exception e){
 			throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage() );
         }
