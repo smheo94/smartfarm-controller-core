@@ -58,7 +58,8 @@
 			priority,
 			on_pc AS onPc,
 			on_mobile AS onMobile,
-			on_panel AS onPanel
+			on_panel AS onPanel,
+			manual_command_num AS manualCommandNum
 		FROM control_properties
 		INNER JOIN control_logic_property_lnk clpl ON clpl.properties_id = control_properties.id
 		<where>
