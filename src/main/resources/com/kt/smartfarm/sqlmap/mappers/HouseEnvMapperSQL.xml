@@ -171,10 +171,10 @@
 	</select>
 	
 	<select id ="getMappedDevice" resultType="int">
-		SELECT device_id 
+		SELECT d.id as device_id
 		FROM map_green_house_device AS mghd 
-		INNER JOIN green_house gh ON gh.id = mghd.green_house_id
-		WHERE gh.id = #{green_house_id} AND gh.gsm_key = #{gsm_key}
+		INNER JOIN device d ON d.id = mghd.device_id
+		WHERE mghd.green_house_id = #{green_house_id} AND d.gsm_key = #{gsm_key}
 	</select>
 	<select id ="getNutrientController" resultType="map">
 		SELECT

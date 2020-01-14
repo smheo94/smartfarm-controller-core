@@ -152,6 +152,8 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 				map.put("green_house_id",houseMap.get("id"));
                 List<Integer> deviceIds = houseEnvMapper.getMappedDevice(map);
 				houseMap.put("selectedDeviceList", deviceIds);
+				List<DeviceEnvVO> devices = deviceEnvMapper.list(map);
+				houseMap.put("deviceList", devices);
 				if( all ) {
 					map.put("deviceIds", deviceIds);
 					if( deviceIds.size() > 0 ) {

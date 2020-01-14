@@ -23,10 +23,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Optional;
 
 /*
  * mgrEnv
@@ -43,6 +46,9 @@ public class HouseDiaryController {
 
 	@Resource(name="authCheckService")
 	private AuthCheckService authCheckService;
+
+
+
 	/**
 	 * @description house에 등록되어 있는 작물 정보
 	 * @param greenHouseId 
@@ -291,4 +297,28 @@ public class HouseDiaryController {
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
+
+    @RequestMapping(value= "/imageDiary/v2/", method = RequestMethod.GET)
+    @ResponseBody
+    public Result getImageDiaryList(
+                                    @RequestParam(required = false, name = "gsmKey") Integer gsmKey,
+                                    @RequestParam(required = false, name = "houseId") Integer houseId,
+                                    @RequestParam(required = false, name = "fromDate") Long fromDate,
+                                    @RequestParam(required = false, name = "toDate") Long toDate,
+                                    @RequestParam(required = false, name = "size") Integer size,
+                                    @RequestParam(required = false, name = "page") Integer page
+    ) throws HttpStatusCodeException {
+        try{
+
+			try{
+				//error message가 null 이고 push_type이 9인것들
+				return new Result(houseDiaryService.getImageDiaryListV2(gsmKey, houseId, fromDate, toDate, size, page));
+			}catch(Exception e){
+
+				return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+			}
+        }catch(Exception e){
+			throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage() );
+        }
+    }
 }

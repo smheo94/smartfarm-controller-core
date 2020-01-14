@@ -338,13 +338,22 @@
 	</select>
 	
 	<select id="getImageDiaryList" parameterType="map" resultType="map">
-		SELECT id,push_date,push_type,push_title,push_message,image_url,weather
-		FROM push_history
-		WHERE green_house_id = #{houseId}
-		AND push_type = 9 
-		AND error_message IS NULL
-		AND image_url IS NOT NULL
+		SELECT ph.id,ph.push_date,ph.push_type,ph.push_title,ph.push_message,ph.image_url,ph.weather
+		FROM push_history ph
+		LEFT JOIN green_house gh ON ph.green_house_id = gh.id
+		<where>
+			push_type = 9 AND image_url IS NOT NULL
+			<if test="house_id != null">AND ph.green_house_id = #{house_id}</if>
+			<if test="from_date != null">AND ph.push_date BETWEEN #{from_date} AND #{to_date}</if>
+			<if test="gsm_key != null">gh.gsm_key = #{gsm_key}</if>
+		</where>
+		ORDER BY push_date DESC
+		<if test="start_page != null">
+		LIMIT ${start_page} , ${end_page}
+		</if>
 		<!-- push_type이 9인경우는 cctv daily 인 case -->
 	</select>
-	
+
+
+
 </mapper>

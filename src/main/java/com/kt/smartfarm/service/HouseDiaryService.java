@@ -1,9 +1,9 @@
 package com.kt.smartfarm.service;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.HashMap;
 import java.util.List;
-
-import org.springframework.web.multipart.MultipartFile;
 
 public interface HouseDiaryService {
 
@@ -34,6 +34,6 @@ public interface HouseDiaryService {
 	
 	HashMap<String,Object> getHouseCropsInfo(Integer greenHouseId);
 	List<HashMap<String,Object>> getImageDiaryList(Integer houseId);
-	
-	
+
+	List<HashMap<String, Object>>  getImageDiaryListV2(Integer gsmKey, Integer houseId, Long fromDate, Long toDate, Integer page, Integer size);
 }

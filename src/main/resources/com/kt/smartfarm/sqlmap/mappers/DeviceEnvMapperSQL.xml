@@ -70,7 +70,7 @@
 	<select id="list" parameterType="map" resultMap="deviceEnvVOMap">
 		SELECT 
 			device.id, device_type_id, device_type_idx, user_info_id, gsm_key,
-			green_house_id, controller_id, nickname, device_type_nickname,
+		    device.green_house_id, controller_id, nickname, device_type_nickname,
 			device.description, setup_date, x_position, y_position, x2_position,
 			y2_position, memo, modbus_address1, modbus_address2, modbus_address3,
 			no_stop_control, MODE, update_date, auto_manual_mode, STATUS, properties
@@ -79,12 +79,16 @@
 			,CDT.opmode_error, CDT.value_exchange, CDT.sensing_timeout
 		FROM device
 		INNER JOIN cd_device_type CDT ON CDT.id = device.device_type_id
+		<if test="house_id != null or green_house_id != null">
+			INNER JOIN map_green_house_device mghd ON mghd.device_id = device.id
+		</if>
 		<where>
 			<if test="gsm_key != null">AND gsm_key = #{gsm_key}</if>
 			<if test="controller_id != null">AND controller_id = #{controller_id}</if>
 			<if test="device_id != null">AND device.id = #{device_id}</if>
 			<if test="device_type_id != null">AND device_type_id=#{device_type_id}</if>
-
+			<if test="house_id != null">AND mghd.green_house_id = #{house_id}</if>
+			<if test="green_house_id != null">AND mghd.green_house_id = #{green_house_id}</if>
 	</where>
 	</select>
 
