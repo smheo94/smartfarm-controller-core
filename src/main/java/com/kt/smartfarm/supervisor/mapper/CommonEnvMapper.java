@@ -60,26 +60,26 @@ public interface CommonEnvMapper {
 	
 	void insertDeviceList(HashMap<String, Object> row);
 	void updateController(HashMap<String, Object> controllerInfo);	
-	int deleteDeviceOfChangedDeviceType(HashMap<String, Object> row);
-	void insertDeviceStatusUpdate(HashMap<String, Object> row);
-	void updateDeviceList(HashMap<String, Object> row);
-	void deleteDeviceOfRemovedDevice(String controllerId, List<String> deviceIdList);
-	void deleteDeviceInfoUsingControllerId(HashMap<String, Object> param);
-	void deleteControllerInfo(int controllerId);
+//	int deleteDeviceOfChangedDeviceType(HashMap<String, Object> row);
+//	void insertDeviceStatusUpdate(HashMap<String, Object> row);
+//	void updateDeviceList(HashMap<String, Object> row);
+//	void deleteDeviceOfRemovedDevice(String controllerId, List<String> deviceIdList);
+//	void deleteDeviceInfoUsingControllerId(HashMap<String, Object> param);
+//	void deleteControllerInfo(int controllerId);
 	
 	
-	void insertSensorControllerInfo(HashMap<String, Object> sensorListInfo);
-	void insertSensorDevice(HashMap<String, Object> sensorListInfo);
-	void updateSensorControllerInfo(HashMap<String, Object> sensorListInfo);	
-	List<HashMap<String, Object>> selectedControllerInfo(HashMap<String, Object> param);
+//	void insertSensorControllerInfo(HashMap<String, Object> sensorListInfo);
+//	void insertSensorDevice(HashMap<String, Object> sensorListInfo);
+//	void updateSensorControllerInfo(HashMap<String, Object> sensorListInfo);
+//	List<HashMap<String, Object>> selectedControllerInfo(HashMap<String, Object> param);
 	
-	List<HashMap<String, Object>> selectSensorList(Integer sensorType);
-	Object getSensorChannel(boolean b);
-	Object getSensorGroupList(Object object);
+//	List<HashMap<String, Object>> selectSensorList(Integer sensorType);
+//	Object getSensorChannel(boolean b);
+//	Object getSensorGroupList(Object object);
 	
-	List<HashMap<String, Object>> selectControllerListOfControlModule(HashMap<String, Object> param);
-	List<HashMap<String, Object>> selectControllerHouseMapList(HashMap<String, Object> param);
-	List<HashMap<String, Object>> selectDeviceOfControlModule(HashMap<String, Object> param);
+//	List<HashMap<String, Object>> selectControllerListOfControlModule(HashMap<String, Object> param);
+//	List<HashMap<String, Object>> selectControllerHouseMapList(HashMap<String, Object> param);
+//	List<HashMap<String, Object>> selectDeviceOfControlModule(HashMap<String, Object> param);
 	
 	
 }

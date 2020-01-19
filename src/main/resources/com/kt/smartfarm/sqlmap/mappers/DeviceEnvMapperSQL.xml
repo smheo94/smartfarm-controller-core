@@ -76,7 +76,7 @@
 			no_stop_control, MODE, update_date, auto_manual_mode, STATUS, properties
 			,CDT.device_type, CDT.device_type_group, CDT.device_type_name, CDT.description AS device_type_description, CDT.kind, CDT.dcac
 			,CDT.round_number,CDT.topic_group,CDT.reset_point,CDT.accum_m,CDT.accum_h,CDT.accum_d,CDT.op_time,CDT.value_type
-			,CDT.opmode_error, CDT.value_exchange
+			,CDT.opmode_error, CDT.value_exchange, CDT.sensing_timeout
 		FROM device
 		INNER JOIN cd_device_type CDT ON CDT.id = device.device_type_id
 		<if test="house_id != null or green_house_id != null">
