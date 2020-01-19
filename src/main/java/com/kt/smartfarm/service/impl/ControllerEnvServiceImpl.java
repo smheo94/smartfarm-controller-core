@@ -50,20 +50,20 @@ public class ControllerEnvServiceImpl extends EgovAbstractServiceImpl implements
 		}
         final List<ControllerDepDeviceTypeVO> dependencyDeviceTypeList = controllerEnvMapper.getDependencyDeviceTypeList(vo.getControllerInfoId());
         if (dependencyDeviceTypeList != null && dependencyDeviceTypeList.size() > 0 && vo.getDeviceList().size() == 0) {
-            dependencyDeviceTypeList.stream().filter(d -> d.getAutoCreate() == 1).forEach(d -> {
-                DeviceEnvVO device = new DeviceEnvVO();
-                device.setControllerId(vo.getId());
-                device.setGsmKey(vo.getGsmKey());
-                device.setDeviceTypeId(d.getDeviceTypeId());
-                device.setModbusAddress1(d.getDefaultAddress1());
-                device.setModbusAddress2(d.getDefaultAddress2());
-                device.setModbusAddress3(d.getDefaultAddress3());
-                device.setDeviceTypeNickname(d.getDeviceTypeName());
-                device.setNickname(d.getDefaultName());
-                device.setDeviceTypeIdx(deviceEnvMapper.selectMaxDeviceTypeIdx(device));
-                deviceEnvMapper.insert(device);
+			for( ControllerDepDeviceTypeVO d : dependencyDeviceTypeList) {
+				DeviceEnvVO device = new DeviceEnvVO();
+				device.setControllerId(vo.getId());
+				device.setGsmKey(vo.getGsmKey());
+				device.setDeviceTypeId(d.getDeviceTypeId());
+				device.setModbusAddress1(d.getDefaultAddress1());
+				device.setModbusAddress2(d.getDefaultAddress2());
+				device.setModbusAddress3(d.getDefaultAddress3());
+				device.setDeviceTypeNickname(d.getDeviceTypeName());
+				device.setNickname(d.getDefaultName());
+				device.setDeviceTypeIdx(deviceEnvMapper.selectMaxDeviceTypeIdx(device));
+				deviceEnvMapper.insert(device);
 				vo.getDeviceList().add(device);
-            });
+			}
         } else if( vo.getDeviceList().size() > 0 ) {
         	vo.getDeviceList().forEach( d -> {
 				try {

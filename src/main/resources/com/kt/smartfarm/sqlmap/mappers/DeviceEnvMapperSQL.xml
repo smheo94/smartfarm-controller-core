@@ -163,7 +163,7 @@
 		</selectKey>
 	</insert>
 
-	<delete id="deleteVDeviceEnv" parameterType="Integer">
+	<delete id="deleteVDeviceEnv">
 		DELETE 
 		FROM device_v_dep_device 
 		<where>
