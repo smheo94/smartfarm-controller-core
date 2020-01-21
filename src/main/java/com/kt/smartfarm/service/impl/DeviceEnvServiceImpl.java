@@ -25,8 +25,11 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import com.kt.smartfarm.supervisor.mapper.DeviceEnvMapper;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpStatusCodeException;
 
 import javax.annotation.Resource;
 
@@ -168,12 +171,15 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 	}
 
 	@Override
-	public List<VDeviceEnvVO> insertVDeviceEnv(List<VDeviceEnvVO> voList) {
+	public List<VDeviceEnvVO> insertVDeviceEnv(List<VDeviceEnvVO> voList) throws HttpStatusCodeException {
 
 		try{
 			for(VDeviceEnvVO vo :voList){
-
-				deviceEnvMapper.deleteVDeviceEnv(null, vo.getParentDeviceId(), vo.getDeviceNum(), vo.getDeviceInsertOrder());
+				if( vo.getParentDeviceId()  != null && vo.getDeviceNum()  != null &&  vo.getDeviceInsertOrder()  != null ) {
+					deviceEnvMapper.deleteVDeviceEnv(null, vo.getParentDeviceId(), vo.getDeviceNum(), vo.getDeviceInsertOrder());
+				} else {
+					throw new HttpClientErrorException(HttpStatus.CONFLICT, "not found device");
+				}
 			}
 			for(VDeviceEnvVO vo :voList){
 
@@ -198,11 +204,15 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 
 
 	@Override
-	public VDeviceEnvVO updateVDeviceEnv(VDeviceEnvVO vo) {
+	public VDeviceEnvVO updateVDeviceEnv(VDeviceEnvVO vo) throws HttpStatusCodeException {
 		try {
 			log.info("updateVDeviceEnv :{} ", vo);
-			deviceEnvMapper.deleteVDeviceEnv(null, vo.getParentDeviceId(), vo.getDeviceNum(), vo.getDeviceInsertOrder());
-			deviceEnvMapper.insertVDeviceEnv(vo);
+			if( vo.getParentDeviceId()  != null && vo.getDeviceNum()  != null &&  vo.getDeviceInsertOrder()  != null ) {
+				deviceEnvMapper.deleteVDeviceEnv(null, vo.getParentDeviceId(), vo.getDeviceNum(), vo.getDeviceInsertOrder());
+				deviceEnvMapper.insertVDeviceEnv(vo);
+			} else {
+				throw new HttpClientErrorException(HttpStatus.CONFLICT, "not found device");
+			}
 			return vo;
 		} catch (Exception e) {
 			log.debug(e.getMessage());

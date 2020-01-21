@@ -1,5 +1,7 @@
 package com.kt.smartfarm.service;
 
+import org.springframework.web.client.HttpStatusCodeException;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -19,12 +21,12 @@ public interface DeviceEnvService {
 	List<HashMap<String,Object>> getDeviceTypeList();
 	
 	List<VDeviceInfoVO> getVDeviceList();
-	List<VDeviceEnvVO> insertVDeviceEnv(List<VDeviceEnvVO> vo);
+	List<VDeviceEnvVO> insertVDeviceEnv(List<VDeviceEnvVO> vo)  throws HttpStatusCodeException;;
 
 
 	List<VDeviceEnvVO> getVDeviceEnvList(Integer deviceId);
 	
-	VDeviceEnvVO updateVDeviceEnv(VDeviceEnvVO vo);
+	VDeviceEnvVO updateVDeviceEnv(VDeviceEnvVO vo) throws HttpStatusCodeException;
 	Integer deleteVDeviceEnv(Integer id, Integer pDeviceId,  Integer deviceNum , Integer deviceInsertOrder);
 
 	Integer copyToNewGSM(Integer fromGsmKey, Integer toGsmKey);
