@@ -12,6 +12,7 @@
  */
 package com.kt.smartfarm.service.impl;
 
+import com.kt.cmmn.util.StringUtil;
 import com.kt.cmmn.util.SunriseSunset;
 import com.kt.smartfarm.service.HouseEnvVO;
 import com.kt.smartfarm.service.ProductVO;
@@ -171,6 +172,9 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 						controllerList.addAll(nutrientControllerList);
 					}
 					houseMap.put("controllerList", controllerList);
+
+					List<ControlLogicSettingVO> logicList = houseEnvMapper.getHouseControlSettings(StringUtil.parseInt(houseMap.get("id")));
+					houseMap.put("logicList", logicList);
 				}
 
 				if(detail ) {
