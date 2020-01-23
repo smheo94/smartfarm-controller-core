@@ -218,6 +218,18 @@
 		</if>
 		 GROUP BY controller_id;
 	</select>
+
+	<select id ="getHouseControlSettings" resultType="controlLogicSettingVO" parameterType="Integer" >
+		SELECT CL.id AS logic_id, CL.name AS def_logic_name, CL.java_class_name, CL.default_period_size,
+		CS.id AS control_setting_id, CS.green_house_id, CS.logic_name, CS.logic_env, CS.logic_period_env, CS.logic_period_size, CS.auto_manual_mode, CS.update_dt,
+		CS.view_order, CS.create_dt,
+		GH.gsm_key
+		FROM control_logic CL
+		INNER JOIN control_setting CS ON CL.id = CS.logic_id
+		INNER JOIN green_house GH ON GH.id = CS.green_house_id
+		WHERE GH.id = #{green_house_id}
+		ORDER BY view_order;
+	</select>
 	
 	<select id="getHouseDeviceList" parameterType="Integer" resultType="deviceEnvVO">
 		SELECT device.* , cd_device_type.device_type , cd_device_type.device_type
