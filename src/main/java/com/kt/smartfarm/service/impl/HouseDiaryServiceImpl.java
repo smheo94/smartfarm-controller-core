@@ -286,12 +286,12 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 	}
 
 	@Override
-	public List<HashMap<String, Object>>  getImageDiaryListV2(Integer gsmKey, Integer houseId, Long fromDate, Long toDate, Integer page, Integer size) {
+	public List<HashMap<String, Object>>  getImageDiaryListV2(Integer gsmKey, List<Integer> houseIdList, Long fromDate, Long toDate, Integer page, Integer size, Boolean total_count) {
         List<HashMap<String,Object>> imageDiaryList = new ArrayList<HashMap<String,Object>>();
         try{
             HashMap<String,Object> param = new HashMap<>();
             param.put("gsm_key", gsmKey);
-            param.put("house_id", houseId);
+            param.put("house_id_list", houseIdList);
             if( fromDate != null && fromDate > 0  ) {
                 param.put("from_date", new Date(fromDate));
             }
@@ -299,9 +299,10 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
                 param.put("to_date", new Date(toDate));
             }
             if( page != null ) {
-                param.put("page_start", page * (size == null ? 10 : 0));
-                param.put("page_end", (size == null ? 10 : 0));
+                param.put("page_start", page * (size == null ? 10 : size));
+                param.put("page_end", (size == null ? 10 : size));
             }
+			param.put("total_count", total_count);
             imageDiaryList = houseDiaryMapper.getImageDiaryList(param);
         }catch(Exception e){
             log.debug("getImageDiaryList Error = " + e.getMessage());

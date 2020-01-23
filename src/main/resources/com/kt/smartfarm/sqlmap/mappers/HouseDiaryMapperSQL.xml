@@ -338,18 +338,32 @@
 	</select>
 	
 	<select id="getImageDiaryList" parameterType="map" resultType="map">
-		SELECT ph.id,ph.push_date,ph.push_type,ph.push_title,ph.push_message,ph.image_url,ph.weather
+		SELECT
+		<if test="total_count == true" >
+		COUNT(ph.id) AS total_count
+		</if>
+		<if test="total_count != true" >
+		ph.id,ph.push_date,ph.push_type,ph.push_title,ph.push_message,ph.image_url,ph.weather
+		,c.cctv_name
+		</if>
 		FROM push_history ph
 		LEFT JOIN green_house gh ON ph.green_house_id = gh.id
+		LEFT JOIN cctv c ON c.id = ph.cctv_id
 		<where>
 			push_type = 9 AND image_url IS NOT NULL
-			<if test="house_id != null">AND ph.green_house_id = #{house_id}</if>
+			<if test="house_id_list != null ">
+				<foreach collection="house_id_list" item="hid" separator="," open="AND ph.green_house_id IN (" close=")">
+					#{hid}
+				</foreach>
+			</if>
 			<if test="from_date != null">AND ph.push_date BETWEEN #{from_date} AND #{to_date}</if>
-			<if test="gsm_key != null">gh.gsm_key = #{gsm_key}</if>
+			<if test="gsm_key != null">AND gh.gsm_key = #{gsm_key}</if>
 		</where>
+		<if test="total_count != true">
 		ORDER BY push_date DESC
-		<if test="start_page != null">
-		LIMIT ${start_page} , ${end_page}
+		<if test="page_start != null">
+		LIMIT ${page_start} , ${page_end}
+		</if>
 		</if>
 		<!-- push_type이 9인경우는 cctv daily 인 case -->
 	</select>

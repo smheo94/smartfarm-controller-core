@@ -28,6 +28,7 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -302,7 +303,7 @@ public class HouseDiaryController {
     @ResponseBody
     public Result getImageDiaryList(
                                     @RequestParam(required = false, name = "gsmKey") Integer gsmKey,
-                                    @RequestParam(required = false, name = "houseId") Integer houseId,
+									@RequestParam(required = false, name = "houseId") List<Integer> houseIdList,
                                     @RequestParam(required = false, name = "fromDate") Long fromDate,
                                     @RequestParam(required = false, name = "toDate") Long toDate,
                                     @RequestParam(required = false, name = "size") Integer size,
@@ -312,7 +313,7 @@ public class HouseDiaryController {
 
 			try{
 				//error message가 null 이고 push_type이 9인것들
-				return new Result(houseDiaryService.getImageDiaryListV2(gsmKey, houseId, fromDate, toDate, size, page));
+				return new Result(houseDiaryService.getImageDiaryListV2(gsmKey, houseIdList, fromDate, toDate, page, size, false));
 			}catch(Exception e){
 
 				return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
@@ -321,4 +322,26 @@ public class HouseDiaryController {
 			throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage() );
         }
     }
+
+	@RequestMapping(value= "/imageDiary/v2/totalCount", method = RequestMethod.GET)
+	@ResponseBody
+	public Result getImageDiaryListCount(
+			@RequestParam(required = false, name = "gsmKey") Integer gsmKey,
+			@RequestParam(required = false, name = "houseId") List<Integer> houseIdList,
+			@RequestParam(required = false, name = "fromDate") Long fromDate,
+			@RequestParam(required = false, name = "toDate") Long toDate
+	) throws HttpStatusCodeException {
+		try{
+
+			try{
+				//error message가 null 이고 push_type이 9인것들
+				return new Result(houseDiaryService.getImageDiaryListV2(gsmKey, houseIdList, fromDate, toDate, null, null, true));
+			}catch(Exception e){
+
+				return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+			}
+		}catch(Exception e){
+			throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage() );
+		}
+	}
 }
