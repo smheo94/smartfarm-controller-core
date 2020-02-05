@@ -80,7 +80,7 @@ public class GsmEnvController {
 	@InterceptPre
 	public Result<GsmEnvVO> update(@RequestBody GsmEnvVO gsmInfo, @PathVariable("gsmKey") Integer gsmKey){
 		try {
-			if( !authCheckService.authCheck(gsmKey, null) ) {
+			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmInfo);
 			}
 			if(!gsmKey.equals(gsmInfo.getGsmKey())) {
@@ -104,7 +104,7 @@ public class GsmEnvController {
 	@InterceptIgnoreGSMKey
 	public Result<GsmEnvVO> insert(HttpServletRequest request,HttpServletResponse response, @RequestBody GsmEnvVO gsmInfo){
 		try {
-			if( !authCheckService.authCheck(gsmInfo.getGsmKey(), null) ) {
+			if( !authCheckService.authCheck(gsmInfo.getGsmKey(), null, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmInfo);
 			}
 			Integer result = gsmEnvService.insert(gsmInfo);
@@ -128,11 +128,8 @@ public class GsmEnvController {
 	@InterceptIgnoreGSMKey
 	public Result<GsmEnvVO> copyTo(HttpServletRequest request,HttpServletResponse response, @PathVariable("from_gsm_key") Integer fromGsmKey, @PathVariable("to_gsm_key") Integer toGsmKey){
 		try {
-			if( !authCheckService.authCheck(fromGsmKey, null) ) {
+			if( !authCheckService.authCheck(null, null, Arrays.asList(fromGsmKey, toGsmKey), null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, fromGsmKey);
-			}
-			if( !authCheckService.authCheck(toGsmKey, null) ) {
-				return new Result("Not Allowed", HttpStatus.FORBIDDEN, toGsmKey);
 			}
 			return new Result(gsmEnvService.copyToNewGsm(request, fromGsmKey, toGsmKey));
 		} catch(Exception e) {
@@ -144,7 +141,7 @@ public class GsmEnvController {
 	@ResponseBody
 	public Result<GsmEnvVO> sync(HttpServletRequest request,HttpServletResponse response, @PathVariable("gsm_key") Integer gsmKey){
 		try {
-			if( !authCheckService.authCheck(gsmKey, null) ) {
+			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
 			}
 			return new Result(gsmEnvService.syncToSmartfarm(request, gsmKey));
@@ -163,7 +160,7 @@ public class GsmEnvController {
 	@ResponseBody
 	public Result<List<HashMap<String,Object>>> gsmOfDeviceList(@PathVariable("gsmKey") Integer gsmKey){
 		try {
-			if( !authCheckService.authCheck(gsmKey, null) ) {
+			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
 			}
 			return new Result(gsmEnvService.gsmOfDeviceList(gsmKey));
@@ -182,7 +179,7 @@ public class GsmEnvController {
 	@ResponseBody
 	public Result<GsmEnvVO> getAll( @PathVariable("gsmKey") Integer gsmKey, @RequestParam(value = "all", required = false) Boolean all, Authentication authentication){
 		try {
-			if( !authCheckService.authCheck(gsmKey, null) ) {
+			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
 			}
 			// 일출, 일몰 api 같이
@@ -204,7 +201,7 @@ public class GsmEnvController {
 //	@InterceptPre
 	public Result<String> delete(@PathVariable("gsmKey") Integer gsmKey){
 		try {
-			if( !authCheckService.authCheck(gsmKey, null) ) {
+			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
 			}
 			gsmEnvService.delete(gsmKey);
@@ -273,7 +270,7 @@ public class GsmEnvController {
 	@ResponseBody
 	public Result autoSync(@RequestBody HashMap<String,Object> param, @PathVariable Integer gsmKey){
 		try {
-			if( !authCheckService.authCheck(gsmKey, null) ) {
+			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
 			}
 			return new Result(autoSyncService.autoSync(gsmKey, request));
@@ -314,7 +311,7 @@ public class GsmEnvController {
 	@InterceptPost
 	public Result gsmThresholdInsert(@RequestBody GsmThresholdVO gsmThresholdVO){
 		try {
-			if( !authCheckService.authCheck(gsmThresholdVO.getGsmKey(), null) ) {
+			if( !authCheckService.authCheck(gsmThresholdVO.getGsmKey(), null, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmThresholdVO);
 			}
 			return new Result(gsmEnvService.gsmThresholdInsert(gsmThresholdVO));
@@ -331,7 +328,7 @@ public class GsmEnvController {
 	@InterceptPost
 	public Result gsmThresholdUpdate(@RequestBody GsmThresholdVO gsmThresholdVO){
 		try {
-			if( !authCheckService.authCheck(gsmThresholdVO.getGsmKey(), null) ) {
+			if( !authCheckService.authCheck(gsmThresholdVO.getGsmKey(), null, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmThresholdVO);
 			}
 			return new Result(gsmEnvService.gsmThresholdUpdate(gsmThresholdVO));
@@ -344,7 +341,7 @@ public class GsmEnvController {
 	@ResponseBody
 	public Result gsmThresholdGet(@PathVariable Integer gsmKey){
 		try {
-			if( !authCheckService.authCheck(gsmKey, null) ) {
+			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
 			}
 			HashMap<String,Object> param = new HashMap<String, Object>();

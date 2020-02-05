@@ -77,7 +77,7 @@ public class ControlLogicSettingTemplateController {
 					return new Result(HttpStatus.NOT_FOUND.name(), HttpStatus.NOT_FOUND, null);
 				}
 			} else {
-				if (!authCheckService.authCheck(null, vo.getGreenHouseId())) {
+				if (!authCheckService.authCheck(null, vo.getGreenHouseId(), null, null)) {
 					return new Result("Not Allowed", HttpStatus.FORBIDDEN, vo);
 				}
 			}
@@ -110,7 +110,7 @@ public class ControlLogicSettingTemplateController {
 	public Result<ControlLogicSettingTemplateVO> update(@PathVariable("controlSettingTemplateId") Long controlSettingTemplateId, @RequestBody ControlLogicSettingTemplateVO vo) {
 		try {
 			final ControlLogicSettingTemplateVO logicSettingTemplate = service.getLogicSettingTemplate(controlSettingTemplateId);
-			if( !authCheckService.authCheck(null, logicSettingTemplate.getGreenHouseId()) ) {
+			if( !authCheckService.authCheck(null, logicSettingTemplate.getGreenHouseId(), null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, vo);
 			}
 			return new Result(service.updateLogicSettingTemplate(vo));
@@ -125,7 +125,7 @@ public class ControlLogicSettingTemplateController {
 	public Result<ControlLogicSettingTemplateVO> delete(@PathVariable("controlSettingTemplateId") Long controlSettingTemplateId) {
 		try {
 			final ControlLogicSettingTemplateVO logicSettingTemplate = service.getLogicSettingTemplate(controlSettingTemplateId);
-			if( !authCheckService.authCheck(null, logicSettingTemplate.getGreenHouseId()) ) {
+			if( !authCheckService.authCheck(null, logicSettingTemplate.getGreenHouseId(), null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, controlSettingTemplateId);
 			}
 			service.delLogicSettingTemplate(controlSettingTemplateId);

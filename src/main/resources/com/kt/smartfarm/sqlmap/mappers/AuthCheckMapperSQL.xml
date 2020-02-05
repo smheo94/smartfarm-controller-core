@@ -9,4 +9,55 @@
 	<select id="selectUserIdxForOauthClientId"  resultType="Integer">
 		SELECT idx FROM user_info WHERE user_id = #{user_id};
 	</select>
+
+	<select id="isAdminUser" resultType="Integer">
+		SELECT IF( roles_id = 100, 1, 0 ) FROM user_info_roles  WHERE roles_id = 100 AND user_idx =  #{user_idx};
+	</select>
+
+	<select id="selectCheckAllowAuth2" parameterType="map" resultType="Integer">
+		SELECT COUNT(DISTINCT gsm_key) >=
+		( SELECT COUNT(DISTINCT G.gsm_key) FROM gsm_info G
+		<where>
+			<if test="gsm_key != null">G.gsm_key = #{gsm_key}</if>
+			<if test="house_id != null">OR G.gsm_key = (SELECT gsm_key FROM green_house WHERE id = #{house_id})</if>
+			<if test="gsm_key_list != null">
+				OR G.gsm_key IN <foreach collection="gsm_key_list" open="(" close=")" separator="," item="item"> #{item} </foreach>
+			</if>
+			<if test="house_id_list != null">OR G.gsm_key IN
+				<foreach collection="house_id_list" open="(SELECT gsm_key FROM green_house WHERE id IN (" close=") )" separator="," item="item">
+					#{item}
+				</foreach>)
+			</if>
+		</where>
+		) as VALUE
+		FROM
+		(
+		SELECT gi.gsm_key
+		FROM gsm_category_view gc
+		INNER JOIN gsm_info gi ON gi.category_id = gc.child_category_id
+		INNER JOIN auth_group_detail ad ON ad.category_id = gc.category_id
+		INNER JOIN user_info_auth_group ua ON ua.auth_group_id = ad.group_id
+		WHERE ua.user_idx =  #{user_idx}
+		UNION ALL
+		SELECT ad.gsm_key
+		FROM auth_group_detail ad
+		INNER JOIN user_info_auth_group ua ON ua.auth_group_id = ad.group_id
+		WHERE ad.category_id = '0'	AND ua.user_idx =  #{user_idx}
+		UNION ALL
+		SELECT gsm_key FROM gsm_info
+		WHERE user_info_id =  #{user_idx}
+		) A
+		<where>
+			<if test="gsm_key != null">A.gsm_key = #{gsm_key}</if>
+			<if test="house_id != null">OR A.gsm_key = (SELECT gsm_key FROM green_house WHERE id = #{house_id})</if>
+			<if test="gsm_key_list != null">
+				OR A.gsm_key IN <foreach collection="gsm_key_list" open="(" close=")" separator="," item="item"> #{item} </foreach>
+			</if>
+			<if test="house_id_list != null">OR A.gsm_key IN (
+				<foreach collection="house_id_list" open="(SELECT gsm_key FROM green_house WHERE id IN (" close=") )" separator="," item="item">
+					#{item}
+				</foreach>)
+			</if>
+		</where>
+	</select>
 </mapper>

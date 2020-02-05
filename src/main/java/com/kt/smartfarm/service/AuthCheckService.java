@@ -6,6 +6,9 @@ import java.util.List;
 
 public interface AuthCheckService {
 	Boolean authCheck(Integer gsmKey, Integer houseId);
-	String getAuthUserIdx();
+
+    Boolean authCheck(Integer gsmKey, Integer houseId, List<Integer> gsmKeyList, List<Integer> houseIdList);
+
+    String getAuthUserIdx();
 	AuthorityChecker getAuthCheck();
 }

@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service("authCheckService")
@@ -54,7 +55,6 @@ public class AuthCheckServiceImpl extends EgovAbstractServiceImpl implements Aut
 	@Override
 	public Boolean authCheck(Integer gsmKey, Integer houseId) {
 		if (config.isSmartfarmSystem()) {
-			//20190318 - 제어기에서는 검사 안해요
 			return true;
 		}
 		final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -73,6 +73,33 @@ public class AuthCheckServiceImpl extends EgovAbstractServiceImpl implements Aut
 			if (gsmKey != null && allowGsm != 1) return false;
             return houseId == null || allowHouse == 1;
         }
+		return false;
+	}
+
+	@Override
+	public Boolean authCheck(Integer gsmKey, Integer houseId, List<Integer> gsmKeyList, List<Integer> houseIdList) {
+		if (config.isSmartfarmSystem()) {
+			return true;
+		}
+		final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication == null) return false;
+		if (authentication.getPrincipal() == null) return false;
+		String userIdx = authentication.getPrincipal().toString();
+		userIdx = getClientUserIdx(userIdx);
+		HashMap<String, Object> param = new HashMap<>();
+		param.put("user_idx", userIdx);
+		param.put("gsm_key", gsmKey);
+		param.put("house_id", houseId);
+		param.put("gsm_key_list", gsmKeyList);
+		param.put("house_id_list", houseIdList);
+		Integer isAdmin = authCheckMapper.isAdminUser(param);
+		if( isAdmin > 0 ) {
+			return true;
+		}
+		Integer isAllowUser = authCheckMapper.selectCheckAllowAuth2(param);
+		if (isAllowUser > 0) {
+			return true;
+		}
 		return false;
 	}
 	public String getAuthUserIdx() {

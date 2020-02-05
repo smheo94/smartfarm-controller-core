@@ -47,7 +47,7 @@ public class ControlLogicSettingController {
 	@ResponseBody
 	public Result<List<ControlLogicSettingVO>> list(@PathVariable("gsmKey") Integer gsmKey, @PathVariable("houseId") Integer houseId, @RequestParam(required = false, name="logicId") List<Long> logicId) {
 		try {
-			if( !authCheckService.authCheck(gsmKey, null) ) {
+			if( !authCheckService.authCheck(gsmKey, houseId, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
 			}
 			return new Result(service.getLogicSetting(gsmKey, houseId, null, logicId));
@@ -67,7 +67,7 @@ public class ControlLogicSettingController {
 														   @RequestParam(required = false, name = "from_date") Long fromDate,
 														   @RequestParam(required = false, name = "to_date") Long toDate) {
 		try {
-			if( !authCheckService.authCheck(gsmKey, null) ) {
+			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
 			}
 			return new Result(service.getControlLogicSettingHIstoryList(gsmKey, houseId, controlSettingId, fromDate, toDate));
@@ -95,7 +95,7 @@ public class ControlLogicSettingController {
 			if (logicSettingList == null || logicSettingList.size() == 0) {
 				return new Result(HttpStatus.NOT_FOUND.name(), HttpStatus.NOT_FOUND, null);
 			}
-			if( !authCheckService.authCheck(null, logicSettingList.get(0).getGreenHouseId()) ) {
+			if( !authCheckService.authCheck(null, logicSettingList.get(0).getGreenHouseId(), null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, controlSettingId);
 			}
 			return new Result(logicSettingList.get(0));
@@ -109,7 +109,7 @@ public class ControlLogicSettingController {
 	@InterceptPost
 	public Result<ControlLogicSettingVO> insert(@RequestBody ControlLogicSettingVO vo) {
 		try {
-			if( !authCheckService.authCheck(null, vo.getGreenHouseId()) ) {
+			if( !authCheckService.authCheck(null, vo.getGreenHouseId(), null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, vo);
 			}
 			return new Result(service.insertLogicSetting(vo));
@@ -156,7 +156,7 @@ public class ControlLogicSettingController {
 	@InterceptPost
 	public Result<ControlLogicSettingVO> update(@PathVariable("controlSettingId") Integer controlSettingId, @RequestBody ControlLogicSettingVO vo) {
 		try {
-			if( !authCheckService.authCheck(null, vo.getGreenHouseId()) ) {
+			if( !authCheckService.authCheck(null, vo.getGreenHouseId(), null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, vo);
 			}
 			return new Result(service.updateLogicSetting(vo));
