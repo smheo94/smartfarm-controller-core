@@ -21,12 +21,12 @@
 			<if test="gsm_key != null">G.gsm_key = #{gsm_key}</if>
 			<if test="house_id != null">OR G.gsm_key = (SELECT gsm_key FROM green_house WHERE id = #{house_id})</if>
 			<if test="gsm_key_list != null">
-				OR G.gsm_key IN <foreach collection="gsm_key_list" open="(" close=")" separator="," item="item"> #{item} </foreach>
+				<foreach collection="gsm_key_list" open="OR G.gsm_key IN (" close=")" separator="," item="item"> #{item} </foreach>
 			</if>
-			<if test="house_id_list != null">OR G.gsm_key IN
-				<foreach collection="house_id_list" open="(SELECT gsm_key FROM green_house WHERE id IN (" close=") )" separator="," item="item">
+			<if test="house_id_list != null">
+				<foreach collection="house_id_list" open="OR G.gsm_key IN (SELECT gsm_key FROM green_house WHERE id IN (" close=") )" separator="," item="item">
 					#{item}
-				</foreach>)
+				</foreach>
 			</if>
 		</where>
 		) as VALUE
@@ -51,12 +51,12 @@
 			<if test="gsm_key != null">A.gsm_key = #{gsm_key}</if>
 			<if test="house_id != null">OR A.gsm_key = (SELECT gsm_key FROM green_house WHERE id = #{house_id})</if>
 			<if test="gsm_key_list != null">
-				OR A.gsm_key IN <foreach collection="gsm_key_list" open="(" close=")" separator="," item="item"> #{item} </foreach>
+				<foreach collection="gsm_key_list" open="OR A.gsm_key IN  (" close=")" separator="," item="item"> #{item} </foreach>
 			</if>
-			<if test="house_id_list != null">OR A.gsm_key IN (
-				<foreach collection="house_id_list" open="(SELECT gsm_key FROM green_house WHERE id IN (" close=") )" separator="," item="item">
+			<if test="house_id_list != null">
+				<foreach collection="house_id_list" open="OR A.gsm_key IN (SELECT gsm_key FROM green_house WHERE id IN (" close=") )" separator="," item="item">
 					#{item}
-				</foreach>)
+				</foreach>
 			</if>
 		</where>
 	</select>

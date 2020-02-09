@@ -93,11 +93,11 @@ public class AuthCheckServiceImpl extends EgovAbstractServiceImpl implements Aut
 		param.put("gsm_key_list", gsmKeyList);
 		param.put("house_id_list", houseIdList);
 		Integer isAdmin = authCheckMapper.isAdminUser(param);
-		if( isAdmin > 0 ) {
+		if (isAdmin != null && isAdmin > 0) {
 			return true;
 		}
 		Integer isAllowUser = authCheckMapper.selectCheckAllowAuth2(param);
-		if (isAllowUser > 0) {
+		if (isAllowUser != null && isAllowUser > 0) {
 			return true;
 		}
 		return false;
