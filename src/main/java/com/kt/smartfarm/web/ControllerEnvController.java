@@ -59,7 +59,7 @@ public class ControllerEnvController {
 	@RequestMapping(value= "/{controllerId}", method = RequestMethod.PUT)
 	@ResponseBody
 	@InterceptPre
-	public Result<ControllerEnvVO> update(@PathVariable("gsmKey") Integer gsmKey, @PathVariable("controllerId") String controllerId, @RequestBody ControllerEnvVO controller){
+	public Result<ControllerEnvVO> update(@PathVariable("gsmKey") Long gsmKey, @PathVariable("controllerId") String controllerId, @RequestBody ControllerEnvVO controller){
 		try {
 			return new Result(controllerEnvService.update(controller));
 		} catch(Exception e) {
@@ -76,7 +76,7 @@ public class ControllerEnvController {
 	@RequestMapping(value= {"", "/"}, method = RequestMethod.POST)
 	@ResponseBody
 	@InterceptPost
-	public Result<ControllerEnvVO> insert( @PathVariable("gsmKey") Integer gsmKey, @RequestBody ControllerEnvVO controller){
+	public Result<ControllerEnvVO> insert( @PathVariable("gsmKey") Long gsmKey, @RequestBody ControllerEnvVO controller){
 		try {			
 			return new Result(controllerEnvService.insert(controller));
 		} catch(Exception e) {
@@ -91,7 +91,7 @@ public class ControllerEnvController {
 	 */
 	@RequestMapping(value= "/", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<List<ControllerEnvVO>> list( @PathVariable("gsmKey") Integer gsmKey){
+	public Result<List<ControllerEnvVO>> list( @PathVariable("gsmKey") Long gsmKey){
 		try {
 			return new Result(controllerEnvService.list(gsmKey));
 		} catch(Exception e) {
@@ -106,7 +106,7 @@ public class ControllerEnvController {
 	 */
 	@RequestMapping(value= "/deviceList", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<List<ControllerEnvVO>> controllerDeviceList( @PathVariable("gsmKey") Integer gsmKey){
+	public Result<List<ControllerEnvVO>> controllerDeviceList( @PathVariable("gsmKey") Long gsmKey){
 		try {
 			return new Result(controllerEnvService.controllerDeviceList(gsmKey));
 		} catch(Exception e) {
@@ -124,7 +124,7 @@ public class ControllerEnvController {
 	 */
 	@RequestMapping(value= "/{controllerId}", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<ControllerEnvVO> get( @PathVariable("gsmKey") Integer gsmKey,  @PathVariable("controllerId") Integer controllerId){
+	public Result<ControllerEnvVO> get( @PathVariable("gsmKey") Long gsmKey,  @PathVariable("controllerId") Long controllerId){
 		try {
 			return new Result(controllerEnvService.get(gsmKey, controllerId));
 		} catch(Exception e) {
@@ -141,7 +141,7 @@ public class ControllerEnvController {
 	@RequestMapping(value= "/{controllerId}", method = RequestMethod.DELETE)
 	@ResponseBody
 	@InterceptPre
-	public Result<ControllerEnvVO> delete(@PathVariable("gsmKey") Integer gsmKey,  @PathVariable("controllerId") Integer controllerId){
+	public Result<ControllerEnvVO> delete(@PathVariable("gsmKey") Long gsmKey,  @PathVariable("controllerId") Long controllerId){
 		try {
 			return new Result(controllerEnvService.delete(gsmKey, controllerId));
 		} catch(Exception e) {

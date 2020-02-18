@@ -16,7 +16,7 @@ import lombok.Setter;
 @Data
 public class CCTVSettingVO {
 	Integer id;
-	Integer houseId;
+	Long houseId;
 	String cctvName;
 	String cctvUid;
 	String cctvPwd;

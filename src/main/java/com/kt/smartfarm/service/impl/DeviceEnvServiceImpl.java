@@ -80,7 +80,7 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 	}
 
 	@Override
-	public Integer deleteControllerDeivces(Integer gsmKey, Integer controller_id) {
+	public Integer deleteControllerDeivces(Long gsmKey, Long controller_id) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("gsm_key", gsmKey);
 		map.put("controller_id", controller_id);
@@ -96,7 +96,7 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 	}
 
 //	@Override
-//	public DeviceEnvVO getDevice(Integer gsmKey, Integer controllerId) {
+//	public DeviceEnvVO getDevice(Long gsmKey, Long controllerId) {
 //		Map<String, Object> map = new HashMap<>();
 //		map.put("gsm_key",  gsmKey);
 //		map.put("id",  controllerId);
@@ -104,7 +104,7 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 //	}
 
 	@Override
-	public List<DeviceEnvVO> list(Integer gsmKey, Integer controllerId, Boolean withVDeviceList, Boolean withEDeviceList) {
+	public List<DeviceEnvVO> list(Long gsmKey, Long controllerId, Boolean withVDeviceList, Boolean withEDeviceList) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("gsm_key", gsmKey);
 		map.put("controller_id", controllerId);
@@ -126,7 +126,7 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 	}
 
 	@Override
-	public DeviceEnvVO getDevice(Integer deviceId, Boolean withVDeviceList) {
+	public DeviceEnvVO getDevice(Long deviceId, Boolean withVDeviceList) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("device_id", deviceId);
 		DeviceEnvVO device = deviceEnvMapper.list(map).stream().findFirst().orElse(null);
@@ -192,7 +192,7 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 	}
 
 	@Override
-	public List<VDeviceEnvVO> getVDeviceEnvList(Integer deviceId) {
+	public List<VDeviceEnvVO> getVDeviceEnvList(Long deviceId) {
 		try {
 			return deviceEnvMapper.getVDeviceEnvList(deviceId);
 
@@ -221,7 +221,7 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 	}
 
 	@Override
-	public Integer deleteVDeviceEnv(Integer id, Integer pDeviceId, Integer deviceNum, Integer deviceInsertOrder) {
+	public Integer deleteVDeviceEnv(Integer id, Long pDeviceId, Integer deviceNum, Integer deviceInsertOrder) {
 		try{
 			log.info("deleteVDeviceEnv :{}/{}/{}/{} ", id, pDeviceId, deviceNum, deviceInsertOrder);
 			return deviceEnvMapper.deleteVDeviceEnv(id, pDeviceId, deviceNum, deviceInsertOrder);
@@ -233,7 +233,7 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 
 
 	@Override
-	public Integer deleteDevice(Integer deviceId) {
+	public Integer deleteDevice(Long deviceId) {
 		try {
 			log.info("Delete Device :{}", deviceId);
 			return deviceEnvMapper.deleteDevice(deviceId);
@@ -244,7 +244,7 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 	}
 
 	@Override
-	public Integer copyToNewGSM(Integer fromGsmKey, Integer toGsmKey) {
+	public Integer copyToNewGSM(Long fromGsmKey, Long toGsmKey) {
 		log.info("copyToNewGSM :{} --> {}", fromGsmKey, toGsmKey);
 		deviceEnvMapper.copyToNewGSM(fromGsmKey, toGsmKey);
 		return deviceEnvMapper.copyToNewGSMVDeviceEnv(fromGsmKey, toGsmKey);
@@ -264,7 +264,7 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 	}
 
 	@Override
-	public List<EDeviceEnvVO> getEDeviceEnvList(Integer deviceId) {
+	public List<EDeviceEnvVO> getEDeviceEnvList(Long deviceId) {
 		try {
 			return deviceEnvMapper.getEDeviceEnvList(deviceId);
 
@@ -297,7 +297,7 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 	}
 
 	@Override
-	public Integer deleteEDevicesEnv(Integer parentDeviceId) {
+	public Integer deleteEDevicesEnv(Long parentDeviceId) {
 		try {
 			log.info("deleteEDevicesEnv : pid = {}", parentDeviceId);
 			//수정

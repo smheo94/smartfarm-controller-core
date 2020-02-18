@@ -77,7 +77,7 @@ public class ControllerEnvServiceImpl extends EgovAbstractServiceImpl implements
 	}
 
 	@Override
-	public Integer delete(Integer gsmKey, Integer controllerId) {
+	public Integer delete(Long gsmKey, Long controllerId) {
 		log.info("Delete Controller : {}, {}", gsmKey, controllerId);
 		Map<String, Object> map = new HashMap<>();
 		map.put("gsmKey",  gsmKey);
@@ -93,7 +93,7 @@ public class ControllerEnvServiceImpl extends EgovAbstractServiceImpl implements
 	}
 
 	@Override
-	public ControllerEnvVO get(Integer gsmKey, Integer controllerId) {
+	public ControllerEnvVO get(Long gsmKey, Long controllerId) {
 		log.info("Get Controller : {}, {}", gsmKey, controllerId);
 		Map<String, Object> map = new HashMap<>();
 		map.put("gsm_key",  gsmKey);
@@ -102,7 +102,7 @@ public class ControllerEnvServiceImpl extends EgovAbstractServiceImpl implements
 	}
 
 	@Override
-	public List<ControllerEnvVO> list(Integer gsmKey) {
+	public List<ControllerEnvVO> list(Long gsmKey) {
 		log.info("List Controller : {}", gsmKey);
 		Map<String, Object> map = new HashMap<>();
 		map.put("gsm_key",  gsmKey);		
@@ -115,13 +115,13 @@ public class ControllerEnvServiceImpl extends EgovAbstractServiceImpl implements
 	}
 
 	@Override
-	public List<ControllerEnvVO> controllerDeviceList(Integer gsmKey) {
+	public List<ControllerEnvVO> controllerDeviceList(Long gsmKey) {
 		log.info("List Controller Device : {}", gsmKey);
 		Map<String, Object> map = new HashMap<>();
 		map.put("gsm_key",  gsmKey);
 		List<ControllerEnvVO> controllerList = controllerEnvMapper.list(map);
 		for(ControllerEnvVO controller : controllerList){
-			Integer controllerId = controller.getId();
+			Long controllerId = controller.getId();
 			map.put("controller_id", controllerId);
 			controller.setDeviceList(deviceEnvMapper.list(map));
 			controller.getDeviceList().forEach( d ->d.setRelationDeviceList(deviceEnvMapper.getVDeviceEnvList(d.getId())));
@@ -131,7 +131,7 @@ public class ControllerEnvServiceImpl extends EgovAbstractServiceImpl implements
 	}
 
 	@Override
-	public Integer copyToNewGSM(Integer fromGsmKey, Integer toGsmKey) {
+	public Integer copyToNewGSM(Long fromGsmKey, Long toGsmKey) {
 		log.info("Copy To {} --> {}", fromGsmKey, toGsmKey);
 		return controllerEnvMapper.copyToNewGSM(fromGsmKey,toGsmKey);
 	}

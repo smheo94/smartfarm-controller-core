@@ -60,7 +60,7 @@ public class HouseEnvController {
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	@ResponseBody
 	@InterceptPost
-	public Result<HouseEnvVO> insert(@PathVariable("gsm_key") Integer gsmKey, @RequestBody HouseEnvVO house) {
+	public Result<HouseEnvVO> insert(@PathVariable("gsm_key") Long gsmKey, @RequestBody HouseEnvVO house) {
 		try {
 			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
@@ -79,7 +79,7 @@ public class HouseEnvController {
 	@RequestMapping(value = "/linkDevice", method = RequestMethod.POST)
 	@ResponseBody
 	@InterceptPost
-	public Result<HashMap<String, Object>> houesMapDeviceInsert(@PathVariable("gsm_key") Integer gsmKey, @RequestBody HashMap<String, Object> map) {
+	public Result<HashMap<String, Object>> houesMapDeviceInsert(@PathVariable("gsm_key") Long gsmKey, @RequestBody HashMap<String, Object> map) {
 		try {
 			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
@@ -98,7 +98,7 @@ public class HouseEnvController {
 	@RequestMapping(value = "/linkDevice", method = RequestMethod.DELETE)
 	@ResponseBody
 	@InterceptPre
-	public Result<HashMap<String, Object>> houesMapDeviceUpdate(@PathVariable("gsm_key") Integer gsmKey, @RequestBody HashMap<String, Object> map) {
+	public Result<HashMap<String, Object>> houesMapDeviceUpdate(@PathVariable("gsm_key") Long gsmKey, @RequestBody HashMap<String, Object> map) {
 		try {
 			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
@@ -118,7 +118,7 @@ public class HouseEnvController {
 	@RequestMapping(value = "", method = RequestMethod.PUT)
 	@ResponseBody
 	@InterceptPre
-	public Result<HouseEnvVO> update(@PathVariable("gsm_key") Integer gsmKey, @RequestBody HouseEnvVO house) {
+	public Result<HouseEnvVO> update(@PathVariable("gsm_key") Long gsmKey, @RequestBody HouseEnvVO house) {
 		try {
 			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
@@ -131,7 +131,7 @@ public class HouseEnvController {
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<List<HashMap<String, Object>>> list(@PathVariable("gsm_key") Integer gsmKey) {
+	public Result<List<HashMap<String, Object>>> list(@PathVariable("gsm_key") Long gsmKey) {
 		try {
 			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
@@ -144,7 +144,7 @@ public class HouseEnvController {
 
 	@RequestMapping(value = "/{greenHouseId}", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<HashMap<String, Object>> get(@PathVariable("gsm_key") Integer gsmKey, @PathVariable("greenHouseId") Integer greenHouseId) {
+	public Result<HashMap<String, Object>> get(@PathVariable("gsm_key") Long gsmKey, @PathVariable("greenHouseId") Long greenHouseId) {
 		try {
 			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
@@ -158,7 +158,7 @@ public class HouseEnvController {
 	@RequestMapping(value = "/{greenHouseId}", method = RequestMethod.DELETE)
 	@ResponseBody
 	@InterceptPre
-	public Result<HouseEnvVO> delete(@PathVariable("gsm_key") Integer gsmKey, @PathVariable("greenHouseId") Integer greenHouseId) {
+	public Result<HouseEnvVO> delete(@PathVariable("gsm_key") Long gsmKey, @PathVariable("greenHouseId") Long greenHouseId) {
 		try {
 			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
@@ -201,7 +201,7 @@ public class HouseEnvController {
 
 	@RequestMapping(value = "/{houseId}/deviceList", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<List<DeviceEnvVO>> houseDeviceList(@PathVariable("houseId") Integer houseId) {
+	public Result<List<DeviceEnvVO>> houseDeviceList(@PathVariable("houseId") Long houseId) {
 		try {
 			if( !authCheckService.authCheck(null, houseId, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, houseId);
@@ -218,7 +218,7 @@ public class HouseEnvController {
 	 */
 	@RequestMapping(value = "/{houseId}/deviceInfoList", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<HashMap<String,Object>> houseDeviceInfoList(@PathVariable("houseId") Integer houseId) {
+	public Result<HashMap<String,Object>> houseDeviceInfoList(@PathVariable("houseId") Long houseId) {
 		try {
 			if( !authCheckService.authCheck(null, houseId, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, houseId);
@@ -237,7 +237,7 @@ public class HouseEnvController {
 
 	@RequestMapping(value = "/weather_cast", method = RequestMethod.GET)
 	@ResponseBody
-	public Result weatherCast(@RequestParam(value = "house_id", required = false) Integer houseId, @RequestParam(value = "from_date", required = false) String fromDate,
+	public Result weatherCast(@RequestParam(value = "house_id", required = false) Long houseId, @RequestParam(value = "from_date", required = false) String fromDate,
 			@RequestParam(value = "to_date", required = false) String toDate) {
 		try {
 			if( !authCheckService.authCheck(null, houseId, null, null) ) {
@@ -262,7 +262,7 @@ public class HouseEnvController {
 	
 	@RequestMapping(value= "/{houseId}/groundDeviceList", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<List<DeviceEnvVO>> groundDeviceList(@PathVariable("houseId") Integer houseId){
+	public Result<List<DeviceEnvVO>> groundDeviceList(@PathVariable("houseId") Long houseId){
 		try {
 			if( !authCheckService.authCheck(null, houseId, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, houseId);
@@ -292,7 +292,7 @@ public class HouseEnvController {
 	// CCTV READ
 	@RequestMapping(value = "/{houseId}/cctv", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<List<CCTVSettingVO>> insertCctv(@PathVariable Integer houseId) {
+	public Result<List<CCTVSettingVO>> insertCctv(@PathVariable Long houseId) {
 		try {
 			if( !authCheckService.authCheck(null, houseId, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, houseId);

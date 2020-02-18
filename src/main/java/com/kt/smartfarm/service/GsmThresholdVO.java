@@ -17,7 +17,7 @@ import lombok.Setter;
 @Setter
 public class GsmThresholdVO {
 	// gsmKey
-	Integer gsmKey;
+	Long gsmKey;
 	// 수정일자	
 	String updateDate;
 	// 외부고온

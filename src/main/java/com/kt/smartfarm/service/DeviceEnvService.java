@@ -8,13 +8,13 @@ import java.util.List;
 public interface DeviceEnvService {	
 	List<DeviceEnvVO> insert( List<DeviceEnvVO> device);
 	List<DeviceEnvVO> update( List<DeviceEnvVO> vo);
-	List<DeviceEnvVO> list(Integer gsmKey, Integer controllerId, Boolean withVDeviceList, Boolean withEDeviceList);
-	DeviceEnvVO getDevice(Integer deviceId, Boolean withVDeviceList);
+	List<DeviceEnvVO> list(Long gsmKey, Long controllerId, Boolean withVDeviceList, Boolean withEDeviceList);
+	DeviceEnvVO getDevice(Long deviceId, Boolean withVDeviceList);
 
-	//DeviceEnvVO getDevice(Integer gsmKey, Integer controllerId);
+	//DeviceEnvVO getDevice(Long gsmKey, Long controllerId);
 
 
-	Integer deleteControllerDeivces(Integer gsmKey, Integer controllerId);
+	Integer deleteControllerDeivces(Long gsmKey, Long controllerId);
 	
 	List<DeviceTypeVO> getDeviceTypeByHouseType(String houseType, String kind);
 	HashMap<String,Object > getHouseTypeKindInfo();
@@ -24,23 +24,23 @@ public interface DeviceEnvService {
 	List<VDeviceEnvVO> insertVDeviceEnv(List<VDeviceEnvVO> vo)  throws HttpStatusCodeException;;
 
 
-	List<VDeviceEnvVO> getVDeviceEnvList(Integer deviceId);
+	List<VDeviceEnvVO> getVDeviceEnvList(Long deviceId);
 	
 	VDeviceEnvVO updateVDeviceEnv(VDeviceEnvVO vo) throws HttpStatusCodeException;
-	Integer deleteVDeviceEnv(Integer id, Integer pDeviceId,  Integer deviceNum , Integer deviceInsertOrder);
+	Integer deleteVDeviceEnv(Integer id, Long pDeviceId,  Integer deviceNum , Integer deviceInsertOrder);
 
-	Integer copyToNewGSM(Integer fromGsmKey, Integer toGsmKey);
+	Integer copyToNewGSM(Long fromGsmKey, Long toGsmKey);
 
-	Integer deleteDevice(Integer deviceId);
+	Integer deleteDevice(Long deviceId);
 
 
 	List<EDeviceEnvVO> insertEDeviceEnv(List<EDeviceEnvVO> vo);
 
-	List<EDeviceEnvVO> getEDeviceEnvList(Integer deviceId);
+	List<EDeviceEnvVO> getEDeviceEnvList(Long deviceId);
 
 	EDeviceEnvVO updateEDeviceEnv(EDeviceEnvVO vo);
-	Integer deleteEDeviceEnv(Integer deviceId);
-	Integer deleteEDevicesEnv(Integer pDeviceId);
+	Integer deleteEDeviceEnv(Integer id);
+	Integer deleteEDevicesEnv(Long pDeviceId);
 
 
 }

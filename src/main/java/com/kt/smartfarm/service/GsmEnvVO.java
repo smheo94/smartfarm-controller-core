@@ -15,7 +15,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class GsmEnvVO {
-	Integer gsmKey;
+	Long gsmKey;
 	Integer userInfoId;
 	Integer isMine;
 	String areaCode;

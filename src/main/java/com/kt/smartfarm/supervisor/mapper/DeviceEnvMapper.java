@@ -27,10 +27,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 @Mapper("deviceEnvMapper")
 public interface DeviceEnvMapper {
-	
 	Integer insert( DeviceEnvVO device);
 	Integer update( DeviceEnvVO vo);	
-//	DeviceEnvVO getDevice(Integer gsmKey, Integer controllerId);
+//	DeviceEnvVO getDevice(Long gsmKey, Long controllerId);
 	List<DeviceEnvVO> list(Map<String, Object> map);
 	Integer deleteControllerDeivces(Map<String,Object> map);
 
@@ -45,23 +44,23 @@ public interface DeviceEnvMapper {
 
 	Integer insertVDeviceEnv(VDeviceEnvVO vo);
 
-	List<VDeviceEnvVO> getVDeviceEnvList(@Param("deviceId") Integer deviceId);
-	Integer deleteVDeviceEnv(@Param("id") Integer id, @Param("pDeviceId") Integer pDeviceId, @Param("deviceNum") Integer deviceNum , @Param("deviceInsertOrder") Integer deviceInsertOrder);
+	List<VDeviceEnvVO> getVDeviceEnvList(@Param("deviceId") Long deviceId);
+	Integer deleteVDeviceEnv(@Param("id") Integer id, @Param("pDeviceId") Long pDeviceId, @Param("deviceNum") Integer deviceNum , @Param("deviceInsertOrder") Integer deviceInsertOrder);
 	VDeviceEnvVO updateVDeviceEnv(VDeviceEnvVO vo);
 
-	Integer copyToNewGSM(@Param("from_gsm_key") Integer fromGsmKey, @Param("to_gsm_key") Integer toGsmKey );
-	Integer copyToNewGSMVDeviceEnv(@Param("from_gsm_key") Integer fromGsmKey, @Param("to_gsm_key") Integer toGsmKey );
+	Integer copyToNewGSM(@Param("from_gsm_key") Long fromGsmKey, @Param("to_gsm_key") Long toGsmKey );
+	Integer copyToNewGSMVDeviceEnv(@Param("from_gsm_key") Long fromGsmKey, @Param("to_gsm_key") Long toGsmKey );
 
-    Integer deleteDevice(Integer deviceId);
+    Integer deleteDevice(Long deviceId);
 
-	//List<EDeviceEnvVO> getElectricDeviceEnvList(@Param("deviceId") Integer deviceId);
+	//List<EDeviceEnvVO> getElectricDeviceEnvList(@Param("deviceId") Long deviceId);
 
 	Integer insertEDeviceEnv(EDeviceEnvVO vo);
 	EDeviceEnvVO updateEDeviceEnv(EDeviceEnvVO vo);
 	//??
-	List<EDeviceEnvVO> getEDeviceEnvList(@Param("deviceId") Integer deviceId);
-	Integer deleteEDeviceEnv(Integer deviceId);
-	Integer deleteVDevicesEnv(Integer parentDeviceId);
+	List<EDeviceEnvVO> getEDeviceEnvList(@Param("deviceId") Long deviceId);
+	Integer deleteEDeviceEnv(Integer id);
+	Integer deleteVDevicesEnv(Long parentDeviceId);
 
 
 }

@@ -2,18 +2,15 @@ package com.kt.smartfarm.service.impl;
 
 import com.kt.cmmn.util.JasyptUtil;
 import com.kt.cmmn.util.MapUtils;
-import com.kt.cmmn.util.RestClientUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 @Slf4j
 public class SystemServiceImplTest {

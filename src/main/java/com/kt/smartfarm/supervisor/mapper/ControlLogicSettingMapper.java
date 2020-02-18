@@ -26,16 +26,13 @@ import java.util.Map;
 @Repository
 @Mapper("controlLogicSettingMapper")
 public interface ControlLogicSettingMapper {
-	List<ControlLogicSettingVO> getControlLogicSetting(@Param("gsm_key") Integer gsmKey, @Param("green_house_id") Integer greenHouseId,
-													   @Param("control_setting_id") Integer controlSettingId, @Param("logic_id")  List<Long> logicId);
+	List<ControlLogicSettingVO> getControlLogicSetting(@Param("gsm_key") Long gsmKey, @Param("green_house_id") Long greenHouseId,
+													   @Param("control_setting_id") Long controlSettingId, @Param("logic_id")  List<Long> logicId);
+//	ControlLogicSettingHistoryVO getControlLogicSettingHistoryDetail(@Param("gsm_key") Long gsmKey, @Param("green_house_id") Long greenHouseId,
+//													   @Param("control_setting_id") Long controlSettingId, @Param("log_dt") Long logDt);
 
-
-
-//	ControlLogicSettingHistoryVO getControlLogicSettingHistoryDetail(@Param("gsm_key") Integer gsmKey, @Param("green_house_id") Integer greenHouseId,
-//													   @Param("control_setting_id") Integer controlSettingId, @Param("log_dt") Long logDt);
-
-	List<ControlLogicSettingHistoryVO> getControlLogicSettingHistoryList(@Param("gsm_key") Integer gsmKey, @Param("green_house_id") Integer greenHouseId,
-                                                                         @Param("control_setting_id") Integer controlSettingId
+	List<ControlLogicSettingHistoryVO> getControlLogicSettingHistoryList(@Param("gsm_key") Long gsmKey, @Param("green_house_id") Long greenHouseId,
+                                                                         @Param("control_setting_id") Long controlSettingId
 														, @Param("from_date") Long fromData, @Param("to_date") Long toDate);
 
 
@@ -45,30 +42,30 @@ public interface ControlLogicSettingMapper {
 	List<ControlSettingOperatorVO> listControlSettingOperator();
 
 	Integer insertControlSettingChkConditionDevice(ControlLogicSettingCheckConditionVO vo);
-	Integer deleteControlSettingChkConditionDevice(@Param("id") Integer id);
+	Integer deleteControlSettingChkConditionDevice(@Param("id") Long id);
 
 	Integer insertControlSettingChkCondition(ControlLogicSettingCheckConditionVO vo);
 	Integer updateControlSettingChkCondition(ControlLogicSettingCheckConditionVO vo);
-	Integer deleteControlSettingChkCondition(@Param("id") Integer id,@Param("control_setting_id") Integer controlSettingId);
+	Integer deleteControlSettingChkCondition(@Param("id") Long id,@Param("control_setting_id") Long controlSettingId);
 
 	Integer insertControlSettingDevice(ControlLogicSettingDeviceVO vo);
 	Integer updateControlSettingDevice(ControlLogicSettingDeviceVO vo);
-	Integer deleteControlSettingDevice(@Param("id") Integer id,@Param("control_setting_id") Integer controlSettingId);
+	Integer deleteControlSettingDevice(@Param("id") Long id,@Param("control_setting_id") Long controlSettingId);
 
 	Integer insertControlSettingPreOrder(ControlLogicSettingVO vo);
-	Integer deleteControlSettingPreOrder(@Param("id") Integer id,@Param("control_setting_id") Integer controlSettingId);
+	Integer deleteControlSettingPreOrder(@Param("id") Long id,@Param("control_setting_id") Long controlSettingId);
 
 	Integer insertControlSetting(ControlLogicSettingVO vo);
 	Integer updateControlSetting(ControlLogicSettingVO vo);
 	Integer updateControlSettingEnv(Map<String, Object> param);
-	Integer deleteControlSetting(@Param("control_setting_id") Integer controlSettingId);
-	Integer delChkConditionSetting(Integer chkConditionId);
+	Integer deleteControlSetting(@Param("control_setting_id") Long controlSettingId);
+	Integer delChkConditionSetting(Long chkConditionId);
 
-	Integer copyToNewGSMContolSetting(@Param("from_gsm_key") Integer fromGsmKey, @Param("to_gsm_key") Integer toGsmKey );
-	Integer copyToNewGSMContolSettingCheckCondition(@Param("from_gsm_key") Integer fromGsmKey, @Param("to_gsm_key") Integer toGsmKey );
-	Integer copyToNewGSMContolSettingCheckConditionDevice(@Param("from_gsm_key") Integer fromGsmKey, @Param("to_gsm_key") Integer toGsmKey );
-	Integer copyToNewGSMControlSettingDevice(@Param("from_gsm_key") Integer fromGsmKey, @Param("to_gsm_key") Integer toGsmKey );
-	Integer copyToNewGSMControlPreOrder(@Param("from_gsm_key") Integer fromGsmKey, @Param("to_gsm_key") Integer toGsmKey );
+	Integer copyToNewGSMContolSetting(@Param("from_gsm_key") Long fromGsmKey, @Param("to_gsm_key") Long toGsmKey );
+	Integer copyToNewGSMContolSettingCheckCondition(@Param("from_gsm_key") Long fromGsmKey, @Param("to_gsm_key") Long toGsmKey );
+	Integer copyToNewGSMContolSettingCheckConditionDevice(@Param("from_gsm_key") Long fromGsmKey, @Param("to_gsm_key") Long toGsmKey );
+	Integer copyToNewGSMControlSettingDevice(@Param("from_gsm_key") Long fromGsmKey, @Param("to_gsm_key") Long toGsmKey );
+	Integer copyToNewGSMControlPreOrder(@Param("from_gsm_key") Long fromGsmKey, @Param("to_gsm_key") Long toGsmKey );
 	void updateLogicEnv(Map<String, Object> param);
 
 

@@ -23,8 +23,8 @@ import lombok.Setter;
 @Setter
 public class ControlLogicSettingVO {
 
-	public Integer controlSettingId;
-	public Integer greenHouseId;
+	public Long controlSettingId;
+	public Long greenHouseId;
 	public Integer logicId;
 	public String defLogicName;
 	public String javaClassName;
@@ -35,7 +35,7 @@ public class ControlLogicSettingVO {
 	public String autoManualMode;
 	public Date createDt;
 	public Date updateDt;
-	public Integer preOrderSettingId;
+	public Long preOrderSettingId;
 	public Object sensorData;
 	public Integer defaultPeriodSize;
 	public Integer viewOrder;
@@ -43,7 +43,7 @@ public class ControlLogicSettingVO {
 	public List<ControlLogicSettingDeviceVO> deviceList;
 
 	@JsonIgnore
-	public Integer tmpGsmKey;
+	public Long tmpGsmKey;
 
 	public Map<String,Object> toMap() {
 		return ClassUtil.toHashMap(this);

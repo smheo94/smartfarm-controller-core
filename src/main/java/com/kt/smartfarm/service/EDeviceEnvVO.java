@@ -11,6 +11,6 @@ import lombok.Setter;
 @Setter
 public class EDeviceEnvVO {
     Integer id;
-    Integer parentDeviceId;
-    Integer deviceId;
+    Long parentDeviceId;
+    Long deviceId;
 }

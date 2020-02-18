@@ -30,7 +30,7 @@
 			,#{id}
 		</if>
 		)
-	 	<selectKey keyProperty="id" resultType ="int"> 
+	 	<selectKey keyProperty="id" resultType ="long">
 	   		SELECT LASTVAL(gsm_seq_${gsmKey}) AS id;
 	    </selectKey>
 	</insert>

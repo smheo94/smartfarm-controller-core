@@ -30,21 +30,17 @@ import org.springframework.stereotype.Repository;
 @Repository
 @Mapper("controllerEnvMapper")
 public interface ControllerEnvMapper {
-	
+
 	Integer insert(ControllerEnvVO map);
 	Integer delete(Map<String,Object> map);
-	Integer update(ControllerEnvVO map);	
+	Integer update(ControllerEnvVO map);
 	List<ControllerEnvVO> list(Map<String,Object> map);
 	void insertDeviceList(ArrayDeviceVO row);
 	void insertDeviceStatusUpdate(ArrayDeviceVO row);
 	List<HashMap<String, Object>> listType();
 	List<ControllerEnvVO> controllerDeviceList(Map<String, Object> map);
 	List<ControllerEnvVO> get(Map<String, Object> map);
-	
-	List<DeviceEnvVO> getDeviceList(Integer controller_id);
-
+	List<DeviceEnvVO> getDeviceList(Long controller_id);
     List<ControllerDepDeviceTypeVO> getDependencyDeviceTypeList(String controller_info_id);
-
-
-	Integer copyToNewGSM(@Param("from_gsm_key") Integer fromGsmKey, @Param("to_gsm_key") Integer toGsmKey );
+	Integer copyToNewGSM(@Param("from_gsm_key") Long fromGsmKey, @Param("to_gsm_key") Long toGsmKey );
 }

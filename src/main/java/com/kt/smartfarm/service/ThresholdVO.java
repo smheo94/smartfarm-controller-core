@@ -17,9 +17,9 @@ import lombok.Setter;
 @Setter
 public class ThresholdVO {
 	// gsmKey
-	Integer gsmKey;
+	Long gsmKey;
 	
-	Integer greenHouseId;
+	Long greenHouseId;
 	// 수정일자
 	String updateDate;
 

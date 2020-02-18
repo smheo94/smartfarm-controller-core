@@ -24,7 +24,7 @@ public interface HouseDiaryService {
 	Integer deleteHouseDiary(Integer id);
 	Integer deleteCropsDiary(Integer id);
 	
-	HashMap<String,Object> getMonthlyHouseDiaryList(List<Integer> gsmKeyList, Integer gsmKey, Integer houseId, Integer year, Integer month);
+	HashMap<String,Object> getMonthlyHouseDiaryList(List<Long>gsmKeyList, Long gsmKey, Long houseId, Integer year, Integer month);
 	
 	HouseDiaryVO getHouseDiaryDetail(Integer id);
 	HouseCropsDiaryVO getCropsDiaryDetail(Integer id);
@@ -32,8 +32,8 @@ public interface HouseDiaryService {
 	List<HashMap<String,Object>> getCategoryList();
 	
 	
-	HashMap<String,Object> getHouseCropsInfo(Integer greenHouseId);
-	List<HashMap<String,Object>> getImageDiaryList(Integer houseId);
+	HashMap<String,Object> getHouseCropsInfo(Long greenHouseId);
+	List<HashMap<String,Object>> getImageDiaryList(Long houseId);
 
-	List<HashMap<String, Object>>  getImageDiaryListV2(Integer gsmKey, List<Integer> houseIdList, Long fromDate, Long toDate, Integer page, Integer size, Boolean totalCount);
+	List<HashMap<String, Object>>  getImageDiaryListV2(Long gsmKey, List<Long>houseIdList, Long fromDate, Long toDate, Integer page, Integer size, Boolean totalCount);
 }

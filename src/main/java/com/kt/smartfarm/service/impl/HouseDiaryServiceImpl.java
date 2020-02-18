@@ -177,7 +177,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 
 
 	@Override
-	public HashMap<String,Object> getMonthlyHouseDiaryList(List<Integer> gsmKeyList,  Integer gsmKey, Integer houseId,Integer year, Integer month) {
+	public HashMap<String,Object> getMonthlyHouseDiaryList(List<Long> gsmKeyList,  Long gsmKey, Long houseId,Integer year, Integer month) {
 		HashMap<String,Object> param = new HashMap<>();
 		HashMap<String,Object> result = new HashMap<>();
 		if(year != null && month != null){
@@ -201,7 +201,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 /*
  	//하나로 통합 
 	@Override
-	public List<HouseCropsDiaryVO> getMonthlyCropsDiaryList(Integer greenHouseId, Integer year, Integer month) {
+	public List<HouseCropsDiaryVO> getMonthlyCropsDiaryList(Long greenHouseId, Integer year, Integer month) {
 	 	HashMap<String,Object> param = new HashMap<>();
 	 	if(year != null && month != null){
 	 		param = getMonthDate(year,month);	
@@ -212,7 +212,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 	}
 */
 	@Override
-	public HashMap<String, Object> getHouseCropsInfo(Integer greenHouseId) {
+	public HashMap<String, Object> getHouseCropsInfo(Long greenHouseId) {
 		HashMap<String,Object> param = new HashMap<>();
 		param.put("green_house_id", greenHouseId);
 		return houseDiaryMapper.getHouseCropsInfo(param);
@@ -273,7 +273,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 		return result;
 	}
 	@Override
-	public List<HashMap<String, Object>> getImageDiaryList(Integer houseId) {
+	public List<HashMap<String, Object>> getImageDiaryList(Long houseId) {
 		List<HashMap<String,Object>> imageDiaryList = new ArrayList<HashMap<String,Object>>();
 		try{			
 			HashMap<String,Object> param = new HashMap<>();
@@ -286,7 +286,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 	}
 
 	@Override
-	public List<HashMap<String, Object>>  getImageDiaryListV2(Integer gsmKey, List<Integer> houseIdList, Long fromDate, Long toDate, Integer page, Integer size, Boolean total_count) {
+	public List<HashMap<String, Object>>  getImageDiaryListV2(Long gsmKey, List<Long> houseIdList, Long fromDate, Long toDate, Integer page, Integer size, Boolean total_count) {
         List<HashMap<String,Object>> imageDiaryList = new ArrayList<HashMap<String,Object>>();
         try{
             HashMap<String,Object> param = new HashMap<>();

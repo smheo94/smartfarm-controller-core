@@ -33,7 +33,7 @@ public interface ControlLogicSettingTemplateMapper {
 			@Param("relative_level") List<ControlLogicSettingTemplateVO.RelativeLevel> relativeLevel,
 			@Param("publish_level") List<ControlLogicSettingTemplateVO.PublishLevel> publishLevel,
 			@Param("user_id") String userId,
-			@Param("green_house_id") Integer houseId,
+			@Param("green_house_id") Long houseId,
 			@Param("prd_code") List<String> prdCode,
 			@Param("grow_stage") String growStage,
 			@Param("logic_id") List<Long> logicId);
@@ -44,7 +44,7 @@ public interface ControlLogicSettingTemplateMapper {
 
 
 
-//	Integer copyToNewGSMContolSetting(@Param("from_gsm_key") Integer fromGsmKey, @Param("to_gsm_key") Integer toGsmKey);
+//	Integer copyToNewGSMContolSetting(@Param("from_gsm_key") Long fromGsmKey, @Param("to_gsm_key") Integer toGsmKey);
 //	Integer copyToNewGSMContolSettingCheckCondition(@Param("from_gsm_key") Integer fromGsmKey, @Param("to_gsm_key") Integer toGsmKey);
 //	Integer copyToNewGSMContolSettingCheckConditionDevice(@Param("from_gsm_key") Integer fromGsmKey, @Param("to_gsm_key") Integer toGsmKey);
 //	Integer copyToNewGSMControlSettingDevice(@Param("from_gsm_key") Integer fromGsmKey, @Param("to_gsm_key") Integer toGsmKey);

@@ -34,21 +34,21 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 	HouseEnvMapper houseEnvMapper;
 
 	@Override
-	public List<ControlLogicSettingVO> getLogicSetting(Integer gsmKey, Integer houseId, Integer controlSettingId) {
+	public List<ControlLogicSettingVO> getLogicSetting(Long gsmKey, Long houseId, Long controlSettingId) {
 		return mapper.getControlLogicSetting(gsmKey, houseId, controlSettingId, null);
 	}
 	@Override
-	public List<ControlLogicSettingVO> getLogicSetting(Integer gsmKey, Integer houseId, Integer controlSettingId, List<Long> logicId) {
+	public List<ControlLogicSettingVO> getLogicSetting(Long gsmKey, Long houseId, Long controlSettingId, List<Long> logicId) {
 		return mapper.getControlLogicSetting(gsmKey, houseId, controlSettingId, logicId);
 	}
 
 //	@Override
-//	public ControlLogicSettingHistoryVO getControlLogicSettingHIstoryDetail(Integer gsmKey, Integer houseId, Integer controlSettingId, Long logDt) {
+//	public ControlLogicSettingHistoryVO getControlLogicSettingHIstoryDetail(Long gsmKey, Long houseId, Long controlSettingId, Long logDt) {
 //		return mapper.getControlLogicSettingHistoryDetail(gsmKey, houseId, controlSettingId, logDt);
 //	}
 
 	@Override
-	public List<ControlLogicSettingHistoryVO> getControlLogicSettingHIstoryList(Integer gsmKey, Integer houseId, Integer controlSettingId, Long fromData, Long toDate)
+	public List<ControlLogicSettingHistoryVO> getControlLogicSettingHIstoryList(Long gsmKey, Long houseId, Long controlSettingId, Long fromData, Long toDate)
 	{
 		return  mapper.getControlLogicSettingHistoryList(gsmKey, houseId, controlSettingId, fromData, toDate);
 	}
@@ -57,7 +57,7 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 	@Override
 	public ControlLogicSettingVO insertLogicSetting(ControlLogicSettingVO vo) {
 		log.info("Update Logic Setting :{}", vo);
-		Integer tempControlSettingId = null;
+		Long tempControlSettingId = null;
 		if(vo.getControlSettingId() !=null){
 			tempControlSettingId = vo.getControlSettingId();
 		}
@@ -96,7 +96,7 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 	}
 
 	@Override
-	public Integer delLogicSetting(Integer controlSettingId) {
+	public Integer delLogicSetting(Long controlSettingId) {
 		List<ControlLogicSettingVO> logicSettingVOList = mapper.getControlLogicSetting(null, null, controlSettingId, null);
 		if (logicSettingVOList == null || logicSettingVOList.size() == 0 || logicSettingVOList.get(0) == null) {
 			return 0;
@@ -150,7 +150,7 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 				ControlLogicSettingDeviceVO device = vo.getDeviceList().get(i);
 				device.setControlSettingId(vo.getControlSettingId());
 				device.setTmpGsmKey(vo.tmpGsmKey);
-				Integer id = device.getId();
+				Long id = device.getId();
 				int isExist = mapper.updateControlSettingDevice(device);
 				if (isExist == 0) {
 					mapper.insertControlSettingDevice(device);
@@ -176,17 +176,17 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 	}
 
 	@Override
-	public Integer delChkConditionSetting(Integer chkConditionId) {
+	public Integer delChkConditionSetting(Long chkConditionId) {
 		return mapper.delChkConditionSetting(chkConditionId);
 	}
 
 	@Override
-	public Integer deleteControlLogicSettingDevice(Integer id) {
+	public Integer deleteControlLogicSettingDevice(Long id) {
 		return mapper.deleteControlSettingDevice(id, null);
 	}
 
 	@Override
-	public Integer copyToNewGSM(Integer fromGsmKey, Integer toGsmKey) {
+	public Integer copyToNewGSM(Long fromGsmKey, Long toGsmKey) {
 		Integer result = mapper.copyToNewGSMContolSetting(fromGsmKey,toGsmKey);
 		mapper.copyToNewGSMContolSettingCheckCondition(fromGsmKey,toGsmKey);
 		mapper.copyToNewGSMContolSettingCheckConditionDevice(fromGsmKey,toGsmKey);

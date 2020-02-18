@@ -14,8 +14,8 @@ import java.util.Map;
 public class HouseDiaryVO {
 
 	Integer id;
-	Integer greenHouseId; //
-	List<Integer> houseIdList;
+	Long greenHouseId; //
+	List<Long>houseIdList;
 	String title; // 작업일지 명 ( 농장이름 + 작물 + 종류 )
 	String content; // 내용
 	String work; // 종류

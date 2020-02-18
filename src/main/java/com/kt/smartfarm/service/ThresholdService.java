@@ -4,8 +4,8 @@ import java.util.List;
 
 public interface ThresholdService {
 
-	List<ThresholdVO> getThreshold(Integer gsmKey, Integer houseId);
-	int update(Integer gsmKey, Integer houseId, List<ThresholdVO> thresholdVOs);
+	List<ThresholdVO> getThreshold(Long gsmKey, Long houseId);
+	int update(Long gsmKey, Long houseId, List<ThresholdVO> thresholdVOs);
 
-	Integer copyToNewGSM(Integer fromGsmKey, Integer toGsmKey);
+	Integer copyToNewGSM(Long fromGsmKey, Long toGsmKey);
 }

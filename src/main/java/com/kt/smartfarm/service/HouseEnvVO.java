@@ -19,7 +19,7 @@ import java.util.List;
 @Setter
 public class HouseEnvVO {
 
-	Integer id;
+	Long id;
 	Integer productMethodId;
 	Integer greenHouseTypeId;
 	String houseName;
@@ -43,7 +43,7 @@ public class HouseEnvVO {
 	Double houseDirection;
 	Double selectTempSensor;
 	Double selectHumSensor;
-	Integer gsmKey;
+	Long gsmKey;
 	String houseNameI18n;
 	
 	List<CCTVSettingVO> cctv;

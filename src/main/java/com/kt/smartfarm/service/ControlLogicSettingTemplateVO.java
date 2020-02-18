@@ -33,8 +33,7 @@ public class ControlLogicSettingTemplateVO {
 	public String prdCode;
 	public String growStage;
 	public String templateDescription;
-
-	public Integer greenHouseId;
+	public Long greenHouseId;
 	public String userId;
 	public Integer logicId;
 	public String defLogicName;

@@ -16,8 +16,8 @@ import java.util.Map;
 public class HouseCropsDiaryVO {
 
 	Integer id;
-	Integer greenHouseId;
-	List<Integer> houseIdList;
+	Long greenHouseId;
+	List<Long>houseIdList;
 	Double leafWidth; 	// 잎 길이
 	Double stem;		// 줄기굵기
 	Double harvest;		// 수확량(kg)

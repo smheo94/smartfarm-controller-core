@@ -9,7 +9,7 @@ public interface ControlLogicSettingTemplateService {
 
 	List<ControlLogicSettingTemplateVO> getLogicSettingTemplate(List<ControlLogicSettingTemplateVO.RelativeLevel> relativeLevel,
 																List<ControlLogicSettingTemplateVO.PublishLevel> publishLevel,
-																String userId, Integer houseId,
+																String userId, Long houseId,
 																List<String> prdCode, String growStage, List<Long> logicId);
 	ControlLogicSettingTemplateVO insertLogicSettingTemplate(ControlLogicSettingTemplateVO vo);
 	ControlLogicSettingTemplateVO updateLogicSettingTemplate(ControlLogicSettingTemplateVO vo);

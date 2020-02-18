@@ -16,7 +16,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CommonEnvVO {
-	Integer gsmKey;
+	Long gsmKey;
 	String envName;
 	String envJsonValue;
 	String envJsonDefault;

@@ -71,7 +71,7 @@ public class DeviceEnvController {
 	@RequestMapping(value= "/gsm/{gsm_key}", method = RequestMethod.GET)
 	@ApiOperation(value = "GMS 에 저장된 전체 Device 가져오기")
 	@ResponseBody
-	public Result<List<DeviceEnvVO>> list(@PathVariable("gsm_key") Integer gsmKey,
+	public Result<List<DeviceEnvVO>> list(@PathVariable("gsm_key") Long gsmKey,
 										  @RequestParam("withVDeviceList") Boolean withVDeviceList,
 										  @RequestParam(required = false) Boolean withEDeviceList){
 		try {
@@ -96,7 +96,7 @@ public class DeviceEnvController {
 	@ApiOperation(value = "구동기 모듈에 해당하는 구동기,센서 수정 : OLD( /gsm/{gsm_key}/{controllerId}")
 	@ResponseBody
 	@InterceptPre
-	public Result<DeviceEnvVO> update(@PathVariable("gsm_key") Integer gsmKey, @PathVariable("controllerId") String controllerId, @RequestBody List<DeviceEnvVO> device){
+	public Result<DeviceEnvVO> update(@PathVariable("gsm_key") Long gsmKey, @PathVariable("controllerId") String controllerId, @RequestBody List<DeviceEnvVO> device){
 		try {
 			if( !authCheckService.authCheck(gsmKey, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
@@ -116,7 +116,7 @@ public class DeviceEnvController {
 	@RequestMapping(value= "/gsm/{gsm_key}/controller/{controllerId}", method = RequestMethod.GET)
 	@ApiOperation(value = "저장된 구동모듈에 해당하는 deviceList 가져오기 : OLD( /gsm/{gsm_key}/list/{controllerId}")
 	@ResponseBody
-	public Result<List<DeviceEnvVO>> list( @PathVariable("gsm_key") Integer gsmKey, @PathVariable("controllerId") Integer controllerId,
+	public Result<List<DeviceEnvVO>> list( @PathVariable("gsm_key") Long gsmKey, @PathVariable("controllerId") Long controllerId,
 										   @RequestParam(value = "withVDeviceList", required = false) Boolean withVDeviceList) {
 		try {
 			if( !authCheckService.authCheck(gsmKey, null) ) {
@@ -132,7 +132,7 @@ public class DeviceEnvController {
 //	@ApiOperation(value = "컨트롤러에 등록된 Device동작하나(?): OLD( /gsm/{gsm_key}/{controllerId})")
 //	//@RequestMapping(value= "/{controllerId}", method = RequestMethod.GET)
 //	@ResponseBody
-//	public Result<DeviceEnvVO> getDevice( @PathVariable("gsm_key") Integer gsmKey,  @PathVariable("controllerId") Integer controllerId){
+//	public Result<DeviceEnvVO> getDevice( @PathVariable("gsm_key") Long gsmKey,  @PathVariable("controllerId") Long controllerId){
 //		try {
 //			return new Result(deviceEnvService.getDevice(gsmKey, controllerId));
 //		} catch(Exception e) {
@@ -150,7 +150,7 @@ public class DeviceEnvController {
 	@ApiOperation(value = "구동모듈에 해당하는 Device 삭제: OLD( /gsm/{gsm_key}/{controllerId})")
 	@ResponseBody
 	@InterceptPre
-	public Result<DeviceEnvVO> deleteControllerDeivces(@PathVariable("gsm_key") Integer gsmKey,  @PathVariable("controllerId") Integer controllerId){
+	public Result<DeviceEnvVO> deleteControllerDeivces(@PathVariable("gsm_key") Long gsmKey,  @PathVariable("controllerId") Long controllerId){
 		try {
 			if( !authCheckService.authCheck(gsmKey, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
@@ -170,7 +170,7 @@ public class DeviceEnvController {
 	//Device Type 별로 입력 @RequestMapping(value= "/vDeviceList", method = RequestMethod.POST)
 	@ResponseBody
 	@InterceptPost
-	public Result<List<VDeviceEnvVO>> vDeviceList(@PathVariable("deviceId") Integer deviceId, @RequestBody List<VDeviceEnvVO> vo){
+	public Result<List<VDeviceEnvVO>> vDeviceList(@PathVariable("deviceId") Long deviceId, @RequestBody List<VDeviceEnvVO> vo){
 		try {
 			vo.stream().forEach(v -> v.setParentDeviceId(deviceId));
 			return new Result(deviceEnvService.insertVDeviceEnv(vo));
@@ -182,7 +182,7 @@ public class DeviceEnvController {
 	@RequestMapping(value= "/{deviceId}/relationdevices", method = RequestMethod.PUT)
 	@ResponseBody
 	@InterceptPre
-	public Result<VDeviceEnvVO> updateVDeviceList(@PathVariable("deviceId") Integer deviceId, @RequestBody VDeviceEnvVO vo){
+	public Result<VDeviceEnvVO> updateVDeviceList(@PathVariable("deviceId") Long deviceId, @RequestBody VDeviceEnvVO vo){
 		try {
 			vo.setParentDeviceId(deviceId);
 			return new Result(deviceEnvService.updateVDeviceEnv(vo));
@@ -209,7 +209,7 @@ public class DeviceEnvController {
 	@RequestMapping(value= "/{deviceId}/relationdevices", method = RequestMethod.GET)
 	//Device Type 별로 입력 @RequestMapping(value= "/vDeviceList", method = RequestMethod.POST)
 	@ResponseBody
-	public Result<List<VDeviceInfoVO>> vDeviceList(@PathVariable("deviceId") Integer deviceId){
+	public Result<List<VDeviceInfoVO>> vDeviceList(@PathVariable("deviceId") Long deviceId){
 		try {
 			return new Result(deviceEnvService.getVDeviceEnvList(deviceId));
 		} catch(Exception e) {
@@ -225,7 +225,7 @@ public class DeviceEnvController {
 	@RequestMapping(value= "/{deviceId}", method = RequestMethod.GET)
 	//Device Type 별로 입력 @RequestMapping(value= "/vDeviceList", method = RequestMethod.POST)
 	@ResponseBody
-	public Result<DeviceEnvVO> vDeviceList(@PathVariable("deviceId") Integer deviceId,
+	public Result<DeviceEnvVO> vDeviceList(@PathVariable("deviceId") Long deviceId,
 										   @RequestParam(value = "withVDeviceList", required = false) Boolean withVDeviceList){
 		try {
 			return new Result(deviceEnvService.getDevice(deviceId, withVDeviceList));
@@ -243,7 +243,7 @@ public class DeviceEnvController {
 	@RequestMapping(value= "/{deviceId}", method = RequestMethod.DELETE)
 	@ResponseBody
 	@InterceptPre
-	public Result<DeviceEnvVO> deleteDevice(@PathVariable("deviceId") Integer deviceId, @Param("gsmKey") Integer gsmKey){
+	public Result<DeviceEnvVO> deleteDevice(@PathVariable("deviceId") Long deviceId, @Param("gsmKey") Long gsmKey){
 		try {
 			if( !authCheckService.authCheck(gsmKey, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
@@ -274,7 +274,7 @@ public class DeviceEnvController {
 	@ApiOperation(value="전류 감지기 등록")
 	@ResponseBody
 	@InterceptPost
-	public Result<List<EDeviceEnvVO>> insertEDeviceList(@PathVariable("deviceId") Integer deviceId, @RequestBody List<EDeviceEnvVO> vo){
+	public Result<List<EDeviceEnvVO>> insertEDeviceList(@PathVariable("deviceId") Long deviceId, @RequestBody List<EDeviceEnvVO> vo){
 		try {
 			return new Result(deviceEnvService.insertEDeviceEnv(vo));
 		} catch(Exception e) {
@@ -292,7 +292,7 @@ public class DeviceEnvController {
 	@ApiOperation(value="전류 감지기 수정")
 	@ResponseBody
 	@InterceptPre
-	public Result<EDeviceEnvVO> updateEDeviceList(@PathVariable("deviceId") Integer deviceId, @RequestBody EDeviceEnvVO vo){
+	public Result<EDeviceEnvVO> updateEDeviceList(@PathVariable("deviceId") Long deviceId, @RequestBody EDeviceEnvVO vo){
 		try {
 			return new Result(deviceEnvService.updateEDeviceEnv(vo));
 		} catch(Exception e) {
@@ -325,7 +325,7 @@ public class DeviceEnvController {
 	@RequestMapping(value= "/{deviceId}/electricdevices", method = RequestMethod.GET)
 	@ApiOperation(value = "전류감지기 조회")
 	@ResponseBody
-	public Result<List<EDeviceEnvVO>> eDeviceList(@PathVariable("deviceId") Integer deviceId){
+	public Result<List<EDeviceEnvVO>> eDeviceList(@PathVariable("deviceId") Long deviceId){
 		try {
 			return new Result(deviceEnvService.getEDeviceEnvList(deviceId));
 		} catch(Exception e) {
@@ -343,7 +343,7 @@ public class DeviceEnvController {
 	@ApiOperation(value = "Device의 전류 감지기 전체 삭제")
     @ResponseBody
     @InterceptPre
-    public Result<EDeviceEnvVO> deleteEDevices(@PathVariable("deviceId") Integer deviceId){
+    public Result<EDeviceEnvVO> deleteEDevices(@PathVariable("deviceId") Long deviceId){
         try {
             return new Result(deviceEnvService.deleteEDevicesEnv(deviceId));
         } catch(Exception e) {

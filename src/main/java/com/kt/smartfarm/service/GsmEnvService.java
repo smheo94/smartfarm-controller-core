@@ -7,15 +7,15 @@ import java.util.Map;
 
 public interface GsmEnvService {
 
-	List<GsmEnvVO> gsmOfDeviceList(Integer gsmKey);
+	List<GsmEnvVO> gsmOfDeviceList(Long gsmKey);
 
-	//GsmEnvVO get(Integer gsmKey);
+	//GsmEnvVO get(Long gsmKey);
 
-	Map<String,Object> get(Integer gsmKey, boolean  all, Boolean isSmartfarmSystem);
+	Map<String,Object> get(Long gsmKey, boolean  all, Boolean isSmartfarmSystem);
 
-	Integer delete(Integer gsmKey);
+	Integer delete(Long gsmKey);
 
-	Integer insert(GsmEnvVO gsmInfo);
+	Long insert(GsmEnvVO gsmInfo);
 
 	Integer update(GsmEnvVO gsmInfo);
 
@@ -23,7 +23,7 @@ public interface GsmEnvService {
 
 	List<GsmEnvVO> notMappedList();
 
-	Integer userRegistGSM(HashMap<String, Object> param, Integer gsmKey);
+	Integer userRegistGSM(HashMap<String, Object> param, Long gsmKey);
 
 //	List<GsmEnvVO> getGsmInfoByUser(Integer userInfoId);
 
@@ -32,7 +32,7 @@ public interface GsmEnvService {
 	GsmThresholdVO gsmThresholdGet(HashMap<String,Object> param);
 
 
-	Integer copyToNewGsm(HttpServletRequest request, Integer fromGsmKey, Integer toGsmKey);
+	Integer copyToNewGsm(HttpServletRequest request, Long fromGsmKey, Long toGsmKey);
 
-	Integer syncToSmartfarm(HttpServletRequest request, Integer gsmKey);
+	Integer syncToSmartfarm(HttpServletRequest request, Long gsmKey);
 }

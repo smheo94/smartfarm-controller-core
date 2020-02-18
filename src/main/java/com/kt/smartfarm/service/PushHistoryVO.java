@@ -14,12 +14,12 @@ public class PushHistoryVO {
     public Long id;
     public Integer smsPush;
     public Date pushDate;
-    public Integer greenHouseId;
+    public Long greenHouseId;
     public Integer pushType;
     public String pushTitle;
     public String pushMessage;
     public String  pushInterval;
-    public Integer deviceId;
+    public Long deviceId;
     public Integer cctvId;
     public Integer requestCount;
     public String historyKey;

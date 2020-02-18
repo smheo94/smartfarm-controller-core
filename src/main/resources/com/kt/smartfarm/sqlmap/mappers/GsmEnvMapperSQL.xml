@@ -33,10 +33,10 @@
 		INCREMENT BY 1
 		CYCLE;
 	</update>
-	<select id="getNewGSMSeqValue" resultType="Integer">
+	<select id="getNewGSMSeqValue" resultType="Long">
 		SELECT (${to_gsm_key} * 100000) + (IFNULL(LASTVAL(gsm_seq_${from_gsm_key}),0) % 100000);
 	</select>
-	<select id="setNewGSMSeqKey" resultType="Integer">
+	<select id="setNewGSMSeqKey" resultType="Long">
 		SELECT SETVAL(gsm_seq_${to_gsm_key}, #{set_val} );
 	</select>
 	
@@ -127,7 +127,7 @@
 		LIMIT 1;
 	</select>
 
-	<select id="getAuthGSMList" resultType="Integer">
+	<select id="getAuthGSMList" resultType="Long">
 		SELECT DISTINCT gi.gsm_key
 		FROM gsm_category gc
 				 INNER JOIN (
@@ -237,21 +237,6 @@
 			user_info_id = #{userInfoId}
 		WHERE gsm_key = #{gsmKey}
 	</update>
-	
-<!--	<select id="getGsmInfoByUser" parameterType="Integer" resultType="gsmEnvVOMap">-->
-<!--		SELECT-->
-<!--			gsm_key, user_info_id, is_mine, area_code, farm_nickname, update_date, owner_user_info_id, master_system_host, -->
-<!--			master_system_port, system_host, system_port, vpn_system_host, vpn_system_port, cropsurl, imsurl, mqtt_broker_host, -->
-<!--			mqtt_broker_port, server_read_time, product_interval, monitoring_interval, history_save_db_interval, -->
-<!--			sensor_current_retention_period, debug_stop_event, debug_stop_crops, debug_stop_device_auto_control, -->
-<!--			debug_stop_ims, delay_auto_control_start, package_version, schema_version, nutrient_monitoring_interval, -->
-<!--			farm_nickname_i18n, user_id, farm_db_id, category_id, monitoring_process_interval, properties-->
-<!--		FROM-->
-<!--			gsm_info-->
-<!--		WHERE -->
-<!--			user_info_id = #{userInfoId}-->
-<!--	</select>-->
-
 
 	<select id ="gsmThresholdGet" parameterType="map" resultType="gsmThresholdVO">
 		SELECT 

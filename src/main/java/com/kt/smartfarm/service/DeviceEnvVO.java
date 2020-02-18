@@ -19,13 +19,13 @@ import java.util.Map;
 @Getter
 @Setter
 public class DeviceEnvVO {
-	Integer id;
+	Long id;
 	Integer deviceTypeId;
 	Integer deviceTypeIdx;
 	Integer userInfoId;
-	Integer gsmKey;
-	Integer greenHouseId;
-	Integer controllerId;
+	Long gsmKey;
+	Long greenHouseId;
+	Long controllerId;
 	String nickname;
 	String deviceTypeNickname;
 	String description;

@@ -4,7 +4,7 @@
 	<resultMap id="houseDiaryMap" type="houseDiaryVO" autoMapping="true">
 		<id column="id" property="id"/>
 		<result column="work" property="work"/>
-		<collection property="houseIdList" javaType="java.util.ArrayList"  ofType="Integer">
+		<collection property="houseIdList" javaType="java.util.ArrayList"  ofType="Long">
             <result column="house_id_list"></result>
         </collection>
 	</resultMap>
@@ -12,7 +12,7 @@
 	<resultMap id="cropsDiaryMap" type="cropsDiaryVO" autoMapping="true">
 		<id column="id" property="id"/>
 		<result column="work" property="work"/>
-        <collection property="houseIdList" javaType="java.util.ArrayList"  ofType="Integer">
+        <collection property="houseIdList" javaType="java.util.ArrayList"  ofType="Long">
             <result column="house_id_list"></result>
         </collection>
 	</resultMap>

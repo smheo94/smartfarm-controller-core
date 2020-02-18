@@ -305,14 +305,14 @@
     </dependencies>
 
 	<build>
-        <!--<resources>
+        <resources>
             <resource>
                 <directory>src/main/resources/</directory>
             </resource>
             <resource>
                 <directory>env/${env}/</directory>
             </resource>
-        </resources>-->
+        </resources>
         <defaultGoal>package</defaultGoal>
         <directory>${basedir}/target</directory>
         <finalName>${artifactId}-${version}</finalName>

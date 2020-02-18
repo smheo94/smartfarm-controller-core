@@ -10,7 +10,7 @@
 <!--        <result column="operator_condition" property="operatorCondition"/>-->
 <!--        <result column="action" property="action"/>-->
 <!--        <result column="value" property="value"/>-->
-<!--        <collection property="deviceIdList" javaType="java.util.ArrayList" ofType="Integer">-->
+<!--        <collection property="deviceIdList" javaType="java.util.ArrayList" ofType="Long">-->
 <!--            <result column="device_id"></result>-->
 <!--        </collection>-->
 <!--    </resultMap>-->
@@ -20,7 +20,7 @@
 <!--        &lt;!&ndash;<result column="able_array" property="ableArray" />&ndash;&gt;-->
 <!--        &lt;!&ndash;<result column="is_used" property="isUsed" />&ndash;&gt;-->
 <!--        &lt;!&ndash;<result column="required" property="required" />&ndash;&gt;-->
-<!--        &lt;!&ndash;<collection   property="deviceIdList" javaType="java.util.ArrayList"  ofType="Integer" >&ndash;&gt;-->
+<!--        &lt;!&ndash;<collection   property="deviceIdList" javaType="java.util.ArrayList"  ofType="Long" >&ndash;&gt;-->
 <!--        &lt;!&ndash;<result column="device_id"></result>&ndash;&gt;-->
 <!--        &lt;!&ndash;</collection>&ndash;&gt;-->
 <!--    </resultMap>-->

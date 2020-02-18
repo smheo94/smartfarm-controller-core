@@ -28,22 +28,22 @@ import org.springframework.stereotype.Repository;
 @Repository
 @Mapper("gsmEnvMapper")
 public interface GsmEnvMapper {
-	void createGSMSeq(@Param("gsmKey") Integer gsmKey);
-	GsmEnvVO get(@Param("gsmKey") Integer gsmKey);
-	Integer delete(@Param("gsmKey") Integer gsmKey);
-	Integer insert(GsmEnvVO gsmInfo);
+	void createGSMSeq(@Param("gsmKey") Long gsmKey);
+	GsmEnvVO get(@Param("gsmKey") Long gsmKey);
+	Integer delete(@Param("gsmKey") Long gsmKey);
+	Long insert(GsmEnvVO gsmInfo);
 	Integer update(GsmEnvVO gsmInfo);
-	List<GsmEnvVO>  gsmOfDeviceList(@Param("gsmKey")Integer gsmKey);
-	List<GsmEnvVO>  getGsmList(@Param("gsmKey") Integer gsmKey, @Param("userInfoId") Integer userInfoId, @Param("categoryId") Integer categoryId, @Param("farmName") String farmName,
+	List<GsmEnvVO>  gsmOfDeviceList(@Param("gsmKey")Long gsmKey);
+	List<GsmEnvVO>  getGsmList(@Param("gsmKey") Long gsmKey, @Param("userInfoId") Integer userInfoId, @Param("categoryId") Integer categoryId, @Param("farmName") String farmName,
 										 @Param("authUserIdx") String authUserIdx, @Param("isSmartfarmSystem")Boolean isSmartfarmSystem);
-	//List<Map<String, Object>> getHouseList(@Param("gsmKey") Integer gsmKey);
+	//List<Map<String, Object>> getHouseList(@Param("gsmKey") Long gsmKey);
 	List<GsmEnvVO> notMappedList();
 	Integer userRegistGSM(HashMap<String, Object> param);
 //	List<GsmEnvVO> getGsmInfoByUser(Integer userInfoId);
 	
-	Integer gsmThresholdInsert(GsmThresholdVO gsmThresholdVO);
-	Integer gsmThresholdUpdate(GsmThresholdVO gsmThresholdVO);
+	Long gsmThresholdInsert(GsmThresholdVO gsmThresholdVO);
+	Long gsmThresholdUpdate(GsmThresholdVO gsmThresholdVO);
 	GsmThresholdVO gsmThresholdGet(HashMap<String,Object> param);
-	Integer getNewGSMSeqValue(@Param("from_gsm_key") Integer fromGsmKey, @Param("to_gsm_key") Integer toGsmKey );
-	Integer setNewGSMSeqKey(@Param("to_gsm_key") Integer toGsmKey, @Param("set_val") Integer setValue );
+	Long getNewGSMSeqValue(@Param("from_gsm_key") Long fromGsmKey, @Param("to_gsm_key") Long toGsmKey );
+	Long setNewGSMSeqKey(@Param("to_gsm_key") Long toGsmKey, @Param("set_val") Long setValue );
 }

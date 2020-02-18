@@ -40,14 +40,14 @@ import org.springframework.stereotype.Repository;
 @Repository
 @Mapper("commonEnvMapper")
 public interface CommonEnvMapper {
-	CommonEnvVO getOutWeather(int gsmKey);
+	CommonEnvVO getOutWeather(Long gsmKey);
 	void updateOutWeather(CommonEnvVO vo);
-	CommonEnvVO getOutWeatherDefault(int gsmKey);
+	CommonEnvVO getOutWeatherDefault(Long gsmKey);
 	void updateOutWeatherDefault(CommonEnvVO vo);
 	
-	CommonEnvVO getThreshold(int gsmKey);
+	CommonEnvVO getThreshold(Long gsmKey);
 	void updateThreshold(CommonEnvVO vo);
-	CommonEnvVO getThresholdDefault(int gsmKey);
+	CommonEnvVO getThresholdDefault(Long gsmKey);
 	void updateThresholdDefault(CommonEnvVO vo);
 	
 	void updateEnvInfo(CommonEnvVO vo);
@@ -60,26 +60,5 @@ public interface CommonEnvMapper {
 	
 	void insertDeviceList(HashMap<String, Object> row);
 	void updateController(HashMap<String, Object> controllerInfo);	
-//	int deleteDeviceOfChangedDeviceType(HashMap<String, Object> row);
-//	void insertDeviceStatusUpdate(HashMap<String, Object> row);
-//	void updateDeviceList(HashMap<String, Object> row);
-//	void deleteDeviceOfRemovedDevice(String controllerId, List<String> deviceIdList);
-//	void deleteDeviceInfoUsingControllerId(HashMap<String, Object> param);
-//	void deleteControllerInfo(int controllerId);
-	
-	
-//	void insertSensorControllerInfo(HashMap<String, Object> sensorListInfo);
-//	void insertSensorDevice(HashMap<String, Object> sensorListInfo);
-//	void updateSensorControllerInfo(HashMap<String, Object> sensorListInfo);
-//	List<HashMap<String, Object>> selectedControllerInfo(HashMap<String, Object> param);
-	
-//	List<HashMap<String, Object>> selectSensorList(Integer sensorType);
-//	Object getSensorChannel(boolean b);
-//	Object getSensorGroupList(Object object);
-	
-//	List<HashMap<String, Object>> selectControllerListOfControlModule(HashMap<String, Object> param);
-//	List<HashMap<String, Object>> selectControllerHouseMapList(HashMap<String, Object> param);
-//	List<HashMap<String, Object>> selectDeviceOfControlModule(HashMap<String, Object> param);
-	
 	
 }

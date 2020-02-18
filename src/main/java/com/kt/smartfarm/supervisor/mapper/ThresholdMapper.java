@@ -45,7 +45,6 @@ public interface ThresholdMapper {
 
 	List<ThresholdVO> getThreshold(Map<String,Object> param);
 	Integer insert(ThresholdVO thresholdVO);
-	//	Integer update(ThresholdVO thresholdVO);
 	Integer delete(Map<String,Object> param);
-	Integer copyToNewGSM(@Param("from_gsm_key") Integer fromGsmKey, @Param("to_gsm_key") Integer toGsmKey );
+	Integer copyToNewGSM(@Param("from_gsm_key") Long fromGsmKey, @Param("to_gsm_key") Long toGsmKey );
 }

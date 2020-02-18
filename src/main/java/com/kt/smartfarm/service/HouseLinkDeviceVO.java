@@ -16,6 +16,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class HouseLinkDeviceVO {
-	Integer greenHouseId;
-	Integer deviceId;	
+	Long greenHouseId;
+	Long deviceId;
 }

@@ -78,7 +78,7 @@ public class GsmEnvController {
 	@ApiOperation("제어기 정보 수정, OLD /")
 	@ResponseBody
 	@InterceptPre
-	public Result<GsmEnvVO> update(@RequestBody GsmEnvVO gsmInfo, @PathVariable("gsmKey") Integer gsmKey){
+	public Result<GsmEnvVO> update(@RequestBody GsmEnvVO gsmInfo, @PathVariable("gsmKey") Long gsmKey){
 		try {
 			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmInfo);
@@ -107,7 +107,7 @@ public class GsmEnvController {
 			if( !authCheckService.authCheck(gsmInfo.getGsmKey(), null, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmInfo);
 			}
-			Integer result = gsmEnvService.insert(gsmInfo);
+			Long result = gsmEnvService.insert(gsmInfo);
 			response.setHeader(SmartFarmDataInterceptor.X_HEADER_GSM_KEY, gsmInfo.getGsmKey().toString());
 			return new Result(gsmInfo);
 		} catch(Exception e) {
@@ -126,7 +126,7 @@ public class GsmEnvController {
 	@ResponseBody
 	@InterceptPost
 	@InterceptIgnoreGSMKey
-	public Result<GsmEnvVO> copyTo(HttpServletRequest request,HttpServletResponse response, @PathVariable("from_gsm_key") Integer fromGsmKey, @PathVariable("to_gsm_key") Integer toGsmKey){
+	public Result<GsmEnvVO> copyTo(HttpServletRequest request,HttpServletResponse response, @PathVariable("from_gsm_key") Long fromGsmKey, @PathVariable("to_gsm_key") Long toGsmKey){
 		try {
 			if( !authCheckService.authCheck(null, null, Arrays.asList(fromGsmKey, toGsmKey), null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, fromGsmKey);
@@ -139,7 +139,7 @@ public class GsmEnvController {
 
 	@RequestMapping(value= "/{gsm_key}/sync", method = RequestMethod.POST)
 	@ResponseBody
-	public Result<GsmEnvVO> sync(HttpServletRequest request,HttpServletResponse response, @PathVariable("gsm_key") Integer gsmKey){
+	public Result<GsmEnvVO> sync(HttpServletRequest request,HttpServletResponse response, @PathVariable("gsm_key") Long gsmKey){
 		try {
 			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
@@ -158,7 +158,7 @@ public class GsmEnvController {
 	@RequestMapping(value= "/{gsmKey}/device", method = RequestMethod.GET)
 	@ApiOperation("제어기 정보 수정, OLD /deviceInfo")
 	@ResponseBody
-	public Result<List<HashMap<String,Object>>> gsmOfDeviceList(@PathVariable("gsmKey") Integer gsmKey){
+	public Result<List<HashMap<String,Object>>> gsmOfDeviceList(@PathVariable("gsmKey") Long gsmKey){
 		try {
 			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
@@ -177,7 +177,7 @@ public class GsmEnvController {
 	@SuppressWarnings("PMD.AvoidReassigningParameters")
 	@RequestMapping(value= "/{gsmKey}", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<GsmEnvVO> getAll( @PathVariable("gsmKey") Integer gsmKey, @RequestParam(value = "all", required = false) Boolean all, Authentication authentication){
+	public Result<GsmEnvVO> getAll( @PathVariable("gsmKey") Long gsmKey, @RequestParam(value = "all", required = false) Boolean all, Authentication authentication){
 		try {
 			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
@@ -199,7 +199,7 @@ public class GsmEnvController {
 	@RequestMapping(value= "/{gsmKey}", method = RequestMethod.DELETE)
 	@ResponseBody
 //	@InterceptPre
-	public Result<String> delete(@PathVariable("gsmKey") Integer gsmKey){
+	public Result<String> delete(@PathVariable("gsmKey") Long gsmKey){
 		try {
 			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
@@ -268,7 +268,7 @@ public class GsmEnvController {
 	@RequestMapping(value= "/{gsmKey}/autosync", method = RequestMethod.POST)
 	@ApiOperation("userInfoId로 제어기 등록.")
 	@ResponseBody
-	public Result autoSync(@RequestBody HashMap<String,Object> param, @PathVariable Integer gsmKey){
+	public Result autoSync(@RequestBody HashMap<String,Object> param, @PathVariable Long gsmKey){
 		try {
 			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
@@ -286,7 +286,7 @@ public class GsmEnvController {
 	@RequestMapping(value= "/{gsmKey}", method = RequestMethod.POST)
 	@ApiOperation("userInfoId로 제어기 등록.")
 	@ResponseBody
-	public Result userRegistGSM(@RequestBody HashMap<String,Object> param, @PathVariable Integer gsmKey){
+	public Result userRegistGSM(@RequestBody HashMap<String,Object> param, @PathVariable Long gsmKey){
 		try {
 			return new Result(gsmEnvService.userRegistGSM(param,gsmKey));
 		} catch(Exception e) {
@@ -339,7 +339,7 @@ public class GsmEnvController {
 	
 	@RequestMapping(value= "/{gsmKey}/threshold", method = RequestMethod.GET)	
 	@ResponseBody
-	public Result gsmThresholdGet(@PathVariable Integer gsmKey){
+	public Result gsmThresholdGet(@PathVariable Long gsmKey){
 		try {
 			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);

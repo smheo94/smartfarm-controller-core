@@ -28,11 +28,11 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @Mapper("houseEnvMapper")
-public interface HouseEnvMapper {	
-	Integer insert(HouseEnvVO map);
+public interface HouseEnvMapper {
+	Long insert(HouseEnvVO map);
 	Integer delete(Map<String,Object> map);
 	Integer update(HouseEnvVO map);	
-	HouseEnvVO get(@Param("gsm_key")Integer gsmKey, @Param("green_house_id") Integer greenHouseId);
+	HouseEnvVO get(@Param("gsm_key")Long gsmKey, @Param("green_house_id") Long greenHouseId);
 	List<HouseEnvVO> list(Map<String,Object> map);
 	
 	List<HashMap<String, Object>> selectHouseTypeList();
@@ -45,14 +45,14 @@ public interface HouseEnvMapper {
 	
     List<HashMap<String, Object>> getHouseDetail(Map<String,Object> map);
 //	List<HashMap<String, Object>> getMappedDevice(Map<String, Object> map);
-	List<Integer> getMappedDevice(Map<String, Object> map);
+	List<Long> getMappedDevice(Map<String, Object> map);
 	List<HashMap<String, Object>> getMappedController(Map<String, Object> map);
 	List<HashMap<String, Object>> getNutrientController(Map<String, Object> map);
-	List<DeviceEnvVO> getHouseDeviceList(Integer houseId);
-	List<ControlLogicSettingVO> getHouseControlSettings(Integer houseId);
+	List<DeviceEnvVO> getHouseDeviceList(Long houseId);
+	List<ControlLogicSettingVO> getHouseControlSettings(Long houseId);
 	
 	Integer insertCCTVSetting(CCTVSettingVO vo);
-	List<HashMap<String, Object>> getCctvList(@Param("houseId")Integer houseId);
+	List<HashMap<String, Object>> getCctvList(@Param("houseId")Long houseId);
 	Integer updateCctv(CCTVSettingVO vo);
 	Integer deleteCctv(Integer cctvId);
 	List<HashMap<String, Object>> getAllList();
@@ -64,9 +64,9 @@ public interface HouseEnvMapper {
 	List<HashMap<String, Object>> getWeatherCategory();
 	HashMap<String, Object> getSunriseInfo(Map<String, Object> map);
 	
-	List<HashMap<String, Object>> getGroundDeviceList(Integer houseId);
-	List<DeviceTypeVO> getHouseDeviceTypeList(Integer houseId);
+	List<HashMap<String, Object>> getGroundDeviceList(Long houseId);
+	List<DeviceTypeVO> getHouseDeviceTypeList(Long houseId);
 
-	Integer copyToNewGSM(@Param("from_gsm_key") Integer fromGsmKey, @Param("to_gsm_key") Integer toGsmKey );
-	Integer copyToNewGSMMapGreenHouseDevice(@Param("from_gsm_key") Integer fromGsmKey, @Param("to_gsm_key") Integer toGsmKey );
+	Integer copyToNewGSM(@Param("from_gsm_key") Long fromGsmKey, @Param("to_gsm_key") Long toGsmKey );
+	Integer copyToNewGSMMapGreenHouseDevice(@Param("from_gsm_key") Long fromGsmKey, @Param("to_gsm_key") Long toGsmKey );
 }

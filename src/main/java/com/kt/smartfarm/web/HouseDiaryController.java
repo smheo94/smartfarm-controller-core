@@ -57,7 +57,7 @@ public class HouseDiaryController {
 	 */
 	@RequestMapping(value= "/cropsInfo/{green_house_id}", method = RequestMethod.GET)
 	@ResponseBody
-	public Result houseCropsInfo(@PathVariable("green_house_id") Integer greenHouseId){
+	public Result houseCropsInfo(@PathVariable("green_house_id") Long greenHouseId){
 		try{
 			return new Result(houseDiaryService.getHouseCropsInfo(greenHouseId));
 		}catch(Exception e){
@@ -147,7 +147,7 @@ public class HouseDiaryController {
 	 */
 	@RequestMapping(value= "/list/{greenHouseId}", method = RequestMethod.GET)
 	@ResponseBody
-	public Result MonthlyHouseDiaryList(@PathVariable("greenHouseId") Integer greenHouseId,
+	public Result MonthlyHouseDiaryList(@PathVariable("greenHouseId") Long greenHouseId,
 			@RequestParam(value="year",required=false) Integer year, @RequestParam(value="month",required=false) Integer month){
 		try{
 			return new Result(houseDiaryService.getMonthlyHouseDiaryList(null, null, greenHouseId,year,month));
@@ -165,8 +165,8 @@ public class HouseDiaryController {
 	 */
 	@RequestMapping(value= "/list", method = RequestMethod.GET)
 	@ResponseBody
-	public Result MonthlyHouseDiaryListByGSM(@RequestParam(value="gsmKey", required=false) Integer gsmKey,
-											 @RequestParam(value = "gsmKeyList", required=false) List<Integer> gsmKeyList,
+	public Result MonthlyHouseDiaryListByGSM(@RequestParam(value="gsmKey", required=false) Long gsmKey,
+											 @RequestParam(value = "gsmKeyList", required=false) List<Long>gsmKeyList,
 										@RequestParam(value="year",required=false) Integer year, @RequestParam(value="month",required=false) Integer month){
 		try{
 			return new Result(houseDiaryService.getMonthlyHouseDiaryList(gsmKeyList, gsmKey,null, year,month));
@@ -289,7 +289,7 @@ public class HouseDiaryController {
 	 */
 	@RequestMapping(value= "/imageDiary/{houseId}", method = RequestMethod.GET)
 	@ResponseBody
-	public Result getImageDiaryList(@PathVariable("houseId") Integer houseId){
+	public Result getImageDiaryList(@PathVariable("houseId") Long houseId){
 		try{
 			//error message가 null 이고 push_type이 9인것들
 			return new Result(houseDiaryService.getImageDiaryList(houseId));
@@ -302,8 +302,8 @@ public class HouseDiaryController {
     @RequestMapping(value= "/imageDiary/v2/", method = RequestMethod.GET)
     @ResponseBody
     public Result getImageDiaryList(
-                                    @RequestParam(required = false, name = "gsmKey") Integer gsmKey,
-									@RequestParam(required = false, name = "houseId") List<Integer> houseIdList,
+                                    @RequestParam(required = false, name = "gsmKey") Long gsmKey,
+									@RequestParam(required = false, name = "houseId") List<Long>houseIdList,
                                     @RequestParam(required = false, name = "fromDate") Long fromDate,
                                     @RequestParam(required = false, name = "toDate") Long toDate,
                                     @RequestParam(required = false, name = "size") Integer size,
@@ -326,8 +326,8 @@ public class HouseDiaryController {
 	@RequestMapping(value= "/imageDiary/v2/totalCount", method = RequestMethod.GET)
 	@ResponseBody
 	public Result getImageDiaryListCount(
-			@RequestParam(required = false, name = "gsmKey") Integer gsmKey,
-			@RequestParam(required = false, name = "houseId") List<Integer> houseIdList,
+			@RequestParam(required = false, name = "gsmKey") Long gsmKey,
+			@RequestParam(required = false, name = "houseId") List<Long>houseIdList,
 			@RequestParam(required = false, name = "fromDate") Long fromDate,
 			@RequestParam(required = false, name = "toDate") Long toDate
 	) throws HttpStatusCodeException {

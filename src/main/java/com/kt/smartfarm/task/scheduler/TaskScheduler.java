@@ -70,7 +70,7 @@ public class TaskScheduler {
 					HashMap<String,Object> gridXY = getGridxy(latitude,longitude);
 					String nx = gridXY.get("x").toString();
 					String ny = gridXY.get("y").toString();
-					Integer houseId = (Integer)houseList.get(i).get("id");
+					Long houseId = (Long)houseList.get(i).get("id");
 					if(Integer.parseInt(nx) > 0 && Integer.parseInt(ny) >0){
 						try{
 							URL url = new URL(FORECAST_URL

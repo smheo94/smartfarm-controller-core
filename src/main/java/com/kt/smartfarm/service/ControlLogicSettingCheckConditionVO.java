@@ -10,16 +10,16 @@ import java.util.List;
 @Getter
 @Setter
 public class ControlLogicSettingCheckConditionVO {
-    Integer id;
-    Integer  controlSettingId;
+    Long id;
+    Long  controlSettingId;
     Integer logicId;
     String operatorCode;
     String operatorCondition;
     String action;
     Double value;
-    List<Integer> deviceIdList;
+    List<Long> deviceIdList;
 
 
     @JsonIgnore
-    public Integer tmpGsmKey;
+    public Long tmpGsmKey;
 }

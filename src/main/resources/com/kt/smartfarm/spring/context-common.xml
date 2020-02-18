@@ -13,8 +13,8 @@
 		<property name="basenames">
 			<list>
 				<value>classpath:com/kt/smartfarm/message/message-common</value>
-				<value>classpath:egovframework/rte/fdl/idgnr/messages/idgnr</value>
-				<value>classpath:egovframework/rte/fdl/property/messages/properties</value>
+<!--				<value>classpath:egovframework/rte/fdl/idgnr/messages/idgnr</value>-->
+<!--				<value>classpath:egovframework/rte/fdl/property/messages/properties</value>-->
 			</list>
 		</property>
 		<property name="cacheSeconds">
@@ -52,7 +52,7 @@
 	    <!-- max size of file in memory (in bytes) -->
 	    <property name="maxInMemorySize" value="1048576" /> <!-- 1MB -->
 	</bean>
-	
+
 	<bean id="antPathMater" class="org.springframework.util.AntPathMatcher" />
 	<bean id="defaultTraceHandler" class="egovframework.rte.fdl.cmmn.trace.handler.DefaultTraceHandler" />
 	 

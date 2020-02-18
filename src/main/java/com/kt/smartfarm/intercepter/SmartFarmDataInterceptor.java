@@ -91,7 +91,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
              if( preIntercept) {
 //                System.out.printf( "제어기 연동이 필요 합니다.");
 //                //TODO : 제어기에 데이터를 보낸다.
-//                Integer gsmKey = Integer.valueOf(headerGsmKey);
+//                Long gsmKey = Integer.valueOf(headerGsmKey);
 //
 //                ResponseEntity<ResponseResult> result = sendProxyRequest(gsmKey, InterceptPre.class, request, response);
 //                boolean callResult = isSuccessResult(result);
@@ -154,7 +154,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
                         return;
                     }
                     log.info("제어기에 데이터를 보냅니다. , {}", handlerMethod.getMethod() );
-                    Integer gsmKey = Integer.valueOf(headerGsmKey);
+                    Long gsmKey = Long.valueOf(headerGsmKey);
                     ResponseEntity<ResponseResult> result = null;
                     if( handlerMethod.getMethod().getAnnotation(InterceptPre.class) != null) {
                         result = sendProxyRequest(gsmKey, InterceptPre.class, request, wrapper);
@@ -241,7 +241,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
         return true;
     }
 
-    public ResponseEntity<ResponseResult> sendProxyRequest(Integer gsmKey, Class annotationClass, HttpServletRequest request, HttpServletResponse response) throws URISyntaxException,
+    public ResponseEntity<ResponseResult> sendProxyRequest(Long gsmKey, Class annotationClass, HttpServletRequest request, HttpServletResponse response) throws URISyntaxException,
             IOException,
             HttpStatusCodeException {
 

@@ -44,7 +44,7 @@ public class ThresholdServiceImpl extends EgovAbstractServiceImpl implements Thr
     private DataSourceTransactionManager transactionManager;
 
 	@Override
-	public List<ThresholdVO> getThreshold(Integer gsmKey, Integer greenHouseId) {
+	public List<ThresholdVO> getThreshold(Long gsmKey, Long greenHouseId) {
 		Map<String,Object> param = new HashMap<String,Object>();
 		param.put("gsmKey", gsmKey);
 		param.put("greenHouseId", greenHouseId);
@@ -52,7 +52,7 @@ public class ThresholdServiceImpl extends EgovAbstractServiceImpl implements Thr
 	}
 
 	@Override
-	public int update(Integer gsmKey, Integer greenHouseId, List<ThresholdVO> thresholdVOs) {
+	public int update(Long gsmKey, Long greenHouseId, List<ThresholdVO> thresholdVOs) {
 		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
 		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
 
@@ -74,7 +74,7 @@ public class ThresholdServiceImpl extends EgovAbstractServiceImpl implements Thr
 		transactionManager.commit(status);
 		return cnt;
 	}
-	public Integer copyToNewGSM(Integer fromGsmKey, Integer toGsmKey) {
+	public Integer copyToNewGSM(Long fromGsmKey, Long toGsmKey) {
 		return thresholdMapper.copyToNewGSM(fromGsmKey, toGsmKey);
 	}
 

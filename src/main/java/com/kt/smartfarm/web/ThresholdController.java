@@ -53,7 +53,7 @@ public class ThresholdController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value= "/gsm/{gsmKey}/house/{greenHouseId}", method = RequestMethod.POST)
 	@ResponseBody
-	public Result insert(@PathVariable Integer gsmKey, @PathVariable Integer greenHouseId,
+	public Result insert(@PathVariable Long gsmKey, @PathVariable Long greenHouseId,
 											@RequestBody List<ThresholdVO> thresholdVOs){
 		try {
 			int cnt = thresholdService.update(gsmKey, greenHouseId, thresholdVOs);
@@ -72,7 +72,7 @@ public class ThresholdController {
 	
 	@RequestMapping(value= "/gsm/{gsmKey}/house/{greenHouseId}", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<List<ThresholdVO>> list( @PathVariable Integer gsmKey, @PathVariable Integer greenHouseId){
+	public Result<List<ThresholdVO>> list( @PathVariable Long gsmKey, @PathVariable Long greenHouseId){
 		try {
 			return new Result(thresholdService.getThreshold(gsmKey,greenHouseId));
 		} catch(Exception e) {

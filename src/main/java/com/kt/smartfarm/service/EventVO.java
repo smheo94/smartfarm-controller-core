@@ -21,7 +21,7 @@ import lombok.Setter;
 @Setter
 public class EventVO {
 	Integer id;
-	Integer gsmKey;
+	Long gsmKey;
 	String controllerInfoId;
 	String ip;
 	String controllerType;

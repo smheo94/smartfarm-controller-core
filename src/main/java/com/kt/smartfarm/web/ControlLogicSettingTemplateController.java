@@ -46,7 +46,7 @@ public class ControlLogicSettingTemplateController {
 			@RequestParam(required = false, name="relativeLevel") List<ControlLogicSettingTemplateVO.RelativeLevel> relativeLevel,
 			@RequestParam(required = false, name="growStage") String growStage,
 			@RequestParam(required = false, name="userId") String userId,
-			@RequestParam(required = false, name="houseId") Integer houseId,
+			@RequestParam(required = false, name="houseId") Long houseId,
 			@RequestParam(required = false, name="logicId") List<Long> logicId,
 			@RequestParam(required = false, name="prdCode") List<String> prdCode) {
 		try {
@@ -142,7 +142,7 @@ public class ControlLogicSettingTemplateController {
 //	@RequestMapping(value = "/{controlSettingId}", method = RequestMethod.PUT)
 //	@ResponseBody
 //	@InterceptPost
-//	public Result<ControlLogicSettingTemplateVO> update(@PathVariable("controlSettingId") Integer controlSettingId, @RequestBody ControlLogicSettingTemplateVO vo) {
+//	public Result<ControlLogicSettingTemplateVO> update(@PathVariable("controlSettingId") Long controlSettingId, @RequestBody ControlLogicSettingTemplateVO vo) {
 //		try {
 //			if( !authCheckService.authCheck(null, vo.getGreenHouseId()) ) {
 //				return new Result("Not Allowed", HttpStatus.FORBIDDEN, vo);
@@ -156,7 +156,7 @@ public class ControlLogicSettingTemplateController {
 //	@RequestMapping(value = "/{controlSettingId}/env_upudate", method = RequestMethod.PUT)
 //	@ResponseBody
 //	@InterceptPre
-//	public Result<String> updateEnv(@PathVariable("controlSettingId") Integer controlSettingId, @RequestBody Map<String, Object> param) {
+//	public Result<String> updateEnv(@PathVariable("controlSettingId") Long controlSettingId, @RequestBody Map<String, Object> param) {
 //		try {
 //			service.updateLogicSettingEnv(param);
 //			// TODO : JSON
@@ -169,7 +169,7 @@ public class ControlLogicSettingTemplateController {
 //	@RequestMapping(value = "/{controlSettingId}/logic_env_update", method = RequestMethod.PUT)
 //	@ResponseBody
 //	@InterceptPre
-//	public Result<String> updateLogicEnv(@PathVariable("controlSettingId") Integer controlSettingId, @RequestBody Map<String, Object> param) {
+//	public Result<String> updateLogicEnv(@PathVariable("controlSettingId") Long controlSettingId, @RequestBody Map<String, Object> param) {
 //		try {
 //			//logic_env, period_env, update_dt, auto_manual_mode
 //			service.updateLogicEnv(param);
@@ -182,7 +182,7 @@ public class ControlLogicSettingTemplateController {
 //	@RequestMapping(value = "/{controlSettingId}", method = RequestMethod.DELETE)
 //	@ResponseBody
 //	@InterceptPre
-//	public Result<Integer> delete(@PathVariable("controlSettingId") Integer controlSettingId) {
+//	public Result<Integer> delete(@PathVariable("controlSettingId") Long controlSettingId) {
 //		try {
 //			return new Result(service.delLogicSetting(controlSettingId));
 //		} catch (Exception e) {

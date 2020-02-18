@@ -45,7 +45,7 @@ public class ControlLogicSettingController {
 
 	@RequestMapping(value = "/gsm/{gsmKey}/house/{houseId}", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<List<ControlLogicSettingVO>> list(@PathVariable("gsmKey") Integer gsmKey, @PathVariable("houseId") Integer houseId, @RequestParam(required = false, name="logicId") List<Long> logicId) {
+	public Result<List<ControlLogicSettingVO>> list(@PathVariable("gsmKey") Long gsmKey, @PathVariable("houseId") Long houseId, @RequestParam(required = false, name="logicId") List<Long> logicId) {
 		try {
 			if( !authCheckService.authCheck(gsmKey, houseId, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
@@ -62,8 +62,8 @@ public class ControlLogicSettingController {
 
 	@RequestMapping(value = "/gsm/{gsmKey}/house/{houseId}/settingId/{controlSettingId}/history", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<List<ControlLogicSettingVO>> historyList(@PathVariable("gsmKey") Integer gsmKey, @PathVariable("houseId") Integer houseId,
-														   @PathVariable("controlSettingId") Integer controlSettingId,
+	public Result<List<ControlLogicSettingVO>> historyList(@PathVariable("gsmKey") Long gsmKey, @PathVariable("houseId") Long houseId,
+														   @PathVariable("controlSettingId") Long controlSettingId,
 														   @RequestParam(required = false, name = "from_date") Long fromDate,
 														   @RequestParam(required = false, name = "to_date") Long toDate) {
 		try {
@@ -78,8 +78,8 @@ public class ControlLogicSettingController {
 
 //	@RequestMapping(value = "/gsm/{gsmKey}/house/{houseId}/settingId/{controlSettingId}/history/logdt/{logdt}", method = RequestMethod.GET)
 //	@ResponseBody
-//	public Result<ControlLogicSettingVO> historyDetail(@PathVariable("gsmKey") Integer gsmKey, @PathVariable("houseId") Integer houseId,
-//															 @PathVariable("controlSettingId") Integer controlSettingId, @PathVariable("logdt") Long logDt) {
+//	public Result<ControlLogicSettingVO> historyDetail(@PathVariable("gsmKey") Long gsmKey, @PathVariable("houseId") Long houseId,
+//															 @PathVariable("controlSettingId") Long controlSettingId, @PathVariable("logdt") Long logDt) {
 //		try {
 //			return new Result(service.getControlLogicSettingHIstoryDetail(gsmKey, houseId, controlSettingId, logDt));
 //		} catch (Exception e) {
@@ -89,7 +89,7 @@ public class ControlLogicSettingController {
 
 	@RequestMapping(value = "/{controlSettingId}", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<List<ControlLogicSettingVO>> get(@PathVariable("controlSettingId") Integer controlSettingId) {
+	public Result<List<ControlLogicSettingVO>> get(@PathVariable("controlSettingId") Long controlSettingId) {
 		try {
 			final List<ControlLogicSettingVO> logicSettingList = service.getLogicSetting(null, null, controlSettingId);
 			if (logicSettingList == null || logicSettingList.size() == 0) {
@@ -154,7 +154,7 @@ public class ControlLogicSettingController {
 	@RequestMapping(value = "/{controlSettingId}", method = RequestMethod.PUT)
 	@ResponseBody
 	@InterceptPost
-	public Result<ControlLogicSettingVO> update(@PathVariable("controlSettingId") Integer controlSettingId, @RequestBody ControlLogicSettingVO vo) {
+	public Result<ControlLogicSettingVO> update(@PathVariable("controlSettingId") Long controlSettingId, @RequestBody ControlLogicSettingVO vo) {
 		try {
 			if( !authCheckService.authCheck(null, vo.getGreenHouseId(), null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, vo);
@@ -168,7 +168,7 @@ public class ControlLogicSettingController {
 	@RequestMapping(value = "/{controlSettingId}/env_upudate", method = RequestMethod.PUT)
 	@ResponseBody
 	@InterceptPre
-	public Result<String> updateEnv(@PathVariable("controlSettingId") Integer controlSettingId, @RequestBody Map<String, Object> param) {
+	public Result<String> updateEnv(@PathVariable("controlSettingId") Long controlSettingId, @RequestBody Map<String, Object> param) {
 		try {
 			service.updateLogicSettingEnv(param);
 			// TODO : JSON
@@ -181,7 +181,7 @@ public class ControlLogicSettingController {
 	@RequestMapping(value = "/{controlSettingId}/logic_env_update", method = RequestMethod.PUT)
 	@ResponseBody
 	@InterceptPre
-	public Result<String> updateLogicEnv(@PathVariable("controlSettingId") Integer controlSettingId, @RequestBody Map<String, Object> param) {
+	public Result<String> updateLogicEnv(@PathVariable("controlSettingId") Long controlSettingId, @RequestBody Map<String, Object> param) {
 		try {
 			//logic_env, period_env, update_dt, auto_manual_mode
 			service.updateLogicEnv(param);
@@ -205,7 +205,7 @@ public class ControlLogicSettingController {
 	@RequestMapping(value = "/{controlSettingId}", method = RequestMethod.DELETE)
 	@ResponseBody
 	@InterceptPre
-	public Result<Integer> delete(@PathVariable("controlSettingId") Integer controlSettingId) {
+	public Result<Integer> delete(@PathVariable("controlSettingId") Long controlSettingId) {
 		try {
 			return new Result(service.delLogicSetting(controlSettingId));
 		} catch (Exception e) {
@@ -216,7 +216,7 @@ public class ControlLogicSettingController {
 	@RequestMapping(value = "/chkCondition/{chkConditionId}", method = RequestMethod.DELETE)
 	@ResponseBody
 	@InterceptPre
-	public Result<Integer> deleteChkCondition(@PathVariable("chkConditionId") Integer chkConditionId) {
+	public Result<Integer> deleteChkCondition(@PathVariable("chkConditionId") Long chkConditionId) {
 		try {
 			return new Result(service.delChkConditionSetting(chkConditionId));
 		} catch (Exception e) {
@@ -227,7 +227,7 @@ public class ControlLogicSettingController {
 	@RequestMapping(value = "/device/{deviceId}", method = RequestMethod.DELETE)
 	@ResponseBody
 	@InterceptPost
-	public Result<Integer> deleteControlSettingDevice(@PathVariable("deviceId") Integer deviceId) {
+	public Result<Integer> deleteControlSettingDevice(@PathVariable("deviceId") Long deviceId) {
 		try {
 			return new Result(service.deleteControlLogicSettingDevice(deviceId));
 		} catch (Exception e) {

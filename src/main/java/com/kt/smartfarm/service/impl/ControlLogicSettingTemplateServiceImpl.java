@@ -38,7 +38,7 @@ public class ControlLogicSettingTemplateServiceImpl extends EgovAbstractServiceI
 	@Override
 	public List<ControlLogicSettingTemplateVO> getLogicSettingTemplate(List<ControlLogicSettingTemplateVO.RelativeLevel> relativeLevel,
 																	   List<ControlLogicSettingTemplateVO.PublishLevel> publishLevel,
-																	   String userId, Integer houseId,  List<String> prdCode, String growStage, List<Long> logicId) {
+																	   String userId, Long houseId,  List<String> prdCode, String growStage, List<Long> logicId) {
 		return mapper.listControlLogicSettingTemplate(relativeLevel, publishLevel, userId, houseId, prdCode, growStage, logicId);
 	}
 

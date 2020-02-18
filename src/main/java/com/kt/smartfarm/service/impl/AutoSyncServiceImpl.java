@@ -53,7 +53,7 @@ public class AutoSyncServiceImpl extends EgovAbstractServiceImpl implements Auto
 	private ObjectMapper objMapper =  new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
 	@Override
-	public Integer autoSync(Integer gsmkey, HttpServletRequest request) {
+	public Integer autoSync(Long gsmkey, HttpServletRequest request) {
 
 		final List<ControlLogicSettingVO> logicSettingList = controlLogicSettingService.getLogicSetting(gsmkey, null, null);
 

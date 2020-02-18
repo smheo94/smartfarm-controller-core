@@ -2,17 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kt.smartfarm.supervisor.mapper.HouseEnvMapper">
 	
-<!-- 	
-	<resultMap id="controllerEnv"
-		type="ControllerEnvVO">
-		<result property="id" column="id" javaType="Integer"/>		
-		<association property="controllerInfo" column="controllerInfoId" 
-		select="com.kt.smartfarm.customize.service.ControllerInfoMapper.select"></association>
-		
-	</resultMap>
 
- -->
- 
 	<insert id="insert" useGeneratedKeys="true" parameterType="houseEnvVO">
 		INSERT INTO green_house( 
        		product_method_id, green_house_type_id, house_name, latitude, longitude, description, build_date, last_update, addr_1, addr_2, zip, nutrient_common_id, change_gh, change_temperature, floor_space, house_horizontal, house_vertical, house_height, plant_spacing, crop_cnt, house_direction, select_temp_sensor, select_hum_sensor, gsm_key, house_name_i18n
@@ -27,7 +17,7 @@
 			,NEXTVAL(gsm_seq_${gsmKey})
 		</if>
 		);
-		<selectKey keyProperty="id" resultType="int">
+		<selectKey keyProperty="id" resultType="long">
 			SELECT LASTVAL(gsm_seq_${gsmKey}) AS id;
 		</selectKey>
 	</insert>
@@ -219,7 +209,7 @@
 		 GROUP BY controller_id;
 	</select>
 
-	<select id ="getHouseControlSettings" resultType="controlLogicSettingVO" parameterType="Integer" >
+	<select id ="getHouseControlSettings" resultType="controlLogicSettingVO" parameterType="Long" >
 		SELECT CL.id AS logic_id, CL.name AS def_logic_name, CL.java_class_name, CL.default_period_size,
 		CS.id AS control_setting_id, CS.green_house_id, CS.logic_name, CS.logic_env, CS.logic_period_env, CS.logic_period_size, CS.auto_manual_mode, CS.update_dt,
 		CS.view_order, CS.create_dt,
@@ -231,7 +221,7 @@
 		ORDER BY view_order;
 	</select>
 	
-	<select id="getHouseDeviceList" parameterType="Integer" resultType="deviceEnvVO">
+	<select id="getHouseDeviceList" parameterType="Long" resultType="deviceEnvVO">
 		SELECT device.* , cd_device_type.device_type , cd_device_type.device_type
 		FROM map_green_house_device  AS mghd
 		INNER JOIN device ON device.id = mghd.device_id
@@ -239,7 +229,7 @@
 		WHERE mghd.green_house_id = #{houseId}			
 	</select>
 	
-	<select id="getHouseDeviceTypeList" parameterType="Integer" resultType="deviceTypeVO">
+	<select id="getHouseDeviceTypeList" parameterType="Long" resultType="deviceTypeVO">
 		SELECT cdt.* 
 		FROM map_green_house_device  AS mghd
 		INNER JOIN device ON device.id = mghd.device_id
@@ -247,7 +237,7 @@
 		WHERE mghd.green_house_id = #{houseId}			
 	</select>
 	
-	<select id="getGroundDeviceList" parameterType="Integer" resultType="map">
+	<select id="getGroundDeviceList" parameterType="Long" resultType="map">
 		SELECT device.* ,cpt.device_type AS dt, cpt.device_type_group AS dtg
 		FROM map_green_house_device  AS mghd
 		INNER JOIN device ON device.id = mghd.device_id
@@ -270,7 +260,7 @@
 		</selectKey>
 	</insert>
 	
-	<select id="getCctvList" parameterType="Integer" resultType="map">
+	<select id="getCctvList" parameterType="Long" resultType="map">
 		SELECT 
 			cctv.id as id,  
 			house_id as houseId, 

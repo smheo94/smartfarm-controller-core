@@ -4,16 +4,16 @@ import java.util.List;
 import java.util.Map;
 
 public interface ControlLogicSettingService {
-	List<ControlLogicSettingVO> getLogicSetting(Integer gsmKey, Integer houseId, Integer controlSettingId);
-	List<ControlLogicSettingVO> getLogicSetting(Integer gsmKey, Integer houseId, Integer controlSettingId, List<Long> logicId);
+	List<ControlLogicSettingVO> getLogicSetting(Long gsmKey, Long houseId, Long controlSettingId);
+	List<ControlLogicSettingVO> getLogicSetting(Long gsmKey, Long houseId, Long controlSettingId, List<Long> logicId);
 
-//	ControlLogicSettingHistoryVO getControlLogicSettingHIstoryDetail(Integer gsmKey, Integer houseId, Integer controlSettingId, Long logDt);
+//	ControlLogicSettingHistoryVO getControlLogicSettingHIstoryDetail(Long gsmKey, Long houseId, Long controlSettingId, Long logDt);
 
-	List<ControlLogicSettingHistoryVO> getControlLogicSettingHIstoryList(Integer gsmKey, Integer houseId, Integer controlSettingId, Long fromData, Long toDate);
+	List<ControlLogicSettingHistoryVO> getControlLogicSettingHIstoryList(Long gsmKey, Long houseId, Long controlSettingId, Long fromData, Long toDate);
 
 	ControlLogicSettingVO insertLogicSetting(ControlLogicSettingVO vo);
 
-	Integer delLogicSetting(Integer controlSettingId);
+	Integer delLogicSetting(Long controlSettingId);
 
 	ControlLogicSettingVO updateLogicSetting(ControlLogicSettingVO vo);
 
@@ -21,11 +21,11 @@ public interface ControlLogicSettingService {
 
 	List<ControlSettingOperatorVO> listControlSettingOperation();
 
-	Integer delChkConditionSetting(Integer chkConditionId);
+	Integer delChkConditionSetting(Long chkConditionId);
 
-	Integer deleteControlLogicSettingDevice(Integer id);
+	Integer deleteControlLogicSettingDevice(Long deviceId);
 
 	void updateLogicEnv(Map<String, Object> param);
 
-	Integer copyToNewGSM(Integer fromGsmKey, Integer toGsmKey);
+	Integer copyToNewGSM(Long fromGsmKey, Long toGsmKey);
 }

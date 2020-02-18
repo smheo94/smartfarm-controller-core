@@ -21,7 +21,7 @@ public class ArrayDeviceVO {
 	String modbusAddress2;
 	String modbusAddress3;
 	Integer mode;
-	Integer controllerId;
+	Long controllerId;
 	String deviceId;
 	String nickname;
 	String deviceTypeNickname;

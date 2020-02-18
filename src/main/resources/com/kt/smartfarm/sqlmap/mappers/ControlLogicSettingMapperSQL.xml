@@ -10,7 +10,7 @@
         <result column="operator_condition" property="operatorCondition"/>
         <result column="action" property="action"/>
         <result column="value" property="value"/>
-        <collection property="deviceIdList" javaType="java.util.ArrayList" ofType="Integer">
+        <collection property="deviceIdList" javaType="java.util.ArrayList" ofType="Long">
             <result column="device_id"></result>
         </collection>
     </resultMap>
@@ -20,7 +20,7 @@
         <!--<result column="able_array" property="ableArray" />-->
         <!--<result column="is_used" property="isUsed" />-->
         <!--<result column="required" property="required" />-->
-        <!--<collection   property="deviceIdList" javaType="java.util.ArrayList"  ofType="Integer" >-->
+        <!--<collection   property="deviceIdList" javaType="java.util.ArrayList"  ofType="Long" >-->
         <!--<result column="device_id"></result>-->
         <!--</collection>-->
     </resultMap>
@@ -204,7 +204,7 @@
             ,#{id}
         </if>
         );
-        <selectKey keyProperty="id" resultType="Integer" keyColumn="id">
+        <selectKey keyProperty="id" resultType="Long" keyColumn="id">
             SELECT LAST_INSERT_ID() AS id;
         </selectKey>
     </insert>
@@ -234,7 +234,7 @@
             ,#{id}
         </if>
         );
-        <selectKey keyProperty="id" resultType="Integer" keyColumn="id">
+        <selectKey keyProperty="id" resultType="Long" keyColumn="id">
             SELECT LAST_INSERT_ID() AS id;
         </selectKey>
     </insert>
@@ -294,7 +294,7 @@
             , #{viewOrder}
         </if>
         );
-        <selectKey keyProperty="controlSettingId" resultType="Integer" keyColumn="id">
+        <selectKey keyProperty="controlSettingId" resultType="Long" keyColumn="id">
             SELECT LASTVAL(gsm_seq_${tmpGsmKey}) AS id;
         </selectKey>
     </insert>

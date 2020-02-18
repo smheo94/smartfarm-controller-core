@@ -20,17 +20,17 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ControlLogicSettingDeviceVO {
-	Integer id;
-	Integer  controlSettingId;
+	Long id;
+	Long  controlSettingId;
 	Integer logicId;
 	Integer deviceNum;
 	Integer deviceInsertOrder;
-	Integer deviceId;
+	Long deviceId;
 	Integer required;
 
 
 	@JsonIgnore
-	public Integer tmpGsmKey;
+	public Long tmpGsmKey;
 	public Map<String,Object> toMap() {
 		return ClassUtil.toHashMap(this);
 	}

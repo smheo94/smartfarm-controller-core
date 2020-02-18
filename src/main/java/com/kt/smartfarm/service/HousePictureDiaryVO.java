@@ -12,7 +12,7 @@ import lombok.Setter;
 public class HousePictureDiaryVO {
 
 	Integer id;
-	Integer greenHouseId; // 
+	Long greenHouseId; //
 	String title; // 작업일지 명 ( 농장이름 + 작물 + 종류 )
 	String content; // 내용
 	String work; // 종류

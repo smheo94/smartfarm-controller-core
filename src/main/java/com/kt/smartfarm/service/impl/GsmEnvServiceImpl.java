@@ -76,17 +76,17 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 	SmartfarmInterceptorConfig smartfarmConfig;
 
 	@Override
-	public List<GsmEnvVO> gsmOfDeviceList(Integer gsmKey) {
+	public List<GsmEnvVO> gsmOfDeviceList(Long gsmKey) {
 		return gsmEnvMapper.gsmOfDeviceList(gsmKey);
 	}
 
 	@PostConstruct
 	public void initGsmKeyOnSmartfarm() {
 		if( smartfarmConfig.isSmartfarmSystem() ) {
-			Integer gsmKey = 0;
+			Long gsmKey = 0L;
 			try {
 				String gsmKeyValue = smartfarmConfig.GSM_KEY;
-				gsmKey = Integer.parseInt(gsmKeyValue);
+				gsmKey = Long.parseLong(gsmKeyValue);
 			} catch (Exception e) {
 				log.warn("Load GSM Key Error !!!", e);
 			}
@@ -96,7 +96,7 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 			}
 			GsmEnvVO gsmInfo = gsmEnvMapper.get(gsmKey);
 			if( gsmInfo == null || gsmInfo.getGsmKey() == 0 ) {
-				gsmInfo = gsmEnvMapper.get(-1);
+				gsmInfo = gsmEnvMapper.get(-1L);
 				if( gsmInfo == null ) {
 					gsmInfo = new GsmEnvVO();
 					gsmInfo.setGsmKey(gsmKey);
@@ -109,12 +109,12 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 		}
 	}
 //	@Override
-//	public GsmEnvVO get(Integer gsmKey) {
+//	public GsmEnvVO get(Long gsmKey) {
 //		return gsmEnvMapper.get(gsmKey);
 //	}
 
 	@Override
-	public Map<String, Object> get(Integer gsmKey, boolean all, Boolean isSmartfarmSystem) {
+	public Map<String, Object> get(Long gsmKey, boolean all, Boolean isSmartfarmSystem) {
 		GsmEnvVO gsmEnv = gsmEnvMapper.getGsmList(gsmKey,null,null,null, null, null).stream().findFirst().orElse(null);
 		Map<String,Object> gsmMap = MapUtils.convertToMap(gsmEnv);
 		List<HashMap<String, Object>> houseList = houseEnvService.list(gsmKey, all, true, isSmartfarmSystem);
@@ -123,13 +123,13 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 	}
 
 	@Override
-	public Integer delete(Integer gsmKey) {
+	public Integer delete(Long gsmKey) {
 		return gsmEnvMapper.delete(gsmKey);
 	}
 
 	@Override
-	public Integer insert(GsmEnvVO gsmInfo) {
-		Integer gsmKey = gsmEnvMapper.insert(gsmInfo);
+	public Long insert(GsmEnvVO gsmInfo) {
+		Long gsmKey = gsmEnvMapper.insert(gsmInfo);
 		gsmEnvMapper.createGSMSeq(gsmInfo.getGsmKey());
 		return gsmKey;
 	}
@@ -147,9 +147,9 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 		}
 		List<Map<String, Object>> gsmList = gsmEnvList.stream().map( g -> MapUtils.convertToMap(g) ).collect(Collectors.toList());
 		for(Map<String,Object> gsm : gsmList){
-//			Integer gsmKey = (Integer)gsm.get("gsmKey");
+//			Long gsmKey = (Long)gsm.get("gsmKey");
 //			houseList = gsmEnvMapper.getHouseList(gsmKey);
-			Integer gsmKey = (Integer)gsm.get("gsmKey");
+			Long gsmKey = (Long)gsm.get("gsmKey");
 			List<HashMap<String,Object>> houseList = houseEnvService.list(gsmKey, all, false, isSmartfarmSystem, isCCTVOnly);
 			if( isCCTVOnly && (houseList == null  || houseList.size() == 0 ))  {
 				//CCTV가 없으면 리스트를 줄 필요가 없음
@@ -171,7 +171,7 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 
 
 	@Override
-	public Integer userRegistGSM(HashMap<String,Object> param, Integer gsmKey) {
+	public Integer userRegistGSM(HashMap<String,Object> param, Long gsmKey) {
 		param.put("gsmKey", gsmKey);
 		return gsmEnvMapper.userRegistGSM(param);		
 	}
@@ -199,8 +199,8 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 	}
 
 	@Override
-	public Integer copyToNewGsm(HttpServletRequest request, Integer fromGsmKey, Integer toGsmKey) {
-	    Integer setValue = gsmEnvMapper.getNewGSMSeqValue(fromGsmKey, toGsmKey);
+	public Integer copyToNewGsm(HttpServletRequest request, Long fromGsmKey, Long toGsmKey) {
+		Long setValue = gsmEnvMapper.getNewGSMSeqValue(fromGsmKey, toGsmKey);
 		gsmEnvMapper.setNewGSMSeqKey(toGsmKey, setValue);
         thresholdService.copyToNewGSM(fromGsmKey, toGsmKey);
 
@@ -232,7 +232,7 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 	private final String HOUSE_CONTROL_LOGIC_SETTING_UPDATE_URL = "/env/control_logic_setting/%s";
 
 	@Override
-    public Integer syncToSmartfarm(HttpServletRequest request, Integer gsmKey) {
+    public Integer syncToSmartfarm(HttpServletRequest request, Long gsmKey) {
 		final Map<String, Object> gsmInfo = this.get(gsmKey, true, true);
 		List<Map<String,Object>> houseList = (List<Map<String,Object>>)gsmInfo.get("houseList");
         //List<Map<String,Object>> controllerList = (List<Map<String,Object>>)gsmInfo.get("controllerList");
@@ -264,7 +264,7 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 				Map<String, Object> houseInfo = houseList.get(i);
 				log.info("House Info : {}", houseInfo);
 				//하우스 목록 내리기
-				Integer houseId = ClassUtil.castToSomething(houseInfo.get("id"), Integer.class);
+				Long houseId = ClassUtil.castToSomething(houseInfo.get("id"), Long.class);
 				sendRestBodyData(request, String.format(HOUSE_INSERT_URL, gsmKey), HttpMethod.POST, gsmKey, houseInfo);
 				sendRestBodyData(request, String.format(HOUSE_UPDATE_URL, gsmKey), HttpMethod.PUT, gsmKey, houseInfo);
 				//하우스-Device 링크 내리기
@@ -286,7 +286,7 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
     }
 
 	private ObjectMapper objMapper =  new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-	public HttpEntity getHttpEntity(HttpServletRequest request, Integer gsmKey, Object data) throws JsonProcessingException {
+	public HttpEntity getHttpEntity(HttpServletRequest request, Long gsmKey, Object data) throws JsonProcessingException {
 		HttpHeaders headers = new HttpHeaders();
 		Enumeration<String> headerNames = request.getHeaderNames();
 		while (headerNames.hasMoreElements()) {
@@ -303,7 +303,7 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 		}
 		return new HttpEntity<String>(strData, headers);
 	}
-	public HttpEntity sendRestBodyData(HttpServletRequest request, String server, Integer port, String url, HttpMethod method, Integer gsmKey, Object data) {
+	public HttpEntity sendRestBodyData(HttpServletRequest request, String server, Integer port, String url, HttpMethod method, Long gsmKey, Object data) {
 		try {
 		    URI uri = new URI("http", null, server, port, null, null, null);
 			uri = UriComponentsBuilder.fromUri(uri).path(url).build(true).toUri();
@@ -322,7 +322,7 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 		}
 		return null;
 	}
-    public HttpEntity sendRestBodyData(HttpServletRequest request, String url, HttpMethod method, Integer gsmKey, Object data)  {
+    public HttpEntity sendRestBodyData(HttpServletRequest request, String url, HttpMethod method, Long gsmKey, Object data)  {
 			final GsmEnvVO gsmEnvVO = this.gsmEnvMapper.get(gsmKey);
 			if (gsmEnvVO == null) {
 				throw new HttpClientErrorException(HttpStatus.NOT_FOUND, NOT_FOUND_GSM_INFO);

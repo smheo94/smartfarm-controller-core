@@ -53,7 +53,7 @@ public class AuthCheckServiceImpl extends EgovAbstractServiceImpl implements Aut
 		return new AuthorityChecker();
 	}
 	@Override
-	public Boolean authCheck(Integer gsmKey, Integer houseId) {
+	public Boolean authCheck(Long gsmKey, Long houseId) {
 		if (config.isSmartfarmSystem()) {
 			return true;
 		}
@@ -77,7 +77,7 @@ public class AuthCheckServiceImpl extends EgovAbstractServiceImpl implements Aut
 	}
 
 	@Override
-	public Boolean authCheck(Integer gsmKey, Integer houseId, List<Integer> gsmKeyList, List<Integer> houseIdList) {
+	public Boolean authCheck(Long gsmKey, Long houseId, List<Long>gsmKeyList, List<Long>houseIdList) {
 		if (config.isSmartfarmSystem()) {
 			return true;
 		}
