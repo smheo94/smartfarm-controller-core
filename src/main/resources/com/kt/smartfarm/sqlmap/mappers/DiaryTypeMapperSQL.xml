@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kt.smartfarm.supervisor.mapper.DiaryTypeMapper">
+	<select id="getDiaryTypeList" resultType="diaryTypeVO">
+	SELECT DT.id, DT.diary_type, DT.type_name, DT.is_base_diary, IF( DT.is_base_diary  = 1, DT.id,  DT.base_diary_type_id)  base_diary_type_id
+	 	, GROUP_CONCAT(DR.depend_type) AS user_role_depend
+	FROM cd_diary_type DT
+	LEFT JOIN cd_diary_depend_mclass DPM ON DPM.diary_type_id = DT.id
+		AND DPM.mclasscode IN  ( SELECT prd_code FROM green_house GH INNER JOIN green_house_product GHP ON GH.id = GHP.green_house_id  WHERE GH.id = #{greenHouseId}   AND GH.gsm_key = #{gsmKey} )
+	LEFT JOIN cd_diary_depend_role DR ON DR.diary_type_id = DT.id
+	LEFT JOIN user_info_roles UIR ON UIR.roles_id = DR.depend_role_id  AND UIR.user_idx = #{userIdx}
+	WHERE ( DR.depend_type  IS NULL OR DR.depend_type  != 'DENY'  )   AND ( DPM.depend_type IS NULL OR DPM.depend_type != 'DENY' )
+		AND ( DT.is_base_diary = 1 OR DR.depend_type = 'ACCESS'  OR DR.depend_type = 'READ'  OR DPM.depend_type = 'ACCESS' )
+	GROUP BY DT.id, DT.diary_type;
+	</select>
+
+	<select id="getDiaryTypePropertyList" resultType="map" >
+		SELECT
+			L.diary_type_id, L.properties_id, P.ui_class_name, P.properties_json, P.display_text, P.support_void, P.suggest_text, P.input_wating,
+			P.validate_text, P.valid_wating, P.valid_button_type, P.helper_text, P.property_data_type, P.property_data_length,
+		    L.is_array, L.data_level, L.priority
+		FROM cd_diary_properties P
+		INNER JOIN cd_diary_properties_lnk L ON L.properties_id = P.id
+		<where>
+			<if test="diaryTypeId != null">
+				AND L.diary_type_id = #{diaryTypeId}
+			</if>
+		</where>
+		ORDER BY L.diary_type_id, L.priority
+	</select>
+</mapper>

@@ -42,7 +42,9 @@
 
 		<typeAlias alias="controlLogicSettingCheckConditionVO" type="com.kt.smartfarm.service.ControlLogicSettingCheckConditionVO"/>
 		<typeAlias alias="controlSettingOperatorVO" type="com.kt.smartfarm.service.ControlSettingOperatorVO"/>
-		
+		<typeAlias alias="controlSettingOperatorVO" type="com.kt.smartfarm.service.DiaryTypeVO"/>
+		diaryTypeVO
+
 		<typeAlias alias="cctv" type="com.kt.smartfarm.service.CCTVSettingVO"/>
 		<typeAlias alias="gsmThresholdVO" type="com.kt.smartfarm.service.GsmThresholdVO"/>
 
