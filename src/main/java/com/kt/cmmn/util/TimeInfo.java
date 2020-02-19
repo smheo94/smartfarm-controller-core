@@ -1,9 +1,9 @@
 package com.kt.cmmn.util;
 
-import org.joda.time.format.DateTimeFormat;
-
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -44,15 +44,21 @@ public class TimeInfo {
     }
 
     public String getNowTimeString() {
-        return DateTimeFormat.forPattern("yyyy.MM.dd HH:mm:ss").print(now.getTimeInMillis());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+        return format.format(now.getTime());
+        //return DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss").withZone(TimeZone.getDefault().toZoneId()). ..print(now.getTimeInMillis());
     }
 
     public String getSunrizeTimeString() {
-        return DateTimeFormat.forPattern("HH:mm").print(sunrize.getTimeInMillis());
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+        return format.format(sunrize.getTime());
+        //return DateTimeFormat.forPattern("HH:mm").print(sunrize.getTimeInMillis());
     }
 
     public String getSunsetTimeString() {
-        return DateTimeFormat.forPattern("HH:mm").print(sunset.getTimeInMillis());
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+        return format.format(sunset.getTime());
+        //return DateTimeFormat.forPattern("HH:mm").print(sunset.getTimeInMillis());
     }
 
 }

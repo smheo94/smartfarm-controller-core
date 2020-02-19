@@ -31,7 +31,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import io.swagger.annotations.ApiOperation;
+//import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PostFilter;
@@ -75,7 +75,7 @@ public class GsmEnvController {
 	 * @return
 	 */
 	@RequestMapping(value= "/{gsmKey}", method = RequestMethod.PUT)
-	@ApiOperation("제어기 정보 수정, OLD /")
+	//@ApiOperation("제어기 정보 수정, OLD /")
 	@ResponseBody
 	@InterceptPre
 	public Result<GsmEnvVO> update(@RequestBody GsmEnvVO gsmInfo, @PathVariable("gsmKey") Long gsmKey){
@@ -156,7 +156,7 @@ public class GsmEnvController {
 	 * @return
 	 */
 	@RequestMapping(value= "/{gsmKey}/device", method = RequestMethod.GET)
-	@ApiOperation("제어기 정보 수정, OLD /deviceInfo")
+	//@ApiOperation("제어기 정보 수정, OLD /deviceInfo")
 	@ResponseBody
 	public Result<List<HashMap<String,Object>>> gsmOfDeviceList(@PathVariable("gsmKey") Long gsmKey){
 		try {
@@ -216,7 +216,7 @@ public class GsmEnvController {
 	 * @return
 	 */
 	@RequestMapping(value= "", method = RequestMethod.GET)
-	@ApiOperation("GSM List OLD (none) ")
+	//@ApiOperation("GSM List OLD (none) ")
 	@ResponseBody
 	@SuppressWarnings("PMD.AvoidReassigningParameters")
 	public Result<List<HashMap<String,Object>>> list(@RequestParam(value = "all", required = false) Boolean all
@@ -245,7 +245,7 @@ public class GsmEnvController {
 	 * @return
 	 */
 	@RequestMapping(value= "/notMappedList", method = RequestMethod.GET)
-	@ApiOperation("농장주와 연결되지 않은 제어기 리스트.")
+	//@ApiOperation("농장주와 연결되지 않은 제어기 리스트.")
 	@ResponseBody
 	public Result<List<GsmEnvVO>> notMappedList(){
 		try {
@@ -266,7 +266,7 @@ public class GsmEnvController {
 	 * @return
 	 */
 	@RequestMapping(value= "/{gsmKey}/autosync", method = RequestMethod.POST)
-	@ApiOperation("userInfoId로 제어기 등록.")
+	//@ApiOperation("userInfoId로 제어기 등록.")
 	@ResponseBody
 	public Result autoSync(@RequestBody HashMap<String,Object> param, @PathVariable Long gsmKey){
 		try {
@@ -284,7 +284,7 @@ public class GsmEnvController {
 	 * @return
 	 */
 	@RequestMapping(value= "/{gsmKey}", method = RequestMethod.POST)
-	@ApiOperation("userInfoId로 제어기 등록.")
+	//@ApiOperation("userInfoId로 제어기 등록.")
 	@ResponseBody
 	public Result userRegistGSM(@RequestBody HashMap<String,Object> param, @PathVariable Long gsmKey){
 		try {

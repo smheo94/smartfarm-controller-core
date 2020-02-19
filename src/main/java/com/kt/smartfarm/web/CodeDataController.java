@@ -18,7 +18,7 @@ package com.kt.smartfarm.web;
 import com.kt.cmmn.util.Result;
 import com.kt.smartfarm.config.SmartfarmInterceptorConfig;
 import com.kt.smartfarm.service.*;
-import io.swagger.annotations.ApiOperation;
+//import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -64,7 +64,7 @@ public class CodeDataController {
 	 * @return
 	 */
 	@RequestMapping(value= "/housetype/{houseType}/kind/{kind}/devicetype", method = RequestMethod.GET)
-	@ApiOperation(value = "하우스 타입/구동기종류별 구동기 Type 리스트: OLD( /gsm/{gsm_key}/listType/{houseType}/{kind}")
+	//@ApiOperation(value = "하우스 타입/구동기종류별 구동기 Type 리스트: OLD( /gsm/{gsm_key}/listType/{houseType}/{kind}")
 	//@RequestMapping(value= "/listType/{houseType}/{kind}", method = RequestMethod.GET)
 	@ResponseBody
 	public Result<List<DeviceTypeVO>> getDeviceList(@PathVariable("houseType") String houseType, @PathVariable String kind){
@@ -81,7 +81,7 @@ public class CodeDataController {
 	 * controllerType 하고 kind 가져가는 api 만들어줘
 	 */
 	@RequestMapping(value= "/housetype", method = RequestMethod.GET)
-	@ApiOperation(value = "HouseType 리스트: OLD( /gsm/{gsm_key}/houseTypeKindInfo")
+	//@ApiOperation(value = "HouseType 리스트: OLD( /gsm/{gsm_key}/houseTypeKindInfo")
 	@ResponseBody
 	public Result<HashMap<String,Object>> houseTypeKindInfo(){
 		try {
@@ -92,7 +92,7 @@ public class CodeDataController {
 	}
 
 	@RequestMapping(value= "/devicetype", method = RequestMethod.GET)
-	@ApiOperation(value = "Device Type 리스트: OLD( /gsm/{gsm_key}/deviceTypeList")
+	//@ApiOperation(value = "Device Type 리스트: OLD( /gsm/{gsm_key}/deviceTypeList")
 	@ResponseBody
 	public Result<List<HashMap<String,Object>>> deviceTypeList(){
 		try {
@@ -108,7 +108,7 @@ public class CodeDataController {
 	 * @return
 	 */
 	@RequestMapping(value= "/vdeviceinfo", method = RequestMethod.GET)
-	@ApiOperation(value = "가상 장치 종류 리스트: OLD( /gsm/{gsm_key}/vDeviceList")
+	//@ApiOperation(value = "가상 장치 종류 리스트: OLD( /gsm/{gsm_key}/vDeviceList")
 	@ResponseBody
 	public Result<List<VDeviceInfoVO>> vDeviceList(){
 		try {
@@ -124,7 +124,7 @@ public class CodeDataController {
 	 * @return
 	 */
 	@RequestMapping(value= "/control_setting_operator", method = RequestMethod.GET)
-	@ApiOperation(value = "컨트롤 셋팅 오퍼레이터 리스트")
+	//@ApiOperation(value = "컨트롤 셋팅 오퍼레이터 리스트")
 	@ResponseBody
 	public Result<List<ControlSettingOperatorVO>> listControlSettingOperator(){
 		try {
@@ -140,7 +140,7 @@ public class CodeDataController {
      * @return
      */
     @RequestMapping(value= "/server_type", method = RequestMethod.GET)
-    @ApiOperation(value = "컨트롤 셋팅 오퍼레이터 리스트")
+    //@ApiOperation(value = "컨트롤 셋팅 오퍼레이터 리스트")
     @ResponseBody
     public Result<String> serverType(){
         try {

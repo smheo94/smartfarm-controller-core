@@ -23,9 +23,9 @@ import com.kt.cmmn.util.Result;
 import com.kt.smartfarm.service.*;
 import javax.annotation.Resource;
 
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+//import io.swagger.annotations.ApiImplicitParam;
+//import io.swagger.annotations.ApiImplicitParams;
+//import io.swagger.annotations.ApiOperation;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -52,7 +52,7 @@ public class DeviceEnvController {
 	 **/
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value= {"", "/"}, method = RequestMethod.POST)
-	@ApiOperation(value = "구동기,센서 등록 : OLD( /gsm/{gsm_key}/")
+	//@ApiOperation(value = "구동기,센서 등록 : OLD( /gsm/{gsm_key}/")
 	@ResponseBody
 	@InterceptPost
 	public Result<List<DeviceEnvVO>> insert(@RequestBody List<DeviceEnvVO> device){
@@ -69,7 +69,7 @@ public class DeviceEnvController {
 	 * @return
 	 */
 	@RequestMapping(value= "/gsm/{gsm_key}", method = RequestMethod.GET)
-	@ApiOperation(value = "GMS 에 저장된 전체 Device 가져오기")
+	//@ApiOperation(value = "GMS 에 저장된 전체 Device 가져오기")
 	@ResponseBody
 	public Result<List<DeviceEnvVO>> list(@PathVariable("gsm_key") Long gsmKey,
 										  @RequestParam("withVDeviceList") Boolean withVDeviceList,
@@ -93,7 +93,7 @@ public class DeviceEnvController {
 	 * @return
 	 */
 	@RequestMapping(value= "/gsm/{gsm_key}/controller/{controllerId}", method = RequestMethod.PUT)
-	@ApiOperation(value = "구동기 모듈에 해당하는 구동기,센서 수정 : OLD( /gsm/{gsm_key}/{controllerId}")
+	//@ApiOperation(value = "구동기 모듈에 해당하는 구동기,센서 수정 : OLD( /gsm/{gsm_key}/{controllerId}")
 	@ResponseBody
 	@InterceptPre
 	public Result<DeviceEnvVO> update(@PathVariable("gsm_key") Long gsmKey, @PathVariable("controllerId") String controllerId, @RequestBody List<DeviceEnvVO> device){
@@ -114,7 +114,7 @@ public class DeviceEnvController {
 	 * @return
 	 */
 	@RequestMapping(value= "/gsm/{gsm_key}/controller/{controllerId}", method = RequestMethod.GET)
-	@ApiOperation(value = "저장된 구동모듈에 해당하는 deviceList 가져오기 : OLD( /gsm/{gsm_key}/list/{controllerId}")
+	//@ApiOperation(value = "저장된 구동모듈에 해당하는 deviceList 가져오기 : OLD( /gsm/{gsm_key}/list/{controllerId}")
 	@ResponseBody
 	public Result<List<DeviceEnvVO>> list( @PathVariable("gsm_key") Long gsmKey, @PathVariable("controllerId") Long controllerId,
 										   @RequestParam(value = "withVDeviceList", required = false) Boolean withVDeviceList) {
@@ -147,7 +147,7 @@ public class DeviceEnvController {
 	 * @return
 	 */
 	@RequestMapping(value= "/gsm/{gsm_key}/controller/{controllerId}", method = RequestMethod.DELETE)
-	@ApiOperation(value = "구동모듈에 해당하는 Device 삭제: OLD( /gsm/{gsm_key}/{controllerId})")
+	//@ApiOperation(value = "구동모듈에 해당하는 Device 삭제: OLD( /gsm/{gsm_key}/{controllerId})")
 	@ResponseBody
 	@InterceptPre
 	public Result<DeviceEnvVO> deleteControllerDeivces(@PathVariable("gsm_key") Long gsmKey,  @PathVariable("controllerId") Long controllerId){
@@ -271,7 +271,7 @@ public class DeviceEnvController {
 	 * @return
 	 */
 	@RequestMapping(value= "/{deviceId}/electricdevices", method = RequestMethod.POST)
-	@ApiOperation(value="전류 감지기 등록")
+	//@ApiOperation(value="전류 감지기 등록")
 	@ResponseBody
 	@InterceptPost
 	public Result<List<EDeviceEnvVO>> insertEDeviceList(@PathVariable("deviceId") Long deviceId, @RequestBody List<EDeviceEnvVO> vo){
@@ -289,7 +289,7 @@ public class DeviceEnvController {
 	 */
 
 	@RequestMapping(value= "/{deviceId}/electricdevice", method = RequestMethod.PUT)
-	@ApiOperation(value="전류 감지기 수정")
+	//@ApiOperation(value="전류 감지기 수정")
 	@ResponseBody
 	@InterceptPre
 	public Result<EDeviceEnvVO> updateEDeviceList(@PathVariable("deviceId") Long deviceId, @RequestBody EDeviceEnvVO vo){
@@ -306,7 +306,7 @@ public class DeviceEnvController {
 	 * @return
 	 */
 	@RequestMapping(value= "/{id}/electricdevice", method = RequestMethod.DELETE)
-	@ApiOperation(value = "전류 감지기 삭제 ")
+	//@ApiOperation(value = "전류 감지기 삭제 ")
 	@ResponseBody
 	@InterceptPre
 	public Result<EDeviceEnvVO> deleteEDevice(@PathVariable("id") Integer id){
@@ -323,7 +323,7 @@ public class DeviceEnvController {
 	 * @return
 	 */
 	@RequestMapping(value= "/{deviceId}/electricdevices", method = RequestMethod.GET)
-	@ApiOperation(value = "전류감지기 조회")
+	//@ApiOperation(value = "전류감지기 조회")
 	@ResponseBody
 	public Result<List<EDeviceEnvVO>> eDeviceList(@PathVariable("deviceId") Long deviceId){
 		try {
@@ -340,7 +340,7 @@ public class DeviceEnvController {
      * @return
      */
     @RequestMapping(value= "/{deviceId}/electricdevices", method = RequestMethod.DELETE)
-	@ApiOperation(value = "Device의 전류 감지기 전체 삭제")
+	//@ApiOperation(value = "Device의 전류 감지기 전체 삭제")
     @ResponseBody
     @InterceptPre
     public Result<EDeviceEnvVO> deleteEDevices(@PathVariable("deviceId") Long deviceId){
