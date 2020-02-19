@@ -13,6 +13,7 @@
 package com.kt.smartfarm.service.impl;
 
 import com.kt.smartfarm.service.DiaryTypePropertiesVO;
+
 import com.kt.smartfarm.service.DiaryTypeService;
 import com.kt.smartfarm.service.DiaryTypeVO;
 import com.kt.smartfarm.supervisor.mapper.DiaryTypeMapper;
@@ -23,7 +24,9 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
+
 import java.util.Objects;
+
 import java.util.stream.Collectors;
 
 
@@ -36,6 +39,7 @@ public class DiaryTypeServiceImpl extends EgovAbstractServiceImpl implements Dia
 	@Override
 	public List<DiaryTypeVO> getDiaryTypeList(Long gsmKey, Long houseId, Long userIdx) {
 		final List<DiaryTypeVO> diaryTypeList = mapper.getDiaryTypeList(gsmKey, houseId, userIdx);
+
 		final List<DiaryTypePropertiesVO> diaryTypePropertyList = mapper.getDiaryTypePropertyList(null);
 		diaryTypeList.forEach( cl ->{
 			try {

@@ -17,7 +17,7 @@ package com.kt.smartfarm.web;
 
 import com.kt.cmmn.util.Result;
 import com.kt.smartfarm.service.*;
-import io.swagger.annotations.ApiOperation;
+//import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +38,7 @@ public class DiaryTypeController {
 	 * @return
 	 */
 	@RequestMapping(value="", method = RequestMethod.GET)
-	@ApiOperation("정의된 일지 목록을 조회합니다.")
+	//@ApiOperation("정의된 일지 목록을 조회합니다.")
 	@ResponseBody
 	public Result<List<DiaryTypeVO>> getDiaryTypeList(@RequestParam(value = "gsmKey", required = false) Long gsmKey, @RequestParam(value = "houseId", required = false) Long houseId, @RequestParam(value = "userIdx", required = false) Long userIdx){
 		try {
@@ -53,7 +53,7 @@ public class DiaryTypeController {
 	 * @return
 	 */
 	@RequestMapping(value= "/{diaryTypeId}/property", method = RequestMethod.GET)
-	@ApiOperation("특정 제어로직에 사용될 프로퍼티 목록을 조회합니다.")
+	//@ApiOperation("특정 제어로직에 사용될 프로퍼티 목록을 조회합니다.")
 	@ResponseBody
 	public Result<List<DiaryTypePropertiesVO>> getDiaryTypePropertyList(@PathVariable("diaryTypeId") Long diaryTypeId){
 		try {
