@@ -7,5 +7,5 @@ import java.util.Map;
 
 public interface DiaryTypeService {
 	List<DiaryTypeVO> getDiaryTypeList(Long gsmKey, Long houseId, Long userIdx);
-	List<Map<String, Object>> getDiaryTypePropertyList(Long diaryTypeId);
+	List<DiaryTypePropertiesVO> getDiaryTypePropertyList(Long diaryTypeId);
 }

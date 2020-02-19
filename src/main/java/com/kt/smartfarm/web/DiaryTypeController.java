@@ -55,7 +55,7 @@ public class DiaryTypeController {
 	@RequestMapping(value= "/{diaryTypeId}/property", method = RequestMethod.GET)
 	@ApiOperation("특정 제어로직에 사용될 프로퍼티 목록을 조회합니다.")
 	@ResponseBody
-	public Result<List<HashMap<String,Object>>> getDiaryTypePropertyList(@PathVariable("diaryTypeId") Long diaryTypeId){
+	public Result<List<DiaryTypePropertiesVO>> getDiaryTypePropertyList(@PathVariable("diaryTypeId") Long diaryTypeId){
 		try {
 			return new Result(service.getDiaryTypePropertyList(diaryTypeId));
 		} catch(Exception e) {

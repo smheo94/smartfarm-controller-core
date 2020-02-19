@@ -25,9 +25,8 @@ public class DiaryTypeVO {
 	String diaryType;
 	String isBaseDiary;
 	String baseDiaryTypeId;
-	List<DiaryDependMclassVO> dependCrops;
-	List<Map<String,Object>> propertyList;
-
+	String userRoleDependType;
+	List<DiaryTypePropertiesVO> propertyList;
 	public Map<String,Object> toMap() {
 		return ClassUtil.toHashMap(this);
 	}
