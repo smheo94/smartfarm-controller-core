@@ -19,6 +19,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.kt.smartfarm.service.ControlLogicDeviceVO;
+import com.kt.smartfarm.service.ControlLogicPropertiesVO;
+import com.kt.smartfarm.service.ControlLogicV2VO;
 import com.kt.smartfarm.service.ControlLogicVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -28,6 +30,8 @@ import org.springframework.stereotype.Repository;
 @Mapper("controlLogicMapper")
 public interface ControlLogicMapper {
 	List<ControlLogicVO> getLogicList();
-	List<ControlLogicDeviceVO> getLogicDeviceList(@Param("logicId") Long logicId);
-	List<HashMap<String,Object>> getLogicPropertyList(@Param("logicId") Long logicId);
+	List<ControlLogicV2VO> getLogicListV2();
+	List<ControlLogicDeviceVO> getLogicDeviceList(@Param("logicId") Integer logicId);
+	List<HashMap<String,Object>> getLogicPropertyList(@Param("logicId") Integer logicId);
+	List<ControlLogicPropertiesVO> getLogicPropertyListV2(@Param("logicId") Integer logicId);
 }

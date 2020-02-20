@@ -55,6 +55,7 @@
     <resultMap id="ControlLogicSettingHistoryMap" type="controlLogicSettingHistoryVO">
         <id column="control_setting_id" property="controlSettingId"/>
         <id column="log_dt" property="logDt"/>
+        <result column="gsm_key" property="gsmKey"/>
         <result column="green_house_id" property="greenHouseId"/>
         <result column="def_logic_id" property="logicId"/>
         <result column="def_logic_name" property="defLogicName"/>
@@ -183,9 +184,9 @@
     </select>
 
     <insert id="insertControlSettingChkConditionDevice" parameterType="controlLogicSettingCheckConditionVO">
-        INSERT INTO control_setting_chk_condition_device (control_setting_chk_condition_id, device_id)
+        INSERT INTO control_setting_chk_condition_device (gsm_key, control_setting_chk_condition_id, device_id)
         <foreach collection="deviceIdList" item="deviceIdList" index="deviceIdList" separator="," open=" VALUES ">
-            ( #{id}, #{deviceIdList} )
+            ( #{tmpGsmKey}, #{id}, #{deviceIdList} )
         </foreach>
     </insert>
     <delete id="deleteControlSettingChkConditionDevice">
@@ -195,17 +196,17 @@
 
 
     <insert id="insertControlSettingChkCondition" parameterType="controlLogicSettingCheckConditionVO" useGeneratedKeys="true">
-        INSERT INTO control_setting_chk_condition (control_setting_id, operator_code, operator_condition, value, action ,id)
-        VALUES( #{controlSettingId}, #{operatorCode}, #{operatorCondition}, #{value}, #{action}
+        INSERT INTO control_setting_chk_condition (gsm_key, control_setting_id, operator_code, operator_condition, value, action ,id)
+        VALUES( #{tmpGsmKey}, #{controlSettingId}, #{operatorCode}, #{operatorCondition}, #{value}, #{action}
         <if test="id == null">
-            ,NEXTVAL(gsm_seq_${tmpGsmKey})
+            ,NEXTVAL_control_setting_chk_condition(#{tmpGsmKey})
         </if>
         <if test="id != null">
             ,#{id}
         </if>
         );
         <selectKey keyProperty="id" resultType="Long" keyColumn="id">
-            SELECT LAST_INSERT_ID() AS id;
+            SELECT LASTVAL_control_setting_chk_condition(#{tmpGsmKey}) AS id;
         </selectKey>
     </insert>
     <update id="updateControlSettingChkCondition" parameterType="controlLogicSettingCheckConditionVO">
@@ -225,17 +226,17 @@
 
 
     <insert id="insertControlSettingDevice" parameterType="controlLogicSettingDeviceVO" useGeneratedKeys="true">
-        INSERT INTO control_setting_device ( control_setting_id, logic_id, device_num, device_insert_order, device_id,id  )
-        VALUES( #{controlSettingId}, #{logicId}, #{deviceNum}, #{deviceInsertOrder}, #{deviceId}
+        INSERT INTO control_setting_device ( gsm_key, control_setting_id, logic_id, device_num, device_insert_order, device_id,id  )
+        VALUES( #{tmpGsmKey}, #{controlSettingId}, #{logicId}, #{deviceNum}, #{deviceInsertOrder}, #{deviceId}
         <if test="id == null">
-            ,NEXTVAL(gsm_seq_${tmpGsmKey})
+            ,NEXTVAL_control_setting_device(#{tmpGsmKey})
         </if>
         <if test="id != null">
             ,#{id}
         </if>
         );
         <selectKey keyProperty="id" resultType="Long" keyColumn="id">
-            SELECT LAST_INSERT_ID() AS id;
+            SELECT LASTVAL_control_setting_device(#{tmpGsmKey}) AS id;
         </selectKey>
     </insert>
     <update id="updateControlSettingDevice" parameterType="controlLogicSettingDeviceVO">
@@ -256,15 +257,18 @@
 
 
     <insert id="insertControlSettingPreOrder" parameterType="controlLogicSettingVO" useGeneratedKeys="true">
-        INSERT INTO control_setting_pre_order (control_setting_id, pre_order_setting_id, id)
-        VALUES( #{controlSettingId}, #{preOrderSettingId}
+        INSERT INTO control_setting_pre_order (gsm_key, control_setting_id, pre_order_setting_id, id)
+        VALUES( #{tmpGsmKey}, #{controlSettingId}, #{preOrderSettingId}
         <if test="id == null">
-            ,NEXTVAL(gsm_seq_${tmpGsmKey})
+            ,NEXTVAL_control_setting_pre_order(#{tmpGsmKey})
         </if>
         <if test="id != null">
             ,#{id}
         </if>
         );
+        <selectKey keyProperty="id" resultType="Long" keyColumn="id">
+            SELECT LASTVAL_control_setting_pre_order(#{tmpGsmKey}) AS id;
+        </selectKey>
     </insert>
     <delete id="deleteControlSettingPreOrder">
         DELETE FROM
@@ -276,16 +280,16 @@
     </delete>
 
     <insert id="insertControlSetting" parameterType="controlLogicSettingVO" useGeneratedKeys="true">
-        INSERT INTO control_setting ( green_house_id, logic_name, logic_id, logic_period_size, logic_env, logic_period_env, create_dt, update_dt,
+        INSERT INTO control_setting ( gsm_key, green_house_id, logic_name, logic_id, logic_period_size, logic_env, logic_period_env, create_dt, update_dt,
         auto_manual_mode, java_class_name,id
         <if test="viewOrder != null">
         , view_order
         </if>
         )
-        VALUES(#{greenHouseId}, #{logicName}, #{logicId}, #{logicPeriodSize}, #{logicEnv}, #{logicPeriodEnv}, NOW(), NOW(),
+        VALUES(#{tmpGsmKey}, #{greenHouseId}, #{logicName}, #{logicId}, #{logicPeriodSize}, #{logicEnv}, #{logicPeriodEnv}, NOW(), NOW(),
         #{autoManualMode}, (SELECT java_class_name FROM control_logic WHERE id = #{logicId} )
         <if test="controlSettingId == null">
-            ,NEXTVAL(gsm_seq_${tmpGsmKey})
+            ,NEXTVAL_control_setting(#{tmpGsmKey})
         </if>
         <if test="controlSettingId != null">
             ,#{controlSettingId}
@@ -295,7 +299,7 @@
         </if>
         );
         <selectKey keyProperty="controlSettingId" resultType="Long" keyColumn="id">
-            SELECT LASTVAL(gsm_seq_${tmpGsmKey}) AS id;
+            SELECT LASTVAL_control_setting(#{tmpGsmKey}) AS id;
         </selectKey>
     </insert>
     <update id="updateControlSetting" parameterType="controlLogicSettingVO">
@@ -353,10 +357,10 @@
 
     <insert id="copyToNewGSMContolSetting">
         INSERT INTO control_setting
-          (id, green_house_id, logic_name, logic_id, logic_period_size, logic_env, logic_period_env, create_dt, update_dt, auto_manual_mode, java_class_name, control_status)
+          (id, gsm_key, green_house_id, logic_name, logic_id, logic_period_size, logic_env, logic_period_env, create_dt, update_dt, auto_manual_mode, java_class_name, control_status, view_order)
         SELECT
-            (${to_gsm_key}  * 100000) + (S.id %  100000), (${to_gsm_key}  * 100000) + (S.green_house_id %  100000),
-               S.logic_name, S.logic_id, S.logic_period_size, S.logic_env, S.logic_period_env, S.create_dt, S.update_dt, S.auto_manual_mode, S.java_class_name, S.control_status
+            (${to_gsm_key}  * 1000000000) + (S.id %  1000000000), #{to_gsm_key},  (${to_gsm_key}  * 1000000000) + (S.green_house_id %  1000000000),
+               S.logic_name, S.logic_id, S.logic_period_size, S.logic_env, S.logic_period_env, S.create_dt, S.update_dt, S.auto_manual_mode, S.java_class_name, S.control_status, view_order
         FROM control_setting S
         INNER JOIN green_house GH ON GH.id = S.green_house_id
         WHERE GH.gsm_key = #{from_gsm_key}
@@ -364,9 +368,10 @@
 
     <insert id="copyToNewGSMContolSettingCheckCondition">
         INSERT INTO control_setting_chk_condition
-          (id, control_setting_id, operator_code, operator_condition, `value`, `action`)
-        SELECT (${to_gsm_key}  * 100000) + (D.id %  100000)
-               ,(${to_gsm_key}  * 100000) + (D.control_setting_id %  100000)
+          (id, gsm_key, control_setting_id, operator_code, operator_condition, `value`, `action`)
+        SELECT (${to_gsm_key}  * 1000000000) + (D.id %  1000000000)
+            ,#{to_gsm_key}
+             ,(${to_gsm_key}  * 1000000000) + (D.control_setting_id %  1000000000)
                ,D.operator_code, D.operator_condition, D.`value`, D.`action`
         FROM control_setting_chk_condition D
           INNER JOIN control_setting S ON  S.id = D.control_setting_id
@@ -375,8 +380,8 @@
     </insert>
 
     <insert id="copyToNewGSMContolSettingCheckConditionDevice">
-        INSERT INTO control_setting_chk_condition_device (control_setting_chk_condition_id, device_id)
-        SELECT (${to_gsm_key}  * 100000) + (D.id %  100000) , (${to_gsm_key}  * 100000) + (CD.device_id %  100000)
+        INSERT INTO control_setting_chk_condition_device (control_setting_chk_condition_id, device_id, gsm_key)
+        SELECT (${to_gsm_key}  * 1000000000) + (D.id %  1000000000) , (${to_gsm_key}  * 1000000000) + (CD.device_id %  1000000000)   ,#{to_gsm_key}
         FROM control_setting_chk_condition D
         INNER JOIN control_setting_chk_condition_device CD ON CD.control_setting_chk_condition_id = D.id
         INNER JOIN control_setting S ON  S.id = D.control_setting_id
@@ -385,19 +390,21 @@
     </insert>
 
     <insert id="copyToNewGSMControlSettingDevice">
-    INSERT INTO control_setting_device ( id, control_setting_id, logic_id, device_num, device_insert_order, device_id)
-    SELECT (${to_gsm_key}  * 100000) + (D.id %  100000),
-    (${to_gsm_key}  * 100000) + (D.control_setting_id %  100000), D.logic_id, D.device_num, D.device_insert_order, (${to_gsm_key}  * 100000) + (D.device_id %  100000)
+    INSERT INTO control_setting_device ( id, gsm_key, control_setting_id, logic_id, device_num, device_insert_order, device_id)
+    SELECT (${to_gsm_key}  * 1000000000) + (D.id %  1000000000),
+            #{to_gsm_key},
+    (${to_gsm_key}  * 1000000000) + (D.control_setting_id %  1000000000), D.logic_id, D.device_num, D.device_insert_order, (${to_gsm_key}  * 1000000000) + (D.device_id %  1000000000)
     FROM control_setting_device D
     INNER JOIN control_setting S ON  S.id = D.control_setting_id
     INNER JOIN green_house GH ON GH.id = S.green_house_id
     WHERE GH.gsm_key = #{from_gsm_key}
     </insert>
     <insert id="copyToNewGSMControlPreOrder">
-    INSERT INTO control_setting_pre_order (id, control_setting_id, pre_order_setting_id)
-    SELECT (${to_gsm_key}  * 100000) + (D.id %  100000),
-           (${to_gsm_key}  * 100000) + (D.control_setting_id %  100000),
-           (${to_gsm_key}  * 100000) + (D.pre_order_setting_id %  100000)
+    INSERT INTO control_setting_pre_order (id, gsm_key, control_setting_id, pre_order_setting_id)
+    SELECT (${to_gsm_key}  * 1000000000) + (D.id %  1000000000),
+           #{to_gsm_key},
+           (${to_gsm_key}  * 1000000000) + (D.control_setting_id %  1000000000),
+           (${to_gsm_key}  * 1000000000) + (D.pre_order_setting_id %  1000000000)
     FROM control_setting_pre_order D
     INNER JOIN control_setting S ON  S.id = D.control_setting_id
     INNER JOIN green_house GH ON GH.id = S.green_house_id

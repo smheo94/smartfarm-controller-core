@@ -25,21 +25,21 @@
 		VALUES (#{gsmKey}, #{controllerInfoId}, #{controllerType}, #{ip},
 		#{port}, #{controllerStatus}, #{description}, '${@com.kt.cmmn.util.MapUtils@toJson(properties)}'
 		<if test="id == null">
-			,NEXTVAL(gsm_seq_${gsmKey})
+			,NEXTVAL_controller(#{gsmKey})
 		</if>
 		<if test="id != null">
 			,#{id}
 		</if>
 		);
 		<selectKey keyProperty="id" resultType="long">
-			SELECT LASTVAL(gsm_seq_${gsmKey}) AS id;
+			SELECT LASTVAL_controller(#{gsmKey}) AS id;
 		</selectKey>
 	</insert>
 
 	<insert id="copyToNewGSM">
 		INSERT INTO controller
 		(gsm_key, controller_info_id, controller_type, ip, `port`, controller_status,description,properties,id	)
-		SELECT #{to_gsm_key}, controller_info_id, controller_type, ip, `port`, controller_status,description,properties,(${to_gsm_key}  * 100000) + (id %  100000)
+		SELECT #{to_gsm_key}, controller_info_id, controller_type, ip, `port`, controller_status,description,properties,(${to_gsm_key}  * 1000000000) + (id %  1000000000)
 		FROM controller WHERE gsm_key = #{from_gsm_key}
 	</insert>
 

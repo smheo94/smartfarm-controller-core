@@ -15,14 +15,8 @@
  */
 package com.kt.smartfarm.web;
 
-import java.util.HashMap;
-import java.util.List;
 import com.kt.cmmn.util.Result;
 import com.kt.smartfarm.service.*;
-
-import javax.annotation.Resource;
-
-//import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,14 +24,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.List;
+
+//import io.swagger.annotations.ApiOperation;
+
 
 @Controller
-@RequestMapping(value={"/controllogic"})
-public class ControlLogicEnvController {
+@RequestMapping(value={"/v2/controllogic"})
+public class ControlLogicEnvV2Controller {
 
 	public static final String DEFAULT_SETUP_FILE_PATH = "data/env-default/";
 	private static final String extraUrl = "";
-	
+
 	@Resource(name = "controlLogicEnvService")
 	private ControlLogicEnvService controlLogicEnvService;
 
@@ -48,25 +48,24 @@ public class ControlLogicEnvController {
 	@RequestMapping(value= "", method = RequestMethod.GET)
 	//@ApiOperation("정의된 제어로직 목록을 조회합니다.")
 	@ResponseBody
-	public Result<List<ControlLogicVO>> list(){
+	public Result<List<ControlLogicV2VO>> list(){
 		try {
-			return new Result(controlLogicEnvService.getAllLogicList());
+			return new Result(controlLogicEnvService.getAllLogicListV2());
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
 	}
 
-
 	/**
 	 * @description 제어로직 프로퍼티 조회
 	 * @return
 	 */
-	@RequestMapping(value= "/{logicId}/controlproperty", method = RequestMethod.GET)
+	@RequestMapping(value= "/{logicId}/ml ", method = RequestMethod.GET)
 	//@ApiOperation("특정 제어로직에 사용될 프로퍼티 목록을 조회합니다.")
 	@ResponseBody
-	public Result<List<HashMap<String,Object>>> getLogicPropertyList(@PathVariable("logicId") Integer logicId){
+	public Result<List<ControlLogicPropertiesVO>> getLogicPropertyList(@PathVariable("logicId") Integer logicId){
 		try {
-			return new Result(controlLogicEnvService.getLogicPropertyList(logicId));
+			return new Result(controlLogicEnvService.getLogicPropertyListV2(logicId));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}

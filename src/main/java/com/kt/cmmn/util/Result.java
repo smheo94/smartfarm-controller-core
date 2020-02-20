@@ -12,7 +12,6 @@ import java.util.Arrays;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 public class Result<T> {

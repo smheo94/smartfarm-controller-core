@@ -130,7 +130,7 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 	@Override
 	public Long insert(GsmEnvVO gsmInfo) {
 		Long gsmKey = gsmEnvMapper.insert(gsmInfo);
-		gsmEnvMapper.createGSMSeq(gsmInfo.getGsmKey());
+		//gsmEnvMapper.createGSMSeq(gsmInfo.getGsmKey());
 		return gsmKey;
 	}
 
@@ -200,8 +200,8 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 
 	@Override
 	public Integer copyToNewGsm(HttpServletRequest request, Long fromGsmKey, Long toGsmKey) {
-		Long setValue = gsmEnvMapper.getNewGSMSeqValue(fromGsmKey, toGsmKey);
-		gsmEnvMapper.setNewGSMSeqKey(toGsmKey, setValue);
+		//Long setValue = gsmEnvMapper.getNewGSMSeqValue(fromGsmKey, toGsmKey);
+		//gsmEnvMapper.setNewGSMSeqKey(toGsmKey, setValue);
         thresholdService.copyToNewGSM(fromGsmKey, toGsmKey);
 
         controllerEnvService.copyToNewGSM(fromGsmKey, toGsmKey);

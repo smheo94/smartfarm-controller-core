@@ -6,9 +6,13 @@ import java.util.List;
 
 public interface ControlLogicEnvService {
 	List<ControlLogicVO> getAllLogicList();
-//	HashMap<String,Object> allList();
+
+	List<ControlLogicV2VO> getAllLogicListV2();
+
+	//	HashMap<String,Object> allList();
 	List<ControlLogicVO> getLogicList();
-	List<ControlLogicDeviceVO> getLogicDeviceList(Long logicId);
-	List<HashMap<String, Object>> getLogicPropertyList(Long logicId);
+	List<ControlLogicDeviceVO> getLogicDeviceList(Integer logicId);
+	List<HashMap<String, Object>> getLogicPropertyList(Integer logicId);
+	List<ControlLogicPropertiesVO> getLogicPropertyListV2(Integer logicId);
 
 }

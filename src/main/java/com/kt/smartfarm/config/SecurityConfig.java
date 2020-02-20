@@ -1,9 +1,16 @@
 package com.kt.smartfarm.config;
 
+//import io.swagger.v3.oas.models.Components;
+//import io.swagger.v3.oas.models.OpenAPI;
+//import io.swagger.v3.oas.models.info.Info;
+//import io.swagger.v3.oas.models.info.License;
+//import io.swagger.v3.oas.models.security.SecurityScheme;
+//import io.swagger.v3.oas.models.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpMethod;
@@ -21,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 @Configuration
 @EnableWebSecurity
 @Slf4j
+
 @PropertySource(value={"classpath:application.properties","file:/myapp/application.properties","file:/home/gsm/v4/conf/smartfarm-mgr-env.properties"}, ignoreResourceNotFound=true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -55,7 +63,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.requestMatcher(new BasicRequestMatcher())
 			.authorizeRequests()
 			.antMatchers(HttpMethod.OPTIONS).permitAll()
-			.antMatchers("/index.jsp", "/swagger-resources/**","/swagger-ui.html",
+			.antMatchers("/swagger-ui/**",  "/v3/api-docs/**", "/index.jsp", "/swagger-resources/**","/swagger-ui.html",
 					"/v2/api-docs", "/webjars/**").permitAll() // Swagger Support
 			.antMatchers("/otp/**", "/userInfo/resetPassword", "/userInfo/device", "/**/openapi/**").permitAll() // OTP 코드 생성, 검증, 비밀번호 변경
 			.anyRequest().authenticated()
@@ -105,6 +113,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	    tokenService.setClientSecret(clientSecret);
 	    return tokenService;
 	}
+//
+//	@Bean
+//	public OpenAPI customOpenAPI() {
+//
+//		return new OpenAPI().components(new Components()
+//				.addSecuritySchemes("basicScheme",
+//						new SecurityScheme().type(SecurityScheme.Type.OAUTH2).scheme("oauth2"))).info(new Info().title("RPA Common API").version("100")).addTagsItem(new Tag().name("mytag"));
+//	}
+//
+//	@Bean
+//	public OpenAPI customOpenAPI(@Value("3.0") String appVersion) {
+//		return new OpenAPI()
+//				.components(new Components().addSecuritySchemes("basicScheme",
+//						new SecurityScheme().type(SecurityScheme.Type.OAUTH2).scheme("oauth2")))
+//				.info(new Info().title("SpringShop API").version(appVersion)
+//						.license(new License().name("Apache 2.0").url("http://springdoc.org")));
+//	}
+
 
 
 }

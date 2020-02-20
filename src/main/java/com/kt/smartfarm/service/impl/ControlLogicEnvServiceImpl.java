@@ -12,12 +12,12 @@
  */
 package com.kt.smartfarm.service.impl;
 
-import com.kt.smartfarm.service.ControlLogicDeviceVO;
-import com.kt.smartfarm.service.ControlLogicEnvService;
-import com.kt.smartfarm.service.ControlLogicVO;
+import com.kt.cmmn.util.ClassUtil;
+import com.kt.smartfarm.service.*;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -42,32 +42,46 @@ public class ControlLogicEnvServiceImpl extends EgovAbstractServiceImpl implemen
 		logicList.forEach( cl ->{
 			try {
 				cl.setControlDeviceList(logicDeviceList.stream().filter(d -> d.getLogicId().equals(cl.getId())).collect(Collectors.toList()));
-				cl.setControlPropertyList(logicPropertyList.stream().filter(m -> m.get("logicId").equals(cl.getId())).collect(Collectors.toList()));
+				cl.setControlPropertyList(logicPropertyList.stream().filter(m -> ClassUtil.castToSomething(m.get("logicId"), Integer.class).equals(cl.getId())).collect(Collectors.toList()));
 			} catch (Exception e) {
 				log.debug(e.getMessage());
 			}
 		});
 		return logicList;
 	}
-//	@Override
-//	public HashMap<String,Object> allList() {
-//		HashMap<String,Object> result = new HashMap<>();
-//		result.put("control_logic", controlLogicMapper.getLogicList());
-//		result.put("control_logic_device", controlLogicMapper.getLogicDeviceList(null));
-//		return result;
-//	}
+	@Override
+	public List<ControlLogicV2VO> getAllLogicListV2() {
+		final List<ControlLogicV2VO> logicList = controlLogicMapper.getLogicListV2();
+		final List<ControlLogicDeviceVO> logicDeviceList = controlLogicMapper.getLogicDeviceList(null);
+		final List<ControlLogicPropertiesVO> logicPropertyList = controlLogicMapper.getLogicPropertyListV2(null);
+		logicList.forEach( cl ->{
+			try {
+				cl.setControlDeviceList(logicDeviceList.stream().filter(d -> d.getLogicId().equals(cl.getId())).collect(Collectors.toList()));
+				cl.setControlPropertyList(logicPropertyList.stream().filter(m -> Objects.equals(m.getLogicId(), cl.getId())).collect(Collectors.toList()));
+			} catch (Exception e) {
+				log.debug(e.getMessage());
+			}
+		});
+		return logicList;
+	}
+
 	@Override
 	public List<ControlLogicVO> getLogicList() {
 		return controlLogicMapper.getLogicList();
 	}
 	@Override
-	public List<ControlLogicDeviceVO> getLogicDeviceList(Long logicId) {
+	public List<ControlLogicDeviceVO> getLogicDeviceList(Integer logicId) {
 		return controlLogicMapper.getLogicDeviceList(logicId);
 	}
 	@Override
-	public List<HashMap<String, Object>> getLogicPropertyList(Long logicId) {
+	public List<HashMap<String, Object>> getLogicPropertyList(Integer logicId) {
 		return controlLogicMapper.getLogicPropertyList(logicId);
 	}
-	
-	
+	@Override
+	public List<ControlLogicPropertiesVO> getLogicPropertyListV2(Integer logicId) {
+		return controlLogicMapper.getLogicPropertyListV2(logicId);
+	}
+
+
+
 }

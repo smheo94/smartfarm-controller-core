@@ -23,6 +23,7 @@
 		
 		<typeAlias alias="categoryEnvVO" type="com.kt.smartfarm.service.CategoryEnvVO"/>
 		<typeAlias alias="controlLogicVO" type="com.kt.smartfarm.service.ControlLogicVO"/>
+		<typeAlias alias="controlLogicV2VO" type="com.kt.smartfarm.service.ControlLogicV2VO"/>
 		<typeAlias alias="controlLogicDeviceVO" type="com.kt.smartfarm.service.ControlLogicDeviceVO"/>
 
         <typeAlias alias="thresholdVO" type="com.kt.smartfarm.service.ThresholdVO"/>

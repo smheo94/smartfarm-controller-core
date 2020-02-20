@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kt.smartfarm.supervisor.mapper.ControlLogicMapper">
+
+	<resultMap id="controlLogicPropertiesMap"
+			   type="com.kt.smartfarm.service.ControlLogicPropertiesVO" autoMapping="true">
+		<result column="properties_json" property="propertiesJson" typeHandler="com.kt.cmmn.util.JsonTypeHandler"/>
+		<result column="depend_device" property="dependDevice" typeHandler="com.kt.cmmn.util.JsonTypeHandler"/>
+	</resultMap>
 	<select id="getLogicList" resultType="controlLogicVO">
 		SELECT 
 			id, 
@@ -59,7 +65,49 @@
 			on_pc AS onPc,
 			on_mobile AS onMobile,
 			on_panel AS onPanel,
-			manual_command_num AS manualCommandNum
+			manual_command_num AS manualCommandNum,
+		    depend_device AS dependDevice
+		FROM control_properties
+		INNER JOIN control_logic_property_lnk clpl ON clpl.properties_id = control_properties.id
+		<where>
+			<if test="logicId != null">
+				AND clpl.logic_id = #{logicId}
+			</if>
+		</where>
+		ORDER BY control_properties.id,is_period, priority
+	</select>
+
+
+	<select id="getLogicListV2" resultType="controlLogicV2VO">
+		SELECT
+			id,
+			name,
+			java_class_name,
+			ui_class_name,
+			description,
+			ui_help,
+			can_multi_logic,
+			default_period_size
+		FROM control_logic
+	</select>
+
+	<select id="getLogicPropertyListV2" resultMap="controlLogicPropertiesMap" >
+		SELECT
+		id,
+		ui_class_name,
+		description,
+		ui_help,
+		properties_json,
+		bootstrap_size,
+		logic_id,
+		properties_id,
+		is_period,
+		priority,
+		on_pc,
+		on_mobile,
+		on_panel,
+		manual_command_num,
+		depend_device
 		FROM control_properties
 		INNER JOIN control_logic_property_lnk clpl ON clpl.properties_id = control_properties.id
 		<where>

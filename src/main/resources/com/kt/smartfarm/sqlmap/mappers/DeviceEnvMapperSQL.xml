@@ -24,14 +24,14 @@
 	  		#{gsmKey}, #{deviceTypeId}, #{deviceTypeIdx} ,#{nickname}, #{deviceTypeNickname}, 0, #{controllerId}, 1, #{modbusAddress1}, #{modbusAddress2}, #{modbusAddress3}
 			,'${@com.kt.cmmn.util.MapUtils@toJson(properties)}'
 		<if test="id == null">
-			,NEXTVAL(gsm_seq_${gsmKey})
+			,NEXTVAL_device(#{gsmKey})
 		</if>
 		<if test="id != null">
 			,#{id}
 		</if>
 		)
 	 	<selectKey keyProperty="id" resultType ="long">
-	   		SELECT LASTVAL(gsm_seq_${gsmKey}) AS id;
+	   		SELECT LASTVAL_device(#{gsmKey}) AS id;
 	    </selectKey>
 	</insert>
 
@@ -150,16 +150,17 @@
 	</select>
 
 	<insert id="insertVDeviceEnv" useGeneratedKeys="true" parameterType="vDeviceEnvVO">
-		INSERT INTO device_v_dep_device(
-			p_device_id, device_num, device_insert_order, device_id
-			<if test="id != null">,id</if>
+		INSERT INTO device_v_dep_device
+		(
+			p_device_id, device_num, device_insert_order, device_id,gsm_key,id
 		)
 		VALUES(
-			#{parentDeviceId}, #{deviceNum}, #{deviceInsertOrder}, #{deviceId}
+			#{parentDeviceId}, #{deviceNum}, #{deviceInsertOrder}, #{deviceId},(SELECT gsm_key FROM device WHERE id = #{deviceId})
+			<if test="id == null">,NEXTVAL_device_v_dep_device((SELECT gsm_key FROM device WHERE id = #{deviceId}))</if>
 			<if test="id != null">,#{id}</if>
 		);
-		<selectKey keyProperty="id" resultType ="int">
-			SELECT LAST_INSERT_ID() AS value;
+		<selectKey keyProperty="id" resultType ="long">
+			SELECT LASTVAL_device_v_dep_device((SELECT gsm_key FROM device WHERE id = #{deviceId})) AS id;
 		</selectKey>
 	</insert>
 
@@ -185,27 +186,38 @@
 		</where>
 	</update>
 
-
-
 	<insert id="copyToNewGSM">
 		INSERT INTO device (
 		gsm_key, device_type_id,device_type_idx, nickname, device_type_nickname, green_house_id, controller_id,  mode, modbus_address1, modbus_address2, modbus_address3
 		, id
 		)
-		SELECT #{to_gsm_key}, device_type_id,device_type_idx, nickname, device_type_nickname, 0, (${to_gsm_key}  * 100000) + (controller_id %  100000) ,  1, modbus_address1, modbus_address2,
+		SELECT #{to_gsm_key}, device_type_id,device_type_idx, nickname, device_type_nickname, 0, (${to_gsm_key}  * 1000000000) + (controller_id %  1000000000) ,  1, modbus_address1, modbus_address2,
 			   modbus_address3
-		, (${to_gsm_key}  * 100000) + (id %  100000)
+		, (${to_gsm_key}  * 1000000000) + (id %  1000000000)
 	  	FROM device
 	    WHERE gsm_key = #{from_gsm_key}
 	</insert>
 
-
 	<insert id="copyToNewGSMVDeviceEnv">
-		INSERT INTO device_v_dep_device(p_device_id, device_num, device_insert_order, device_id)
+		INSERT INTO device_v_dep_device(id, gsm_key,p_device_id, device_num, device_insert_order, device_id)
 		SELECT
-		(${to_gsm_key}  * 100000) + (D.p_device_id %  100000), D.device_num, D.device_insert_order, (${to_gsm_key}  * 100000) + (D.device_id %  100000)
+		(${to_gsm_key}  * 1000000000) + (D.id %  1000000000),
+		#{to_gsm_key},
+		(${to_gsm_key}  * 1000000000) + (D.p_device_id %  1000000000), D.device_num, D.device_insert_order, (${to_gsm_key}  * 1000000000) + (D.device_id %  1000000000)
 		FROM device_v_dep_device D
 	    INNER JOIN device ON device.id = D.p_device_id
+		WHERE device.gsm_key = #{from_gsm_key}
+	</insert>
+
+	<insert id="copyToNewGSMEDeviceEnv">
+		INSERT INTO device_electric_dep_device(id, gsm_key, p_device_id, device_id)
+		SELECT
+			(${to_gsm_key}  * 1000000000) + (D.id %  1000000000),
+			#{to_gsm_key},
+			(${to_gsm_key}  * 1000000000) + (D.p_device_id %  1000000000),
+		       (${to_gsm_key}  * 1000000000) + (D.device_id %  1000000000)
+		FROM device_electric_dep_device D
+				 INNER JOIN device ON device.id = D.p_device_id
 		WHERE device.gsm_key = #{from_gsm_key}
 	</insert>
 
@@ -217,17 +229,18 @@
 		WHERE p_device_id = #{deviceId}
 	</select>
 
-
-
 	<insert id="insertEDeviceEnv" useGeneratedKeys="true" parameterType="eDeviceEnvVO">
 		INSERT INTO device_electric_dep_device(
-		p_device_id, device_id
+		p_device_id, device_id,gsm_key,id
 		)
 		VALUES(
-		#{parentDeviceId}, #{deviceId}
+		#{parentDeviceId}, #{deviceId},(SELECT gsm_key FROM device WHERE id = #{deviceId})
+		<if test="id == null">,NEXTVAL_device_electric_dep_device((SELECT gsm_key FROM device WHERE id = #{deviceId}))</if>
+		<if test="id != null">,#{id}</if>
 		);
-		<selectKey keyProperty="id" resultType ="int">
-			SELECT LAST_INSERT_ID() AS value;
+
+		<selectKey keyProperty="id" resultType ="long">
+			SELECT LASTVAL_device_electric_dep_device((SELECT gsm_key FROM device WHERE id = #{deviceId})) AS id;
 		</selectKey>
 	</insert>
 
@@ -256,6 +269,8 @@
 			where p_device_id=#{parentDeviceId}
 		);
 	</delete>
+
+
 	<!-- yechae -->
 	
 </mapper>

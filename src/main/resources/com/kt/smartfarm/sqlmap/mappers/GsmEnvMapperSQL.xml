@@ -34,7 +34,7 @@
 		CYCLE;
 	</update>
 	<select id="getNewGSMSeqValue" resultType="Long">
-		SELECT (${to_gsm_key} * 100000) + (IFNULL(LASTVAL(gsm_seq_${from_gsm_key}),0) % 100000);
+		SELECT (${to_gsm_key} * 1000000000) + (IFNULL(LASTVAL(gsm_seq_${from_gsm_key}),0) % 1000000000);
 	</select>
 	<select id="setNewGSMSeqKey" resultType="Long">
 		SELECT SETVAL(gsm_seq_${to_gsm_key}, #{set_val} );
