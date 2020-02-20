@@ -160,7 +160,7 @@
 		<if test="green_house_id != null">AND id = #{green_house_id}</if>
 	</select>
 	
-	<select id ="getMappedDevice" resultType="int">
+	<select id ="getMappedDevice" resultType="Long">
 		SELECT d.id as device_id
 		FROM map_green_house_device AS mghd 
 		INNER JOIN device d ON d.id = mghd.device_id
