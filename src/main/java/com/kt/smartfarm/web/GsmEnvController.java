@@ -112,7 +112,7 @@ public class GsmEnvController {
 			if ( gi != null && gi.get("gsmKey") != null ) {
 				return new Result("Duplicate entry", HttpStatus.CONFLICT, gi);
 			}
-			Integer result = gsmEnvService.insert(gsmInfo);
+			Long result = gsmEnvService.insert(gsmInfo);
 			response.setHeader(SmartFarmDataInterceptor.X_HEADER_GSM_KEY, gsmInfo.getGsmKey().toString());
 			return new Result(gsmInfo);
 		} catch(Exception e) {
