@@ -116,9 +116,12 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 	@Override
 	public Map<String, Object> get(Long gsmKey, boolean all, Boolean isSmartfarmSystem) {
 		GsmEnvVO gsmEnv = gsmEnvMapper.getGsmList(gsmKey,null,null,null, null, null).stream().findFirst().orElse(null);
-		Map<String,Object> gsmMap = MapUtils.convertToMap(gsmEnv);
-		List<HashMap<String, Object>> houseList = houseEnvService.list(gsmKey, all, true, isSmartfarmSystem);
-		gsmMap.put("houseList", houseList);
+		Map<String,Object> gsmMap = null;
+		if ( gsmEnv != null ) {
+			gsmMap = MapUtils.convertToMap(gsmEnv);
+			List<HashMap<String, Object>> houseList = houseEnvService.list(gsmKey, all, true, isSmartfarmSystem);
+			gsmMap.put("houseList", houseList);
+		}
 		return gsmMap;
 	}
 

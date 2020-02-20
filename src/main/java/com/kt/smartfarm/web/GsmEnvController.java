@@ -18,6 +18,7 @@ package com.kt.smartfarm.web;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.kt.cmmn.util.InterceptIgnoreGSMKey;
 import com.kt.cmmn.util.InterceptPost;
@@ -106,6 +107,10 @@ public class GsmEnvController {
 		try {
 			if( !authCheckService.authCheck(gsmInfo.getGsmKey(), null, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmInfo);
+			}
+			Map gi = gsmEnvService.get(gsmInfo.getGsmKey(), false, false);
+			if ( gi != null && gi.get("gsmKey") != null ) {
+				return new Result("Duplicate entry", HttpStatus.CONFLICT, gi);
 			}
 			Long result = gsmEnvService.insert(gsmInfo);
 			response.setHeader(SmartFarmDataInterceptor.X_HEADER_GSM_KEY, gsmInfo.getGsmKey().toString());
