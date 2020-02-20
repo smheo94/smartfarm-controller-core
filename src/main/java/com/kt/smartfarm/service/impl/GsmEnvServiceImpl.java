@@ -152,7 +152,7 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 		for(Map<String,Object> gsm : gsmList){
 //			Long gsmKey = (Long)gsm.get("gsmKey");
 //			houseList = gsmEnvMapper.getHouseList(gsmKey);
-			Long gsmKey = (Long)gsm.get("gsmKey");
+			Long gsmKey = ClassUtil.castToSomething(gsm.get("gsmKey"), Long.class);
 			List<HashMap<String,Object>> houseList = houseEnvService.list(gsmKey, all, false, isSmartfarmSystem, isCCTVOnly);
 			if( isCCTVOnly && (houseList == null  || houseList.size() == 0 ))  {
 				//CCTV가 없으면 리스트를 줄 필요가 없음

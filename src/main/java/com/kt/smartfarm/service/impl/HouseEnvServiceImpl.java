@@ -100,7 +100,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 		for(int i=0; i<houseDetail.size();i++){
 			List<HashMap<String,Object>> cctvList = new ArrayList<HashMap<String,Object>>();
 			Map<String,Object> houseDetailMap = houseDetail.get(i);
-			Long houseId = (Long)houseDetailMap.get("id");
+			Long houseId = ClassUtil.castToSomething(houseDetailMap.get("id"), Long.class);
 			if( isSmartfarmSystem == false) {
 				cctvList = houseEnvMapper.getCctvList(houseId);
 			}
@@ -188,7 +188,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 					houseMap.put("sunriseInfo", sunriseSunset.getSunriseSunSetMap());
 				}
 				if( isCCTVOnly || detail ) {
-					Long houseId = (Long)houseMap.get("id");
+					Long houseId = ClassUtil.castToSomething(houseMap.get("id"), Long.class);
 					if( isSmartfarmSystem == false) {
 						cctv = houseEnvMapper.getCctvList(houseId);
 					}
@@ -230,11 +230,11 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 	@Override
 	public HashMap<String, Object> insertHouseDeviceMap(HashMap<String, Object> map) {
 		HashMap<String,Object> param = new HashMap<>();
-		Long houseId = (Long) map.get("houseId");
-		List<Long> deviceIds = (List<Long>) map.get("deviceId");
-		for(Long deviceId : deviceIds){
+		Long houseId = ClassUtil.castToSomething(map.get("houseId"), Long.class);
+		List deviceIds = (List) map.get("deviceId");
+		for(Object deviceId : deviceIds){
 			param.put("house_id", houseId);
-			param.put("device_id", deviceId);
+			param.put("device_id", ClassUtil.castToSomething(deviceId, Long.class));
 			houseEnvMapper.insertHouseDeviceMap(param);
 		}		
 		
@@ -279,11 +279,11 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 	@Override
 	public HashMap<String, Object> deleteHouseDeviceMap(HashMap<String, Object> map) {
 		HashMap<String,Object> param = new HashMap<>();
-		Long houseId = (Long) map.get("houseId");
-		List<Long> deviceIds = (List<Long>) map.get("deviceId");
-		for(Long deviceId : deviceIds){
+		Long houseId = ClassUtil.castToSomething(map.get("houseId"), Long.class);
+		List deviceIds = (List) map.get("deviceId");
+		for(Object deviceId : deviceIds){
 			param.put("house_id", houseId);
-			param.put("device_id", deviceId);
+			param.put("device_id", ClassUtil.castToSomething(deviceId, Long.class));
 			houseEnvMapper.deleteHouseDeviceMap(param);
 		}
 		return map;

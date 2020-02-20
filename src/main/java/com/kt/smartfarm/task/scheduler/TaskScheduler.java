@@ -7,6 +7,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import com.kt.cmmn.util.ClassUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -70,7 +71,7 @@ public class TaskScheduler {
 					HashMap<String,Object> gridXY = getGridxy(latitude,longitude);
 					String nx = gridXY.get("x").toString();
 					String ny = gridXY.get("y").toString();
-					Long houseId = (Long)houseList.get(i).get("id");
+					Long houseId = ClassUtil.castToSomething(houseList.get(i).get("id"), Long.class);
 					if(Integer.parseInt(nx) > 0 && Integer.parseInt(ny) >0){
 						try{
 							URL url = new URL(FORECAST_URL
