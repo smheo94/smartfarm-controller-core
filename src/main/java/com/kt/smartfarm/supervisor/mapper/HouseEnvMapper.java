@@ -59,8 +59,8 @@ public interface HouseEnvMapper {
 
 	Integer insertHouseProduct(HouseProductVO vo);
 	Integer updateHouseProduct(HouseProductVO vo);
-	Integer deleteHouseProduct(@Param("gsmKey")Long gsmKey, @Param("green_house_id") Long greenHouseId, @Param("id")Long houseProductId);
-	List<HouseProductVO> listHouseProduct(@Param("gsmKey")Long gsmKey, @Param("green_house_id") Long greenHouseId, @Param("id")Long houseProductId);
+	Integer deleteHouseProduct(@Param("gsmKey")Long gsmKey, @Param("greenHouseId") Long greenHouseId, @Param("id")Long houseProductId);
+	List<HouseProductVO> listHouseProduct(@Param("gsmKey")Long gsmKey, @Param("greenHouseId") Long greenHouseId, @Param("id")Long houseProductId);
 
 	Integer insertForecastData(LinkedHashMap<String, Object> hm);
 	Integer insertSunriseData(HashMap<String, Object> hm);
