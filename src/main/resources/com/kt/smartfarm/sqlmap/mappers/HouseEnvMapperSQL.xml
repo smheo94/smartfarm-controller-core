@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kt.smartfarm.supervisor.mapper.HouseEnvMapper">
-	
+	<resultMap id="houseProductVOMap" type="houseProductVO" autoMapping="true">
+		<result column="properties" property="properties" typeHandler="com.kt.cmmn.util.JsonTypeHandler"/>
+	</resultMap>
 
 	<insert id="insert" useGeneratedKeys="true" parameterType="houseEnvVO">
 		INSERT INTO green_house( 
@@ -21,6 +23,56 @@
 			SELECT LASTVAL_green_house(#{gsmKey}) AS id;
 		</selectKey>
 	</insert>
+
+	<insert id="insertHouseProduct" useGeneratedKeys="true" parameterType="houseProductVO">
+		INSERT INTO green_house_product (
+		 gsm_key, green_house_id, prd_code, start_date, end_date, properties, id,
+		)
+		VALUES
+		(
+		#{gsmKey},#{greenHouseId}, #{prdCode}, #{startDate}, #{endDate}
+		,'${@com.kt.cmmn.util.MapUtils@toJson(properties)}'
+		<if test="id != null and id != -1">
+			,#{id}
+		</if>
+		<if test="id == null or id == -1">
+			,NEXTVAL_green_house_product(#{}gsmKey})
+		</if>
+		);
+		<selectKey keyProperty="id" resultType="long">
+			SELECT LASTVAL_green_house_product(#{gsmKey}) AS id;
+		</selectKey>
+	</insert>
+	<update id="updateHouseProduct" parameterType="houseProductVO">
+		UPDATE green_house_product
+		SET
+		<if test="prd_code != null">,	prd_code = #{prd_code}</if>
+		<if test="start_date != null">,	start_date = #{start_date}</if>
+		<if test="end_date != null">,	end_date = #{end_date}</if>
+		<if test="properties != null">,	properties = '${@com.kt.cmmn.util.MapUtils@toJson(properties)}'</if>
+		WHERE id = #{id};
+	</update>
+
+	<delete id="deleteHouseProduct" parameterType="houseProductVO">
+		DELETE
+		FROM green_house_product
+		<where>
+			<if test="gsmKey != null">gsm_key = #{gsmKey}</if>
+			<if test="greenHouseId != null">AND green_house_id = #{greenHouseId}</if>
+			<if test="id != null">AND id = #{id}</if>
+		</where>
+	</delete>
+	<select id="listHouseProduct" resultMap="houseProductVOMap">
+		SELECT
+			gsm_key, green_house_id, prd_code, start_date, end_date, properties, id
+		FROM green_house_product
+		<where>
+			<if test="gsmKey != null">gsm_key = #{gsmKey}</if>
+			<if test="greenHouseId != null">AND green_house_id = #{greenHouseId}</if>
+			<if test="id != null">AND id = #{id}</if>
+		</where>
+		;
+	</select>
 	
 	<insert id="insertHouseDeviceMap" parameterType="map">		
 		REPLACE INTO map_green_house_device
@@ -414,5 +466,15 @@
 	    FROM map_green_house_device D
 	    INNER JOIN green_house GH on GH.id = D.green_house_id
 	    WHERE GH.gsm_key = #{from_gsm_key};
+	</insert>
+	<insert id="copyToNewGSMHouseProduct">
+		INSERT INTO green_house_product (id, gsm_key, green_house_id, prd_code, start_date, end_date, properties)
+		SELECT   (${to_gsm_key}  * 1000000000) + (id %  1000000000)
+				 ,${to_gsm_key}
+			 	 ,(${to_gsm_key}  * 1000000000) + (green_house_id %  1000000000)
+			, prd_code, start_date, end_date, properties
+		FROM green_house_product D
+				 INNER JOIN green_house GH on GH.id = D.green_house_id
+		WHERE GH.gsm_key = #{from_gsm_key};
 	</insert>
 </mapper>

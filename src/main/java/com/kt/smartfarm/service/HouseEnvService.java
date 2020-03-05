@@ -35,4 +35,14 @@ public interface HouseEnvService {
 	HashMap<String,Object> houseDeviceInfoList(Long houseId);
 
 	Integer copyToNewGSM(Long fromGsmKey, Long toGsmKey);
+
+	List<HouseProductVO> listHouseProduct(Long greenHouseId);
+
+	List<HouseProductVO> insertHouseProducts(List<HouseProductVO> listHouseProduct);
+
+	HouseProductVO insertHouseProduct(HouseProductVO houseProduct);
+
+	HouseProductVO updateHouseProduct(HouseProductVO houseProduct);
+
+	Integer deleteHouseProduct(Long gsmKey, Long houseId, Long houseProductId);
 }

@@ -15,12 +15,7 @@ package com.kt.smartfarm.service.impl;
 import com.kt.cmmn.util.ClassUtil;
 import com.kt.cmmn.util.StringUtil;
 import com.kt.cmmn.util.SunriseSunset;
-import com.kt.smartfarm.service.HouseEnvVO;
-import com.kt.smartfarm.service.ProductVO;
-import com.kt.smartfarm.service.CCTVSettingVO;
-import com.kt.smartfarm.service.ControlLogicSettingVO;
-import com.kt.smartfarm.service.DeviceEnvVO;
-import com.kt.smartfarm.service.HouseEnvService;
+import com.kt.smartfarm.service.*;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
 import java.util.ArrayList;
@@ -156,6 +151,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 				houseMap.put("selectedDeviceList", deviceIds);
 				List<DeviceEnvVO> devices = deviceEnvMapper.list(map);
 				houseMap.put("deviceList", devices);
+				Long houseId = ClassUtil.castToSomething(houseMap.get("id"), Long.class);
 				if( all ) {
 					map.put("deviceIds", deviceIds);
 					if( deviceIds.size() > 0 ) {
@@ -176,6 +172,9 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 
 					List<ControlLogicSettingVO> logicList = houseEnvMapper.getHouseControlSettings(ClassUtil.castToSomething(houseMap.get("id"), Long.class));
 					houseMap.put("logicList", logicList);
+
+					List<HouseProductVO> productList = houseEnvMapper.listHouseProduct(null, null, houseId);
+					houseMap.put("productList", productList);
 				}
 
 				if(detail ) {
@@ -188,7 +187,6 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 					houseMap.put("sunriseInfo", sunriseSunset.getSunriseSunSetMap());
 				}
 				if( isCCTVOnly || detail ) {
-					Long houseId = ClassUtil.castToSomething(houseMap.get("id"), Long.class);
 					if( isSmartfarmSystem == false) {
 						cctv = houseEnvMapper.getCctvList(houseId);
 					}
@@ -258,10 +256,39 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
     @Override
     public Integer copyToNewGSM(Long fromGsmKey, Long toGsmKey) {
         houseEnvMapper.copyToNewGSM(fromGsmKey, toGsmKey);
+        houseEnvMapper.copyToNewGSMHouseProduct(fromGsmKey, toGsmKey);
         return houseEnvMapper.copyToNewGSMMapGreenHouseDevice(fromGsmKey, toGsmKey);
     }
 
-    @Override
+	@Override
+	public List<HouseProductVO> listHouseProduct(Long greenHouseId) {
+		return houseEnvMapper.listHouseProduct(null, greenHouseId , null);
+	}
+
+	@Override
+	public List<HouseProductVO> insertHouseProducts(List<HouseProductVO> listHouseProduct) {
+		listHouseProduct.stream().forEach( h -> houseEnvMapper.insertHouseProduct(h));
+		return listHouseProduct;
+	}
+
+	@Override
+	public HouseProductVO insertHouseProduct(HouseProductVO houseProduct) {
+		houseEnvMapper.insertHouseProduct(houseProduct);
+		return houseProduct;
+	}
+
+	@Override
+	public HouseProductVO updateHouseProduct(HouseProductVO houseProduct) {
+		houseEnvMapper.updateHouseProduct(houseProduct);
+		return houseProduct;
+	}
+
+	@Override
+	public Integer deleteHouseProduct(Long gsmKey, Long houseId, Long houseProductId) {
+		return houseEnvMapper.deleteHouseProduct(gsmKey, houseId, houseProductId);
+	}
+
+	@Override
 	public List<HashMap<String,Object>> groundDeviceList(Long houseId) {
 		List<HashMap<String,Object>> tempDeviceList = new ArrayList<>();
 		List<HashMap<String,Object>> deviceList = new ArrayList<>();

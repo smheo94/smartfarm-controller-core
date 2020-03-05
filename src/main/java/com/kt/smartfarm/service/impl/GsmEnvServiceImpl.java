@@ -229,8 +229,10 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 	private final String DEVICE_ELECTRIC_DEP_INSERT_URL = "/env/device/%s/electricdevices";
 	private final String HOUSE_INSERT_URL = "/env/%s/house";
 	private final String HOUSE_UPDATE_URL = "/env/%s/house";
+	private final String HOUSE_PRODUCT_DELETE_URL = "/env/%s/house/%s/houseProducts";
+	private final String HOUSE_PRODUCT_INSERT_URL = "/env/%s/house/%s/houseProducts";
 	private final String HOUSE_DEVICE_LINK_DELETE_URL = "/env/%s/house/linkDevice";
-	private final String HOUSE_DEVICE_LINK_INSERT_URL = "/env/%s/house/linkDevice";
+	private final String HOUSE_DEVICE_LINK_INSERT_URL =  "/env/%s/house/linkDevice";
 	private final String HOUSE_CONTROL_LOGIC_SETTING_INSERT_URL = "/env/control_logic_setting";
 	private final String HOUSE_CONTROL_LOGIC_SETTING_UPDATE_URL = "/env/control_logic_setting/%s";
 
@@ -253,7 +255,6 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 						if( vDeviceEnvList.size() > 0 ) {
 							sendRestBodyData(request, String.format(DEVICE_RELATION_INSERT_URL, d.getId()), HttpMethod.POST, gsmKey, vDeviceEnvList);
 						}
-
 						final List<EDeviceEnvVO> eDeviceEnvList = deviceEnvService.getEDeviceEnvList(d.getId());
 						if( eDeviceEnvList.size() > 0 ) {
 							sendRestBodyData(request, String.format(DEVICE_ELECTRIC_DEP_INSERT_URL, d.getId()), HttpMethod.POST, gsmKey, eDeviceEnvList);
@@ -277,6 +278,10 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 				sendRestBodyData(request, String.format(HOUSE_DEVICE_LINK_DELETE_URL, gsmKey, houseId), HttpMethod.DELETE, gsmKey, null);
 				sendRestBodyData(request, String.format(HOUSE_DEVICE_LINK_INSERT_URL, gsmKey, houseId), HttpMethod.POST, gsmKey, param);
 
+				List<HouseProductVO> productVOList = (List<HouseProductVO>)houseInfo.get("productList");
+				sendRestBodyData(request, String.format(HOUSE_PRODUCT_DELETE_URL, gsmKey, houseId), HttpMethod.DELETE, gsmKey, null);
+				sendRestBodyData(request, String.format(HOUSE_PRODUCT_INSERT_URL, gsmKey, houseId), HttpMethod.POST, gsmKey, productVOList);
+
 				//제어로직 리스트 내리기
 				final List<ControlLogicSettingVO> logicSetting = controlLogicSettingService.getLogicSetting(gsmKey, houseId, null);
 				logicSetting.forEach( cs -> {
@@ -287,6 +292,64 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 		}
 		return HttpStatus.OK.value();
     }
+
+	@Override
+	public Integer syncToSupervisor(HttpServletRequest request) {
+		Long gsmKey = ClassUtil.castToSomething(smartfarmConfig.GSM_KEY, Long.class);
+		final Map<String, Object> gsmInfo = this.get(gsmKey, true, true);
+		List<Map<String,Object>> houseList = (List<Map<String,Object>>)gsmInfo.get("houseList");
+		//List<Map<String,Object>> controllerList = (List<Map<String,Object>>)gsmInfo.get("controllerList");
+		final List<ControllerEnvVO> contorollerEnvList = controllerEnvService.controllerDeviceList(gsmKey);
+		if( contorollerEnvList != null ) {
+			contorollerEnvList.forEach(c -> {
+				sendRestBodyDataToSupervisor(request, String.format(CONTROLLER_INSERT_URL, gsmKey), HttpMethod.POST, gsmKey, c);
+				sendRestBodyDataToSupervisor(request, String.format(CONTROLLER_UPDATE_URL, gsmKey, c.getId()), HttpMethod.PUT, gsmKey, c);
+				if (c.getDeviceList() != null && c.getDeviceList().size() > 0 ) {
+					sendRestBodyDataToSupervisor(request, String.format(DEVICE_INSERT_URL), HttpMethod.POST, gsmKey, c.getDeviceList());
+					c.getDeviceList().forEach(d -> {
+						sendRestBodyDataToSupervisor(request, String.format(DEVICE_RELATION_DELETE_URL, d.getId()), HttpMethod.DELETE, gsmKey, null);
+						sendRestBodyDataToSupervisor(request, String.format(DEVICE_ELECTRIC_DEP_DELETE_URL, d.getId()), HttpMethod.DELETE, gsmKey, null);
+						final List<VDeviceEnvVO> vDeviceEnvList = deviceEnvService.getVDeviceEnvList(d.getId());
+						if( vDeviceEnvList.size() > 0 ) {
+							sendRestBodyDataToSupervisor(request, String.format(DEVICE_RELATION_INSERT_URL, d.getId()), HttpMethod.POST, gsmKey, vDeviceEnvList);
+						}
+						final List<EDeviceEnvVO> eDeviceEnvList = deviceEnvService.getEDeviceEnvList(d.getId());
+						if( eDeviceEnvList.size() > 0 ) {
+							sendRestBodyDataToSupervisor(request, String.format(DEVICE_ELECTRIC_DEP_INSERT_URL, d.getId()), HttpMethod.POST, gsmKey, eDeviceEnvList);
+						}
+					});
+				}
+			});
+		}
+		if( houseList != null ) {
+			for (int i = 0; i < houseList.size(); i++) {
+				Map<String, Object> houseInfo = houseList.get(i);
+				log.info("House Info : {}", houseInfo);
+				//하우스 목록 내리기
+				Long houseId = ClassUtil.castToSomething(houseInfo.get("id"), Long.class);
+				sendRestBodyDataToSupervisor(request, String.format(HOUSE_INSERT_URL, gsmKey), HttpMethod.POST, gsmKey, houseInfo);
+				sendRestBodyDataToSupervisor(request, String.format(HOUSE_UPDATE_URL, gsmKey), HttpMethod.PUT, gsmKey, houseInfo);
+				//하우스-Device 링크 내리기
+				Map<String,Object> param = new HashMap<>();
+				param.put("houseId", houseInfo.get("id"));
+				param.put("deviceId" , houseInfo.get("selectedDeviceList"));
+				sendRestBodyDataToSupervisor(request, String.format(HOUSE_DEVICE_LINK_DELETE_URL, gsmKey, houseId), HttpMethod.DELETE, gsmKey, null);
+				sendRestBodyDataToSupervisor(request, String.format(HOUSE_DEVICE_LINK_INSERT_URL, gsmKey, houseId), HttpMethod.POST, gsmKey, param);
+
+				List<HouseProductVO> productVOList = (List<HouseProductVO>)houseInfo.get("productList");
+				sendRestBodyDataToSupervisor(request, String.format(HOUSE_PRODUCT_DELETE_URL, gsmKey, houseId), HttpMethod.DELETE, gsmKey, null);
+				sendRestBodyDataToSupervisor(request, String.format(HOUSE_PRODUCT_INSERT_URL, gsmKey, houseId), HttpMethod.POST, gsmKey, productVOList);
+
+				//제어로직 리스트 내리기
+				final List<ControlLogicSettingVO> logicSetting = controlLogicSettingService.getLogicSetting(gsmKey, houseId, null);
+				logicSetting.forEach( cs -> {
+					sendRestBodyDataToSupervisor(request, String.format(HOUSE_CONTROL_LOGIC_SETTING_INSERT_URL), HttpMethod.POST, gsmKey, cs);
+					sendRestBodyDataToSupervisor(request, String.format(HOUSE_CONTROL_LOGIC_SETTING_UPDATE_URL, cs.getControlSettingId()), HttpMethod.PUT, gsmKey, cs);
+				});
+			}
+		}
+		return HttpStatus.OK.value();
+	}
 
 	private ObjectMapper objMapper =  new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	public HttpEntity getHttpEntity(HttpServletRequest request, Long gsmKey, Object data) throws JsonProcessingException {
@@ -325,7 +388,7 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 		}
 		return null;
 	}
-    public HttpEntity sendRestBodyData(HttpServletRequest request, String url, HttpMethod method, Long gsmKey, Object data)  {
+    public HttpEntity sendRestBodyData(HttpServletRequest request, String url, HttpMethod method, Long gsmKey,  Object data)  {
 			final GsmEnvVO gsmEnvVO = this.gsmEnvMapper.get(gsmKey);
 			if (gsmEnvVO == null) {
 				throw new HttpClientErrorException(HttpStatus.NOT_FOUND, NOT_FOUND_GSM_INFO);
@@ -333,6 +396,28 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 			String server = gsmEnvVO.getSystemHost();
 			Integer port = gsmEnvVO.getSystemPort();
 			return sendRestBodyData(request, server, port, url, method, gsmKey, data);
-
 	}
+
+
+	public HttpEntity sendRestBodyDataToSupervisor(HttpServletRequest request, String path, HttpMethod method, Long gsmKey, Object data) {
+		try {
+			URI uri = new URI(smartfarmConfig.ENV_API);
+			uri = UriComponentsBuilder.fromUri(uri).path(path).build(true).toUri();
+			HttpEntity httpEntity = getHttpEntity(request, gsmKey, data);
+			if (httpEntity == null) {
+				return null;
+			}
+			RestTemplate restTemplate = new RestTemplate();
+			restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
+
+			log.debug("sendPost : {} , {}, {}", gsmKey, uri, request.getMethod());
+			final ResponseEntity<ResponseResult> returnValue = restTemplate.exchange(uri, method, httpEntity, ResponseResult.class);
+			return returnValue;
+		} catch(Exception e ) {
+			log.warn("{} - {} , {}, {} :{}",path, method, gsmKey, data,  e);
+		}
+		return null;
+	}
+
+
 }

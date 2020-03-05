@@ -56,7 +56,12 @@ public interface HouseEnvMapper {
 	Integer updateCctv(CCTVSettingVO vo);
 	Integer deleteCctv(Integer cctvId);
 	List<HashMap<String, Object>> getAllList();
-	
+
+	Integer insertHouseProduct(HouseProductVO vo);
+	Integer updateHouseProduct(HouseProductVO vo);
+	Integer deleteHouseProduct(@Param("gsmKey")Long gsmKey, @Param("green_house_id") Long greenHouseId, @Param("id")Long houseProductId);
+	List<HouseProductVO> listHouseProduct(@Param("gsmKey")Long gsmKey, @Param("green_house_id") Long greenHouseId, @Param("id")Long houseProductId);
+
 	Integer insertForecastData(LinkedHashMap<String, Object> hm);
 	Integer insertSunriseData(HashMap<String, Object> hm);
 	
@@ -69,4 +74,5 @@ public interface HouseEnvMapper {
 
 	Integer copyToNewGSM(@Param("from_gsm_key") Long fromGsmKey, @Param("to_gsm_key") Long toGsmKey );
 	Integer copyToNewGSMMapGreenHouseDevice(@Param("from_gsm_key") Long fromGsmKey, @Param("to_gsm_key") Long toGsmKey );
+	Integer copyToNewGSMHouseProduct(@Param("from_gsm_key") Long fromGsmKey, @Param("to_gsm_key") Long toGsmKey );
 }

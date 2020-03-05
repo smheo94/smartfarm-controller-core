@@ -23,7 +23,8 @@ import javax.annotation.Resource;
 @SuppressWarnings("PMD")
 public class SmartfarmInterceptorConfig extends WebMvcConfigurerAdapter {
 
-	
+    @Value("${smartfarm.supervisor.env.api-url:https://apismartfarm.kt.co.kr/env/}")
+    public String ENV_API;
     @Value("${smartfarm.gsm-key}")
     public String GSM_KEY;
     @Value("${smartfarm.system.type}")

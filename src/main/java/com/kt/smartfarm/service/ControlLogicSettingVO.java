@@ -39,6 +39,7 @@ public class ControlLogicSettingVO {
 	public Object sensorData;
 	public Integer defaultPeriodSize;
 	public Integer viewOrder;
+	public String updateSystem;
 	public List<ControlLogicSettingCheckConditionVO> checkConditionList;
 	public List<ControlLogicSettingDeviceVO> deviceList;
 

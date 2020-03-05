@@ -191,6 +191,7 @@ public class HouseEnvController {
 	 */
 	@RequestMapping(value = "/productList", method = RequestMethod.GET)
 	@ResponseBody
+	@Deprecated
 	public Result<List<ProductVO>> selectProductList() {
 		try {
 			return new Result(houseEnvService.selectProductList());
@@ -198,6 +199,91 @@ public class HouseEnvController {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
 	}
+
+
+	@RequestMapping(value = "/{houseId}/houseProduct", method = RequestMethod.GET)
+	@ResponseBody
+	public Result<List<HouseProductVO>> listHouseProduct(@PathVariable("gsm_key") Long gsmKey, @PathVariable("houseId") Long houseId) {
+		try {
+			if( !authCheckService.authCheck(gsmKey, houseId, null, null) ) {
+				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
+			}
+			return new Result(houseEnvService.listHouseProduct(houseId));
+		} catch (Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		}
+	}
+
+	@RequestMapping(value = "/{houseId}/houseProducts", method = RequestMethod.POST)
+	@ResponseBody
+	@InterceptPost
+	public Result<List<HouseProductVO>> insertHouseProducts(@PathVariable("gsm_key") Long gsmKey, @PathVariable("houseId") Long houseId, @RequestBody List<HouseProductVO> listHouseProduct) {
+		try {
+			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
+				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
+			}
+			return new Result(houseEnvService.insertHouseProducts(listHouseProduct));
+		} catch (Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, listHouseProduct);
+		}
+	}
+	@RequestMapping(value = "/{houseId}/houseProduct", method = RequestMethod.POST)
+	@ResponseBody
+	@InterceptPost
+	public Result<HouseEnvVO> insertHouseProduct(@PathVariable("gsm_key") Long gsmKey, @PathVariable("houseId") Long houseId, @RequestBody HouseProductVO houseProduct) {
+		try {
+			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
+				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
+			}
+			return new Result(houseEnvService.insertHouseProduct(houseProduct));
+		} catch (Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, houseProduct);
+		}
+	}
+
+	@RequestMapping(value = "/{houseId}/houseProduct/{id}", method = RequestMethod.PUT)
+	@ResponseBody
+	@InterceptPost
+	public Result<HouseEnvVO> updateHouseProduct(@PathVariable("gsm_key") Long gsmKey, @PathVariable("houseId") Long houseId, @PathVariable("id") Long id, @RequestBody HouseProductVO houseProduct) {
+		try {
+			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
+				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
+			}
+			houseProduct.id = id;
+			return new Result(houseEnvService.updateHouseProduct(houseProduct));
+		} catch (Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, houseProduct);
+		}
+	}
+
+	@RequestMapping(value = "/{houseId}/houseProducts", method = RequestMethod.DELETE)
+	@ResponseBody
+	@InterceptPost
+	public Result<Integer> deleteHouseProducts(@PathVariable("gsm_key") Long gsmKey, @PathVariable("houseId") Long houseId) {
+		try {
+			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
+				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
+			}
+			return new Result(houseEnvService.deleteHouseProduct(null, houseId, null));
+		} catch (Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, houseId);
+		}
+	}
+
+	@RequestMapping(value = "/{houseId}/houseProduct/{id}", method = RequestMethod.DELETE)
+	@ResponseBody
+	@InterceptPost
+	public Result<Integer> deleteHouseProduct(@PathVariable("gsm_key") Long gsmKey, @PathVariable("houseId") Long houseId, @PathVariable("id") Long id) {
+		try {
+			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
+				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
+			}
+			return new Result(houseEnvService.deleteHouseProduct(null, null, id));
+		} catch (Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, id);
+		}
+	}
+
 
 	@RequestMapping(value = "/{houseId}/deviceList", method = RequestMethod.GET)
 	@ResponseBody

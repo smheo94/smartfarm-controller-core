@@ -3,7 +3,7 @@
 <mapper namespace="com.kt.smartfarm.supervisor.mapper.HouseDiaryMapper">
 	<resultMap id="houseDiaryMap" type="houseDiaryVO" autoMapping="true">
 		<id column="id" property="id"/>
-		<result column="work" property="work"/>
+		<result column="diary_data" property="diaryData" typeHandler="com.kt.cmmn.util.JsonTypeHandler"/>
 		<collection property="houseIdList" javaType="java.util.ArrayList"  ofType="Long">
             <result column="house_id_list"></result>
         </collection>
@@ -33,11 +33,12 @@
 	<insert id="insertHouseDiary" useGeneratedKeys="true" parameterType="houseDiaryVO">
 		INSERT INTO house_diary
 			(
-				green_house_id,title,content,work,etc,start_date,end_date,crops,harvest,income,spend,content_type,work_time,cctv_image_url,weather
+				green_house_id,title,content,work,etc,start_date,end_date,crops,harvest,income,spend,content_type,work_time,cctv_image_url,weather,diary_type_id,diary_data
 			)
 		VALUES 
 			(
-				#{greenHouseId},#{title},#{content},#{work},#{etc},#{startDate},#{endDate},#{crops},#{harvest},#{income},#{spend},#{contentType},#{workTime},#{cctvImageUrl},#{weather}
+				#{greenHouseId},#{title},#{content},#{work},#{etc},#{startDate},#{endDate},#{crops},#{harvest},#{income},#{spend},#{contentType},#{workTime},#{cctvImageUrl},#{weather},#{diaryTypeId},
+		'${@com.kt.cmmn.util.MapUtils@toJson(diaryData)}'
 			);
 		<selectKey keyProperty="id" resultType="int">
 		SELECT LAST_INSERT_ID() AS id;
@@ -65,6 +66,8 @@
 		<set>
 			<if test="title != null">title =#{title},</if>
 			<if test="content != null">content =#{content},</if>
+			<if test="diary_type_id != null">diary_type_id =#{diaryTypeId},</if>
+			<if test="diary_data != null">diary_data ='${@com.kt.cmmn.util.MapUtils@toJson(diaryData)}',</if>
 			<if test="work != null">work =#{work},</if>
 			<if test="etc != null">etc =#{etc},</if>
 			<if test="startDate != null">start_date =#{startDate},</if>
@@ -86,6 +89,8 @@
 			hdm.green_house_id AS house_id_list,
 			hd.title,
 			hd.content,
+		    hd.diary_type_id,
+			hd.diary_data,
 			hd.work,
 			hd.etc,
 			hd.start_date,
@@ -165,6 +170,8 @@
 			hd.work,
 			hd.etc,
 			hd.start_date,
+			hd.diary_type_id,
+			hd.diary_data,
 			hd.end_date,
 			hd.crops,
 			hd.harvest,

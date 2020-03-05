@@ -18,9 +18,12 @@ package com.kt.smartfarm.web;
 import com.kt.cmmn.util.InterceptPost;
 import com.kt.cmmn.util.InterceptPre;
 import com.kt.cmmn.util.Result;
+import com.kt.smartfarm.config.SmartfarmInterceptorConfig;
 import com.kt.smartfarm.service.AuthCheckService;
 import com.kt.smartfarm.service.ControlLogicSettingService;
 import com.kt.smartfarm.service.ControlLogicSettingVO;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +45,9 @@ public class ControlLogicSettingController {
 
 	@Resource(name="authCheckService")
 	private AuthCheckService authCheckService;
+
+	@Autowired
+	SmartfarmInterceptorConfig config;
 
 	@RequestMapping(value = "/gsm/{gsmKey}/house/{houseId}", method = RequestMethod.GET)
 	@ResponseBody
@@ -109,6 +115,9 @@ public class ControlLogicSettingController {
 	@InterceptPost
 	public Result<ControlLogicSettingVO> insert(@RequestBody ControlLogicSettingVO vo) {
 		try {
+		    if(StringUtils.isEmpty(vo.updateSystem)) {
+		        vo.updateSystem = config.SYSTEM_TYPE;
+            }
 			if( !authCheckService.authCheck(null, vo.getGreenHouseId(), null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, vo);
 			}
@@ -126,6 +135,7 @@ public class ControlLogicSettingController {
             if( voList.get(0) == null ) {
                 return new Result("Not Allowed", HttpStatus.FORBIDDEN, null);
             }
+			voList.stream().filter(s -> StringUtils.isEmpty(s.updateSystem)).forEach(s -> s.updateSystem = config.SYSTEM_TYPE );
             List<ControlLogicSettingVO> resultList = new ArrayList<>();
             voList.stream().forEach( vo -> resultList.add(service.insertLogicSetting(vo)));
             return new Result(resultList);
@@ -143,6 +153,7 @@ public class ControlLogicSettingController {
             if( voList.get(0) == null ) {
                 return new Result("Not Allowed", HttpStatus.FORBIDDEN, null);
             }
+			voList.stream().filter(s -> StringUtils.isEmpty(s.updateSystem)).forEach(s -> s.updateSystem = config.SYSTEM_TYPE );
             List<ControlLogicSettingVO> resultList = new ArrayList<>();
             voList.stream().forEach( vo -> resultList.add(service.updateLogicSetting(vo)));
             return new Result(resultList);
@@ -158,6 +169,9 @@ public class ControlLogicSettingController {
 		try {
 			if( !authCheckService.authCheck(null, vo.getGreenHouseId(), null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, vo);
+			}
+			if(StringUtils.isEmpty(vo.updateSystem)) {
+				vo.updateSystem = config.SYSTEM_TYPE;
 			}
 			return new Result(service.updateLogicSetting(vo));
 		} catch (Exception e) {

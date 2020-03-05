@@ -305,11 +305,19 @@
     <update id="updateControlSetting" parameterType="controlLogicSettingVO">
         update
             control_setting
-        set logic_name = #{logicName}, logic_id = #{logicId}, logic_period_size = #{logicPeriodSize}, logic_env = #{logicEnv}
-                , logic_period_env = #{logicPeriodEnv},  update_dt = NOW(), auto_manual_mode = #{autoManualMode}
-        <if test="viewOrder != null">
+        <set>
+            <if test="logicName != null">logic_name = #{logicName}</if>
+            <if test="logicId != null">  , logic_id = #{logicId}</if>
+            <if test="logicPeriodSize != null">, logic_period_size = #{logicPeriodSize}</if>
+            <if test="logicEnv != null">, logic_env = #{logicEnv}</if>
+            <if test="logicPeriodEnv != null">, logic_period_env = #{logicPeriodEnv}</if>
+            <if test="autoManualMode != null">, auto_manual_mode = #{autoManualMode}</if>
+            ,  update_dt = NOW()
+            <if test="viewOrder != null">
             , view_order = #{viewOrder}
-        </if>
+            </if>
+            ,update_system = #{updateSystem}
+        </set>
         where id = #{controlSettingId};
     </update>
     <delete id="deleteControlSetting">
@@ -339,6 +347,7 @@
                     CONCAT( '$.', #{logic_period_env_column} ) , #{logic_period_env_value}
                 </foreach>
             </if>
+
         </set>
         WHERE id = #{control_setting_id};
     </update>
