@@ -3,6 +3,7 @@ package com.kt.smartfarm.intercepter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kt.cmmn.util.*;
+import com.kt.smartfarm.service.GsmEnvService;
 import com.kt.smartfarm.supervisor.mapper.GsmEnvMapper;
 
 import com.kt.smartfarm.message.ApplicationMessage;
@@ -45,13 +46,14 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
     Boolean isSmartfarmSystem;
     String myGSMKey;
     String proxySubPath;
-    GsmEnvMapper gsmEnvMapper;
-    public SmartFarmDataInterceptor(Boolean isSmartfarmSystem, String proxySubPath, String myGSMKey, GsmEnvMapper gsmMapper) {
+    GsmEnvService gsmEnvService;
+    //GsmEnvMapper gsmEnvMapper;
+    public SmartFarmDataInterceptor(Boolean isSmartfarmSystem, String proxySubPath, String myGSMKey, GsmEnvService gsmEnvService) {
         this.isSmartfarmSystem = isSmartfarmSystem;
 //        this.myGSMKey = "3785";
         this.proxySubPath = proxySubPath;
         this.myGSMKey = myGSMKey;
-        this.gsmEnvMapper = gsmMapper;
+        this.gsmEnvService = gsmEnvService;
     }
 
     public boolean startTran = false;
@@ -244,8 +246,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
     public ResponseEntity<ResponseResult> sendProxyRequest(Long gsmKey, Class annotationClass, HttpServletRequest request, HttpServletResponse response) throws URISyntaxException,
             IOException,
             HttpStatusCodeException {
-
-        final GsmEnvVO gsmEnvVO = this.gsmEnvMapper.get(gsmKey);
+        final GsmEnvVO gsmEnvVO = this.gsmEnvService.get(gsmKey, false);
         if( gsmEnvVO == null ) {
             throw new HttpClientErrorException( HttpStatus.NOT_FOUND, NOT_FOUND_GSM_INFO);
         }

@@ -300,12 +300,14 @@
 	
 	<insert id="insertCCTVSetting" parameterType="cctv" useGeneratedKeys="true">
 		INSERT INTO	cctv	
-           ( house_id, cctv_name, cctv_uid, cctv_pwd, cctv_ws_url, cctv_rtsp_url, is_rtsp_play, enable_ptz, wowza_id)
+           ( house_id, cctv_name, cctv_uid, cctv_pwd, cctv_ws_url, cctv_rtsp_url, is_rtsp_play, enable_ptz, wowza_id, is_mini_vms, mini_vms_url, mini_vms_idx)
 		VALUES(
 			#{houseId},#{cctvName},#{cctvUid},#{cctvPwd},#{cctvWsUrl},#{cctvRtspUrl},
 			IF( #{isRtspPlay} IS NULL, 0, IF(#{isRtspPlay} = 'true', 1, IF( #{isRtspPlay} = 'false' , 0, #{isRtspPlay}))),
 			IF( #{enablePtz} IS NULL, 0, IF(#{enablePtz} = 'true', 1, IF( #{enablePtz} = 'false' , 0, #{enablePtz}))),
-			IF( #{wowzaId} IS NULL , 1, #{wowzaId})
+			IF( #{wowzaId} IS NULL , 1, #{wowzaId}),
+			IF( #{isMiniVms} IS NULL, 0, IF(#{isMiniVms} = 'true', 1, IF( #{isMiniVms} = 'false' , 0, #{isMiniVms}))),
+		    #{miniVmsUrl},#{miniVmsIdx}
 		)
 		<selectKey keyProperty="id" resultType="int">
 			SELECT LAST_INSERT_ID() AS id;
@@ -321,28 +323,47 @@
 			cctv_pwd as cctvPwd,
 			cctv_ws_url as cctvWsUrl,
 			cctv_rtsp_url as cctvRtspUrl,
+			mini_vms_url as miniVmsUrl,
+			40000 as miniVmsApiPort,
+			40001 as miniVmsStreamPort,
+			mini_vms_idx as miniVmsIdx,
+			rtc_stream_hash as rtcStreamHash,
 			is_rtsp_play as isRtspPlay,
+			is_mini_vms as isMiniVms,
 			enable_ptz as enablePtz,
 			wowza_id as wowzaId,
 			stream_url as wowzaStreamUrl,
 			rest_url as wowzaRestUrl
 		FROM cctv as cctv
+		INNER JOIN green_house as gh on gh.id = cctv.house_id
+		INNER JOIN gsm_info as gi on gi.gsm_key = gh.gsm_key
 		LEFT OUTER JOIN wowza as wowza on cctv.wowza_id = wowza.id
 		WHERE house_id =#{houseId}
 	</select>
 	
 	<update id="updateCctv" parameterType="cctv">
 		UPDATE cctv
-		SET
+		<set>
 			<if test="cctvName != null"> cctv_name = #{cctvName}</if>
 			<if test="cctvUid != null">, cctv_uid = #{cctvUid}</if>
 			<if test="cctvPwd != null">, cctv_pwd = #{cctvPwd}</if>
 			<if test="cctvWsUrl != null">, cctv_ws_url = #{cctvWsUrl}</if>
 			<if test="cctvRtspUrl != null">, cctv_rtsp_url = #{cctvRtspUrl}</if>
+			<if test="miniVmsUrl != null">, mini_vms_url = #{miniVmsUrl}</if>
+			<if test="miniVmsIdx != null">, mini_vms_idx = #{miniVmsIdx}</if>
 			<if test="isRtspPlay != null">, is_rtsp_play = IF(#{isRtspPlay} = 'true', 1, IF( #{isRtspPlay} = 'false' , 0, #{isRtspPlay}))</if>
+			<if test="isMiniVms != null">, IF( #{isMiniVms} IS NULL, 0, IF(#{isMiniVms} = 'true', 1, IF( #{isMiniVms} = 'false' , 0, #{isMiniVms})))</if>
 			<if test="enablePtz != null">, enable_ptz = IF(#{enablePtz} = 'true', 1, IF( #{enablePtz} = 'false' , 0, #{enablePtz}))</if>
 			<if test="wowzaId != null">, wowza_id = #{wowzaId}</if>
+		</set>
 		WHERE house_id = #{houseId} AND id = #{id};				
+	</update>
+
+	<update id="updateMiniVmsHash" parameterType="cctvMiniVMSVO">
+		UPDATE cctv c
+			INNER JOIN green_house as gh on gh.id = c.house_id
+		SET  c.rtc_stream_hash = #{rtcStreamHash}
+		WHERE gh.gsm_key = #{gsmKey} AND c.mini_vms_idx = #{miniVmsIdx}
 	</update>
 	
 	<delete id='deleteCctv'>

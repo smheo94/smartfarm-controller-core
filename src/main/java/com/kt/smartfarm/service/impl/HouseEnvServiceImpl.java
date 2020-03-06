@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kt.smartfarm.supervisor.mapper.ControlLogicSettingMapper;
@@ -39,6 +40,7 @@ import javax.annotation.Resource;
 @Service("houseEnvService")
 public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements HouseEnvService {
 	private static final Logger log = LoggerFactory.getLogger(HouseEnvServiceImpl.class);
+
 	@Resource(name="houseEnvMapper")
 	HouseEnvMapper houseEnvMapper;
 	
@@ -97,7 +99,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 			Map<String,Object> houseDetailMap = houseDetail.get(i);
 			Long houseId = ClassUtil.castToSomething(houseDetailMap.get("id"), Long.class);
 			if( isSmartfarmSystem == false) {
-				cctvList = houseEnvMapper.getCctvList(houseId);
+				cctvList = getCCTVList(houseId);
 			}
 			houseDetailMap.put("cctvList", cctvList);
 			Double latitude = (Double)houseDetailMap.get("latitude");
@@ -128,6 +130,16 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 		result.put("logicList", logicList);
 		
 		return result;
+	}
+	@Override
+	public Integer updateMiniVmsHash(List<CCTVMiniVMSVO> miniVmsList) {
+		miniVmsList.stream().forEach(v -> houseEnvMapper.updateMiniVmsHash(v));
+		return 0;
+	}
+
+	public List<HashMap<String, Object>> getCCTVList(Long houseId) {
+		List<HashMap<String, Object>> cctvList = houseEnvMapper.getCctvList(houseId);
+		return cctvList;
 	}
 	public List<HashMap<String, Object>> list(Long gsmKey, boolean all, boolean detail, Boolean isSmartfarmSystem) {
 		return list(gsmKey, all, detail, isSmartfarmSystem, false);
@@ -188,7 +200,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 				}
 				if( isCCTVOnly || detail ) {
 					if( isSmartfarmSystem == false) {
-						cctv = houseEnvMapper.getCctvList(houseId);
+						cctv = getCCTVList(houseId);
 					}
 					houseMap.put("cctvList",cctv);
 				}
@@ -415,7 +427,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 
 	@Override
 	public List<HashMap<String, Object>> getCctvsByHouseId(Long houseId) {
-		return houseEnvMapper.getCctvList(houseId);
+		return getCCTVList(houseId);
 	}
 
 	@Override

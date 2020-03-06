@@ -35,7 +35,6 @@ import javax.servlet.http.HttpServletResponse;
 //import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -293,24 +292,12 @@ public class GsmEnvController {
 	@ResponseBody
 	public Result userRegistGSM(@RequestBody HashMap<String,Object> param, @PathVariable Long gsmKey){
 		try {
-			return new Result(gsmEnvService.userRegistGSM(param,gsmKey));
+			return new Result(gsmEnvService.userRegisterGSM(param,gsmKey));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
 	}
-//	
-//	@RequestMapping(value= "/user/{userInfoId}", method = RequestMethod.GET)
-//	@ApiOperation("userInfoId로 제어기 조회.")
-//	@ResponseBody
-//	public Result getGsmInfoByUser(@PathVariable("userInfoId") Integer userInfoId){
-//		try {		    
-//			return new Result<List<GsmEnvVO>>(gsmEnvService.getGsmInfoByUser(userInfoId));
-//		} catch(Exception e) {
-//			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
-//		}
-//	}
-//	
-	
+
 	@RequestMapping(value= "/threshold", method = RequestMethod.POST)	
 	@ResponseBody
 	@InterceptPost

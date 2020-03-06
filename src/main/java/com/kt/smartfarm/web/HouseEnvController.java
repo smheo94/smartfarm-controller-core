@@ -52,9 +52,7 @@ public class HouseEnvController {
 	SmartfarmInterceptorConfig config;
 	/**
 	 * @description 온실 등록 ( 제어기 선택은 어디서? 밑에서~ )
-	 * @param request
 	 * @param gsmKey
-	 * @param device
 	 * @return
 	 */
 	@RequestMapping(value = "", method = RequestMethod.POST)
@@ -384,6 +382,17 @@ public class HouseEnvController {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, houseId);
 			}
 			return new Result(houseEnvService.getCctvsByHouseId(houseId));
+		} catch (Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		}
+	}
+	// CCTV UPDATE
+	@RequestMapping(value = "/cctv/minivms", method = RequestMethod.PUT)
+	@ResponseBody
+	public Result<CCTVSettingVO> updateCctvMiniVms(@PathVariable("gsm_key") Long gsmKey, @RequestBody List<CCTVMiniVMSVO> miniVmsList) {
+		try {
+			miniVmsList.stream().forEach(v -> v.gsmKey = gsmKey);
+			return new Result(houseEnvService.updateMiniVmsHash(miniVmsList));
 		} catch (Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}

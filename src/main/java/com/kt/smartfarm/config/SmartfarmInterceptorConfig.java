@@ -1,5 +1,6 @@
 package com.kt.smartfarm.config;
 
+import com.kt.smartfarm.service.GsmEnvService;
 import com.kt.smartfarm.supervisor.mapper.GsmEnvMapper;
 import com.kt.cmmn.SystemType;
 import com.kt.smartfarm.intercepter.SmartFarmDataInterceptor;
@@ -35,9 +36,11 @@ public class SmartfarmInterceptorConfig extends WebMvcConfigurerAdapter {
     private String DB_URL;
 //    @Value("${variable.secret.var}")
 //    private String pass;
-    @Resource(name="gsmEnvMapper")
-    GsmEnvMapper gsmMapper;
+//    @Resource(name="gsmEnvMapper")
+//    GsmEnvMapper gsmMapper;
 
+    @Autowired
+    GsmEnvService gsmEnvService;
 
 
     public Boolean isSmartfarmSystem() {
@@ -49,7 +52,7 @@ public class SmartfarmInterceptorConfig extends WebMvcConfigurerAdapter {
     public void addInterceptors(InterceptorRegistry registry) {
         log.info("Load Config : {}, {}, {}", GSM_KEY, SYSTEM_TYPE, DB_URL);
 //        System.out.println("PASS */* = " + pass);
-        registry.addInterceptor(new SmartFarmDataInterceptor(isSmartfarmSystem(), PROXY_SUB_PATH, GSM_KEY, gsmMapper)).addPathPatterns("/**");
+        registry.addInterceptor(new SmartFarmDataInterceptor(isSmartfarmSystem(), PROXY_SUB_PATH, GSM_KEY, gsmEnvService)).addPathPatterns("/**");
 //        registry.addInterceptor(new SmartFarmDataInterceptor(SYSTEM_TYPE, GSM_KEY, gsmMapper)).addPathPatterns("/**");
     }
 

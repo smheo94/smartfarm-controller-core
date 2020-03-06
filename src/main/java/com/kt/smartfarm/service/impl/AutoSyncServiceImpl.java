@@ -36,8 +36,6 @@ import java.util.*;
 @Service("autoSyncService")
 public class AutoSyncServiceImpl extends EgovAbstractServiceImpl implements AutoSyncService {
 
-	@Resource(name="gsmEnvMapper")
-	GsmEnvMapper gsmEnvMapper;
 	@Resource(name="gsmEnvService")
     GsmEnvService gsmEnvService;
 
@@ -57,7 +55,7 @@ public class AutoSyncServiceImpl extends EgovAbstractServiceImpl implements Auto
 
 		final List<ControlLogicSettingVO> logicSettingList = controlLogicSettingService.getLogicSetting(gsmkey, null, null);
 
-		final GsmEnvVO gsmEnvVO = gsmEnvMapper.get(gsmkey);
+		final GsmEnvVO gsmEnvVO = gsmEnvService.get(gsmkey, true);
 		String server  = gsmEnvVO.getSystemHost();
 		Integer port = gsmEnvVO.getSystemPort();
 		try {
