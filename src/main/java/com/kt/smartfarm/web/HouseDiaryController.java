@@ -15,6 +15,7 @@
  */
 package com.kt.smartfarm.web;
 
+import com.kt.cmmn.util.InterceptLog;
 import com.kt.cmmn.util.Result;
 import com.kt.smartfarm.service.*;
 
@@ -74,6 +75,7 @@ public class HouseDiaryController {
 	 */
 	@RequestMapping(value= "", method = RequestMethod.POST)
 	@ResponseBody
+	@InterceptLog
 //	public Result insertDiary(@RequestPart(value="houseDiary", required=false) HouseDiaryVO houseDiaryVO, @RequestPart(value="file", required=false) MultipartFile[] file){
 	public Result insert(@RequestBody HouseDiaryVO houseDiaryVO){
 		try{
@@ -99,6 +101,7 @@ public class HouseDiaryController {
 
 	@RequestMapping(value= "/diaryFile", method = RequestMethod.DELETE, consumes = { "*/*" })
 	@ResponseBody
+	@InterceptLog
 	public Result insertDiaryFile(@RequestParam("content_type") String contentType, @RequestParam("id") Integer id,
 								  @RequestBody FileIdxListVO fileIdList){
 		try{
@@ -128,6 +131,7 @@ public class HouseDiaryController {
 	 */
 	@RequestMapping(value= "/{id}", method = RequestMethod.PUT)
 	@ResponseBody
+	@InterceptLog
 	public Result update(@RequestBody HouseDiaryVO houseDiaryVO){
 		try{
 			return new Result(houseDiaryService.updateHouseDiary(houseDiaryVO));

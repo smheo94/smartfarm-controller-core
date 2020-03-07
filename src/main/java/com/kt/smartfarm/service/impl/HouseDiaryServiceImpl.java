@@ -26,7 +26,6 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 	@Override
 	public HouseDiaryVO insertHouseDiary(HouseDiaryVO houseDiaryVO) {
 		try{
-			log.info("Insert House Diary : {}", houseDiaryVO);
             if( houseDiaryVO.getGreenHouseId() != null && ( houseDiaryVO.getHouseIdList() == null  || houseDiaryVO.getHouseIdList().size() == 0 ) )  {
                 houseDiaryVO.setHouseIdList(Arrays.asList(houseDiaryVO.getGreenHouseId()));
             }
@@ -116,7 +115,6 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 	@Override
 	public HouseDiaryVO updateHouseDiary(HouseDiaryVO houseDiaryVO) {
 		try{
-			log.info("Update House Diary : {}", houseDiaryVO);
 			houseDiaryMapper.updateHouseDiary(houseDiaryVO);
 			HashMap<String,Object> param = new HashMap<>();
 			param.put("id", houseDiaryVO.getId());
@@ -130,7 +128,6 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 	@Override
 	public HouseCropsDiaryVO updateCropsDiary(HouseCropsDiaryVO houseCropsVO) {
 		try{
-
 			log.info("Update Crops Diary : {}", houseCropsVO);
 			houseDiaryMapper.updateCropsDiary(houseCropsVO);
 			HashMap<String,Object> param = new HashMap<>();

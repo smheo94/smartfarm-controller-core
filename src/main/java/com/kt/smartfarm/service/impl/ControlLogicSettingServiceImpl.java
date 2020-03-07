@@ -42,11 +42,6 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 		return mapper.getControlLogicSetting(gsmKey, houseId, controlSettingId, logicId);
 	}
 
-//	@Override
-//	public ControlLogicSettingHistoryVO getControlLogicSettingHIstoryDetail(Long gsmKey, Long houseId, Long controlSettingId, Long logDt) {
-//		return mapper.getControlLogicSettingHistoryDetail(gsmKey, houseId, controlSettingId, logDt);
-//	}
-
 	@Override
 	public List<ControlLogicSettingHistoryVO> getControlLogicSettingHIstoryList(Long gsmKey, Long houseId, Long controlSettingId, Long fromData, Long toDate)
 	{
@@ -56,7 +51,6 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 
 	@Override
 	public ControlLogicSettingVO insertLogicSetting(ControlLogicSettingVO vo) {
-		log.info("Update Logic Setting :{}", vo);
 		Long tempControlSettingId = null;
 		if(vo.getControlSettingId() !=null){
 			tempControlSettingId = vo.getControlSettingId();
@@ -118,7 +112,6 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 
 	@Override
 	public ControlLogicSettingVO updateLogicSetting(ControlLogicSettingVO vo) {
-		log.info("Update Logic Setting :{}", vo);
 		if (vo.getControlSettingId() == null) {
 			return vo;
 		}

@@ -9,6 +9,7 @@ import com.kt.smartfarm.service.GsmEnvVO;
 import com.kt.smartfarm.supervisor.mapper.GsmEnvMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.Charsets;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,13 +65,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
             boolean postIntercept = handlerMethod.getMethod().getAnnotation(InterceptPost.class) != null;
             boolean logIntercept = handlerMethod.getMethod().getAnnotation(InterceptLog.class) != null;
             if (logIntercept) {
-                AuthorityChecker authChecker = new AuthorityChecker();
-                ContentCachingRequestWrapper wrapperRequest = new ContentCachingRequestWrapper(request);
-                String encoding = StringUtils.isBlank(wrapperRequest.getCharacterEncoding()) ? Charsets.toCharset("UTF-8").name() : Charsets.toCharset(wrapperRequest.getCharacterEncoding()).name();
-                //ContentCachingRequestWrapper request = WebUtils.getNativeRequest(request, ContentCachingRequestWrapper.class);
-                String requestBody = new String(wrapperRequest.getContentAsByteArray(), encoding);
-                String requestPath = wrapperRequest.getRequestURI();
-                log.info("{}/{} : {} - {}", authChecker.getName(), authChecker.getRemoteAddr(), requestPath, requestBody);
+                writeAPILog(request);
             }
             if (isSmartfarmSystem) {
                 if (handlerMethod.getMethod().getAnnotation(InterceptIgnoreGSMKey.class) == null && (headerGsmKey == null || !Objects.equals(headerGsmKey, myGSMKey))) {
@@ -111,6 +106,15 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
             }
         }
         return true;
+    }
+
+    private void writeAPILog(HttpServletRequest request) throws IOException {
+        AuthorityChecker authChecker = new AuthorityChecker();
+        String encoding = StringUtils.isBlank(request.getCharacterEncoding()) ? Charsets.toCharset("UTF-8").name() : Charsets.toCharset(request.getCharacterEncoding()).name();
+        //ContentCachingRequestWrapper request = WebUtils.getNativeRequest(request, ContentCachingRequestWrapper.class);
+        String requestBody =  IOUtils.toString(request.getInputStream(), encoding);
+        String requestPath = request.getRequestURI();
+        log.info("{}/{} : {} - {}", authChecker.getName(), authChecker.getRemoteAddr(), requestPath, requestBody);
     }
 
 

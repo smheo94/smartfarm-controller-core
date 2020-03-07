@@ -44,7 +44,6 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 	@Override
 	public List<DeviceEnvVO> insert(List<DeviceEnvVO> device) {
 		try {
-			log.info("Insert List : {}", device);
 			for (DeviceEnvVO vo : device) {
 				log.info("Insert Device : {}", vo);
 				try {
@@ -206,7 +205,6 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 	@Override
 	public VDeviceEnvVO updateVDeviceEnv(VDeviceEnvVO vo) throws HttpStatusCodeException {
 		try {
-			log.info("updateVDeviceEnv :{} ", vo);
 			if( vo.getParentDeviceId()  != null && vo.getDeviceNum()  != null &&  vo.getDeviceInsertOrder()  != null ) {
 				deviceEnvMapper.deleteVDeviceEnv(null, vo.getParentDeviceId(), vo.getDeviceNum(), vo.getDeviceInsertOrder());
 				deviceEnvMapper.insertVDeviceEnv(vo);
@@ -223,7 +221,6 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 	@Override
 	public Integer deleteVDeviceEnv(Integer id, Long pDeviceId, Integer deviceNum, Integer deviceInsertOrder) {
 		try{
-			log.info("deleteVDeviceEnv :{}/{}/{}/{} ", id, pDeviceId, deviceNum, deviceInsertOrder);
 			return deviceEnvMapper.deleteVDeviceEnv(id, pDeviceId, deviceNum, deviceInsertOrder);
 		}catch(Exception e){
 			log.debug(e.getMessage());
@@ -235,7 +232,6 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 	@Override
 	public Integer deleteDevice(Long deviceId) {
 		try {
-			log.info("Delete Device :{}", deviceId);
 			return deviceEnvMapper.deleteDevice(deviceId);
 		} catch (Exception e) {
 			log.debug(e.getMessage());
@@ -277,7 +273,6 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 	@Override
 	public EDeviceEnvVO updateEDeviceEnv(EDeviceEnvVO vo) {
 		try {
-			log.info("updateEDeviceEnv :{} ", vo);
 			return deviceEnvMapper.updateEDeviceEnv(vo);
 		} catch (Exception e) {
 			log.debug(e.getMessage());
@@ -288,7 +283,6 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 	@Override
 	public Integer deleteEDeviceEnv(Integer id) {
 		try {
-			log.info("deleteEDeviceEnv :{} ", id);
 			return deviceEnvMapper.deleteEDeviceEnv(id);
 		} catch (Exception e) {
 			log.debug(e.getMessage());
@@ -299,7 +293,6 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 	@Override
 	public Integer deleteEDevicesEnv(Long parentDeviceId) {
 		try {
-			log.info("deleteEDevicesEnv : pid = {}", parentDeviceId);
 			//수정
 			return deviceEnvMapper.deleteVDevicesEnv(parentDeviceId);
 		} catch (Exception e) {

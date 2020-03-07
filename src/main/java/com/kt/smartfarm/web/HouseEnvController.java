@@ -18,6 +18,7 @@ package com.kt.smartfarm.web;
 import java.util.HashMap;
 import java.util.List;
 
+import com.kt.cmmn.util.InterceptLog;
 import com.kt.cmmn.util.InterceptPost;
 import com.kt.cmmn.util.InterceptPre;
 import com.kt.cmmn.util.Result;
@@ -58,6 +59,7 @@ public class HouseEnvController {
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	@ResponseBody
 	@InterceptPost
+	@InterceptLog
 	public Result<HouseEnvVO> insert(@PathVariable("gsm_key") Long gsmKey, @RequestBody HouseEnvVO house) {
 		try {
 			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
@@ -77,6 +79,7 @@ public class HouseEnvController {
 	@RequestMapping(value = "/linkDevice", method = RequestMethod.POST)
 	@ResponseBody
 	@InterceptPost
+	@InterceptLog
 	public Result<HashMap<String, Object>> houesMapDeviceInsert(@PathVariable("gsm_key") Long gsmKey, @RequestBody HashMap<String, Object> map) {
 		try {
 			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
@@ -96,6 +99,7 @@ public class HouseEnvController {
 	@RequestMapping(value = "/linkDevice", method = RequestMethod.DELETE)
 	@ResponseBody
 	@InterceptPre
+	@InterceptLog
 	public Result<HashMap<String, Object>> houesMapDeviceUpdate(@PathVariable("gsm_key") Long gsmKey, @RequestBody HashMap<String, Object> map) {
 		try {
 			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
@@ -116,6 +120,7 @@ public class HouseEnvController {
 	@RequestMapping(value = "", method = RequestMethod.PUT)
 	@ResponseBody
 	@InterceptPre
+	@InterceptLog
 	public Result<HouseEnvVO> update(@PathVariable("gsm_key") Long gsmKey, @RequestBody HouseEnvVO house) {
 		try {
 			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
@@ -156,6 +161,7 @@ public class HouseEnvController {
 	@RequestMapping(value = "/{greenHouseId}", method = RequestMethod.DELETE)
 	@ResponseBody
 	@InterceptPre
+	@InterceptLog
 	public Result<HouseEnvVO> delete(@PathVariable("gsm_key") Long gsmKey, @PathVariable("greenHouseId") Long greenHouseId) {
 		try {
 			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
@@ -215,6 +221,7 @@ public class HouseEnvController {
 	@RequestMapping(value = "/{houseId}/houseProducts", method = RequestMethod.POST)
 	@ResponseBody
 	@InterceptPost
+	@InterceptLog
 	public Result<List<HouseProductVO>> insertHouseProducts(@PathVariable("gsm_key") Long gsmKey, @PathVariable("houseId") Long houseId, @RequestBody List<HouseProductVO> listHouseProduct) {
 		try {
 			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
@@ -228,6 +235,7 @@ public class HouseEnvController {
 	@RequestMapping(value = "/{houseId}/houseProduct", method = RequestMethod.POST)
 	@ResponseBody
 	@InterceptPost
+	@InterceptLog
 	public Result<HouseEnvVO> insertHouseProduct(@PathVariable("gsm_key") Long gsmKey, @PathVariable("houseId") Long houseId, @RequestBody HouseProductVO houseProduct) {
 		try {
 			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
@@ -242,6 +250,7 @@ public class HouseEnvController {
 	@RequestMapping(value = "/{houseId}/houseProduct/{id}", method = RequestMethod.PUT)
 	@ResponseBody
 	@InterceptPost
+	@InterceptLog
 	public Result<HouseEnvVO> updateHouseProduct(@PathVariable("gsm_key") Long gsmKey, @PathVariable("houseId") Long houseId, @PathVariable("id") Long id, @RequestBody HouseProductVO houseProduct) {
 		try {
 			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
@@ -257,6 +266,7 @@ public class HouseEnvController {
 	@RequestMapping(value = "/{houseId}/houseProducts", method = RequestMethod.DELETE)
 	@ResponseBody
 	@InterceptPost
+	@InterceptLog
 	public Result<Integer> deleteHouseProducts(@PathVariable("gsm_key") Long gsmKey, @PathVariable("houseId") Long houseId) {
 		try {
 			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
@@ -271,6 +281,7 @@ public class HouseEnvController {
 	@RequestMapping(value = "/{houseId}/houseProduct/{id}", method = RequestMethod.DELETE)
 	@ResponseBody
 	@InterceptPost
+	@InterceptLog
 	public Result<Integer> deleteHouseProduct(@PathVariable("gsm_key") Long gsmKey, @PathVariable("houseId") Long houseId, @PathVariable("id") Long id) {
 		try {
 			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
@@ -365,6 +376,7 @@ public class HouseEnvController {
 	@RequestMapping(value = "/cctv", method = RequestMethod.POST)
 	@ResponseBody
 	@InterceptPost
+	@InterceptLog
 	public Result<CCTVSettingVO> insertCctv(@RequestBody CCTVSettingVO cctv) {
 		try {
 			return new Result(houseEnvService.insertCctv(cctv));
@@ -376,7 +388,7 @@ public class HouseEnvController {
 	// CCTV READ
 	@RequestMapping(value = "/{houseId}/cctv", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<List<CCTVSettingVO>> insertCctv(@PathVariable Long houseId) {
+	public Result<List<CCTVSettingVO>> selectCCTV(@PathVariable Long houseId) {
 		try {
 			if( !authCheckService.authCheck(null, houseId, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, houseId);
@@ -389,6 +401,7 @@ public class HouseEnvController {
 	// CCTV UPDATE
 	@RequestMapping(value = "/cctv/minivms", method = RequestMethod.PUT)
 	@ResponseBody
+	@InterceptLog
 	public Result<CCTVSettingVO> updateCctvMiniVms(@PathVariable("gsm_key") Long gsmKey, @RequestBody List<CCTVMiniVMSVO> miniVmsList) {
 		try {
 			miniVmsList.stream().forEach(v -> v.gsmKey = gsmKey);
@@ -402,6 +415,7 @@ public class HouseEnvController {
 	@RequestMapping(value = "/cctv", method = RequestMethod.PUT)
 	@ResponseBody
 	@InterceptPre
+	@InterceptLog
 	public Result<CCTVSettingVO> updateCctv(@RequestBody CCTVSettingVO cctv) {
 		try {
 			return new Result(houseEnvService.updateCctv(cctv));
@@ -414,6 +428,7 @@ public class HouseEnvController {
 	@RequestMapping(value = "/cctv/{cctvId}", method = RequestMethod.DELETE)
 	@ResponseBody
 	@InterceptPre
+	@InterceptLog
 	public Result<HashMap<String, Object>> deleteCctv(@PathVariable("cctvId") Integer cctvId) {
 		try {
 			return new Result(houseEnvService.deleteCctv(cctvId));
