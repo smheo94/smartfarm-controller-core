@@ -24,31 +24,14 @@
                     <version>2.6.1</version>
                 </dependency>
             </dependencies>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-compiler-plugin</artifactId>
-                            <configuration>
-                                <includes>src/main/swagger/**/*.java</includes>
-                                <source>1.8</source>
-                                <target>1.8</target>
-                                <encoding>UTF-8</encoding>
-                            </configuration>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-            </build>
             <properties>
                 <env>dev-center</env>
-            </properties>        
-
-        </profile>
-        <profile>
+            </properties>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
+        </profile>
+        <profile>
             <id>dev-smartfarm</id>
             <build>
                 <pluginManagement>
@@ -57,7 +40,7 @@
                             <groupId>org.apache.maven.plugins</groupId>
                             <artifactId>maven-compiler-plugin</artifactId>
                             <configuration>
-                                <excludes>src/main/swagger/**/*.java</excludes>
+                                <excludes>src/main/com/kt/smartfarm/config/SwaggerConfig.java</excludes>
                                 <source>1.8</source>
                                 <target>1.8</target>
                                 <encoding>UTF-8</encoding>
