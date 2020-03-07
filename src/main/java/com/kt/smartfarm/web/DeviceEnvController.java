@@ -17,6 +17,7 @@ package com.kt.smartfarm.web;
 
 import java.util.List;
 
+import com.kt.cmmn.util.InterceptLog;
 import com.kt.cmmn.util.InterceptPost;
 import com.kt.cmmn.util.InterceptPre;
 import com.kt.cmmn.util.Result;
@@ -55,6 +56,7 @@ public class DeviceEnvController {
 	//@ApiOperation(value = "구동기,센서 등록 : OLD( /gsm/{gsm_key}/")
 	@ResponseBody
 	@InterceptPost
+	@InterceptLog
 	public Result<List<DeviceEnvVO>> insert(@RequestBody List<DeviceEnvVO> device){
 		try {
 			return new Result(deviceEnvService.insert(device));
@@ -96,6 +98,7 @@ public class DeviceEnvController {
 	//@ApiOperation(value = "구동기 모듈에 해당하는 구동기,센서 수정 : OLD( /gsm/{gsm_key}/{controllerId}")
 	@ResponseBody
 	@InterceptPre
+	@InterceptLog
 	public Result<DeviceEnvVO> update(@PathVariable("gsm_key") Long gsmKey, @PathVariable("controllerId") String controllerId, @RequestBody List<DeviceEnvVO> device){
 		try {
 			if( !authCheckService.authCheck(gsmKey, null) ) {
@@ -150,6 +153,7 @@ public class DeviceEnvController {
 	//@ApiOperation(value = "구동모듈에 해당하는 Device 삭제: OLD( /gsm/{gsm_key}/{controllerId})")
 	@ResponseBody
 	@InterceptPre
+	@InterceptLog
 	public Result<DeviceEnvVO> deleteControllerDeivces(@PathVariable("gsm_key") Long gsmKey,  @PathVariable("controllerId") Long controllerId){
 		try {
 			if( !authCheckService.authCheck(gsmKey, null) ) {
@@ -170,6 +174,7 @@ public class DeviceEnvController {
 	//Device Type 별로 입력 @RequestMapping(value= "/vDeviceList", method = RequestMethod.POST)
 	@ResponseBody
 	@InterceptPost
+	@InterceptLog
 	public Result<List<VDeviceEnvVO>> vDeviceList(@PathVariable("deviceId") Long deviceId, @RequestBody List<VDeviceEnvVO> vo){
 		try {
 			vo.stream().forEach(v -> v.setParentDeviceId(deviceId));
@@ -182,6 +187,7 @@ public class DeviceEnvController {
 	@RequestMapping(value= "/{deviceId}/relationdevices", method = RequestMethod.PUT)
 	@ResponseBody
 	@InterceptPre
+	@InterceptLog
 	public Result<VDeviceEnvVO> updateVDeviceList(@PathVariable("deviceId") Long deviceId, @RequestBody VDeviceEnvVO vo){
 		try {
 			vo.setParentDeviceId(deviceId);
@@ -194,6 +200,7 @@ public class DeviceEnvController {
 	@RequestMapping(value= "/{id}/relationdevices", method = RequestMethod.DELETE)
 	@ResponseBody
 	@InterceptPre
+	@InterceptLog
 	public Result<VDeviceEnvVO> deleteVDeviceList(@PathVariable("id") Integer id){
 		try {
 			return new Result(deviceEnvService.deleteVDeviceEnv(id, null, null, null));
@@ -243,6 +250,7 @@ public class DeviceEnvController {
 	@RequestMapping(value= "/{deviceId}", method = RequestMethod.DELETE)
 	@ResponseBody
 	@InterceptPre
+	@InterceptLog
 	public Result<DeviceEnvVO> deleteDevice(@PathVariable("deviceId") Long deviceId, @Param("gsmKey") Long gsmKey){
 		try {
 			if( !authCheckService.authCheck(gsmKey, null) ) {
@@ -292,6 +300,7 @@ public class DeviceEnvController {
 	//@ApiOperation(value="전류 감지기 수정")
 	@ResponseBody
 	@InterceptPre
+	@InterceptLog
 	public Result<EDeviceEnvVO> updateEDeviceList(@PathVariable("deviceId") Long deviceId, @RequestBody EDeviceEnvVO vo){
 		try {
 			return new Result(deviceEnvService.updateEDeviceEnv(vo));
@@ -309,6 +318,7 @@ public class DeviceEnvController {
 	//@ApiOperation(value = "전류 감지기 삭제 ")
 	@ResponseBody
 	@InterceptPre
+	@InterceptLog
 	public Result<EDeviceEnvVO> deleteEDevice(@PathVariable("id") Integer id){
 		try {
 			return new Result(deviceEnvService.deleteEDeviceEnv(id));
@@ -343,6 +353,7 @@ public class DeviceEnvController {
 	//@ApiOperation(value = "Device의 전류 감지기 전체 삭제")
     @ResponseBody
     @InterceptPre
+	@InterceptLog
     public Result<EDeviceEnvVO> deleteEDevices(@PathVariable("deviceId") Long deviceId){
         try {
             return new Result(deviceEnvService.deleteEDevicesEnv(deviceId));

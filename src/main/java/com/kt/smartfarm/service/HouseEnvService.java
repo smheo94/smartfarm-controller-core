@@ -45,4 +45,6 @@ public interface HouseEnvService {
 	HouseProductVO updateHouseProduct(HouseProductVO houseProduct);
 
 	Integer deleteHouseProduct(Long gsmKey, Long houseId, Long houseProductId);
+
+	Integer updateMiniVmsHash(List<CCTVMiniVMSVO> miniVmsList);
 }

@@ -25,10 +25,9 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import javax.servlet.http.HttpServletRequest;
 
+@Slf4j
 @Configuration
 @EnableWebSecurity
-@Slf4j
-
 @PropertySource(value={"classpath:application.properties","file:/myapp/application.properties","file:/home/gsm/v4/conf/smartfarm-mgr-env.properties"}, ignoreResourceNotFound=true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 

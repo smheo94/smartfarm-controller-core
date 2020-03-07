@@ -54,6 +54,7 @@ public interface HouseEnvMapper {
 	Integer insertCCTVSetting(CCTVSettingVO vo);
 	List<HashMap<String, Object>> getCctvList(@Param("houseId")Long houseId);
 	Integer updateCctv(CCTVSettingVO vo);
+	Integer updateMiniVmsHash(CCTVMiniVMSVO v);
 	Integer deleteCctv(Integer cctvId);
 	List<HashMap<String, Object>> getAllList();
 
@@ -75,4 +76,6 @@ public interface HouseEnvMapper {
 	Integer copyToNewGSM(@Param("from_gsm_key") Long fromGsmKey, @Param("to_gsm_key") Long toGsmKey );
 	Integer copyToNewGSMMapGreenHouseDevice(@Param("from_gsm_key") Long fromGsmKey, @Param("to_gsm_key") Long toGsmKey );
 	Integer copyToNewGSMHouseProduct(@Param("from_gsm_key") Long fromGsmKey, @Param("to_gsm_key") Long toGsmKey );
+
+
 }

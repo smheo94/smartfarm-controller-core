@@ -49,7 +49,6 @@ public class ControlLogicSettingTemplateServiceImpl extends EgovAbstractServiceI
 
 	@Override
 	public ControlLogicSettingTemplateVO insertLogicSettingTemplate(ControlLogicSettingTemplateVO vo) {
-		log.info("Update Logic Setting Template:{}", vo);
 		Long tempControlSettingId = null;
 		if(vo.getControlSettingTemplateId() !=null){
 			tempControlSettingId = vo.getControlSettingTemplateId();
@@ -73,7 +72,6 @@ public class ControlLogicSettingTemplateServiceImpl extends EgovAbstractServiceI
 
 	@Override
 	public ControlLogicSettingTemplateVO updateLogicSettingTemplate(ControlLogicSettingTemplateVO vo) {
-		log.info("Update Logic Setting Template:{}", vo);
 		if (vo.getControlSettingTemplateId() == null) {
 			return null;
 		}

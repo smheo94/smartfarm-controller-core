@@ -53,6 +53,7 @@ public class GsmEnvVO {
 	ThresholdVO threshold;
 	Integer device_count;
 	Integer deviceCount;
+	Long readTime;
 
 	Map<String,Object> properties;
 //	String trdPtCompanyName;

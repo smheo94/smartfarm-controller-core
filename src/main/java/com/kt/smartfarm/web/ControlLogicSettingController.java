@@ -15,6 +15,7 @@
  */
 package com.kt.smartfarm.web;
 
+import com.kt.cmmn.util.InterceptLog;
 import com.kt.cmmn.util.InterceptPost;
 import com.kt.cmmn.util.InterceptPre;
 import com.kt.cmmn.util.Result;
@@ -61,10 +62,6 @@ public class ControlLogicSettingController {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
 	}
-
-
-
-
 
 	@RequestMapping(value = "/gsm/{gsmKey}/house/{houseId}/settingId/{controlSettingId}/history", method = RequestMethod.GET)
 	@ResponseBody
@@ -113,6 +110,7 @@ public class ControlLogicSettingController {
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	@ResponseBody
 	@InterceptPost
+	@InterceptLog
 	public Result<ControlLogicSettingVO> insert(@RequestBody ControlLogicSettingVO vo) {
 		try {
 		    if(StringUtils.isEmpty(vo.updateSystem)) {
@@ -130,6 +128,7 @@ public class ControlLogicSettingController {
     @RequestMapping(value = "/new_list", method = RequestMethod.POST)
     @ResponseBody
     @InterceptPost
+	@InterceptLog
     public Result<List<ControlLogicSettingVO>> insert(@RequestBody List<ControlLogicSettingVO> voList) {
         try {
             if( voList.get(0) == null ) {
@@ -148,6 +147,7 @@ public class ControlLogicSettingController {
     @RequestMapping(value = "/update_list", method = RequestMethod.PUT)
     @ResponseBody
     @InterceptPost
+	@InterceptLog
     public Result<List<ControlLogicSettingVO>> update(@RequestBody List<ControlLogicSettingVO> voList) {
         try {
             if( voList.get(0) == null ) {
@@ -165,6 +165,7 @@ public class ControlLogicSettingController {
 	@RequestMapping(value = "/{controlSettingId}", method = RequestMethod.PUT)
 	@ResponseBody
 	@InterceptPost
+	@InterceptLog
 	public Result<ControlLogicSettingVO> update(@PathVariable("controlSettingId") Long controlSettingId, @RequestBody ControlLogicSettingVO vo) {
 		try {
 			if( !authCheckService.authCheck(null, vo.getGreenHouseId(), null, null) ) {
@@ -182,6 +183,7 @@ public class ControlLogicSettingController {
 	@RequestMapping(value = "/{controlSettingId}/env_upudate", method = RequestMethod.PUT)
 	@ResponseBody
 	@InterceptPre
+	@InterceptLog
 	public Result<String> updateEnv(@PathVariable("controlSettingId") Long controlSettingId, @RequestBody Map<String, Object> param) {
 		try {
 			service.updateLogicSettingEnv(param);
@@ -195,6 +197,7 @@ public class ControlLogicSettingController {
 	@RequestMapping(value = "/{controlSettingId}/logic_env_update", method = RequestMethod.PUT)
 	@ResponseBody
 	@InterceptPre
+	@InterceptLog
 	public Result<String> updateLogicEnv(@PathVariable("controlSettingId") Long controlSettingId, @RequestBody Map<String, Object> param) {
 		try {
 			//logic_env, period_env, update_dt, auto_manual_mode
@@ -219,6 +222,7 @@ public class ControlLogicSettingController {
 	@RequestMapping(value = "/{controlSettingId}", method = RequestMethod.DELETE)
 	@ResponseBody
 	@InterceptPre
+	@InterceptLog
 	public Result<Integer> delete(@PathVariable("controlSettingId") Long controlSettingId) {
 		try {
 			return new Result(service.delLogicSetting(controlSettingId));
@@ -230,6 +234,7 @@ public class ControlLogicSettingController {
 	@RequestMapping(value = "/chkCondition/{chkConditionId}", method = RequestMethod.DELETE)
 	@ResponseBody
 	@InterceptPre
+	@InterceptLog
 	public Result<Integer> deleteChkCondition(@PathVariable("chkConditionId") Long chkConditionId) {
 		try {
 			return new Result(service.delChkConditionSetting(chkConditionId));
@@ -241,6 +246,7 @@ public class ControlLogicSettingController {
 	@RequestMapping(value = "/device/{deviceId}", method = RequestMethod.DELETE)
 	@ResponseBody
 	@InterceptPost
+	@InterceptLog
 	public Result<Integer> deleteControlSettingDevice(@PathVariable("deviceId") Long deviceId) {
 		try {
 			return new Result(service.deleteControlLogicSettingDevice(deviceId));

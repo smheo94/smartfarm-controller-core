@@ -18,6 +18,7 @@ package com.kt.smartfarm.web;
 import java.util.HashMap;
 import java.util.List;
 
+import com.kt.cmmn.util.InterceptLog;
 import com.kt.cmmn.util.InterceptPost;
 import com.kt.cmmn.util.InterceptPre;
 import com.kt.cmmn.util.Result;
@@ -59,6 +60,7 @@ public class ControllerEnvController {
 	@RequestMapping(value= "/{controllerId}", method = RequestMethod.PUT)
 	@ResponseBody
 	@InterceptPre
+	@InterceptLog
 	public Result<ControllerEnvVO> update(@PathVariable("gsmKey") Long gsmKey, @PathVariable("controllerId") String controllerId, @RequestBody ControllerEnvVO controller){
 		try {
 			return new Result(controllerEnvService.update(controller));
@@ -76,6 +78,7 @@ public class ControllerEnvController {
 	@RequestMapping(value= {"", "/"}, method = RequestMethod.POST)
 	@ResponseBody
 	@InterceptPost
+	@InterceptLog
 	public Result<ControllerEnvVO> insert( @PathVariable("gsmKey") Long gsmKey, @RequestBody ControllerEnvVO controller){
 		try {			
 			return new Result(controllerEnvService.insert(controller));
@@ -141,6 +144,7 @@ public class ControllerEnvController {
 	@RequestMapping(value= "/{controllerId}", method = RequestMethod.DELETE)
 	@ResponseBody
 	@InterceptPre
+	@InterceptLog
 	public Result<ControllerEnvVO> delete(@PathVariable("gsmKey") Long gsmKey,  @PathVariable("controllerId") Long controllerId){
 		try {
 			return new Result(controllerEnvService.delete(gsmKey, controllerId));

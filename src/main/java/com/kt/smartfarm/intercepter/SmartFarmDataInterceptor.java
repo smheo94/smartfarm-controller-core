@@ -3,11 +3,14 @@ package com.kt.smartfarm.intercepter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kt.cmmn.util.*;
-import com.kt.smartfarm.supervisor.mapper.GsmEnvMapper;
-
 import com.kt.smartfarm.message.ApplicationMessage;
+import com.kt.smartfarm.service.GsmEnvService;
 import com.kt.smartfarm.service.GsmEnvVO;
+import com.kt.smartfarm.supervisor.mapper.GsmEnvMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.Charsets;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
@@ -23,10 +26,9 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.WebUtils;
 
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
@@ -37,80 +39,82 @@ import static com.kt.smartfarm.message.ApplicationMessage.NOT_FOUND_GSM_INFO;
 
 @Slf4j
 public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
-    private static final Logger LOG = LoggerFactory.getLogger(SmartFarmDataInterceptor.class);
-
-
-
     public static final String X_HEADER_GSM_KEY = "x-smartfarm-gsm-key";
     Boolean isSmartfarmSystem;
     String myGSMKey;
     String proxySubPath;
     GsmEnvMapper gsmEnvMapper;
-    public SmartFarmDataInterceptor(Boolean isSmartfarmSystem, String proxySubPath, String myGSMKey, GsmEnvMapper gsmMapper) {
+    public boolean startTran = false;
+    public SmartFarmDataInterceptor(Boolean isSmartfarmSystem, String proxySubPath, String myGSMKey, GsmEnvMapper gsmEnvMapper) {
         this.isSmartfarmSystem = isSmartfarmSystem;
-//        this.myGSMKey = "3785";
         this.proxySubPath = proxySubPath;
         this.myGSMKey = myGSMKey;
-        this.gsmEnvMapper = gsmMapper;
+        this.gsmEnvMapper = gsmEnvMapper;
     }
-
-    public boolean startTran = false;
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-       
-        if( handler instanceof HandlerMethod) {
+        if (handler instanceof HandlerMethod) {
             // there are cases where this handler isn't an instance of HandlerMethod, so the cast fails.
             HandlerMethod handlerMethod = (HandlerMethod) handler;
-            
-        	 String headerGsmKey = request.getHeader(X_HEADER_GSM_KEY);
-             if(headerGsmKey == null){
-             	headerGsmKey = response.getHeader(X_HEADER_GSM_KEY);	
-             }
-             boolean preIntercept = handlerMethod.getMethod().getAnnotation(InterceptPre.class) != null;
-             boolean postIntercept = handlerMethod.getMethod().getAnnotation(InterceptPost.class) != null;
-             if( preIntercept || postIntercept ) {
-                 AuthorityChecker authChecker = new AuthorityChecker();
-                 log.info("Modify Data : ");
-             }
-             if( isSmartfarmSystem ) {
-                 if( handlerMethod.getMethod().getAnnotation(InterceptIgnoreGSMKey.class) ==null && (headerGsmKey == null || !Objects.equals(headerGsmKey, myGSMKey))) {
-                     setErrorResult(response, String.format(ApplicationMessage.MISS_MATCHING_GSM_KEY, headerGsmKey),
-                             HttpStatus.FORBIDDEN);
-                     return false;
-                 }
-                 //헤더의 GSM 이 맞는경우
-                 return true;
-             } 
-             else if( headerGsmKey == null) {
-                 //SuperVisor고 GSM 이 없는경우는 그냥 수행
-                 return true;
-             }
-             startTran = false;
-             
-             if( preIntercept) {
-//                System.out.printf( "제어기 연동이 필요 합니다.");
-//                //TODO : 제어기에 데이터를 보낸다.
-//                Long gsmKey = Integer.valueOf(headerGsmKey);
-//
-//                ResponseEntity<ResponseResult> result = sendProxyRequest(gsmKey, InterceptPre.class, request, response);
-//                boolean callResult = isSuccessResult(result);
-//                if(  callResult == false  ) {
-//                    //System.out.printf( "데이터 롤백을 진행 합니다.");
-//                    response.setContentType("application/json");
-//                    if( result != null ) {
-//                        response.sendError(result.getStatusCode().value(), new ObjectMapper().writeValueAsString(result.getBody()));
-//                    }
-//                    //TODO: 더이상 진행하지 않고 오류를 Response에 셋팅합니다.
-//                    return false;
-//                }
-            } else if( postIntercept ) {
+
+            String headerGsmKey = request.getHeader(X_HEADER_GSM_KEY);
+            if (headerGsmKey == null) {
+                headerGsmKey = response.getHeader(X_HEADER_GSM_KEY);
+            }
+            //boolean preIntercept = handlerMethod.getMethod().getAnnotation(InterceptPre.class) != null;
+            boolean postIntercept = handlerMethod.getMethod().getAnnotation(InterceptPost.class) != null;
+            boolean logIntercept = handlerMethod.getMethod().getAnnotation(InterceptLog.class) != null;
+            if (logIntercept) {
+                writeAPILog(request);
+            }
+            if (isSmartfarmSystem) {
+                if (handlerMethod.getMethod().getAnnotation(InterceptIgnoreGSMKey.class) == null && (headerGsmKey == null || !Objects.equals(headerGsmKey, myGSMKey))) {
+                    setErrorResult(response, String.format(ApplicationMessage.MISS_MATCHING_GSM_KEY, headerGsmKey),
+                            HttpStatus.FORBIDDEN);
+                    return false;
+                }
+                //헤더의 GSM 이 맞는경우
+                return true;
+            } else if (headerGsmKey == null) {
+                //SuperVisor고 GSM 이 없는경우는 그냥 수행
+                return true;
+            }
+            startTran = false;
+//             if( preIntercept) {
+//                 AuthorityChecker authChecker = new AuthorityChecker();
+////                System.out.printf( "제어기 연동이 필요 합니다.");
+////                //TODO : 제어기에 데이터를 보낸다.
+////                Long gsmKey = Integer.valueOf(headerGsmKey);
+////
+////                ResponseEntity<ResponseResult> result = sendProxyRequest(gsmKey, InterceptPre.class, request, response);
+////                boolean callResult = isSuccessResult(result);
+////                if(  callResult == false  ) {
+////                    //System.out.printf( "데이터 롤백을 진행 합니다.");
+////                    response.setContentType("application/json");
+////                    if( result != null ) {
+////                        response.sendError(result.getStatusCode().value(), new ObjectMapper().writeValueAsString(result.getBody()));
+////                    }
+////                    //TODO: 더이상 진행하지 않고 오류를 Response에 셋팅합니다.
+////                    return false;
+////                }
+//            } else
+            if (postIntercept) {
+                AuthorityChecker authChecker = new AuthorityChecker();
                 //System.out.printf( "DB 트렌젝션을 시작하세요. 롤백을 할 수 있어야 합니다.");
                 //TODO : DB 트렌젝션을 시작하세요. 롤백을 할 수 있어야 합니다.
-                startTran =true;
+                startTran = true;
             }
         }
         return true;
+    }
+
+    private void writeAPILog(HttpServletRequest request) throws IOException {
+        AuthorityChecker authChecker = new AuthorityChecker();
+        String encoding = StringUtils.isBlank(request.getCharacterEncoding()) ? Charsets.toCharset("UTF-8").name() : Charsets.toCharset(request.getCharacterEncoding()).name();
+        //ContentCachingRequestWrapper request = WebUtils.getNativeRequest(request, ContentCachingRequestWrapper.class);
+        String requestBody =  IOUtils.toString(request.getInputStream(), encoding);
+        String requestPath = request.getRequestURI();
+        log.info("{}/{} : {} - {}", authChecker.getName(), authChecker.getRemoteAddr(), requestPath, requestBody);
     }
 
 
@@ -119,7 +123,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
         try {
             response.sendError(HttpStatus.OK.value(), new ObjectMapper().writeValueAsString(new Result(message, code, message)));
         } catch (IOException e) {
-            LOG.debug(e.getMessage());
+            log.debug(e.getMessage());
         }
     }
     @Override
@@ -148,7 +152,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
                                 request.getMethod().equalsIgnoreCase(HttpMethod.DELETE.toString()) ||
                                 request.getMethod().equalsIgnoreCase(HttpMethod.PUT.toString()) )
                                 && (handler instanceof HandlerMethod) )  {
-                            LOG.warn("in HeaderGSMKEY NULL : {} , {}, {}, {}", headerGsmKey, request.getRequestURI(), request.getMethod(), handler);
+                            log.warn("in HeaderGSMKEY NULL : {} , {}, {}, {}", headerGsmKey, request.getRequestURI(), request.getMethod(), handler);
                         }
                         //헤더가 없는경우 제어기로 내릴 수 없음
                         return;
@@ -173,7 +177,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
 
             }
         } catch(Exception e){
-        	LOG.debug(e.getMessage());
+            log.debug(e.getMessage());
         }
 //        finally {
 //
@@ -228,7 +232,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
         return null;
     }
 
-    public boolean isSuccessResult(ResponseEntity<ResponseResult> result) {
+    private boolean isSuccessResult(ResponseEntity<ResponseResult> result) {
 
         if( result == null || result.getStatusCode().is5xxServerError() || result.getStatusCode().is4xxClientError() ) {
             return false;
@@ -241,10 +245,9 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
         return true;
     }
 
-    public ResponseEntity<ResponseResult> sendProxyRequest(Long gsmKey, Class annotationClass, HttpServletRequest request, HttpServletResponse response) throws URISyntaxException,
+    private ResponseEntity<ResponseResult> sendProxyRequest(Long gsmKey, Class annotationClass, HttpServletRequest request, HttpServletResponse response) throws URISyntaxException,
             IOException,
             HttpStatusCodeException {
-
         final GsmEnvVO gsmEnvVO = this.gsmEnvMapper.get(gsmKey);
         if( gsmEnvVO == null ) {
             throw new HttpClientErrorException( HttpStatus.NOT_FOUND, NOT_FOUND_GSM_INFO);
@@ -263,7 +266,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
 
-        LOG.debug("Send Proxy Request : {} , {}, {}", gsmKey, uri, request.getMethod());
+        log.debug("Send Proxy Request : {} , {}, {}", gsmKey, uri, request.getMethod());
         final ResponseEntity<ResponseResult> returnValue = restTemplate.exchange(uri, HttpMethod.valueOf(request.getMethod()), httpEntity, ResponseResult.class);
         return returnValue;
     }

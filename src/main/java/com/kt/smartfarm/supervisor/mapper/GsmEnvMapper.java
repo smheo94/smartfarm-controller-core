@@ -28,7 +28,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 @Mapper("gsmEnvMapper")
 public interface GsmEnvMapper {
-	void createGSMSeq(@Param("gsmKey") Long gsmKey);
 	GsmEnvVO get(@Param("gsmKey") Long gsmKey);
 	Integer delete(@Param("gsmKey") Long gsmKey);
 	Long insert(GsmEnvVO gsmInfo);
@@ -36,14 +35,10 @@ public interface GsmEnvMapper {
 	List<GsmEnvVO>  gsmOfDeviceList(@Param("gsmKey")Long gsmKey);
 	List<GsmEnvVO>  getGsmList(@Param("gsmKey") Long gsmKey, @Param("userInfoId") Integer userInfoId, @Param("categoryId") Integer categoryId, @Param("farmName") String farmName,
 										 @Param("authUserIdx") String authUserIdx, @Param("isSmartfarmSystem")Boolean isSmartfarmSystem);
-	//List<Map<String, Object>> getHouseList(@Param("gsmKey") Long gsmKey);
 	List<GsmEnvVO> notMappedList();
 	Integer userRegistGSM(HashMap<String, Object> param);
-//	List<GsmEnvVO> getGsmInfoByUser(Integer userInfoId);
-	
+
 	Long gsmThresholdInsert(GsmThresholdVO gsmThresholdVO);
 	Long gsmThresholdUpdate(GsmThresholdVO gsmThresholdVO);
 	GsmThresholdVO gsmThresholdGet(HashMap<String,Object> param);
-	Long getNewGSMSeqValue(@Param("from_gsm_key") Long fromGsmKey, @Param("to_gsm_key") Long toGsmKey );
-	Long setNewGSMSeqKey(@Param("to_gsm_key") Long toGsmKey, @Param("set_val") Long setValue );
 }

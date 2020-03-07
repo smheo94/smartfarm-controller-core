@@ -15,6 +15,7 @@
  */
 package com.kt.smartfarm.web;
 
+import com.kt.cmmn.util.InterceptLog;
 import com.kt.cmmn.util.Result;
 import com.kt.smartfarm.service.AuthCheckService;
 import com.kt.smartfarm.service.ControlLogicSettingTemplateService;
@@ -69,6 +70,7 @@ public class ControlLogicSettingTemplateController {
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	@ResponseBody
+	@InterceptLog
 	public Result<ControlLogicSettingTemplateVO> insert(@RequestBody ControlLogicSettingTemplateVO vo) {
 		try {
 			if(vo.getControlSettingTemplateId() != null && vo.getControlSettingTemplateId() != 0 ) {
@@ -89,6 +91,7 @@ public class ControlLogicSettingTemplateController {
 
 	@RequestMapping(value = "/{controlSettingTemplateId}", method = RequestMethod.GET)
 	@ResponseBody
+	@InterceptLog
 	public Result<List<ControlLogicSettingTemplateVO>> get(@PathVariable("controlSettingTemplateId") Long controlSettingTemplateId) {
 		try {
 			final ControlLogicSettingTemplateVO logicSettingTemplate = service.getLogicSettingTemplate(controlSettingTemplateId);
@@ -107,6 +110,7 @@ public class ControlLogicSettingTemplateController {
 
 	@RequestMapping(value = "/{controlSettingTemplateId}", method = RequestMethod.PUT)
 	@ResponseBody
+	@InterceptLog
 	public Result<ControlLogicSettingTemplateVO> update(@PathVariable("controlSettingTemplateId") Long controlSettingTemplateId, @RequestBody ControlLogicSettingTemplateVO vo) {
 		try {
 			final ControlLogicSettingTemplateVO logicSettingTemplate = service.getLogicSettingTemplate(controlSettingTemplateId);
@@ -122,6 +126,7 @@ public class ControlLogicSettingTemplateController {
 
 	@RequestMapping(value = "/{controlSettingTemplateId}", method = RequestMethod.DELETE)
 	@ResponseBody
+	@InterceptLog
 	public Result<ControlLogicSettingTemplateVO> delete(@PathVariable("controlSettingTemplateId") Long controlSettingTemplateId) {
 		try {
 			final ControlLogicSettingTemplateVO logicSettingTemplate = service.getLogicSettingTemplate(controlSettingTemplateId);

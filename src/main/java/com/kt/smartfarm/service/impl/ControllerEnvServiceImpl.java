@@ -43,7 +43,6 @@ public class ControllerEnvServiceImpl extends EgovAbstractServiceImpl implements
 	
 	@Override
 	public ControllerEnvVO insert(ControllerEnvVO vo) {
-		log.info("Insert Controller : {}", vo);
 		controllerEnvMapper.insert(vo);
 		if( vo.getDeviceList() == null) {
 			vo.setDeviceList( new ArrayList<>());
@@ -78,7 +77,6 @@ public class ControllerEnvServiceImpl extends EgovAbstractServiceImpl implements
 
 	@Override
 	public Integer delete(Long gsmKey, Long controllerId) {
-		log.info("Delete Controller : {}, {}", gsmKey, controllerId);
 		Map<String, Object> map = new HashMap<>();
 		map.put("gsmKey",  gsmKey);
 		map.put("id",  controllerId);
@@ -87,7 +85,6 @@ public class ControllerEnvServiceImpl extends EgovAbstractServiceImpl implements
 
 	@Override
 	public ControllerEnvVO update(ControllerEnvVO vo) {
-		log.info("Update Controller : {}", vo);
 		controllerEnvMapper.update(vo);
 		return vo;
 	}

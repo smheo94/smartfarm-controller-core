@@ -1,5 +1,6 @@
 package com.kt.smartfarm.config;
 
+import com.kt.smartfarm.service.GsmEnvService;
 import com.kt.smartfarm.supervisor.mapper.GsmEnvMapper;
 import com.kt.cmmn.SystemType;
 import com.kt.smartfarm.intercepter.SmartFarmDataInterceptor;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -16,6 +18,7 @@ import javax.annotation.Resource;
 
 @Configuration
 @Slf4j
+@EnableWebMvc
 //@PropertySource("classpath:smartfarm-mgr-env.properties")
 //@PropertySource(value={"classpath:application.properties","classpath:smartfarm-mgr-env.properties"}, ignoreResourceNotFound=true)
 @PropertySource(value={"classpath:application.properties","file:/myapp/application.properties","file:/home/gsm/v4/conf/smartfarm-mgr-env.properties"}, ignoreResourceNotFound=true)
@@ -37,8 +40,6 @@ public class SmartfarmInterceptorConfig extends WebMvcConfigurerAdapter {
 //    private String pass;
     @Resource(name="gsmEnvMapper")
     GsmEnvMapper gsmMapper;
-
-
 
     public Boolean isSmartfarmSystem() {
         return SystemType.SYSTEM_TYPE_SMARTFARM.equalsIgnoreCase(SYSTEM_TYPE);

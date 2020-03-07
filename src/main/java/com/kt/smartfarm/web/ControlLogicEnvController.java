@@ -55,8 +55,6 @@ public class ControlLogicEnvController {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
 	}
-
-
 	/**
 	 * @description 제어로직 프로퍼티 조회
 	 * @return
@@ -86,29 +84,4 @@ public class ControlLogicEnvController {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
 	}
-	
-	
-//
-//
-//	@RequestMapping(value= "/{house_id}", method = RequestMethod.GET)
-//	@ResponseBody
-//	public Result<DeviceEnvVO> get(@PathVariable("gsm_key") Long gsmKey, @PathVariable("house_id") Long houseId){
-//		try {
-//			return new Result(controlLogicEnvService.getRegList(gsmKey,houseId));
-//		} catch(Exception e) {
-//			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
-//		}
-//	}
-//
-//	@RequestMapping(value= "/{controllerId}", method = RequestMethod.DELETE)
-//	@ResponseBody
-//	public Result<DeviceEnvVO> delete(@PathVariable("gsm_key") Long gsmKey,  @PathVariable("controllerId") Long controllerId){
-//		try {
-//			return new Result(controlLogicEnvService.delete(gsmKey, controllerId));
-//		} catch(Exception e) {
-//			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
-//		}
-//	}
-
-
 }

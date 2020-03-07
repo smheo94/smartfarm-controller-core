@@ -16,6 +16,8 @@
 package com.kt.smartfarm.web;
 
 import java.util.List;
+
+import com.kt.cmmn.util.InterceptLog;
 import com.kt.cmmn.util.Result;
 import com.kt.smartfarm.service.ThresholdVO;
 import com.kt.smartfarm.service.ThresholdService;
@@ -53,6 +55,7 @@ public class ThresholdController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value= "/gsm/{gsmKey}/house/{greenHouseId}", method = RequestMethod.POST)
 	@ResponseBody
+	@InterceptLog
 	public Result insert(@PathVariable Long gsmKey, @PathVariable Long greenHouseId,
 											@RequestBody List<ThresholdVO> thresholdVOs){
 		try {
