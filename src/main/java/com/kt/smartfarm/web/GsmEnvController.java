@@ -20,10 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.kt.cmmn.util.InterceptIgnoreGSMKey;
-import com.kt.cmmn.util.InterceptPost;
-import com.kt.cmmn.util.InterceptPre;
-import com.kt.cmmn.util.Result;
+import com.kt.cmmn.util.*;
 import com.kt.smartfarm.config.SmartfarmInterceptorConfig;
 import com.kt.smartfarm.service.*;
 import com.kt.smartfarm.intercepter.SmartFarmDataInterceptor;
@@ -33,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 //import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -45,6 +43,7 @@ import org.springframework.web.bind.annotation.*;
  * 온실환경설정 및 제어환경설정
  * 센서구성,제어기구성,온실구성,제어로직구성,외부기상대구성,임계치구성
  */
+
 @Controller
 @RequestMapping(value="/gsm")
 public class GsmEnvController {
@@ -78,6 +77,7 @@ public class GsmEnvController {
 	//@ApiOperation("제어기 정보 수정, OLD /")
 	@ResponseBody
 	@InterceptPre
+	@InterceptLog
 	public Result<GsmEnvVO> update(@RequestBody GsmEnvVO gsmInfo, @PathVariable("gsmKey") Long gsmKey){
 		try {
 			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
@@ -101,6 +101,7 @@ public class GsmEnvController {
 	@RequestMapping(value= "", method = RequestMethod.POST)
 	@ResponseBody
 	@InterceptPost
+	@InterceptLog
 	@InterceptIgnoreGSMKey
 	public Result<GsmEnvVO> insert(HttpServletRequest request,HttpServletResponse response, @RequestBody GsmEnvVO gsmInfo){
 		try {
@@ -128,6 +129,7 @@ public class GsmEnvController {
 	 */
 	@RequestMapping(value= "/{from_gsm_key}/copyTo/{to_gsm_key}", method = RequestMethod.POST)
 	@ResponseBody
+	@InterceptLog
 	@InterceptPost
 	@InterceptIgnoreGSMKey
 	public Result<GsmEnvVO> copyTo(HttpServletRequest request,HttpServletResponse response, @PathVariable("from_gsm_key") Long fromGsmKey, @PathVariable("to_gsm_key") Long toGsmKey){
@@ -141,8 +143,10 @@ public class GsmEnvController {
 		}
 	}
 
+
 	@RequestMapping(value= "/{gsm_key}/sync", method = RequestMethod.POST)
 	@ResponseBody
+	@InterceptLog
 	public Result<GsmEnvVO> sync(HttpServletRequest request,HttpServletResponse response, @PathVariable("gsm_key") Long gsmKey){
 		try {
 			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
@@ -202,6 +206,7 @@ public class GsmEnvController {
 	 */
 	@RequestMapping(value= "/{gsmKey}", method = RequestMethod.DELETE)
 	@ResponseBody
+	@InterceptLog
 //	@InterceptPre
 	public Result<String> delete(@PathVariable("gsmKey") Long gsmKey){
 		try {
@@ -290,7 +295,7 @@ public class GsmEnvController {
 	@RequestMapping(value= "/{gsmKey}", method = RequestMethod.POST)
 	//@ApiOperation("userInfoId로 제어기 등록.")
 	@ResponseBody
-	public Result userRegistGSM(@RequestBody HashMap<String,Object> param, @PathVariable Long gsmKey){
+	public Result userRegisterGSM(@RequestBody HashMap<String,Object> param, @PathVariable Long gsmKey){
 		try {
 			return new Result(gsmEnvService.userRegisterGSM(param,gsmKey));
 		} catch(Exception e) {
@@ -300,6 +305,7 @@ public class GsmEnvController {
 
 	@RequestMapping(value= "/threshold", method = RequestMethod.POST)	
 	@ResponseBody
+	@InterceptLog
 	@InterceptPost
 	public Result gsmThresholdInsert(@RequestBody GsmThresholdVO gsmThresholdVO){
 		try {
@@ -317,6 +323,7 @@ public class GsmEnvController {
 
 	@RequestMapping(value= "/threshold", method = RequestMethod.PUT)
 	@ResponseBody
+	@InterceptLog
 	@InterceptPost
 	public Result gsmThresholdUpdate(@RequestBody GsmThresholdVO gsmThresholdVO){
 		try {
@@ -343,6 +350,4 @@ public class GsmEnvController {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
 	}
-
-
 }

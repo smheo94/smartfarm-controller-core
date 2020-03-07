@@ -36,12 +36,8 @@ public class SmartfarmInterceptorConfig extends WebMvcConfigurerAdapter {
     private String DB_URL;
 //    @Value("${variable.secret.var}")
 //    private String pass;
-//    @Resource(name="gsmEnvMapper")
-//    GsmEnvMapper gsmMapper;
-
-    @Autowired
-    GsmEnvService gsmEnvService;
-
+    @Resource(name="gsmEnvMapper")
+    GsmEnvMapper gsmMapper;
 
     public Boolean isSmartfarmSystem() {
         return SystemType.SYSTEM_TYPE_SMARTFARM.equalsIgnoreCase(SYSTEM_TYPE);
@@ -52,7 +48,7 @@ public class SmartfarmInterceptorConfig extends WebMvcConfigurerAdapter {
     public void addInterceptors(InterceptorRegistry registry) {
         log.info("Load Config : {}, {}, {}", GSM_KEY, SYSTEM_TYPE, DB_URL);
 //        System.out.println("PASS */* = " + pass);
-        registry.addInterceptor(new SmartFarmDataInterceptor(isSmartfarmSystem(), PROXY_SUB_PATH, GSM_KEY, gsmEnvService)).addPathPatterns("/**");
+        registry.addInterceptor(new SmartFarmDataInterceptor(isSmartfarmSystem(), PROXY_SUB_PATH, GSM_KEY, gsmMapper)).addPathPatterns("/**");
 //        registry.addInterceptor(new SmartFarmDataInterceptor(SYSTEM_TYPE, GSM_KEY, gsmMapper)).addPathPatterns("/**");
     }
 
