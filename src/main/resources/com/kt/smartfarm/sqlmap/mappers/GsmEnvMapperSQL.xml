@@ -89,7 +89,7 @@
  			debug_stop_event as debugStopEvent, debug_stop_crops as debugStopCrops, debug_stop_device_auto_control as debugStopDeviceAutoContorl, debug_stop_ims as debugStopIms,
  			delay_auto_control_start as delayAutoControlStart, package_version as packageVersion, schema_version as schemaVersion, nutrient_monitoring_interval as nutrientMonitoringInterval,
  			farm_nickname_i18n as farmNicknameI18n, user_id as userId, farm_db_id as farmDbId, category_id as categoryId, COUNT(device.id) AS deviceCount, properties,
-		    NOW() AS readTime
+			UNIX_TIMESTAMP(NOW()) AS readTime
 		FROM gsm_info
 		LEFT OUTER JOIN device ON gsm_info.gsm_key = device.gsm_key
 		<where>
@@ -109,7 +109,7 @@
  			debug_stop_event as debugStopEvent, debug_stop_crops as debugStopCrops, debug_stop_device_auto_control as debugStopDeviceAutoContorl, debug_stop_ims as debugStopIms,
  			delay_auto_control_start as delayAutoControlStart, package_version as packageVersion, schema_version as schemaVersion, nutrient_monitoring_interval as nutrientMonitoringInterval,
  			farm_nickname_i18n as farmNicknameI18n, user_id as userId, farm_db_id as farmDbId, category_id as categoryId, properties,
-			NOW() AS readTime
+			UNIX_TIMESTAMP(NOW()) AS readTime
 		FROM gsm_info
 		<if test="gsmKey != -1">
 			WHERE 	gsm_key = #{gsmKey}
@@ -155,7 +155,7 @@
  			monitoring_interval as monitoringInterval, history_save_db_interval as historySaveDbInterval,
  			delay_auto_control_start as delayAutoControlStart, package_version as packageVersion, schema_version as schemaVersion, nutrient_monitoring_interval as nutrientMonitoringInterval,
  			farm_nickname_i18n as farmNicknameI18n, user_id as userId, farm_db_id as farmDbId, category_id as categoryId, properties,
-			NOW() AS readTime
+			UNIX_TIMESTAMP(NOW()) AS readTime
 		FROM gsm_info
 		<where>
 			<if test="gsmKey != null"> AND gsm_info.gsm_key = #{gsmKey}</if>
@@ -202,7 +202,7 @@
 			sensor_current_retention_period, debug_stop_event, debug_stop_crops, debug_stop_device_auto_control, 
 			debug_stop_ims, delay_auto_control_start, package_version, schema_version, nutrient_monitoring_interval, 
 			farm_nickname_i18n, user_id, farm_db_id, category_id, monitoring_process_interval, properties,
-			NOW() AS readTime
+			UNIX_TIMESTAMP(NOW()) AS readTime
 		FROM
 			gsm_info
 		WHERE 
