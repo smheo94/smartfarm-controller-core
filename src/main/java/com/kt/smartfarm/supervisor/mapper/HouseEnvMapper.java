@@ -52,7 +52,7 @@ public interface HouseEnvMapper {
 	List<ControlLogicSettingVO> getHouseControlSettings(Long houseId);
 	
 	Integer insertCCTVSetting(CCTVSettingVO vo);
-	List<HashMap<String, Object>> getCctvList(@Param("houseId")Long houseId);
+	List<CCTVSettingVO> getCctvList(@Param("houseId")Long houseId);
 	Integer updateCctv(CCTVSettingVO vo);
 	Integer updateMiniVmsHash(CCTVMiniVMSVO v);
 	Integer deleteCctv(Integer cctvId);

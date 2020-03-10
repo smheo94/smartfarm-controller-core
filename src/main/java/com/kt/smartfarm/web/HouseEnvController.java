@@ -393,7 +393,7 @@ public class HouseEnvController {
 			if( !authCheckService.authCheck(null, houseId, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, houseId);
 			}
-			return new Result(houseEnvService.getCctvsByHouseId(houseId));
+			return new Result(houseEnvService.getCCTVListByHouseId(houseId));
 		} catch (Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}

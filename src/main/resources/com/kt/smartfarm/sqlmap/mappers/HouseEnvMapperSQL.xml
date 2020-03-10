@@ -5,6 +5,10 @@
 		<result column="properties" property="properties" typeHandler="com.kt.cmmn.util.JsonTypeHandler"/>
 	</resultMap>
 
+	<resultMap id="cctvMap" type="cctv" autoMapping="true">
+		<result column="properties" property="properties" typeHandler="com.kt.cmmn.util.JsonTypeHandler"/>
+	</resultMap>
+
 	<insert id="insert" useGeneratedKeys="true" parameterType="houseEnvVO">
 		INSERT INTO green_house( 
        		product_method_id, green_house_type_id, house_name, latitude, longitude, description, build_date, last_update, addr_1, addr_2, zip, nutrient_common_id, change_gh, change_temperature, floor_space, house_horizontal, house_vertical, house_height, plant_spacing, crop_cnt, house_direction, select_temp_sensor, select_hum_sensor, gsm_key, house_name_i18n
@@ -300,40 +304,41 @@
 	
 	<insert id="insertCCTVSetting" parameterType="cctv" useGeneratedKeys="true">
 		INSERT INTO	cctv	
-           ( house_id, cctv_name, cctv_uid, cctv_pwd, cctv_ws_url, cctv_rtsp_url, is_rtsp_play, enable_ptz, wowza_id, is_mini_vms, mini_vms_url, mini_vms_idx)
+           ( house_id, cctv_name, cctv_uid, cctv_pwd, cctv_ws_url, cctv_rtsp_url, is_rtsp_play, enable_ptz, wowza_id, is_mini_vms, mini_vms_url, mini_vms_idx, properties)
 		VALUES(
 			#{houseId},#{cctvName},#{cctvUid},#{cctvPwd},#{cctvWsUrl},#{cctvRtspUrl},
 			IF( #{isRtspPlay} IS NULL, 0, IF(#{isRtspPlay} = 'true', 1, IF( #{isRtspPlay} = 'false' , 0, #{isRtspPlay}))),
 			IF( #{enablePtz} IS NULL, 0, IF(#{enablePtz} = 'true', 1, IF( #{enablePtz} = 'false' , 0, #{enablePtz}))),
 			IF( #{wowzaId} IS NULL , 1, #{wowzaId}),
 			IF( #{isMiniVms} IS NULL, 0, IF(#{isMiniVms} = 'true', 1, IF( #{isMiniVms} = 'false' , 0, #{isMiniVms}))),
-		    #{miniVmsUrl},#{miniVmsIdx}
+		    #{miniVmsUrl},#{miniVmsIdx},	'${@com.kt.cmmn.util.MapUtils@toJson(properties)}'
 		)
 		<selectKey keyProperty="id" resultType="int">
 			SELECT LAST_INSERT_ID() AS id;
 		</selectKey>
 	</insert>
 	
-	<select id="getCctvList" parameterType="Long" resultType="map">
+	<select id="getCctvList" parameterType="Long" resultMap="cctvMap">
 		SELECT 
-			cctv.id as id,  
-			house_id as houseId, 
-			cctv_name as cctvName, 
-			cctv_uid as cctvUid,
-			cctv_pwd as cctvPwd,
-			cctv_ws_url as cctvWsUrl,
-			cctv_rtsp_url as cctvRtspUrl,
-			mini_vms_url as miniVmsUrl,
-			40000 as miniVmsApiPort,
-			40001 as miniVmsStreamPort,
-			mini_vms_idx as miniVmsIdx,
-			rtc_stream_hash as rtcStreamHash,
-			is_rtsp_play as isRtspPlay,
-			is_mini_vms as isMiniVms,
-			enable_ptz as enablePtz,
-			wowza_id as wowzaId,
-			stream_url as wowzaStreamUrl,
-			rest_url as wowzaRestUrl
+			cctv.id,
+			house_id,
+			cctv_name,
+			cctv_uid,
+			cctv_pwd,
+			cctv_ws_url,
+			cctv_rtsp_url,
+			mini_vms_url,
+			40000 as mini_vms_api_port,
+			40001 as mini_vms_stream_port,
+			mini_vms_idx,
+			rtc_stream_hash,
+			is_rtsp_play,
+			is_mini_vms,
+			enable_ptz,
+			wowza_id,
+			stream_url as wowza_stream_url,
+			rest_url as wowza_rest_url,
+			cctv.properties
 		FROM cctv as cctv
 		INNER JOIN green_house as gh on gh.id = cctv.house_id
 		INNER JOIN gsm_info as gi on gi.gsm_key = gh.gsm_key

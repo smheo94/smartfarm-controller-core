@@ -31,7 +31,7 @@ public interface HouseEnvService {
 	Integer insertCctv(CCTVSettingVO cctv);
 	Integer deleteCctv(Integer id);
 	Integer updateCctv(CCTVSettingVO cctv);
-	List<HashMap<String, Object>> getCctvsByHouseId(Long houseId);
+	List<CCTVSettingVO> getCCTVListByHouseId(Long houseId);
 	HashMap<String,Object> houseDeviceInfoList(Long houseId);
 
 	Integer copyToNewGSM(Long fromGsmKey, Long toGsmKey);

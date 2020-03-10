@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashMap;
 
 
 /**
@@ -32,8 +33,7 @@ public class CCTVSettingVO {
 	String wowzaId;
 	String wowzaStreamUrl;
 	String wowzaRestUrl;
-//	@JsonIgnore
-//	String gsmSystemHost;
-//	@JsonIgnore
-//	String gsmSystemPort;
+	Integer miniVmsApiPort  = 40000;
+	Integer  miniVmsStreamPort = 40001;
+	HashMap<String,Object> properties = new HashMap<>();
 }
