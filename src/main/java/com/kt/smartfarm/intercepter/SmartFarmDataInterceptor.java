@@ -109,10 +109,14 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
     }
 
     private void writeAPILog(HttpServletRequest request) throws IOException {
+
         AuthorityChecker authChecker = new AuthorityChecker();
+        ContentCachingRequestWrapper requestCacheWrapperObject
+                = new ContentCachingRequestWrapper(request);
+        //((ContentCachingRequestWrapper) request).getContentAsByteArray()
         String encoding = StringUtils.isBlank(request.getCharacterEncoding()) ? Charsets.toCharset("UTF-8").name() : Charsets.toCharset(request.getCharacterEncoding()).name();
         //ContentCachingRequestWrapper request = WebUtils.getNativeRequest(request, ContentCachingRequestWrapper.class);
-        String requestBody =  IOUtils.toString(request.getInputStream(), encoding);
+        String requestBody =  IOUtils.toString(requestCacheWrapperObject.getContentAsByteArray(), encoding);
         String requestPath = request.getRequestURI();
         log.info("{}/{} : {} - {}", authChecker.getName(), authChecker.getRemoteAddr(), requestPath, requestBody);
     }
