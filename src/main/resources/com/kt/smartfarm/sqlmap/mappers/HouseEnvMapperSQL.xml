@@ -28,14 +28,26 @@
 		</selectKey>
 	</insert>
 
+<!--	ALTER TABLE  `green_house_product`-->
+<!--	CHANGE `gsm_key` `gsm_key` BIGINT(20) NULL COMMENT '제어기 키',-->
+<!--	ADD COLUMN IF NOT EXISTS `create_dt` DATETIME NULL COMMENT '입력날짜' AFTER `end_date`,-->
+<!--	ADD COLUMN IF NOT EXISTS `delete_dt` DATETIME NULL COMMENT '삭제날짜' AFTER `update_dt`,-->
+<!--	CHANGE `properties` `properties` VARCHAR(4096) CHARSET utf8 COLLATE utf8_general_ci NULL COMMENT '기타 하우스 속성',-->
+<!--	ADD COLUMN IF NOT EXISTS `planted_area` DOUBLE NULL COMMENT '면적(m2)' AFTER `properties`,-->
+<!--	ADD COLUMN IF NOT EXISTS `area_horizontal` DOUBLE NULL COMMENT '가로(m)' AFTER `planted_area`,-->
+<!--	ADD COLUMN IF NOT EXISTS `area_vertical` DOUBLE NULL COMMENT '세로(m)' AFTER `area_horizontal`,-->
+<!--	ADD COLUMN IF NOT EXISTS `plant_spacing` DOUBLE NULL COMMENT '재식간격' AFTER `area_vertical`,-->
+<!--	ADD COLUMN IF NOT EXISTS `per_tree` INT NULL COMMENT '주당수량' AFTER `plant_spacing`,-->
+<!--	ADD COLUMN IF NOT EXISTS `is_deleted` INT DEFAULT 0 NULL COMMENT '삭제 여부 ( 미사용 )' AFTER `per_tree`;-->
+
 	<insert id="insertHouseProduct" useGeneratedKeys="true" parameterType="houseProductVO">
 		INSERT INTO green_house_product (
-		 gsm_key, green_house_id, prd_code, start_date, end_date, properties, id,
+		 gsm_key, green_house_id, prd_code, start_date, end_date, properties, create_dt, id
 		)
 		VALUES
 		(
 		#{gsmKey},#{greenHouseId}, #{prdCode}, #{startDate}, #{endDate}
-		,'${@com.kt.cmmn.util.MapUtils@toJson(properties)}'
+		,'${@com.kt.cmmn.util.MapUtils@toJson(properties)}', NOW()
 		<if test="id != null and id != -1">
 			,#{id}
 		</if>
@@ -57,21 +69,23 @@
 		WHERE id = #{id};
 	</update>
 
-	<delete id="deleteHouseProduct" parameterType="houseProductVO">
-		DELETE
-		FROM green_house_product
+	<update id="deleteHouseProduct" parameterType="houseProductVO">
+		UPDATE
+			green_house_product
+		    SET is_deleted = '1', delete_dt = NOW()
 		<where>
 			<if test="gsmKey != null">gsm_key = #{gsmKey}</if>
 			<if test="greenHouseId != null">AND green_house_id = #{greenHouseId}</if>
 			<if test="id != null">AND id = #{id}</if>
 		</where>
-	</delete>
+	</update>
 	<select id="listHouseProduct" resultMap="houseProductVOMap">
 		SELECT
 			gsm_key, green_house_id, prd_code, start_date, end_date, properties, id
 		FROM green_house_product
 		<where>
-			<if test="gsmKey != null">gsm_key = #{gsmKey}</if>
+		    is_deleted = 0
+			<if test="gsmKey != null">AND gsm_key = #{gsmKey}</if>
 			<if test="greenHouseId != null">AND green_house_id = #{greenHouseId}</if>
 			<if test="id != null">AND id = #{id}</if>
 		</where>
@@ -307,10 +321,10 @@
            ( house_id, cctv_name, cctv_uid, cctv_pwd, cctv_ws_url, cctv_rtsp_url, is_rtsp_play, enable_ptz, wowza_id, is_mini_vms, mini_vms_url, mini_vms_idx, properties)
 		VALUES(
 			#{houseId},#{cctvName},#{cctvUid},#{cctvPwd},#{cctvWsUrl},#{cctvRtspUrl},
-			IF( #{isRtspPlay} IS NULL, 0, IF(#{isRtspPlay} = 'true', 1, IF( #{isRtspPlay} = 'false' , 0, #{isRtspPlay}))),
-			IF( #{enablePtz} IS NULL, 0, IF(#{enablePtz} = 'true', 1, IF( #{enablePtz} = 'false' , 0, #{enablePtz}))),
+			IFNULL(CASE #{isRtspPlay} WHEN 'true' THEN 1 WHEN 'false' THEN 0 ELSE #{isRtspPlay} END, 0),
+			IFNULL(CASE #{enablePtz} WHEN 'true' THEN 1 WHEN 'false' THEN 0 ELSE #{enablePtz} END, 0),
 			IF( #{wowzaId} IS NULL , 1, #{wowzaId}),
-			IF( #{isMiniVms} IS NULL, 0, IF(#{isMiniVms} = 'true', 1, IF( #{isMiniVms} = 'false' , 0, #{isMiniVms}))),
+			IFNULL(CASE #{isMiniVms} WHEN 'true' THEN 1 WHEN 'false' THEN 0 ELSE #{isMiniVms} END, 0),
 		    #{miniVmsUrl},#{miniVmsIdx},	'${@com.kt.cmmn.util.MapUtils@toJson(properties)}'
 		)
 		<selectKey keyProperty="id" resultType="int">
@@ -356,9 +370,9 @@
 			<if test="cctvRtspUrl != null">, cctv_rtsp_url = #{cctvRtspUrl}</if>
 			<if test="miniVmsUrl != null">, mini_vms_url = #{miniVmsUrl}</if>
 			<if test="miniVmsIdx != null">, mini_vms_idx = #{miniVmsIdx}</if>
-			<if test="isRtspPlay != null">, is_rtsp_play = IF(#{isRtspPlay} = 'true', 1, IF( #{isRtspPlay} = 'false' , 0, #{isRtspPlay}))</if>
-			<if test="isMiniVms != null">, IF( #{isMiniVms} IS NULL, 0, IF(#{isMiniVms} = 'true', 1, IF( #{isMiniVms} = 'false' , 0, #{isMiniVms})))</if>
-			<if test="enablePtz != null">, enable_ptz = IF(#{enablePtz} = 'true', 1, IF( #{enablePtz} = 'false' , 0, #{enablePtz}))</if>
+			<if test="isRtspPlay != null">, is_rtsp_play = IFNULL(CASE #{isRtspPlay} WHEN 'true' THEN 1 WHEN 'false' THEN 0 ELSE #{isRtspPlay} END, 0)</if>
+			<if test="isMiniVms != null">, is_mini_vms =  IFNULL(CASE #{isMiniVms} WHEN 'true' THEN 1 WHEN 'false' THEN 0 ELSE #{isMiniVms} END, 0)</if>
+			<if test="enablePtz != null">, enable_ptz = IFNULL(CASE #{enablePtz} WHEN 'true' THEN 1 WHEN 'false' THEN 0 ELSE #{enablePtz} END, 0)</if>
 			<if test="wowzaId != null">, wowza_id = #{wowzaId}</if>
 		</set>
 		WHERE house_id = #{houseId} AND id = #{id};				

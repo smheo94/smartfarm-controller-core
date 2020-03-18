@@ -13,4 +13,13 @@ public class HouseProductVO {
     public String prdCode;
     public String startDate;
     public String endDate;
+//    public Double plantedArea;
+//    public Double areaHorizontal;
+//    public Double areaVertical;
+//    public Double plantSpacing;
+//    public Double perTree;
+    public Long createDt;
+    public Long updateDt;
+    public Long deleteDt;
+    public Integer isDeleted;
 }
