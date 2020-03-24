@@ -23,7 +23,10 @@ import com.kt.smartfarm.config.SmartfarmInterceptorConfig;
 import com.kt.smartfarm.service.AuthCheckService;
 import com.kt.smartfarm.service.ControlLogicSettingService;
 import com.kt.smartfarm.service.ControlLogicSettingVO;
+import com.kt.smartfarm.service.ControlSettingLiquidVO;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -33,7 +36,9 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
+@Slf4j
 @Controller
 @RequestMapping(value="/control_logic_setting")
 public class ControlLogicSettingController {
@@ -73,7 +78,7 @@ public class ControlLogicSettingController {
 			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
 			}
-			return new Result(service.getControlLogicSettingHIstoryList(gsmKey, houseId, controlSettingId, fromDate, toDate));
+			return new Result(service.getControlLogicSettingHistoryList(gsmKey, houseId, controlSettingId, fromDate, toDate));
 		} catch (Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
@@ -252,6 +257,65 @@ public class ControlLogicSettingController {
 			return new Result(service.deleteControlLogicSettingDevice(deviceId));
 		} catch (Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, deviceId);
+		}
+	}
+
+	@RequestMapping(value = "/liquid/", method = RequestMethod.GET)
+	@ResponseBody
+	public Result<List<ControlSettingLiquidVO>> getControlSettingLiquid() {
+		try {
+			Integer userIdx = NumberUtils.toInt(authCheckService.getAuthUserIdx(), 0);
+			return new Result(service.getControlSettingLiquid(userIdx));
+		} catch (Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, "");
+		}
+	}
+	@RequestMapping(value = "/liquid/", method = RequestMethod.POST)
+	@ResponseBody
+	@InterceptLog
+	public Result<ControlSettingLiquidVO> insertControlSettingLiquid(@RequestBody ControlSettingLiquidVO controlSettingLiquidVO) {
+		try {
+			Integer userIdx = NumberUtils.toInt(authCheckService.getAuthUserIdx(), 0);
+			if( Objects.equals(controlSettingLiquidVO.getPublishLevel(), "OPEN") ) {
+				if( !authCheckService.getAuthCheck().isAdmin() ) {
+					return new Result(HttpStatus.FORBIDDEN);
+				}
+			}
+			controlSettingLiquidVO.setOwnerUserIdx(userIdx);
+			int result = service.insertControlSettingLiquid(controlSettingLiquidVO);
+			log.info("insert result : {}", result);
+			return new Result(controlSettingLiquidVO);
+		} catch (Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, controlSettingLiquidVO);
+		}
+	}
+	@RequestMapping(value = "/liquid/{id}", method = RequestMethod.PUT)
+	@ResponseBody
+	@InterceptLog
+	public Result<Integer> updateControlSettingLiquid(@PathVariable(value = "id") Long id,  @RequestBody ControlSettingLiquidVO controlSettingLiquidVO) {
+		try {
+			Integer userIdx = NumberUtils.toInt(authCheckService.getAuthUserIdx(), 0);
+			if( Objects.equals(controlSettingLiquidVO.getPublishLevel(), "OPEN") ) {
+				if( !authCheckService.getAuthCheck().isAdmin() ) {
+					return new Result(HttpStatus.FORBIDDEN);
+				}
+			}
+			controlSettingLiquidVO.setId(id);
+			controlSettingLiquidVO.setOwnerUserIdx(userIdx);
+			return new Result(service.updateControlSettingLiquid(controlSettingLiquidVO));
+		} catch (Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, controlSettingLiquidVO);
+		}
+	}
+	@RequestMapping(value = "/liquid/{id}", method = RequestMethod.DELETE)
+	@ResponseBody
+	@InterceptLog
+	public Result<Integer> deleteControlSettingLiquid(@PathVariable(value = "id") Long id) {
+		try {
+			Integer userIdx = NumberUtils.toInt(authCheckService.getAuthUserIdx(), 0);
+			return new Result(service.deleteControlSettingLiquid(id, userIdx));
+		} catch (Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, id);
 		}
 	}
 

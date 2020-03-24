@@ -25,6 +25,7 @@
         <!--</collection>-->
     </resultMap>
 
+
     <resultMap id="ControlLogicSettingMap" type="controlLogicSettingVO">
         <id column="control_setting_id" property="controlSettingId"/>
         <result column="tmp_gsm_key" property="tmpGsmKey"/>
@@ -76,6 +77,58 @@
                     ofType="controlLogicSettingDeviceVO"
                     column="control_setting_id" select="getControlDevices"/>
     </resultMap>
+<!--    <resultMap id="liquidMap" type="liquidVO" autoMapping="true">-->
+
+<!--    </resultMap>-->
+    <resultMap id="controlSettingLiquidMap"
+               type="com.kt.smartfarm.service.ControlSettingLiquidVO" autoMapping="true">
+        <id column="id" property="id" />
+        <result column="liquid_id" property="liquidId" />
+        <association property="liquidDefault" javaType="liquidVO" column="liquid_id" select="getCdLiquid" autoMapping="true"   />
+    </resultMap>
+
+    <select id="getCdLiquid" resultType="liquidVO">
+    SELECT liquid_id, liquid_name, mix_type, default_mix_rate, default_packing_size, packing_unit
+    FROM cd_liquid
+        WHERE  #{liquid_id} IS NULL OR liquid_id = #{liquid_id}
+<!--    <where>-->
+<!--        <if test="liquidId != null">liquid_id = #{liquidId}</if>-->
+<!--    </where>-->
+    </select>
+
+    <select id="getControlSettingLiquid" resultMap="controlSettingLiquidMap">
+    SELECT  id, publish_level, owner_user_idx, title, prd_code, liquid_id, packing_size, mix_type, mix_rate, watering_amt, `comment`, create_dt, update_dt
+    FROM control_setting_liquid
+    WHERE publish_level = 'OPEN'
+        <if test="ownerUserIdx != null">OR owner_user_idx = #{ownerUserIdx}</if>
+    </select>
+
+    <insert id="insertControlSettingLiquid" parameterType="controlSettingLiquidVO">
+    INSERT INTO control_setting_liquid (
+    publish_level, owner_user_idx, title, prd_code, liquid_id, packing_size, mix_type, mix_rate, watering_amt, `comment`, create_dt
+    )
+    VALUES
+    (
+    'OWNER', #{ownerUserIdx}, #{title}, #{prdCode}, #{liquidId}, #{packingSize}, #{mixType}, #{mixRate}, #{wateringAmt}, #{comment}, NOW()
+    );
+    <selectKey keyProperty="id" resultType="Long" keyColumn="id">
+        SELECT LAST_INSERT_ID() AS id;
+    </selectKey>
+    </insert>
+
+    <update id="updateControlSettingLiquid" parameterType="controlSettingLiquidVO">
+    UPDATE control_setting_liquid
+    SET title = #{title}, prd_code = #{prdCode}, liquid_id = #{liquidId}, packing_size = #{packingSize}, mix_type = #{mixType},
+        mix_rate = #{mixRate}, watering_amt = #{wateringAmt}, `comment` = #{comment}, update_dt = NOW()
+    WHERE id = #{id} AND owner_user_idx = #{ownerUserIdx};
+    </update>
+    <delete id="deleteControlSettingLiquid">
+    DELETE control_setting_liquid
+    WHERE id  = #{id} AND owner_user_idx = #{ownerUserIdx};
+    </delete>
+
+
+
 
     <select id="getControlLogicSetting" resultMap="ControlLogicSettingMap">
         /* 설정된 제어로직을 조회 , 선행 제어로직 포함 */

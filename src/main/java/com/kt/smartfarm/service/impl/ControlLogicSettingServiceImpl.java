@@ -43,7 +43,7 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 	}
 
 	@Override
-	public List<ControlLogicSettingHistoryVO> getControlLogicSettingHIstoryList(Long gsmKey, Long houseId, Long controlSettingId, Long fromData, Long toDate)
+	public List<ControlLogicSettingHistoryVO> getControlLogicSettingHistoryList(Long gsmKey, Long houseId, Long controlSettingId, Long fromData, Long toDate)
 	{
 		return  mapper.getControlLogicSettingHistoryList(gsmKey, houseId, controlSettingId, fromData, toDate);
 	}
@@ -176,6 +176,28 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 	@Override
 	public Integer deleteControlLogicSettingDevice(Long id) {
 		return mapper.deleteControlSettingDevice(id, null);
+	}
+
+
+	@Override
+	public List<LiquidVO> getCdLiquid(String liquidId) {
+		return mapper.getCdLiquid(liquidId);
+	}
+	@Override
+	public List<ControlSettingLiquidVO> getControlSettingLiquid(Integer ownerUserIdx) {
+		return mapper.getControlSettingLiquid(ownerUserIdx);
+	}
+	@Override
+	public int insertControlSettingLiquid(ControlSettingLiquidVO param) {
+		return mapper.insertControlSettingLiquid(param);
+	}
+	@Override
+	public int updateControlSettingLiquid(ControlSettingLiquidVO param) {
+		return mapper.updateControlSettingLiquid(param);
+	}
+	@Override
+	public int deleteControlSettingLiquid(Long id, Integer ownerUserIdx) {
+		return mapper.deleteControlSettingLiquid(id, ownerUserIdx);
 	}
 
 	@Override

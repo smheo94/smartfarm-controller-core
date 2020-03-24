@@ -58,16 +58,17 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 			HashMap<String, Object> param = new HashMap<>();
 			param.put("id", id);
 			param.put("file_idx_list", fileIdList);
-			if(contentType.equals("11") || contentType.equals("21") || contentType.equals("1") || contentType.equals("2")) {
-				return houseDiaryMapper.deleteHouseDiaryFile(param);
-			} else if(contentType.equals("31") || contentType.equals("3")){
-				return houseDiaryMapper.deleteCropsDiaryFile(param);
-			}
+			return houseDiaryMapper.deleteHouseDiaryFile(param);
+//			if(contentType.equals("11") || contentType.equals("21") || contentType.equals("1") || contentType.equals("2")) {
+////				return houseDiaryMapper.deleteHouseDiaryFile(param);
+////			} else if(contentType.equals("31") || contentType.equals("3")){
+////				return houseDiaryMapper.deleteCropsDiaryFile(param);
+////			}
 		} catch(Exception e) {
 			log.warn("deleteDiaryFileList" , e);
 			return -1;
 		}
-		return 0;
+//		return 0;
 	}
 	@Override
 	public Integer insertDiaryFile(String contentType, Integer id, MultipartFile[] file) {
@@ -79,30 +80,37 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 				if(!file[i].isEmpty()){
 					String fileName=file[i].getOriginalFilename();
 					byte[] bytes = file[i].getBytes();
-					if(contentType.equals("11") || contentType.equals("21") || contentType.equals("1") || contentType.equals("2")){
-						HouseDiaryVO houseDiaryVO = new HouseDiaryVO();
-						houseDiaryVO.setId(id);
-						houseDiaryVO.setFile(bytes);
-						houseDiaryVO.setFileName(fileName);
-//						HouseDiaryVO dbhouseDiaryVO  = houseDiaryMapper.selectHouseDiaryFile(houseDiaryVO);
-//						if( dbhouseDiaryVO != null ) {
-//							result = houseDiaryMapper.updateHouseDiaryFile(houseDiaryVO);
-//						} else {
-							result = houseDiaryMapper.insertHouseDiaryFile(houseDiaryVO);
-//						}
-					}
-					else if(contentType.equals("31") || contentType.equals("3")){
-						HouseCropsDiaryVO houseCropsDiaryVO= new HouseCropsDiaryVO();
-						houseCropsDiaryVO.setId(id);
-						houseCropsDiaryVO.setFile(bytes);
-						houseCropsDiaryVO.setFileName(fileName);
-//						HouseCropsDiaryVO dbhouseDiaryVO  = houseDiaryMapper.selectCropsDiaryFile(houseCropsDiaryVO);
-//						if( dbhouseDiaryVO != null ) {
-//							result = houseDiaryMapper.updateCropsDiaryFile(houseCropsDiaryVO);
-//						} else {
-							result = houseDiaryMapper.insertCropsDiaryFile(houseCropsDiaryVO);
-//						}
-					}
+//					if( contentType == null ) {
+					HouseDiaryVO houseDiaryVO = new HouseDiaryVO();
+					houseDiaryVO.setId(id);
+					houseDiaryVO.setFile(bytes);
+					houseDiaryVO.setFileName(fileName);
+					result = houseDiaryMapper.insertHouseDiaryFile(houseDiaryVO);
+//					}
+//					else if(contentType.equals("11") || contentType.equals("21") || contentType.equals("1") || contentType.equals("2")){
+//						HouseDiaryVO houseDiaryVO = new HouseDiaryVO();
+//						houseDiaryVO.setId(id);
+//						houseDiaryVO.setFile(bytes);
+//						houseDiaryVO.setFileName(fileName);
+////						HouseDiaryVO dbhouseDiaryVO  = houseDiaryMapper.selectHouseDiaryFile(houseDiaryVO);
+////						if( dbhouseDiaryVO != null ) {
+////							result = houseDiaryMapper.updateHouseDiaryFile(houseDiaryVO);
+////						} else {
+//							result = houseDiaryMapper.insertHouseDiaryFile(houseDiaryVO);
+////						}
+//					}
+//					else if(contentType.equals("31") || contentType.equals("3")){
+//						HouseCropsDiaryVO houseCropsDiaryVO= new HouseCropsDiaryVO();
+//						houseCropsDiaryVO.setId(id);
+//						houseCropsDiaryVO.setFile(bytes);
+//						houseCropsDiaryVO.setFileName(fileName);
+////						HouseCropsDiaryVO dbhouseDiaryVO  = houseDiaryMapper.selectCropsDiaryFile(houseCropsDiaryVO);
+////						if( dbhouseDiaryVO != null ) {
+////							result = houseDiaryMapper.updateCropsDiaryFile(houseCropsDiaryVO);
+////						} else {
+//							result = houseDiaryMapper.insertCropsDiaryFile(houseCropsDiaryVO);
+////						}
+//					}
 				}
 			}
 

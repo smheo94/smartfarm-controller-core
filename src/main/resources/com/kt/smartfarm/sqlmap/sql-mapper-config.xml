@@ -11,6 +11,8 @@
 		<typeAlias alias="commonEnvVO" type="com.kt.smartfarm.service.CommonEnvVO"/>
 		<typeAlias alias="controllerEnvVO" type="com.kt.smartfarm.service.ControllerEnvVO" />
         <typeAlias alias="controllerDepDeviceTypeVO" type="com.kt.smartfarm.service.ControllerDepDeviceTypeVO"/>
+		<typeAlias alias="liquidVO" type="com.kt.smartfarm.service.LiquidVO" />
+		<typeAlias alias="controlSettingLiquidVO" type="com.kt.smartfarm.service.ControlSettingLiquidVO" />
 
 
         <typeAlias alias="deviceEnvVO" type="com.kt.smartfarm.service.DeviceEnvVO"/>

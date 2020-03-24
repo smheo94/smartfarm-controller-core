@@ -69,4 +69,10 @@ public interface ControlLogicSettingMapper {
 	void updateLogicEnv(Map<String, Object> param);
 
 
+	List<LiquidVO> getCdLiquid(@Param("liquid_id") String liquidId);
+    List<ControlSettingLiquidVO> getControlSettingLiquid(@Param("ownerUserIdx") Integer ownerUserIdx);
+    int insertControlSettingLiquid(ControlSettingLiquidVO param);
+	int updateControlSettingLiquid(ControlSettingLiquidVO param);
+    int deleteControlSettingLiquid(@Param("id") Long id, @Param("ownerUserIdx") Integer ownerUserIdx);
+
 }

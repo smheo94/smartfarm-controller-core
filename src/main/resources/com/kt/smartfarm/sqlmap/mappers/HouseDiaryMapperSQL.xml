@@ -31,12 +31,10 @@
 
 
 	<insert id="insertHouseDiary" useGeneratedKeys="true" parameterType="houseDiaryVO">
-		INSERT INTO house_diary
-			(
+		INSERT INTO house_diary (
 				green_house_id,title,content,work,etc,start_date,end_date,crops,harvest,income,spend,content_type,work_time,cctv_image_url,weather,diary_type_id,diary_data
-			)
-		VALUES 
-			(
+		)
+		VALUES (
 				#{greenHouseId},#{title},#{content},#{work},#{etc},#{startDate},#{endDate},#{crops},#{harvest},#{income},#{spend},#{contentType},#{workTime},#{cctvImageUrl},#{weather},#{diaryTypeId},
 		'${@com.kt.cmmn.util.MapUtils@toJson(diaryData)}'
 			);
@@ -66,8 +64,8 @@
 		<set>
 			<if test="title != null">title =#{title},</if>
 			<if test="content != null">content =#{content},</if>
-			<if test="diary_type_id != null">diary_type_id =#{diaryTypeId},</if>
-			<if test="diary_data != null">diary_data ='${@com.kt.cmmn.util.MapUtils@toJson(diaryData)}',</if>
+			<if test="diaryTypeId != null">diary_type_id =#{diaryTypeId},</if>
+			<if test="diaryData != null">diary_data ='${@com.kt.cmmn.util.MapUtils@toJson(diaryData)}',</if>
 			<if test="work != null">work =#{work},</if>
 			<if test="etc != null">etc =#{etc},</if>
 			<if test="startDate != null">start_date =#{startDate},</if>

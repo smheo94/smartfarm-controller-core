@@ -150,6 +150,20 @@ public class CodeDataController {
         }
     }
 
+	/**
+	 * @description 컨트롤 셋팅 오퍼레이터 리스트
+	 * @return
+	 */
+	@RequestMapping(value= "/code/liquid", method = RequestMethod.GET)
+	//@ApiOperation(value = "액체 비료 목록을 전달")
+	@ResponseBody
+	public Result<List<LiquidVO>> liquidList(@RequestParam(name = "liquidId", required = false) String liquidId){
+		try {
+			return new Result(controlLogicSettingService.getCdLiquid(liquidId));
+		} catch(Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		}
+	}
 
 
 }

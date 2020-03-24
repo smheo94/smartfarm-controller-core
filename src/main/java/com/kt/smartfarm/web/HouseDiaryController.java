@@ -88,7 +88,7 @@ public class HouseDiaryController {
 	
 	@RequestMapping(value= "/diaryFile", method = RequestMethod.POST, consumes = { "*/*" })
 	@ResponseBody
-	public Result insertDiaryFile(@RequestParam("content_type") String contentType, @RequestParam("id") Integer id, 
+	public Result insertDiaryFile(@RequestParam(value = "content_type", required = false) String contentType, @RequestParam("id") Integer id,
 			@RequestPart(value="file", required=false) MultipartFile[] file){
 		try{
 			return new Result(houseDiaryService.insertDiaryFile(contentType,id,file));
@@ -102,7 +102,7 @@ public class HouseDiaryController {
 	@RequestMapping(value= "/diaryFile", method = RequestMethod.DELETE, consumes = { "*/*" })
 	@ResponseBody
 	@InterceptLog
-	public Result insertDiaryFile(@RequestParam("content_type") String contentType, @RequestParam("id") Integer id,
+	public Result insertDiaryFile(@RequestParam(value = "content_type", required = false) String contentType, @RequestParam("id") Integer id,
 								  @RequestBody FileIdxListVO fileIdList){
 		try{
 			return new Result(houseDiaryService.deleteDiaryFileList(contentType,id,fileIdList.fileIdxList));
@@ -111,18 +111,6 @@ public class HouseDiaryController {
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
-//	@RequestMapping(value= "/diaryFile", method = RequestMethod.PUT, consumes = {"*/*"})
-//	@ResponseBody
-//	public Result update( @RequestParam("content_type") String contentType, @RequestParam("id") Integer id,
-//			@RequestPart(value="file", required=false) MultipartFile[] file){
-//		try{
-//			return new Result(houseDiaryService.updateDiaryFile(contentType,id,file));
-//
-//		}catch(Exception e){
-//
-//			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-//		}
-//	}
 	
 	/**
 	 * @description 작업일지, 가계부 update
@@ -132,8 +120,9 @@ public class HouseDiaryController {
 	@RequestMapping(value= "/{id}", method = RequestMethod.PUT)
 	@ResponseBody
 	@InterceptLog
-	public Result update(@RequestBody HouseDiaryVO houseDiaryVO){
+	public Result update(@PathVariable("id") Integer id,  @RequestBody HouseDiaryVO houseDiaryVO){
 		try{
+			houseDiaryVO.setId(id);
 			return new Result(houseDiaryService.updateHouseDiary(houseDiaryVO));
 		}catch(Exception e){
 			
@@ -216,6 +205,7 @@ public class HouseDiaryController {
 
 	@RequestMapping(value= "/cropsDiary/{id}", method = RequestMethod.GET)
 	@ResponseBody
+	@Deprecated
 	public Result cropsDiaryDetail(@PathVariable Integer id){
 		try{
 			return new Result(houseDiaryService.getCropsDiaryDetail(id));
@@ -261,6 +251,7 @@ public class HouseDiaryController {
 	 */
 	@RequestMapping(value= "/cropsDiary/{id}", method = RequestMethod.PUT)
 	@ResponseBody
+	@Deprecated
 	public Result updateCropsDiary(@RequestBody HouseCropsDiaryVO houseCropsVO){
 		try{
 			return new Result(houseDiaryService.updateCropsDiary(houseCropsVO));
@@ -277,6 +268,7 @@ public class HouseDiaryController {
 	 */
 	@RequestMapping(value= "/cropsDiary/{id}", method = RequestMethod.DELETE)
 	@ResponseBody
+	@Deprecated
 	public Result deleteCropsDiary(@PathVariable("id") Integer id){
 		try{
 			return new Result(houseDiaryService.deleteCropsDiary(id));

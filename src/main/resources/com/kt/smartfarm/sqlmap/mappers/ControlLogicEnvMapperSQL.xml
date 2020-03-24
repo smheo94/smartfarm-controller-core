@@ -25,6 +25,7 @@
 		id,
 		logic_id,
 		device_num,
+		device_param_code,
 		device_param_name,
 		device_type,
 		is_main,

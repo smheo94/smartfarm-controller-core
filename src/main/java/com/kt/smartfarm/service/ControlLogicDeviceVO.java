@@ -22,6 +22,7 @@ public class ControlLogicDeviceVO {
 	Long id;
 	Integer logicId;
 	Integer deviceNum;
+	String deviceParamCode;
 	String deviceParamName;
 	String deviceType;
 	Integer isMain;

@@ -11,6 +11,28 @@
 
     <profiles>
         <profile>
+            <id>dev-smartfarm</id>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-compiler-plugin</artifactId>
+                            <configuration>
+                                <excludes>**/SwaggerConfig.java</excludes>
+                                <source>1.8</source>
+                                <target>1.8</target>
+                                <encoding>UTF-8</encoding>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
             <id>dev-center</id>
             <dependencies>
                 <dependency>
@@ -24,35 +46,8 @@
                     <version>2.6.1</version>
                 </dependency>
             </dependencies>
-            <properties>
-                <env>dev-center</env>
-            </properties>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
         </profile>
-        <profile>
-            <id>dev-smartfarm</id>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-compiler-plugin</artifactId>
-                            <configuration>
-                                <excludes>com\kt\smartfarm\config\SwaggerConfig.java</excludes>
-                                <source>1.8</source>
-                                <target>1.8</target>
-                                <encoding>UTF-8</encoding>
-                            </configuration>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-            </build>
-            <properties>
-                <env>dev-smartfarm</env>
-            </properties>
-        </profile>
+
     </profiles>
 	<properties>
         <!--<env>dev-center</env>-->
@@ -163,7 +158,7 @@
 		<dependency>
 		    <groupId>org.projectlombok</groupId>
 		    <artifactId>lombok</artifactId>
-		    <version>1.16.18</version>
+		    <version>1.18.2</version>
 		    <!-- <scope>provided</scope>
 		    -->
 		</dependency>
