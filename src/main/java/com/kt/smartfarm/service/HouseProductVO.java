@@ -22,4 +22,6 @@ public class HouseProductVO {
     public Long updateDt;
     public Long deleteDt;
     public Integer isDeleted;
+    HashMap<String,Object> properties = new HashMap<>();
+
 }
