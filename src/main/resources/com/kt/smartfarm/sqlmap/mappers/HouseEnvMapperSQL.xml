@@ -374,6 +374,7 @@
 			<if test="isMiniVms != null">, is_mini_vms =  IFNULL(CASE #{isMiniVms} WHEN 'true' THEN 1 WHEN 'false' THEN 0 ELSE #{isMiniVms} END, 0)</if>
 			<if test="enablePtz != null">, enable_ptz = IFNULL(CASE #{enablePtz} WHEN 'true' THEN 1 WHEN 'false' THEN 0 ELSE #{enablePtz} END, 0)</if>
 			<if test="wowzaId != null">, wowza_id = #{wowzaId}</if>
+			<if test="properties != null">, properties = '${@com.kt.cmmn.util.MapUtils@toJson(properties)}'</if>
 		</set>
 		WHERE house_id = #{houseId} AND id = #{id};				
 	</update>
