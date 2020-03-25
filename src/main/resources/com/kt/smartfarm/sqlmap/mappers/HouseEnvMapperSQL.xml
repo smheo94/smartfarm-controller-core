@@ -52,7 +52,7 @@
 			,#{id}
 		</if>
 		<if test="id == null or id == -1">
-			,NEXTVAL_green_house_product(#{}gsmKey})
+			,NEXTVAL_green_house_product(#{gsmKey})
 		</if>
 		);
 		<selectKey keyProperty="id" resultType="long">
