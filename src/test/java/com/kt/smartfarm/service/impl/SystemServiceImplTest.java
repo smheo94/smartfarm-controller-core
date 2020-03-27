@@ -2,8 +2,11 @@ package com.kt.smartfarm.service.impl;
 
 import com.kt.cmmn.util.JasyptUtil;
 import com.kt.cmmn.util.MapUtils;
+import com.kt.cmmn.util.RestClientUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -18,8 +21,11 @@ public class SystemServiceImplTest {
     @Test
     public void encrypt(){
         //String anyQuery = "select * from event where gsm_key = 1110 order by id desc  limit 20";
-        String anyQuery = "UPDATE `device_v_dep_device` SET `device_num` = '1' WHERE id = 82";
+        //String anyQuery = "UPDATE `device_v_dep_device` SET `device_num` = '1' WHERE id = 82";
 
+        String anyQuery = /*[오후 1:45:53][3 ms]*/ "SELECT * FROM push_history LIMIT 1000";
+        //String anyQuery = /*[오후 1:45:53][1 ms]*/ "SHOW KEYS FROM `sf_main_kt`.`control_logic_property_lnk`;";
+        //String anyQuery = /*[오후 1:45:53][1 ms]*/ "SHOW CREATE TABLE `sf_main_kt`.`control_logic_property_lnk`;";
         //String anyQuery = "SELECT * FROM  device_v_dep_device WHERE p_device_id = '637100053'";
 
         //SELECT * FROM `sf_main`.`oauth_client_details` LIMIT 0, 1000;
@@ -33,7 +39,7 @@ public class SystemServiceImplTest {
         //String apiUrl = "https://apismartfarm.kt.co.kr/env/system/data/";
 
 
-//        RestClientUtil client = new RestClientUtil(oAuthserver, "kt-gsm-controller", "05dc8fbd5e01a6625e8a6eb1ddf482c9");//"51724690439c3e4e89a9efc5e2ca567d5e4b09e6fa69a06bd65e7597418737cc");
+//      RestClientUtil client = new RestClientUtil(oAuthserver, "kt-gsm-controller", "05dc8fbd5e01a6625e8a6eb1ddf482c9");//"51724690439c3e4e89a9efc5e2ca567d5e4b09e6fa69a06bd65e7597418737cc");
 
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("any_query", anyQuery );
