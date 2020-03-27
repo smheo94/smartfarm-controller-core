@@ -185,7 +185,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 					List<ControlLogicSettingVO> logicList = houseEnvMapper.getHouseControlSettings(ClassUtil.castToSomething(houseMap.get("id"), Long.class));
 					houseMap.put("logicList", logicList);
 
-					List<HouseProductVO> productList = houseEnvMapper.listHouseProduct(null, null, houseId);
+					List<HouseProductVO> productList = houseEnvMapper.listHouseProduct(gsmKey, houseId, null);
 					houseMap.put("productList", productList);
 				}
 

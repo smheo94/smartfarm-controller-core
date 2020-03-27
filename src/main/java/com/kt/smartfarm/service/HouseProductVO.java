@@ -3,7 +3,7 @@ package com.kt.smartfarm.service;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Map;
+import java.util.HashMap;
 
 @Data
 public class HouseProductVO {
@@ -22,4 +22,6 @@ public class HouseProductVO {
     public Long updateDt;
     public Long deleteDt;
     public Integer isDeleted;
+    HashMap<String,Object> properties = new HashMap<>();
+
 }
