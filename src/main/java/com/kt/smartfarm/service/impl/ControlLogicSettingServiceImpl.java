@@ -12,20 +12,31 @@
  */
 package com.kt.smartfarm.service.impl;
 
+import com.kt.cmmn.util.MapUtils;
+import com.kt.cmmn.util.RestClientUtil;
+import com.kt.smartfarm.config.SmartfarmInterceptorConfig;
 import com.kt.smartfarm.service.*;
 import com.kt.smartfarm.supervisor.mapper.ControlLogicSettingMapper;
 import com.kt.smartfarm.supervisor.mapper.HouseEnvMapper;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Slf4j
 @Service("controlLogicSettingService")
 public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl implements ControlLogicSettingService {
+
+	@Autowired
+	SmartfarmInterceptorConfig config;
 
 	@Resource(name = "controlLogicSettingMapper")
 	ControlLogicSettingMapper mapper;
@@ -148,6 +159,22 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 				if (isExist == 0) {
 					mapper.insertControlSettingDevice(device);
 				}
+			}
+		}
+		if( config.isSmartfarmSystem() && Objects.equals(vo.autoManualMode,  "manual") ) {
+			HashMap<String,Object> param = new HashMap<>();
+			param.put("controlSettingId", vo.controlSettingId);
+			param.put("logicId", vo.logicId);
+			param.put("command", "manual_mode_change");
+			try{
+				log.info("manual command");
+				RestTemplate client = new RestTemplate();
+				String url = "http://127.0.0.1:9876/api/v1/device/operation_command";
+				HashMap<String, Object> responseData = (HashMap<String, Object>) client.postForObject(url, param, HashMap.class);
+				String result = MapUtils.toJson(responseData);
+				log.info("command ========== " + result);
+			}catch(Exception e){
+				log.error("command : {}", param,  e);
 			}
 		}
 		return vo;
