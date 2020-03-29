@@ -12,6 +12,12 @@
  */
 package com.kt.smartfarm.service.impl;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.kt.cmmn.util.ClassUtil;
+import com.kt.cmmn.util.GSMUtil;
 import com.kt.cmmn.util.MapUtils;
 import com.kt.cmmn.util.RestClientUtil;
 import com.kt.smartfarm.config.SmartfarmInterceptorConfig;
@@ -20,16 +26,16 @@ import com.kt.smartfarm.supervisor.mapper.ControlLogicSettingMapper;
 import com.kt.smartfarm.supervisor.mapper.HouseEnvMapper;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.io.IOException;
+import java.sql.Time;
+import java.util.*;
 
 @Slf4j
 @Service("controlLogicSettingService")
@@ -43,6 +49,8 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 
 	@Resource(name = "houseEnvMapper")
 	HouseEnvMapper houseEnvMapper;
+
+	private static final ObjectMapper objMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
 	@Override
 	public List<ControlLogicSettingVO> getLogicSetting(Long gsmKey, Long houseId, Long controlSettingId) {
@@ -62,6 +70,9 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 
 	@Override
 	public ControlLogicSettingVO insertLogicSetting(ControlLogicSettingVO vo) {
+	    if( vo != null ) {
+            vo.logicPeriodEnv = periodSort(vo.logicPeriodEnv);
+        }
 		Long tempControlSettingId = null;
 		if(vo.getControlSettingId() !=null){
 			tempControlSettingId = vo.getControlSettingId();
@@ -100,7 +111,53 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 		return vo;
 	}
 
-	@Override
+    private String periodSort(String logicPeriodEnv) {
+        try {
+            if( logicPeriodEnv == null ) {
+                return logicPeriodEnv;
+            }
+            JsonNode periodEnv = objMapper.readTree(logicPeriodEnv);
+            if( !periodEnv.isArray() ) {
+                return logicPeriodEnv;
+            }
+            SortedMap<Calendar, JsonNode> sortedNodes = new TreeMap<>();
+            List<JsonNode> unsortedNodes = new ArrayList<>();
+            for(JsonNode env : periodEnv) {
+                if( env.isObject() ) {
+                    JsonNode conditionNode = env.get("condition");
+                    JsonNode timeNode = env.get("on_start_time");
+                    if( timeNode == null ) {
+                        timeNode=  env.get("relative_start_time");
+                    }
+                    if( timeNode == null ) {
+                        timeNode=  env.get("relative_time");
+                    }
+                    if( timeNode == null || conditionNode == null) {
+                        unsortedNodes.add(env);
+						continue;
+                    }
+                    Time relativeTime = ClassUtil.castToSomething(timeNode.asText(), Time.class);
+                    Integer condition = ClassUtil.castToSomething(conditionNode.asText(), Integer.class);
+                    Calendar convertCal = GSMUtil.getRealTime(relativeTime, condition);
+                    if( convertCal == null ) {
+						unsortedNodes.add(env);
+						continue;
+					}
+                    sortedNodes.put(convertCal, env);
+                }
+            }
+            List<JsonNode> sortedNodeList = new ArrayList<>(sortedNodes.values());
+            ((ArrayNode)periodEnv).removeAll();
+            ((ArrayNode)periodEnv).addAll(sortedNodeList);
+            ((ArrayNode)periodEnv).addAll(unsortedNodes);
+            return objMapper.writeValueAsString(periodEnv);
+        } catch (Exception e) {
+           log.warn("Sorted Fail : {}", logicPeriodEnv);
+           return logicPeriodEnv;
+        }
+    }
+
+    @Override
 	public Integer delLogicSetting(Long controlSettingId) {
 		List<ControlLogicSettingVO> logicSettingVOList = mapper.getControlLogicSetting(null, null, controlSettingId, null);
 		if (logicSettingVOList == null || logicSettingVOList.size() == 0 || logicSettingVOList.get(0) == null) {
@@ -123,6 +180,9 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 
 	@Override
 	public ControlLogicSettingVO updateLogicSetting(ControlLogicSettingVO vo) {
+        if( vo != null ) {
+            vo.logicPeriodEnv = periodSort(vo.logicPeriodEnv);
+        }
 		if (vo.getControlSettingId() == null) {
 			return vo;
 		}
@@ -187,6 +247,10 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 
 	@Override
 	public void updateLogicEnv(Map<String, Object> param) {
+		if( param.containsKey("logic_period_env")) {
+			String logicPeriodEnv = (String) param.get("logic_period_env");
+			param.put("logic_period_env", periodSort(logicPeriodEnv));
+		}
 		mapper.updateLogicEnv(param);
 	}
 	
