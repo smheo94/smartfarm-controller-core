@@ -65,6 +65,9 @@ public class RestClientUtil {
             }
         }
     }
+    public OAuth2RestTemplate getClient() {
+        return this.client;
+    }
     public <T> ResponseEntity<T> getForEntity(String url, Class<T> tClass, Object... urlData){
         return client.getForEntity(url, tClass, urlData);
     }

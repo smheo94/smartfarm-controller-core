@@ -22,6 +22,11 @@ import java.util.Map;
 
 import com.kt.cmmn.util.*;
 import com.kt.smartfarm.config.SmartfarmInterceptorConfig;
+import com.kt.smartfarm.lamplog.LampLog;
+import com.kt.smartfarm.service.LampLogService;
+import com.kt.smartfarm.lamplog.models.LOG_SECURITY_EVENT;
+import com.kt.smartfarm.lamplog.models.LOG_SECURITY_TYPE;
+import com.kt.smartfarm.lamplog.models.LOG_TYPE;
 import com.kt.smartfarm.service.*;
 import com.kt.smartfarm.intercepter.SmartFarmDataInterceptor;
 
@@ -30,7 +35,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 //import io.swagger.annotations.ApiOperation;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -67,6 +71,9 @@ public class GsmEnvController {
 	HttpServletRequest request;
 	@Autowired
 	SmartfarmInterceptorConfig config;
+
+	@Autowired
+	private LampLogService lampLogService;
 	/**
 	 * 제어모듈 수정
 	 * @param gsmKey
@@ -79,17 +86,26 @@ public class GsmEnvController {
 	@InterceptPre
 	@InterceptLog
 	public Result<GsmEnvVO> update(@RequestBody GsmEnvVO gsmInfo, @PathVariable("gsmKey") Long gsmKey){
+		LampLog lampLog = lampLogService.createTransactionLog("gsm.update", LOG_TYPE.IN_MSG, new AuthorityChecker().getName(), null, null);
 		try {
+			lampLog.addSecurity(LOG_SECURITY_TYPE.PRCS, LOG_SECURITY_EVENT.UPDATE, String.valueOf(gsmInfo.getGsmKey()));
 			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
+				lampLog.error(HttpStatus.FORBIDDEN.toString(), "Not Allowed");
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmInfo);
 			}
 			if(!gsmKey.equals(gsmInfo.getGsmKey())) {
+				lampLog.error(HttpStatus.CONFLICT.toString(), "Unmatched GSM key");
 				return new Result("Unmatched GSM key", HttpStatus.CONFLICT, gsmInfo);
 			}
 			gsmEnvService.update(gsmInfo);
+			lampLog.success();
 			return new Result(gsmInfo);
 		} catch(Exception e) {
+			lampLog.exception(e.getMessage());
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, gsmInfo);
+		}
+		finally {
+			lampLogService.sendLog(lampLog);
 		}
 	}
 	
@@ -104,19 +120,27 @@ public class GsmEnvController {
 	@InterceptLog
 	@InterceptIgnoreGSMKey
 	public Result<GsmEnvVO> insert(HttpServletRequest request,HttpServletResponse response, @RequestBody GsmEnvVO gsmInfo){
+		LampLog lampLog = lampLogService.createTransactionLog("gsm.insert", LOG_TYPE.IN_MSG, new AuthorityChecker().getName(), null, null);
 		try {
+			lampLog.addSecurity(LOG_SECURITY_TYPE.PRCS, LOG_SECURITY_EVENT.CREATE, String.valueOf(gsmInfo.getGsmKey()));
 			if( !authCheckService.authCheck(gsmInfo.getGsmKey(), null, null, null) ) {
+				lampLog.error(HttpStatus.FORBIDDEN.toString(), "Not Allowed");
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmInfo);
 			}
 			Map gi = gsmEnvService.get(gsmInfo.getGsmKey(), false, false);
 			if ( gi != null && gi.get("gsmKey") != null ) {
+				lampLog.error(HttpStatus.CONFLICT.toString(), "Duplicate entry");
 				return new Result("Duplicate entry", HttpStatus.CONFLICT, gi);
 			}
 			Long result = gsmEnvService.insert(gsmInfo);
 			response.setHeader(SmartFarmDataInterceptor.X_HEADER_GSM_KEY, gsmInfo.getGsmKey().toString());
+			lampLog.success();
 			return new Result(gsmInfo);
 		} catch(Exception e) {
+			lampLog.exception(e.getMessage());
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, gsmInfo);
+		} finally {
+			lampLogService.sendLog(lampLog);
 		}
 	}
 
@@ -133,15 +157,24 @@ public class GsmEnvController {
 	@InterceptPost
 	@InterceptIgnoreGSMKey
 	public Result<GsmEnvVO> copyTo(HttpServletRequest request,HttpServletResponse response, @PathVariable("from_gsm_key") Long fromGsmKey, @PathVariable("to_gsm_key") Long toGsmKey){
+		LampLog lampLog = lampLogService.createTransactionLog("gsm.copy", LOG_TYPE.IN_MSG, new AuthorityChecker().getName(), null, null);
 		try {
+			lampLog.addSecurity(LOG_SECURITY_TYPE.PRCS, LOG_SECURITY_EVENT.CREATE, String.valueOf(toGsmKey));
 			if( !authCheckService.authCheck(null, null, Arrays.asList(fromGsmKey, toGsmKey), null) ) {
+				lampLog.error(HttpStatus.FORBIDDEN.toString(), HttpStatus.FORBIDDEN.getReasonPhrase());
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, fromGsmKey);
 			}
+			lampLog.success();
 			return new Result(gsmEnvService.copyToNewGsm(request, fromGsmKey, toGsmKey));
 		} catch(Exception e) {
+			lampLog.exception(e.getMessage());
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, Arrays.asList(fromGsmKey, toGsmKey));
+		} finally{
+			lampLogService.sendLog(lampLog);
 		}
 	}
+
+
 
 
 	@RequestMapping(value= "/{gsm_key}/sync", method = RequestMethod.POST)
@@ -209,14 +242,21 @@ public class GsmEnvController {
 	@InterceptLog
 //	@InterceptPre
 	public Result<String> delete(@PathVariable("gsmKey") Long gsmKey){
+		LampLog lampLog = lampLogService.createTransactionLog("gsm.delete", LOG_TYPE.IN_MSG, new AuthorityChecker().getName(), null, null);
 		try {
+			lampLog.addSecurity(LOG_SECURITY_TYPE.PRCS, LOG_SECURITY_EVENT.DELETE, String.valueOf(gsmKey));
 			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
+				lampLog.error(HttpStatus.FORBIDDEN.toString(), HttpStatus.FORBIDDEN.getReasonPhrase());
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
 			}
 			gsmEnvService.delete(gsmKey);
+			lampLog.success();
 			return new Result("OK",HttpStatus.OK,null);
 		} catch(Exception e) {
+			lampLog.exception(e.getMessage());
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		} finally {
+			lampLogService.sendLog(lampLog);
 		}
 	}
 	

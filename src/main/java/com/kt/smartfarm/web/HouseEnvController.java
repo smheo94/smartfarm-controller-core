@@ -18,11 +18,13 @@ package com.kt.smartfarm.web;
 import java.util.HashMap;
 import java.util.List;
 
-import com.kt.cmmn.util.InterceptLog;
-import com.kt.cmmn.util.InterceptPost;
-import com.kt.cmmn.util.InterceptPre;
-import com.kt.cmmn.util.Result;
+import com.kt.cmmn.util.*;
 import com.kt.smartfarm.config.SmartfarmInterceptorConfig;
+import com.kt.smartfarm.lamplog.LampLog;
+import com.kt.smartfarm.service.LampLogService;
+import com.kt.smartfarm.lamplog.models.LOG_SECURITY_EVENT;
+import com.kt.smartfarm.lamplog.models.LOG_SECURITY_TYPE;
+import com.kt.smartfarm.lamplog.models.LOG_TYPE;
 import com.kt.smartfarm.service.*;
 
 import javax.annotation.Resource;
@@ -51,6 +53,9 @@ public class HouseEnvController {
 	private AuthCheckService authCheckService;
 	@Autowired
 	SmartfarmInterceptorConfig config;
+
+	@Autowired
+	private LampLogService lampLogService;
 	/**
 	 * @description 온실 등록 ( 제어기 선택은 어디서? 밑에서~ )
 	 * @param gsmKey
@@ -61,14 +66,22 @@ public class HouseEnvController {
 	@InterceptPost
 	@InterceptLog
 	public Result<HouseEnvVO> insert(@PathVariable("gsm_key") Long gsmKey, @RequestBody HouseEnvVO house) {
+		LampLog lampLog = lampLogService.createTransactionLog("house.create", LOG_TYPE.IN_MSG, new AuthorityChecker().getName(), null, null);
 		try {
+			lampLog.addSecurity(LOG_SECURITY_TYPE.PRCS, LOG_SECURITY_EVENT.CREATE, String.valueOf(gsmKey));
 			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
+				lampLog.forbidden();
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
 			}
+			lampLog.success();
 			return new Result(houseEnvService.insert(house));
 		} catch (Exception e) {
+			lampLog.exception(e.getMessage());
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, house);
+		} finally {
+			lampLogService.sendLog(lampLog);
 		}
+
 	}
 
 	/**
@@ -122,13 +135,20 @@ public class HouseEnvController {
 	@InterceptPre
 	@InterceptLog
 	public Result<HouseEnvVO> update(@PathVariable("gsm_key") Long gsmKey, @RequestBody HouseEnvVO house) {
+		LampLog lampLog = lampLogService.createTransactionLog("house.update", LOG_TYPE.IN_MSG, new AuthorityChecker().getName(), null, null);
 		try {
+			lampLog.addSecurity(LOG_SECURITY_TYPE.PRCS, LOG_SECURITY_EVENT.UPDATE, String.valueOf(gsmKey));
 			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
+				lampLog.forbidden();
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
 			}
+			lampLog.success();
 			return new Result(houseEnvService.update(house)); // gsmKey, id기준으로 업데이트
 		} catch (Exception e) {
+			lampLog.exception(e.getMessage());
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, house);
+		} finally {
+			lampLogService.sendLog(lampLog);
 		}
 	}
 
@@ -163,13 +183,20 @@ public class HouseEnvController {
 	@InterceptPre
 	@InterceptLog
 	public Result<HouseEnvVO> delete(@PathVariable("gsm_key") Long gsmKey, @PathVariable("greenHouseId") Long greenHouseId) {
+		LampLog lampLog = lampLogService.createTransactionLog("house.delete", LOG_TYPE.IN_MSG, new AuthorityChecker().getName(), null, null);
 		try {
+			lampLog.addSecurity(LOG_SECURITY_TYPE.PRCS, LOG_SECURITY_EVENT.DELETE, String.valueOf(gsmKey));
 			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
+				lampLog.forbidden();
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
 			}
+			lampLog.success();
 			return new Result(houseEnvService.delete(gsmKey, greenHouseId));
 		} catch (Exception e) {
+			lampLog.exception(e.getMessage());
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		} finally {
+			lampLogService.sendLog(lampLog);
 		}
 	}
 
