@@ -12,6 +12,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -23,7 +24,6 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Slf4j
-@Configuration
 public class LampLogService
 {
     private static AtomicLong logSeq = new AtomicLong();
@@ -70,7 +70,7 @@ public class LampLogService
                 .timestamp(curTimeStr())
                 .service(getServiceId())
                 .operation(operation)
-                .bizTransactionId(getServiceId() + UUID.randomUUID().toString())
+                .transactionId(getServiceId() + "_" + UUID.randomUUID().toString())
                 .logType(logType)
                 .seq(nextSeq())
                 .caller(LampCaller.builder().channelIp(getCallerIP()).build())
@@ -106,8 +106,18 @@ public class LampLogService
         try {
             String msg = lampObjMapper.writeValueAsString(llog);
             String logFile = lampLogPath + "/" + serviceId + "_"  + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + ".log";
+            File f = new File(logFile);
+            try {
+                if (!f.exists()) {
+                    f.createNewFile();
+                    f.setReadable(true, false);
+                }
+            } catch (Exception e) {
+                log.warn("File Permission Error : ", e);
+            }
             fileWrite = new FileWriter(logFile, true);
             fileWrite.write(msg);
+            fileWrite.write("\n");
             fileWrite.flush();
             //lampLogger.info(lampObjMapper.writeValueAsString(llog));
         } catch (IOException e) {
