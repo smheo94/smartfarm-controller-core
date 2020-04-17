@@ -310,18 +310,8 @@
 
 
     <insert id="insertControlSettingPreOrder" parameterType="controlLogicSettingVO" useGeneratedKeys="true">
-        INSERT INTO control_setting_pre_order (gsm_key, control_setting_id, pre_order_setting_id, id)
-        VALUES( #{tmpGsmKey}, #{controlSettingId}, #{preOrderSettingId}
-        <if test="id == null">
-            ,NEXTVAL_control_setting_pre_order(#{tmpGsmKey})
-        </if>
-        <if test="id != null">
-            ,#{id}
-        </if>
-        );
-        <selectKey keyProperty="id" resultType="Long" keyColumn="id">
-            SELECT LASTVAL_control_setting_pre_order(#{tmpGsmKey}) AS id;
-        </selectKey>
+        INSERT INTO control_setting_pre_order (gsm_key, control_setting_id, pre_order_setting_id)
+        VALUES( #{tmpGsmKey}, #{controlSettingId}, #{preOrderSettingId} );
     </insert>
     <delete id="deleteControlSettingPreOrder">
         DELETE FROM
