@@ -488,6 +488,17 @@
 	
 	</select>
 
+	<insert id="insertUltraShortWeatherData" parameterType="map" useGeneratedKeys="true">
+		INSERT INTO ultra_weather_cast(
+		 base_date, base_time, nx, ny, pty, reh, rn1, t1h, uuu, vec, vvv, wsd
+		)VALUES(
+		 #{base_date}, #{base_time}, #{ny}, #{ny}, #{pty}, #{reh},#{rn1},#{t1h},#{uuu},#{vec},#{vvv},#{wsd}
+		)
+		<selectKey keyProperty="id" resultType="int">
+			SELECT LAST_INSERT_ID() AS id;
+		</selectKey>
+	</insert>
+
 	<insert id="copyToNewGSM">
 		INSERT INTO green_house(
 		product_method_id, green_house_type_id, house_name, latitude, longitude, description, build_date, last_update, addr_1, addr_2, zip,

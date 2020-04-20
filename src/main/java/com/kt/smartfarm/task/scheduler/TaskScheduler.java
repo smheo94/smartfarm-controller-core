@@ -3,11 +3,17 @@ package com.kt.smartfarm.task.scheduler;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kt.cmmn.util.ClassUtil;
+import com.kt.smartfarm.service.UltraShortWeatherVO.UltraShortWeatherVO;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -19,6 +25,7 @@ import org.springframework.stereotype.Component;
 
 import com.kt.cmmn.util.DateUtil;
 import com.kt.smartfarm.service.HouseEnvService;
+import org.springframework.web.client.RestTemplate;
 
 /*
  * 1시간 단위 동네예보 스케쥴러 
@@ -44,6 +51,9 @@ public class TaskScheduler {
 	
 	static String SUNRISE_URL = "http://apis.data.go.kr/B090041/openapi/service/RiseSetInfoService/getLCRiseSetInfo";
 	static String sunCertKey = "l%2FgDtDXE6ZralE2VJSrcon%2FKyKps%2FPANA9o497NfusyEYyei0Zv1fAWqJoxz8jaah7nv853ln7cxCWJypWOMLA%3D%3D";
+
+	static String ULTRASRTNCST_URL = "http://apis.data.go.kr/1360000/VilageFcstInfoService/getUltraSrtNcst";
+	static String ultraCertKey = "RxrU3O5OC4pUiE6GEGShKBl181iacSPsFyXR32lZv0ohgQy6Frr5CRikB1qGdSVOZqHtX55VFoMoje2o3HJegg%3D%3D";
 	
 	public void runWeatherSchedule(){
 		List<HashMap<String,Object>> houseList = new ArrayList<>();
@@ -186,6 +196,68 @@ public class TaskScheduler {
 				        houseEnvService.insertSunriseData(hm);
 					}catch(Exception e){
 						log.debug(e.getMessage());
+					}
+				}
+			}
+		}
+	}
+
+
+
+
+	public void runUltraShortWeatherSchedule() throws URISyntaxException {
+		if(SYSTEM_TYPE.equalsIgnoreCase("supervisor")){
+			List<HashMap<String,Object>> houseList = new ArrayList<>();
+			houseList = houseEnvService.getAllList();
+			LocalDateTime now = LocalDateTime.now();
+			DateTimeFormatter baseDateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+			DateTimeFormatter baseTimeFormatter = DateTimeFormatter.ofPattern("HHmm");
+			String baseDate = now.format(baseDateFormatter);
+			String baseTime = now.format(baseTimeFormatter);
+			HashMap<Double, Double> locationMap = new HashMap<>();
+
+			for(int i=0; i<houseList.size(); i++){
+				if(houseList.get(i).get("latitude") != null && houseList.get(i).get("longitude") != null){
+					Double longitude = Double.parseDouble(houseList.get(i).get("longitude").toString());
+					Double latitude = Double.parseDouble(houseList.get(i).get("latitude").toString());
+
+					//중복 제거
+					Double existLocation = locationMap.get(longitude);
+					if(existLocation == null) {
+						log.info("[UltraSrcNcst] NEW LOCATION HOUSE id : {}, greenHouseId : {}", houseList.get(i).get("id"));
+						locationMap.put(longitude, latitude);
+
+						HashMap<String,Object> gridXY = getGridxy(latitude,longitude);
+						String nx = gridXY.get("x").toString();
+						String ny = gridXY.get("y").toString();
+
+						if(Integer.parseInt(nx) > 0 && Integer.parseInt(ny) >0){
+							try{
+								URI uri = new URI(ULTRASRTNCST_URL
+										+"?serviceKey=" + ultraCertKey
+										+"&pageNo=1"
+										+"&numOfRows=10"
+										+"&dataType=JSON"
+										+"&base_date="+baseDate
+										+"&base_time="+baseTime
+										+"&nx=" + nx
+										+"&ny="+ny
+								);
+								RestTemplate restTemplate = new RestTemplate();
+								String result = restTemplate.getForObject(uri, String.class);
+								ObjectMapper mapper = new ObjectMapper();
+								UltraShortWeatherVO ultraShortWeatherVO = mapper.readValue(result , UltraShortWeatherVO.class);
+								log.info("URI : {}", uri.toString());
+
+								if(ultraShortWeatherVO.getResponse().getHeader().getResultCode().equals("00")){
+									LinkedHashMap<String, Object> ultraSrtMap = ultraShortWeatherVO.ultraOjbToMap(baseDate, baseTime);
+									log.info("cast! : category" + ultraShortWeatherVO.getResponse().getBody().getItems().getItem().get(0).getCategory()+ " , valuie" + ultraShortWeatherVO.getResponse().getBody().getItems().getItem().get(0).getObsrValue());
+									houseEnvService.insertUltraShortWeather(ultraSrtMap);
+								}
+							}catch(Exception e){
+								log.error("run Ultra Short Ncst Exception : {}" , e);
+							}
+						}
 					}
 				}
 			}

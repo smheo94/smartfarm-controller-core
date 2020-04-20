@@ -13,7 +13,6 @@
 package com.kt.smartfarm.service.impl;
 
 import com.kt.cmmn.util.ClassUtil;
-import com.kt.cmmn.util.StringUtil;
 import com.kt.cmmn.util.SunriseSunset;
 import com.kt.smartfarm.service.*;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
@@ -27,7 +26,6 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kt.smartfarm.supervisor.mapper.ControlLogicSettingMapper;
@@ -337,6 +335,11 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 	public Integer insertForecastData(LinkedHashMap<String, Object> hm) {
 		return houseEnvMapper.insertForecastData(hm);
 		
+	}
+
+	@Override
+	public Integer insertUltraShortWeather(LinkedHashMap<String, Object> hm){
+		return houseEnvMapper.insertUltraShortWeatherData(hm);
 	}
 
 	@Override

@@ -65,6 +65,7 @@ public interface HouseEnvMapper {
 
 	Integer insertForecastData(LinkedHashMap<String, Object> hm);
 	Integer insertSunriseData(HashMap<String, Object> hm);
+	Integer insertUltraShortWeatherData(LinkedHashMap<String , Object> hm);
 	
 	List<HashMap<String, Object>> getWeatherCast(HashMap<String, Object> param);
 	List<HashMap<String, Object>> getWeatherCategory();

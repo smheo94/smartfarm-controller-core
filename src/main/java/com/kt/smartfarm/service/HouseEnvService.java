@@ -24,6 +24,7 @@ public interface HouseEnvService {
 	List<HashMap<String,Object>> getWeatherCast(Long houseId, String fromDate, String toDate, Boolean isSmartfarmSystem);
 	List<HashMap<String,Object>> getWeatherCategory();
 	Integer insertSunriseData(HashMap<String, Object> hm);
+	Integer insertUltraShortWeather(LinkedHashMap<String, Object> ultraVO);
 
 	List<HashMap<String,Object>> groundDeviceList(Long houseId);
 
