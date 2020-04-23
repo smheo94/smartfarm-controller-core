@@ -83,7 +83,7 @@
  	<task:scheduled-tasks>
  		<task:scheduled ref="batchExcuetor" method="runWeatherSchedule" cron="0 15 2,5,8,11,14,17,20,23 * * *"/>
  		<task:scheduled ref="batchExcuetor" method="runSunriseSchedule" cron="0 1 0 * * *"/>
-		<task:scheduled ref="batchExcuetor" method="runUltraShortWeatherSchedule" cron="0 45 0/1 * * *"/>
+		<task:scheduled ref="batchExcuetor" method="runUltraShortWeatherSchedule" cron="0 40 0/1 * * *"/>
  		<!-- <task:scheduled ref="batchExcuetor" method="runSunriseSchedule" cron="0 * * * * *"/> -->
  		<!-- <task:scheduled ref="batchExcuetor" method="runWeatherSchedule" cron="* 01 11 * * *"/> -->
  	</task:scheduled-tasks>

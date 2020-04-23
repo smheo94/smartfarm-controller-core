@@ -206,30 +206,33 @@ public class TaskScheduler {
 
 
 	public void runUltraShortWeatherSchedule() throws URISyntaxException {
+		log.info("Get ultraShortWeather Data...");
 		if(SYSTEM_TYPE.equalsIgnoreCase("supervisor")){
 			List<HashMap<String,Object>> houseList = new ArrayList<>();
 			houseList = houseEnvService.getAllList();
 			LocalDateTime now = LocalDateTime.now();
 			DateTimeFormatter baseDateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-			DateTimeFormatter baseTimeFormatter = DateTimeFormatter.ofPattern("HHmm");
+			DateTimeFormatter baseTimeFormatter = DateTimeFormatter.ofPattern("HH00");
 			String baseDate = now.format(baseDateFormatter);
 			String baseTime = now.format(baseTimeFormatter);
 			HashMap<Double, Double> locationMap = new HashMap<>();
-
 			for(int i=0; i<houseList.size(); i++){
 				if(houseList.get(i).get("latitude") != null && houseList.get(i).get("longitude") != null){
 					Double longitude = Double.parseDouble(houseList.get(i).get("longitude").toString());
 					Double latitude = Double.parseDouble(houseList.get(i).get("latitude").toString());
+					//log.info("longitude: {} , latitude : {}", longitude, latitude);
 
 					//중복 제거
-					Double existLocation = locationMap.get(longitude);
+					Double existLocation = locationMap.get(latitude);
+					//log.info("map 보자 : longitude : {}, latitude : {}", latitude, existLocation);
 					if(existLocation == null) {
-						log.info("[UltraSrcNcst] NEW LOCATION HOUSE id : {}, greenHouseId : {}", houseList.get(i).get("id"));
-						locationMap.put(longitude, latitude);
+						//log.info("[UltraSrcNcst] NEW LOCATION HOUSE id : {}, greenHouseId : {}", houseList.get(i).get("id"));
+						locationMap.put(latitude, longitude);
 
 						HashMap<String,Object> gridXY = getGridxy(latitude,longitude);
 						String nx = gridXY.get("x").toString();
 						String ny = gridXY.get("y").toString();
+						//log.info("[UltraSrcNcst] NEW LOCATION HOUSE id : {}, nx : {}, ny : {}",houseList.get(i).get("id"), nx, ny);
 
 						if(Integer.parseInt(nx) > 0 && Integer.parseInt(ny) >0){
 							try{
@@ -247,11 +250,12 @@ public class TaskScheduler {
 								String result = restTemplate.getForObject(uri, String.class);
 								ObjectMapper mapper = new ObjectMapper();
 								UltraShortWeatherVO ultraShortWeatherVO = mapper.readValue(result , UltraShortWeatherVO.class);
-								log.info("URI : {}", uri.toString());
-
+								//log.info("URI : {}", uri.toString());
+								//log.info("result code : {}", ultraShortWeatherVO.getResponse().getHeader().getResultCode());
 								if(ultraShortWeatherVO.getResponse().getHeader().getResultCode().equals("00")){
-									LinkedHashMap<String, Object> ultraSrtMap = ultraShortWeatherVO.ultraOjbToMap(baseDate, baseTime);
-									log.info("cast! : category" + ultraShortWeatherVO.getResponse().getBody().getItems().getItem().get(0).getCategory()+ " , valuie" + ultraShortWeatherVO.getResponse().getBody().getItems().getItem().get(0).getObsrValue());
+									LinkedHashMap<String, Object> ultraSrtMap = ultraShortWeatherVO.ultraOjbToMap(baseDate);
+									//log.info("baseTime : {}", baseTime);
+									//log.info("cast! : nx : {}, ny : {} , nx :{}, ny : {}", ultraSrtMap.get("nx"), ultraSrtMap.get("ny"), ultraShortWeatherVO.getResponse().getBody().getItems().getItem().get(0).getNx(), ultraShortWeatherVO.getResponse().getBody().getItems().getItem().get(0).getNy() );
 									houseEnvService.insertUltraShortWeather(ultraSrtMap);
 								}
 							}catch(Exception e){

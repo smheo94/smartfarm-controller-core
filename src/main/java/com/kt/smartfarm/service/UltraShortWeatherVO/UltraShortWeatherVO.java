@@ -44,12 +44,12 @@ public class UltraShortWeatherVO {
         return false;
     }
 
-    public LinkedHashMap<String, Object> ultraOjbToMap(String baseTime, String baseDate){
+    public LinkedHashMap<String, Object> ultraOjbToMap(String baseTime){
         LinkedHashMap<String, Object> hm = new LinkedHashMap<String, Object>();
         List<UltraShortWeatherVOItem> items = response.getBody().getItems().getItem();
 
         hm.put("base_date", baseTime);
-        hm.put("base_time", baseDate);
+        hm.put("base_time", items.get(0).getBaseTime());
         hm.put("nx",items.get(0).getNx());
         hm.put("ny", items.get(0).getNy());
         for(UltraShortWeatherVOItem item : items){
