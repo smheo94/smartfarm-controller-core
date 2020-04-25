@@ -492,7 +492,7 @@
 		INSERT INTO ultra_weather_cast(
 		 base_date, base_time, nx, ny, pty, reh, rn1, t1h, uuu, vec, vvv, wsd
 		)VALUES(
-		 #{base_date}, #{base_time}, #{ny}, #{ny}, #{pty}, #{reh},#{rn1},#{t1h},#{uuu},#{vec},#{vvv},#{wsd}
+		 #{base_date}, #{base_time}, #{nx}, #{ny}, #{pty}, #{reh},#{rn1},#{t1h},#{uuu},#{vec},#{vvv},#{wsd}
 		)
 		<selectKey keyProperty="id" resultType="int">
 			SELECT LAST_INSERT_ID() AS id;
