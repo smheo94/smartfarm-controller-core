@@ -2,11 +2,11 @@ package com.kt.cmmn.util;
 
 import java.util.HashMap;
 
-public class CommonUtil {
+public class WeatherCastGPSUtil {
 
 	
 	// 위,경도로 격자 좌표 구하기
-	public HashMap<String, Object> getGridxy(double latitude, double longitude) {
+	public static HashMap<String, Object> getGridxy(double latitude, double longitude) {
         double re1 = 6371.00877; // 지구 반경(km)
         double grid = 5.0; // 격자 간격(am)
         double slatA = 30.0; // 투영 위도1(degree)
@@ -43,10 +43,11 @@ public class CommonUtil {
         }
         theta *= sn;
         map.put("lat", latitude);
-       map.put("lng", longitude);
+        map.put("lng", longitude);
         map.put("x", (int)Math.floor(ra * Math.sin(theta) + xo + 0.5));
         map.put("y", (int)Math.floor(ro - ra * Math.cos(theta) + yo + 0.5));
  
         return map;
     }
+
 }

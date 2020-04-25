@@ -184,25 +184,31 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
             vo.logicPeriodEnv = periodSort(vo.logicPeriodEnv);
         }
 		if (vo.getControlSettingId() == null) {
+			log.info("setting ID is null {}", vo);
 			return vo;
 		}
 		final HouseEnvVO houseEnvVO = houseEnvMapper.get(null, vo.greenHouseId);
 		vo.setTmpGsmKey(houseEnvVO.getGsmKey());
 		mapper.updateControlSetting(vo);
 		if (vo.getPreOrderSettingId() != null) {
+			log.info("exists getPreOrderSettingId {}", vo.controlSettingId);
 			mapper.deleteControlSettingPreOrder(null, vo.controlSettingId);
 			mapper.insertControlSettingPreOrder(vo);
 		}
 		if (vo.getCheckConditionList() != null) {
+			log.info("exists getCheckConditionList {}", vo.getCheckConditionList().size());
 			vo.getCheckConditionList().forEach(checkList -> {
 				checkList.setControlSettingId(vo.controlSettingId);
 				checkList.setTmpGsmKey(vo.tmpGsmKey);
 				int isExist = mapper.updateControlSettingChkCondition(checkList);
 				if (isExist == 0) {
 					mapper.insertControlSettingChkCondition(checkList);
+				} else {
+					log.info("update updateControlSettingChkCondition {}", checkList);
 				}
 
 				if (checkList.getId() != null) {
+					log.info("insertControlSettingChkConditionDevice {}", checkList.getId());
 					mapper.deleteControlSettingChkConditionDevice(checkList.getId());
 					mapper.insertControlSettingChkConditionDevice(checkList);
 				}
