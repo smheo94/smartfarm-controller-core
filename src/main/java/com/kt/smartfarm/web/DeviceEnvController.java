@@ -201,7 +201,7 @@ public class DeviceEnvController {
 	@ResponseBody
 	@InterceptPre
 	@InterceptLog
-	public Result<VDeviceEnvVO> deleteVDeviceList(@PathVariable("id") Integer id){
+	public Result<VDeviceEnvVO> deleteVDeviceList(@PathVariable("id") Long id){
 		try {
 			return new Result(deviceEnvService.deleteVDeviceEnv(id, null, null, null));
 		} catch(Exception e) {
@@ -319,7 +319,7 @@ public class DeviceEnvController {
 	@ResponseBody
 	@InterceptPre
 	@InterceptLog
-	public Result<EDeviceEnvVO> deleteEDevice(@PathVariable("id") Integer id){
+	public Result<EDeviceEnvVO> deleteEDevice(@PathVariable("id") Long id){
 		try {
 			return new Result(deviceEnvService.deleteEDeviceEnv(id));
 		} catch(Exception e) {

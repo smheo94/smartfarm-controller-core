@@ -45,7 +45,7 @@ public interface DeviceEnvMapper {
 	Integer insertVDeviceEnv(VDeviceEnvVO vo);
 
 	List<VDeviceEnvVO> getVDeviceEnvList(@Param("deviceId") Long deviceId);
-	Integer deleteVDeviceEnv(@Param("id") Integer id, @Param("pDeviceId") Long pDeviceId, @Param("deviceNum") Integer deviceNum , @Param("deviceInsertOrder") Integer deviceInsertOrder);
+	Integer deleteVDeviceEnv(@Param("id") Long id, @Param("pDeviceId") Long pDeviceId, @Param("deviceNum") Integer deviceNum , @Param("deviceInsertOrder") Integer deviceInsertOrder);
 	VDeviceEnvVO updateVDeviceEnv(VDeviceEnvVO vo);
 
 	Integer copyToNewGSM(@Param("from_gsm_key") Long fromGsmKey, @Param("to_gsm_key") Long toGsmKey );
@@ -59,7 +59,7 @@ public interface DeviceEnvMapper {
 	EDeviceEnvVO updateEDeviceEnv(EDeviceEnvVO vo);
 	//??
 	List<EDeviceEnvVO> getEDeviceEnvList(@Param("deviceId") Long deviceId);
-	Integer deleteEDeviceEnv(Integer id);
+	Integer deleteEDeviceEnv(Long id);
 	Integer deleteVDevicesEnv(Long parentDeviceId);
 
 

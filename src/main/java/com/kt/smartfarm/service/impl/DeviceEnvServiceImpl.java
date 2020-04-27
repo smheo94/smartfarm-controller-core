@@ -219,7 +219,7 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 	}
 
 	@Override
-	public Integer deleteVDeviceEnv(Integer id, Long pDeviceId, Integer deviceNum, Integer deviceInsertOrder) {
+	public Integer deleteVDeviceEnv(Long id, Long pDeviceId, Integer deviceNum, Integer deviceInsertOrder) {
 		try{
 			return deviceEnvMapper.deleteVDeviceEnv(id, pDeviceId, deviceNum, deviceInsertOrder);
 		}catch(Exception e){
@@ -281,7 +281,7 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 	}
 
 	@Override
-	public Integer deleteEDeviceEnv(Integer id) {
+	public Integer deleteEDeviceEnv(Long id) {
 		try {
 			return deviceEnvMapper.deleteEDeviceEnv(id);
 		} catch (Exception e) {

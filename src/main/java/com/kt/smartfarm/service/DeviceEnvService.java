@@ -27,7 +27,7 @@ public interface DeviceEnvService {
 	List<VDeviceEnvVO> getVDeviceEnvList(Long deviceId);
 	
 	VDeviceEnvVO updateVDeviceEnv(VDeviceEnvVO vo) throws HttpStatusCodeException;
-	Integer deleteVDeviceEnv(Integer id, Long pDeviceId,  Integer deviceNum , Integer deviceInsertOrder);
+	Integer deleteVDeviceEnv(Long id, Long pDeviceId,  Integer deviceNum , Integer deviceInsertOrder);
 
 	Integer copyToNewGSM(Long fromGsmKey, Long toGsmKey);
 
@@ -39,7 +39,7 @@ public interface DeviceEnvService {
 	List<EDeviceEnvVO> getEDeviceEnvList(Long deviceId);
 
 	EDeviceEnvVO updateEDeviceEnv(EDeviceEnvVO vo);
-	Integer deleteEDeviceEnv(Integer id);
+	Integer deleteEDeviceEnv(Long id);
 	Integer deleteEDevicesEnv(Long pDeviceId);
 
 
