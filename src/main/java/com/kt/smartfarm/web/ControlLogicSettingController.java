@@ -118,6 +118,7 @@ public class ControlLogicSettingController {
 	@InterceptLog
 	public Result<ControlLogicSettingVO> insert(@RequestBody ControlLogicSettingVO vo) {
 		try {
+			log.info("POST : Input Parameter : {}", vo);
 		    if(StringUtils.isEmpty(vo.updateSystem)) {
 		        vo.updateSystem = config.SYSTEM_TYPE;
             }
@@ -136,6 +137,7 @@ public class ControlLogicSettingController {
 	@InterceptLog
     public Result<List<ControlLogicSettingVO>> insert(@RequestBody List<ControlLogicSettingVO> voList) {
         try {
+			log.info("POST : New List Parameter : {}", voList);
             if( voList.get(0) == null ) {
                 return new Result("Not Allowed", HttpStatus.FORBIDDEN, null);
             }
@@ -155,6 +157,7 @@ public class ControlLogicSettingController {
 	@InterceptLog
     public Result<List<ControlLogicSettingVO>> update(@RequestBody List<ControlLogicSettingVO> voList) {
         try {
+			log.info("POST : update_list Parameter : {}", voList);
             if( voList.get(0) == null ) {
                 return new Result("Not Allowed", HttpStatus.FORBIDDEN, null);
             }
@@ -173,6 +176,7 @@ public class ControlLogicSettingController {
 	@InterceptLog
 	public Result<ControlLogicSettingVO> update(@PathVariable("controlSettingId") Long controlSettingId, @RequestBody ControlLogicSettingVO vo) {
 		try {
+			log.info("POST : PUT  Parameter : {}", vo);
 			if( !authCheckService.authCheck(null, vo.getGreenHouseId(), null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, vo);
 			}

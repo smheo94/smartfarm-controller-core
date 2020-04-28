@@ -310,7 +310,8 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 
     public void validResponse(ResponseEntity<ResponseResult> response ) throws HttpStatusCodeException {
 		if( response == null ) {
-			throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "Response not received");
+			return ;
+			//throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "Response not received");
 		}
 		if ( response.getStatusCode().is4xxClientError() ) {
 			throw new HttpClientErrorException(response.getStatusCode(), "Response Error" );

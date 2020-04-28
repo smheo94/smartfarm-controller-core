@@ -30,14 +30,13 @@
 	
 	<update id="update" parameterType="gsmEnvVO">	
 		UPDATE gsm_info
-		SET 
-			<if test="gsmKey != null"> gsm_key= #{gsmKey}</if>
-			<if test="userInfoId != null"> , user_info_id= #{userInfoId}</if>
+		<set >
+			update_date= NOW()
+			<if test="userInfoId != null"> user_info_id= #{userInfoId}</if>
 			<if test="userInfoId == 0"> , user_info_id = NULL</if>
 			<if test="isMine != null"> , is_mine= #{isMine}</if>
 			<if test="areaCode != null"> , area_code= #{areaCode}</if>
 			<if test="farmNickname != null"> , farm_nickname= #{farmNickname}</if>
-			<if test="updateDate != null"> , update_date= NOW()</if>
 			<if test="ownerUserInfoId != null"> , owner_user_info_id= #{ownerUserInfoId}</if>
 			<if test="masterSystemHost != null"> , master_system_host= #{masterSystemHost}</if>
 			<if test="masterSystemPort != null"> , master_system_port= #{masterSystemPort}</if>
@@ -68,6 +67,7 @@
 			<if test="categoryId != null"> , category_id = #{categoryId}</if>
 			<if test="monitoringProcessInterval != null"> ,monitoring_process_interval = #{monitoringProcessInterval}</if>
 			<if test="properties != null">,properties = '${@com.kt.cmmn.util.MapUtils@toJson(properties)}' </if>
+		</set>
 		WHERE gsm_key = #{gsmKey}
 	</update>
 	
