@@ -118,7 +118,7 @@ public class ControlLogicSettingController {
 	@InterceptLog
 	public Result<ControlLogicSettingVO> insert(@RequestBody ControlLogicSettingVO vo) {
 		try {
-			log.info("POST : Input Parameter : {}", vo);
+            log.error("new logic : {}", vo);
 		    if(StringUtils.isEmpty(vo.updateSystem)) {
 		        vo.updateSystem = config.SYSTEM_TYPE;
             }
@@ -127,6 +127,7 @@ public class ControlLogicSettingController {
 			}
 			return new Result(service.insertLogicSetting(vo));
 		} catch (Exception e) {
+            log.error("new logic error ", e);
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, vo);
 		}
 	}
@@ -146,6 +147,7 @@ public class ControlLogicSettingController {
             voList.stream().forEach( vo -> resultList.add(service.insertLogicSetting(vo)));
             return new Result(resultList);
         } catch (Exception e) {
+            log.error("logic new list error ", e);
             return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
         }
 
@@ -166,6 +168,7 @@ public class ControlLogicSettingController {
             voList.stream().forEach( vo -> resultList.add(service.updateLogicSetting(vo)));
             return new Result(resultList);
         } catch (Exception e) {
+            log.error("update list error ", e);
             return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
         }
     }
@@ -185,6 +188,7 @@ public class ControlLogicSettingController {
 			}
 			return new Result(service.updateLogicSetting(vo));
 		} catch (Exception e) {
+            log.error("update error ", e);
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, vo);
 		}
 	}
@@ -195,10 +199,12 @@ public class ControlLogicSettingController {
 	@InterceptLog
 	public Result<String> updateEnv(@PathVariable("controlSettingId") Long controlSettingId, @RequestBody Map<String, Object> param) {
 		try {
+            log.error("env_upudate logic : {}", param);
 			service.updateLogicSettingEnv(param);
 			// TODO : JSON
 			return new Result("Success");
 		} catch (Exception e) {
+            log.error("env update error ", e);
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, param);
 		}
 	}
@@ -210,9 +216,11 @@ public class ControlLogicSettingController {
 	public Result<String> updateLogicEnv(@PathVariable("controlSettingId") Long controlSettingId, @RequestBody Map<String, Object> param) {
 		try {
 			//logic_env, period_env, update_dt, auto_manual_mode
+            log.error("logic_env_update logic : {}", param);
 			service.updateLogicEnv(param);
 			return new Result("Success");
 		} catch (Exception e) {
+            log.error("logic env update error ", e);
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, param);
 		}
 	}
