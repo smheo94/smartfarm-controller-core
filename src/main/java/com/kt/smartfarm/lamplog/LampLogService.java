@@ -56,7 +56,7 @@ public class LampLogService
     private String dockerHostIp;
     @Value("${smartfarm.lamp.logpath:/var/log/lamplog/}")
     private String lampLogPath;
-    @Value("${smartfarm.system.typ:supervisor}")
+    @Value("${smartfarm.system.type:supervisor}")
     private String systemType;
 
     @Autowired(required = false)
