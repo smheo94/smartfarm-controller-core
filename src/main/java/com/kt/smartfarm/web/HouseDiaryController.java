@@ -102,7 +102,7 @@ public class HouseDiaryController {
 	@RequestMapping(value= "/diaryFile", method = RequestMethod.DELETE, consumes = { "*/*" })
 	@ResponseBody
 	@InterceptLog
-	public Result insertDiaryFile(@RequestParam(value = "content_type", required = false) String contentType, @RequestParam("id") Integer id,
+	public Result deleteDiaryFile(@RequestParam(value = "content_type", required = false) String contentType, @RequestParam("id") Integer id,
 								  @RequestBody FileIdxListVO fileIdList){
 		try{
 			return new Result(houseDiaryService.deleteDiaryFileList(contentType,id,fileIdList.fileIdxList));
