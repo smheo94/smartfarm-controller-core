@@ -196,7 +196,8 @@ public class DeviceEnvController {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
 	}
-	
+
+
 	@RequestMapping(value= "/{id}/relationdevices", method = RequestMethod.DELETE)
 	@ResponseBody
 	@InterceptPre
@@ -204,6 +205,18 @@ public class DeviceEnvController {
 	public Result<VDeviceEnvVO> deleteVDeviceList(@PathVariable("id") Long id){
 		try {
 			return new Result(deviceEnvService.deleteVDeviceEnv(id, null, null, null));
+		} catch(Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		}
+	}
+
+	@RequestMapping(value= "/{parentId}/relationdevicesbyparent", method = RequestMethod.DELETE)
+	@ResponseBody
+	@InterceptPre
+	@InterceptLog
+	public Result<VDeviceEnvVO> deleteVDeviceListByParentId(@PathVariable("parentId") Long parentId){
+		try {
+			return new Result(deviceEnvService.deleteVDeviceEnv(null, parentId, null, null));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}

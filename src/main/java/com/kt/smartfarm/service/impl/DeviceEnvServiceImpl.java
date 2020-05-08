@@ -173,15 +173,14 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 	public List<VDeviceEnvVO> insertVDeviceEnv(List<VDeviceEnvVO> voList) throws HttpStatusCodeException {
 
 		try{
+//			for(VDeviceEnvVO vo :voList){
+//				if( vo.getParentDeviceId()  != null && vo.getDeviceNum()  != null &&  vo.getDeviceInsertOrder()  != null ) {
+//					deviceEnvMapper.deleteVDeviceEnv(null, vo.getParentDeviceId(), vo.getDeviceNum(), vo.getDeviceInsertOrder());
+//				} else {
+//					throw new HttpClientErrorException(HttpStatus.CONFLICT, "not found device");
+//				}
+//			}
 			for(VDeviceEnvVO vo :voList){
-				if( vo.getParentDeviceId()  != null && vo.getDeviceNum()  != null &&  vo.getDeviceInsertOrder()  != null ) {
-					deviceEnvMapper.deleteVDeviceEnv(null, vo.getParentDeviceId(), vo.getDeviceNum(), vo.getDeviceInsertOrder());
-				} else {
-					throw new HttpClientErrorException(HttpStatus.CONFLICT, "not found device");
-				}
-			}
-			for(VDeviceEnvVO vo :voList){
-
 				deviceEnvMapper.insertVDeviceEnv(vo);
 			}
 		} catch (Exception e) {
