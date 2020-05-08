@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class EDeviceEnvVO {
-    Integer id;
+    Long id;
     Long parentDeviceId;
     Long deviceId;
 }
