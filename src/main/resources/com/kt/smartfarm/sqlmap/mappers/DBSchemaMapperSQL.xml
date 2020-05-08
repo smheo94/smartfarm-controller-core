@@ -32,12 +32,4 @@
 	<update id="schemaUpdate_20181204_1">
 		ALTER TABLE `monitoring_current` CHANGE `data` `data` VARCHAR(20000) CHARSET utf8 COLLATE utf8_general_ci NULL;
 	</update>
-
-	<select id="select_any_query" resultType="Map" parameterType="Map">
-		SELECT * FROM ( ${any_query} ) A;
-	</select>
-
-	<update id="update_any_query" parameterType="Map">
-		${any_query};
-	</update>
 </mapper>
