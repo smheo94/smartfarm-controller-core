@@ -28,6 +28,9 @@ public class ControlLogicSettingVO {
 	public Integer logicId;
 	public String defLogicName;
 	public String javaClassName;
+	public String uiClassName;
+	public String description;
+	public String uiHelp;
 	public String logicName;
 	public String logicEnv;
 	public String logicPeriodEnv;
@@ -37,6 +40,7 @@ public class ControlLogicSettingVO {
 	public Date updateDt;
 	public Long preOrderSettingId;
 	public Object sensorData;
+	public Integer canMultiLogic;
 	public Integer defaultPeriodSize;
 	public Integer viewOrder;
 	public String updateSystem;
