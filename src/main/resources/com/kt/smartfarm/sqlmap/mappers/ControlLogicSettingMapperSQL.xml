@@ -34,6 +34,9 @@
         <result column="def_logic_id" property="logicId"/>
         <result column="def_logic_name" property="defLogicName"/>
         <result column="java_class_name" property="javaClassName"/>
+        <result column="ui_class_name" property="uiClassName"/>
+        <result column="description" property="description"/>
+        <result column="ui_help" property="uiHelp"/>
         <result column="logic_name" property="logicName"/>
         <result column="logic_env" property="logicEnv"/>
         <result column="logic_period_env" property="logicPeriodEnv"/>
@@ -41,6 +44,7 @@
         <result column="auto_manual_mode" property="autoManualMode"/>
         <result column="create_dt" property="createDt"/>
         <result column="default_period_size" property="defaultPeriodSize"/>
+        <result column="can_multi_logic" property="canMultiLogic"/>
         <result column="pre_order_setting_id" property="preOrderSettingId"/>
         <result column="pre_order_setting_id" property="preOrderSettingId"/>
         <result column="view_order" property="viewOrder"/>
@@ -133,6 +137,7 @@
     <select id="getControlLogicSetting" resultMap="ControlLogicSettingMap">
         /* 설정된 제어로직을 조회 , 선행 제어로직 포함 */
         SELECT CL.id AS def_logic_id, CL.name AS def_logic_name, CL.java_class_name, CL.default_period_size,
+        CL.can_multi_logic, CL.ui_class_name, CL.description, CL.ui_help,
         CS.id AS control_setting_id, CS.green_house_id, CS.logic_name, CS.logic_env, CS.logic_period_env, CS.logic_period_size, CS.auto_manual_mode, CS.update_dt,
         CS.view_order, CS.create_dt,CSPO.pre_order_setting_id,
         GH.gsm_key
