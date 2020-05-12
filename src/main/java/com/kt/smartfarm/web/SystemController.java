@@ -54,13 +54,13 @@ public class SystemController {
 	}
 
 
-//	@RequestMapping(value= "/data/", method = RequestMethod.GET)
-//	@ResponseBody
-//	public Result<Map<String,Object>> getData(@RequestBody HashMap<String,Object> param){
-//		try {
-//			return new Result(systemService.getAnyQueryResult(param));
-//		} catch(Exception e) {
-//			return new Result( e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, null);
-//		}
-//	}
+	@RequestMapping(value= "/data/", method = RequestMethod.GET)
+	@ResponseBody
+	public Result<Map<String,Object>> getData(@RequestBody HashMap<String,Object> param){
+		try {
+			return new Result(systemService.getAnyQueryResult(param));
+		} catch(Exception e) {
+			return new Result( e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, null);
+		}
+	}
 }
