@@ -46,6 +46,7 @@ public class ControlLogicSettingVO {
 	public String updateSystem;
 	public List<ControlLogicSettingCheckConditionVO> checkConditionList;
 	public List<ControlLogicSettingDeviceVO> deviceList;
+	public List<ControlLogicDeviceVO> logicDeviceList;
 
 	@JsonIgnore
 	public Long tmpGsmKey;

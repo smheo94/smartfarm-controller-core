@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kt.smartfarm.supervisor.mapper.HouseEnvMapper">
+	<resultMap id="houseEnvVOMap" type="houseEnvVO" autoMapping="true">
+		<result column="properties" property="properties" typeHandler="com.kt.cmmn.util.JsonTypeHandler"/>
+	</resultMap>
+
 	<resultMap id="houseProductVOMap" type="houseProductVO" autoMapping="true">
 		<result column="properties" property="properties" typeHandler="com.kt.cmmn.util.JsonTypeHandler"/>
 	</resultMap>
@@ -128,6 +132,7 @@
 			<if test="selectTempSensor != null">,select_temp_sensor = #{selectTempSensor}</if>
 			<if test="selectHumSensor != null">,select_hum_sensor = #{selectHumSensor}</if>	
 			<if test="houseNameI18n != null">,	house_name_i18n = #{houseNameI18n}</if>
+		    <if test="properties != null">,	properties = '${@com.kt.cmmn.util.MapUtils@toJson(properties)}'</if>
 			,last_update = NOW()	
 		WHERE gsm_key = #{gsmKey} AND id = #{id};
 	</update>
@@ -138,28 +143,28 @@
 		WHERE gsm_key = #{gsmKey} AND id = #{id};
 	</delete>
 	
-	<select id="list" parameterType="map" resultType="houseEnvVO">
+	<select id="list" parameterType="map" resultMap="houseEnvVOMap">
 		SELECT 
 			id, product_method_id, green_house_type_id, house_name,
 			latitude, longitude, description, build_date, last_update, addr_1,
 			addr_2, zip, nutrient_common_id, change_gh, change_temperature,
 			floor_space, house_horizontal, house_vertical, house_height,
 			plant_spacing, crop_cnt, house_direction, select_temp_sensor,
-			select_hum_sensor, gsm_key, house_name_i18n
+			select_hum_sensor, gsm_key, house_name_i18n, properties
 		FROM green_house
 		WHERE
 		 gsm_key = #{gsm_key}
 		;
 	</select>
 
-	<select id ="get" resultType="houseEnvVO">
+	<select id ="get" resultMap="houseEnvVOMap">
 		SELECT
 		id, product_method_id, green_house_type_id, house_name,
 		latitude, longitude, description, build_date, last_update, addr_1,
 		addr_2, zip, nutrient_common_id, change_gh, change_temperature,
 		floor_space, house_horizontal, house_vertical, house_height,
 		plant_spacing, crop_cnt, house_direction, select_temp_sensor,
-		select_hum_sensor, gsm_key, house_name_i18n
+		select_hum_sensor, gsm_key, house_name_i18n, properties
 		FROM green_house
 		WHERE 1=1
 		<if test="gsm_key != null">AND  gsm_key = #{gsm_key}</if>
@@ -224,7 +229,7 @@
 			addr_2 as addr2, zip, change_gh as changeGh, change_temperature as changeTemperature,
 			floor_space as floorSpace, house_horizontal as houseHorizontal, house_vertical as houseVertical, house_height as houseHeight,
 			plant_spacing as plantSpacing, crop_cnt as cropCnt, house_direction as houseDirection, select_temp_sensor as selectTempSensor,
-			select_hum_sensor as selectHumSensor, gsm_key as gsmKey, house_name_i18n as houseNameI18n
+			select_hum_sensor as selectHumSensor, gsm_key as gsmKey, house_name_i18n as houseNameI18n, properties
 		FROM green_house		
 		WHERE 1=1
 		<if test="gsm_key != null">AND  gsm_key = #{gsm_key}</if>

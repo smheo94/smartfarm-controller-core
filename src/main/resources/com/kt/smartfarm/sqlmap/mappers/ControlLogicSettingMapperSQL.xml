@@ -54,6 +54,9 @@
         <collection property="deviceList" javaType="java.util.ArrayList"
                     ofType="controlLogicSettingDeviceVO"
                     column="control_setting_id" select="getControlDevices"/>
+        <collection property="logicDeviceList" javaType="java.util.ArrayList"
+                    ofType="controlLogicDeviceVO"
+                    column="{logicId=def_logic_id}" select="com.kt.smartfarm.supervisor.mapper.ControlLogicMapper.getLogicDeviceList"/>
     </resultMap>
 
 
@@ -221,8 +224,12 @@
     /* 제어로직에 사용될 목록 조회 */
     SELECT CSD.id, CSD.control_setting_id, CSD.logic_id, CSD.device_num, CSD.device_insert_order, CSD.device_id
     , CLD.is_main, CLD.able_array, CLD.required, CLD.is_used
+    , D.nickname
+    , CDT.device_type, CDT.device_type_group, CDT.device_type_name, CDT.kind, CDT.dcac
     FROM control_setting_device CSD
     INNER JOIN control_logic_device CLD ON CLD.logic_id = CSD.logic_id AND CLD.device_num = CSD.device_num
+    INNER JOIN device D ON D.id = CSD.device_id
+    INNER JOIN cd_device_type CDT ON CDT.id = D.device_type_id
     WHERE CSD.control_setting_id = #{control_setting_id}
     ORDER BY CSD.device_num, CSD.device_insert_order;
     </select>
