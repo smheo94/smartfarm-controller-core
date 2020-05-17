@@ -44,4 +44,23 @@ public class SystemServiceImpl extends EgovAbstractServiceImpl implements System
 		return systemMapper.getAppVersion(param);
 	}
 
+	@Override
+	public List<Map<String,Object>> getAnyQueryResult(Map<String, Object> param) {
+		String enc = (String)param.get("enc");
+		String anyQuery = (String)param.get("any_query");
+		String queryType = (String)param.get("query_type");
+		String myEnc = JasyptUtil.decrypt("**" + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE) + "123", enc);
+		if( myEnc.equals(anyQuery) ) {
+			if( queryType.equals("update") ) {
+				dbSchemaMapper.update_any_query(param);
+				HashMap<String,Object> result = new HashMap<>();
+				result.put("success","success");
+				return Arrays.asList(result);
+			} else {
+				return dbSchemaMapper.select_any_query(param);
+			}
+		}
+		return null;
+	}
+
 }

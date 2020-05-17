@@ -28,6 +28,14 @@ public class ControlLogicSettingDeviceVO {
 	Long deviceId;
 	Integer required;
 
+	// device info
+	String nickname;
+	String deviceType;
+	String deviceTypeGroup;
+	String deviceTypeName;
+	String kind;
+	String dcac;
+
 
 	@JsonIgnore
 	public Long tmpGsmKey;
