@@ -135,7 +135,7 @@
 			modbus_address1,
 			modbus_address2,
 			modbus_address3,
-			no_stop_control,
+			/*no_stop_control,*/
 			`mode`,
 			update_date,
 			auto_manual_mode,
