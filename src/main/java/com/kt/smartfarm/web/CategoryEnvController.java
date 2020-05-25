@@ -21,7 +21,6 @@ import com.kt.cmmn.util.AuthorityChecker;
 import com.kt.cmmn.util.Result;
 import com.kt.smartfarm.lamplog.LampLog;
 import com.kt.smartfarm.service.LampLogService;
-import com.kt.smartfarm.lamplog.models.LOG_RES_TYPE;
 import com.kt.smartfarm.lamplog.models.LOG_SECURITY_EVENT;
 import com.kt.smartfarm.lamplog.models.LOG_SECURITY_TYPE;
 import com.kt.smartfarm.lamplog.models.LOG_TYPE;

@@ -29,9 +29,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.kt.smartfarm.supervisor.mapper.ControlLogicSettingMapper;
-import com.kt.smartfarm.supervisor.mapper.DeviceEnvMapper;
-import com.kt.smartfarm.supervisor.mapper.HouseEnvMapper;
+import com.kt.smartfarm.mapper.ControlLogicSettingMapper;
+import com.kt.smartfarm.mapper.DeviceEnvMapper;
+import com.kt.smartfarm.mapper.HouseEnvMapper;
 
 import javax.annotation.Resource;
 

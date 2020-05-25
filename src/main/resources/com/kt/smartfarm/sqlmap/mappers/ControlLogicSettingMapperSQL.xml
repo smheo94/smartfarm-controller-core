@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kt.smartfarm.supervisor.mapper.ControlLogicSettingMapper">
+<mapper namespace="com.kt.smartfarm.mapper.ControlLogicSettingMapper">
 
     <resultMap id="ControlCheckConditionMap" type="controlLogicSettingCheckConditionVO">
         <id property="id" column="id"/>
@@ -56,7 +56,7 @@
                     column="control_setting_id" select="getControlDevices"/>
         <collection property="logicDeviceList" javaType="java.util.ArrayList"
                     ofType="controlLogicDeviceVO"
-                    column="{logicId=def_logic_id}" select="com.kt.smartfarm.supervisor.mapper.ControlLogicMapper.getLogicDeviceList"/>
+                    column="{logicId=def_logic_id}" select="com.kt.smartfarm.mapper.ControlLogicMapper.getLogicDeviceList"/>
     </resultMap>
 
 

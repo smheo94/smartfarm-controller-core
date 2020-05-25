@@ -22,18 +22,15 @@ import com.kt.cmmn.util.MapUtils;
 import com.kt.cmmn.util.RestClientUtil;
 import com.kt.smartfarm.config.SmartfarmInterceptorConfig;
 import com.kt.smartfarm.service.*;
-import com.kt.smartfarm.supervisor.mapper.ControlLogicSettingMapper;
-import com.kt.smartfarm.supervisor.mapper.HouseEnvMapper;
+import com.kt.smartfarm.mapper.ControlLogicSettingMapper;
+import com.kt.smartfarm.mapper.HouseEnvMapper;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
-import java.io.IOException;
 import java.sql.Time;
 import java.util.*;
 
@@ -235,6 +232,7 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 			try{
 				log.info("manual command");
 				RestTemplate client = new RestTemplate();
+				RestClientUtil.setIgnoreCertificateSSL(client);
 				String url = "http://127.0.0.1:9876/api/v1/device/operation_command";
 				HashMap<String, Object> responseData = (HashMap<String, Object>) client.postForObject(url, param, HashMap.class);
 				String result = MapUtils.toJson(responseData);

@@ -14,8 +14,8 @@ package com.kt.smartfarm.service.impl;
 
 import com.kt.cmmn.util.JasyptUtil;
 import com.kt.smartfarm.service.SystemService;
-import com.kt.smartfarm.supervisor.mapper.DBSchemaMapper;
-import com.kt.smartfarm.supervisor.mapper.SystemMapper;
+import com.kt.smartfarm.mapper.DBSchemaMapper;
+import com.kt.smartfarm.mapper.SystemMapper;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

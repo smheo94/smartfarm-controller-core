@@ -1,11 +1,9 @@
 package com.kt.smartfarm.service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.kt.cmmn.util.ClassUtil;
-import com.kt.cmmn.util.MapUtils;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,6 +22,7 @@ public class GsmEnvVO {
 	String ownerUserInfoId;
 	String masterSystemHost;
 	Integer masterSystemPort;
+	String httpSchema = "http";
 	String systemHost;
 	Integer systemPort;
 	String cropsurl;

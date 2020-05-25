@@ -15,8 +15,8 @@ package com.kt.smartfarm.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kt.cmmn.util.RestClientUtil;
 import com.kt.smartfarm.service.*;
-import com.kt.smartfarm.supervisor.mapper.GsmEnvMapper;
 import com.kt.smartfarm.intercepter.ResponseResult;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -56,10 +56,11 @@ public class AutoSyncServiceImpl extends EgovAbstractServiceImpl implements Auto
 		final List<ControlLogicSettingVO> logicSettingList = controlLogicSettingService.getLogicSetting(gsmkey, null, null);
 
 		final GsmEnvVO gsmEnvVO = gsmEnvService.get(gsmkey, true);
+		String httpSchema = gsmEnvVO.getHttpSchema();
 		String server  = gsmEnvVO.getSystemHost();
 		Integer port = gsmEnvVO.getSystemPort();
 		try {
-			URI uri = new URI("http", null, server, port, null, null, null);
+			URI uri = new URI(httpSchema, null, server, port, null, null, null);
 			uri = UriComponentsBuilder.fromUri(uri).path("/env/control_logic_setting").build(true).toUri();
 			HttpHeaders headers = new HttpHeaders();
 			Enumeration<String> headerNames = request.getHeaderNames();
@@ -68,6 +69,7 @@ public class AutoSyncServiceImpl extends EgovAbstractServiceImpl implements Auto
 				headers.set(headerName, request.getHeader(headerName));
 			}
 			RestTemplate restTemplate = new RestTemplate();
+			RestClientUtil.setIgnoreCertificateSSL(restTemplate);
 			for(ControlLogicSettingVO  logicSettingVO : logicSettingList ) {
 				try {
 					HttpEntity httpEntity = new HttpEntity<String>(null, headers);

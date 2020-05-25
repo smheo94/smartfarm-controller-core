@@ -14,16 +14,14 @@ package com.kt.smartfarm.service.impl;
 
 import com.kt.smartfarm.service.ControlLogicSettingTemplateService;
 import com.kt.smartfarm.service.ControlLogicSettingTemplateVO;
-import com.kt.smartfarm.service.HouseEnvVO;
-import com.kt.smartfarm.supervisor.mapper.ControlLogicSettingTemplateMapper;
-import com.kt.smartfarm.supervisor.mapper.HouseEnvMapper;
+import com.kt.smartfarm.mapper.ControlLogicSettingTemplateMapper;
+import com.kt.smartfarm.mapper.HouseEnvMapper;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Service("controlLogicSettingTemplateService")

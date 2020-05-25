@@ -16,14 +16,13 @@ import com.kt.smartfarm.service.DiaryTypePropertiesVO;
 
 import com.kt.smartfarm.service.DiaryTypeService;
 import com.kt.smartfarm.service.DiaryTypeVO;
-import com.kt.smartfarm.supervisor.mapper.DiaryTypeMapper;
+import com.kt.smartfarm.mapper.DiaryTypeMapper;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
 
 import java.util.Objects;
 

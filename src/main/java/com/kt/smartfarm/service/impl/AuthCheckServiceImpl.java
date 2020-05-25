@@ -14,7 +14,7 @@ package com.kt.smartfarm.service.impl;
 
 import com.kt.cmmn.util.AuthorityChecker;
 import com.kt.smartfarm.service.AuthCheckService;
-import com.kt.smartfarm.supervisor.mapper.AuthCheckMapper;
+import com.kt.smartfarm.mapper.AuthCheckMapper;
 import com.kt.cmmn.util.ClassUtil;
 import com.kt.smartfarm.config.SmartfarmInterceptorConfig;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
@@ -27,7 +27,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Service("authCheckService")

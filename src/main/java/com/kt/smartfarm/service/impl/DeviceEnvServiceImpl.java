@@ -17,7 +17,6 @@ import com.mysql.jdbc.MysqlErrorNumbers;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import com.kt.smartfarm.supervisor.mapper.DeviceEnvMapper;
+import com.kt.smartfarm.mapper.DeviceEnvMapper;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpStatusCodeException;
 

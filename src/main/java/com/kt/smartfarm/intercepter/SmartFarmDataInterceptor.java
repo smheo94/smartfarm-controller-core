@@ -4,15 +4,12 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kt.cmmn.util.*;
 import com.kt.smartfarm.message.ApplicationMessage;
-import com.kt.smartfarm.service.GsmEnvService;
 import com.kt.smartfarm.service.GsmEnvVO;
-import com.kt.smartfarm.supervisor.mapper.GsmEnvMapper;
+import com.kt.smartfarm.mapper.GsmEnvMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.HttpClientErrorException;
@@ -276,8 +273,9 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
         }
         String server  = gsmEnvVO.getSystemHost();
         Integer port = gsmEnvVO.getSystemPort();
+        String httpSchema = gsmEnvVO.getHttpSchema();
         String requestUrl = request.getRequestURI();
-        URI uri = new URI("http", null, server, port, null, null, null);
+        URI uri = new URI(httpSchema, null, server, port, null, null, null);
         uri = UriComponentsBuilder.fromUri(uri).path(proxySubPath + requestUrl)
                 .query(request.getQueryString()).build(true).toUri();
 
@@ -286,6 +284,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
             return null;
         }
         RestTemplate restTemplate = new RestTemplate();
+        RestClientUtil.setIgnoreCertificateSSL(restTemplate);
         restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
 
         log.debug("Send Proxy Request : {} , {}, {}", gsmKey, uri, request.getMethod());

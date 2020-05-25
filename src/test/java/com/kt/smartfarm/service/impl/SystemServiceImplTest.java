@@ -1,6 +1,5 @@
 package com.kt.smartfarm.service.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kt.cmmn.util.JasyptUtil;
 import com.kt.cmmn.util.MapUtils;
 import com.kt.cmmn.util.RestClientUtil;
@@ -9,7 +8,6 @@ import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.junit.Test;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 
@@ -29,12 +27,16 @@ public class SystemServiceImplTest {
         select, update
     }
     @Test
+    public void hashTest() {
+        assertTrue(("adb" + "def").hashCode() == ("adb" + "def").hashCode());
+    }
+    @Test
     public void encrypt(){
 
-        //"SELECT TABLE_NAME, COLUMN_NAME, COLUMN_TYPE FROM  information_schema.COLUMNS  WHERE TABLE_SCHEMA = 'sf_main_2'"
-        String queryType = QUERY_TYPE.select.name();
+        //"SELECT TABLE_NAME, update, COLUMN_TYPE FROM  information_schema.COLUMNS  WHERE TABLE_SCHEMA = 'sf_main_2'"
+        String queryType = QUERY_TYPE.update.name();
         String [] anyQueryList = {
-                "SELECT * FROM `event` WHERE restore_date IS  NULL AND event_type_id = '2' AND gsm_key = '540061'"
+                "UPDATE `control_logic_device` SET `device_type` = 'SENSOR' WHERE `id` = '44011'; "
         //"ALTER TABLE `control_setting_device` DROP FOREIGN KEY `fx_control_setting_device`;"
         };
 

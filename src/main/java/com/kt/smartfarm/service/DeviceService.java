@@ -1,7 +1,5 @@
 package com.kt.smartfarm.service;
 
-import java.util.HashMap;
-
 public interface DeviceService {
 //	HashMap<String, Object> getSensorInfoList();
 //	HashMap<String, Object> getDeviceInfoList();

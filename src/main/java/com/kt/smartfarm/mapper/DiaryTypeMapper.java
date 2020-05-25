@@ -1,4 +1,4 @@
-package com.kt.smartfarm.supervisor.mapper;
+package com.kt.smartfarm.mapper;
 
 
 import com.kt.smartfarm.service.DiaryTypePropertiesVO;
@@ -8,7 +8,6 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 
 @Repository
 @Mapper("diaryTypeMapper")

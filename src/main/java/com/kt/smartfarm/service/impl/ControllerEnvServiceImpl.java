@@ -28,8 +28,8 @@ import javax.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import com.kt.smartfarm.supervisor.mapper.ControllerEnvMapper;
-import com.kt.smartfarm.supervisor.mapper.DeviceEnvMapper;
+import com.kt.smartfarm.mapper.ControllerEnvMapper;
+import com.kt.smartfarm.mapper.DeviceEnvMapper;
 
 @Slf4j
 @Service("controllerEnvService")

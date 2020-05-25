@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */                                                               
-package com.kt.smartfarm.supervisor.mapper;
+package com.kt.smartfarm.mapper;
 
 import com.kt.smartfarm.service.*;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;

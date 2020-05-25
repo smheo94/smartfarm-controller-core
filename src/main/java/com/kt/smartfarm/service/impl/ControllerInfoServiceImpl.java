@@ -24,7 +24,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.kt.smartfarm.supervisor.mapper.ControllerInfoMapper;
+import com.kt.smartfarm.mapper.ControllerInfoMapper;
 
 
 @Service("controllerInfoService")
