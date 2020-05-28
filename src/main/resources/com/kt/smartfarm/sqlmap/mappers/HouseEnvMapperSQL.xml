@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kt.smartfarm.supervisor.mapper.HouseEnvMapper">
+<mapper namespace="com.kt.smartfarm.mapper.HouseEnvMapper">
 	<resultMap id="houseEnvVOMap" type="houseEnvVO" autoMapping="true">
 		<result column="properties" property="properties" typeHandler="com.kt.cmmn.util.JsonTypeHandler"/>
 	</resultMap>
@@ -288,7 +288,7 @@
 	<select id ="getHouseControlSettings" resultType="controlLogicSettingVO" parameterType="Long" >
 		SELECT CL.id AS logic_id, CL.name AS def_logic_name, CL.java_class_name, CL.default_period_size,
 		CS.id AS control_setting_id, CS.green_house_id, CS.logic_name, CS.logic_env, CS.logic_period_env, CS.logic_period_size, CS.auto_manual_mode, CS.update_dt,
-		CS.view_order, CS.create_dt,
+		CS.view_order, CS.create_dt, CS.update_system,
 		GH.gsm_key
 		FROM control_logic CL
 		INNER JOIN control_setting CS ON CL.id = CS.logic_id

@@ -29,9 +29,7 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 /*
  * mgrEnv
@@ -63,7 +61,7 @@ public class HouseDiaryController {
 			return new Result(houseDiaryService.getHouseCropsInfo(greenHouseId));
 		}catch(Exception e){
 			
-			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, "오류가 발생했습니다. 관리자에게 문의해 주세요"); /*e.getMessage());*/
 		}
 	}
 	
@@ -82,7 +80,7 @@ public class HouseDiaryController {
 			return new Result(houseDiaryService.insertHouseDiary(houseDiaryVO));
 		}catch(Exception e){
 			
-			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, "오류가 발생했습니다. 관리자에게 문의해 주세요"); /*e.getMessage());*/
 		}
 	}
 	
@@ -94,7 +92,7 @@ public class HouseDiaryController {
 			return new Result(houseDiaryService.insertDiaryFile(contentType,id,file));
 		}catch(Exception e){
 			
-			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, "오류가 발생했습니다. 관리자에게 문의해 주세요"); /*e.getMessage());*/
 		}
 	}
 
@@ -108,7 +106,7 @@ public class HouseDiaryController {
 			return new Result(houseDiaryService.deleteDiaryFileList(contentType,id,fileIdList.fileIdxList));
 		}catch(Exception e){
 
-			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, "오류가 발생했습니다. 관리자에게 문의해 주세요"); /*e.getMessage());*/
 		}
 	}
 	
@@ -126,7 +124,7 @@ public class HouseDiaryController {
 			return new Result(houseDiaryService.updateHouseDiary(houseDiaryVO));
 		}catch(Exception e){
 			
-			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, "오류가 발생했습니다. 관리자에게 문의해 주세요"); /*e.getMessage());*/
 		}
 	}
 	
@@ -146,7 +144,7 @@ public class HouseDiaryController {
 			return new Result(houseDiaryService.getMonthlyHouseDiaryList(null, null, greenHouseId,year,month));
 		}catch(Exception e){
 			
-			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, "오류가 발생했습니다. 관리자에게 문의해 주세요"); /*e.getMessage());*/
 		}
 	}
 
@@ -165,7 +163,7 @@ public class HouseDiaryController {
 			return new Result(houseDiaryService.getMonthlyHouseDiaryList(gsmKeyList, gsmKey,null, year,month));
 		}catch(Exception e){
 
-			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, "오류가 발생했습니다. 관리자에게 문의해 주세요"); /*e.getMessage());*/
 		}
 	}
 	
@@ -182,7 +180,7 @@ public class HouseDiaryController {
 			return new Result(houseDiaryService.getHouseDiaryDetail(id));
 		}catch(Exception e){
 			
-			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, "오류가 발생했습니다. 관리자에게 문의해 주세요"); /*e.getMessage());*/
 		}
 	}
 
@@ -198,7 +196,7 @@ public class HouseDiaryController {
 			return new Result(houseDiaryService.deleteHouseDiary(id));
 		}catch(Exception e){
 			
-			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, "오류가 발생했습니다. 관리자에게 문의해 주세요"); /*e.getMessage());*/
 		}
 	}
 
@@ -211,7 +209,7 @@ public class HouseDiaryController {
 			return new Result(houseDiaryService.getCropsDiaryDetail(id));
 		}catch(Exception e){
 
-			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, "오류가 발생했습니다. 관리자에게 문의해 주세요"); /*e.getMessage());*/
 		}
 	}
 	/**
@@ -226,7 +224,7 @@ public class HouseDiaryController {
 			return new Result(houseDiaryService.getCategoryList());
 		}catch(Exception e){
 			
-			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, "오류가 발생했습니다. 관리자에게 문의해 주세요"); /*e.getMessage());*/
 		}
 	}
 
@@ -240,7 +238,7 @@ public class HouseDiaryController {
 			return new Result(houseDiaryService.insertCropsDiary(houseCropsVO));
 		}catch(Exception e){
 			
-			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, "오류가 발생했습니다. 관리자에게 문의해 주세요"); /*e.getMessage());*/
 		}
 	}
 	
@@ -257,7 +255,7 @@ public class HouseDiaryController {
 			return new Result(houseDiaryService.updateCropsDiary(houseCropsVO));
 		}catch(Exception e){
 			
-			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, "오류가 발생했습니다. 관리자에게 문의해 주세요"); /*e.getMessage());*/
 		}
 	}
 
@@ -274,7 +272,7 @@ public class HouseDiaryController {
 			return new Result(houseDiaryService.deleteCropsDiary(id));
 		}catch(Exception e){
 			
-			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, "오류가 발생했습니다. 관리자에게 문의해 주세요"); /*e.getMessage());*/
 		}
 	}
 	
@@ -291,7 +289,7 @@ public class HouseDiaryController {
 			return new Result(houseDiaryService.getImageDiaryList(houseId));
 		}catch(Exception e){
 			
-			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, "오류가 발생했습니다. 관리자에게 문의해 주세요"); /*e.getMessage());*/
 		}
 	}
 
@@ -312,7 +310,7 @@ public class HouseDiaryController {
 				return new Result(houseDiaryService.getImageDiaryListV2(gsmKey, houseIdList, fromDate, toDate, page, size, false));
 			}catch(Exception e){
 
-				return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+				return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, "오류가 발생했습니다. 관리자에게 문의해 주세요"); /*e.getMessage());*/
 			}
         }catch(Exception e){
 			throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage() );
@@ -334,7 +332,7 @@ public class HouseDiaryController {
 				return new Result(houseDiaryService.getImageDiaryListV2(gsmKey, houseIdList, fromDate, toDate, null, null, true));
 			}catch(Exception e){
 
-				return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+				return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, "오류가 발생했습니다. 관리자에게 문의해 주세요"); /*e.getMessage());*/
 			}
 		}catch(Exception e){
 			throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage() );

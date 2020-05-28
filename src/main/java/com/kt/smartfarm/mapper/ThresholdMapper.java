@@ -13,13 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kt.smartfarm.supervisor.mapper;
+package com.kt.smartfarm.mapper;
 
-import java.util.HashMap;
-import java.util.List;
-
-import com.kt.smartfarm.service.CommonEnvVO;
+import com.kt.smartfarm.service.ThresholdVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -38,27 +40,11 @@ import org.springframework.stereotype.Repository;
  * </pre>
  */
 @Repository
-@Mapper("commonEnvMapper")
-public interface CommonEnvMapper {
-	CommonEnvVO getOutWeather(Long gsmKey);
-	void updateOutWeather(CommonEnvVO vo);
-	CommonEnvVO getOutWeatherDefault(Long gsmKey);
-	void updateOutWeatherDefault(CommonEnvVO vo);
-	
-	CommonEnvVO getThreshold(Long gsmKey);
-	void updateThreshold(CommonEnvVO vo);
-	CommonEnvVO getThresholdDefault(Long gsmKey);
-	void updateThresholdDefault(CommonEnvVO vo);
-	
-	void updateEnvInfo(CommonEnvVO vo);
-	CommonEnvVO getOutweatherInfo(HashMap<String, Object> param);
-	
-	HashMap<String, Object> getSensorInfoList();
-	HashMap<String, Object> getDeviceInfoList();
-	HashMap<String, Object> insertController(HashMap<String, Object> actuatorModuleInfo);
-	HashMap<String, Object> insertSensorList();
-	
-	void insertDeviceList(HashMap<String, Object> row);
-	void updateController(HashMap<String, Object> controllerInfo);	
-	
+@Mapper("thresholdMapper")
+public interface ThresholdMapper {
+
+	List<ThresholdVO> getThreshold(Map<String,Object> param);
+	Integer insert(ThresholdVO thresholdVO);
+	Integer delete(Map<String,Object> param);
+	Integer copyToNewGSM(@Param("from_gsm_key") Long fromGsmKey, @Param("to_gsm_key") Long toGsmKey );
 }

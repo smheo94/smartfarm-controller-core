@@ -13,21 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kt.smartfarm.supervisor.mapper;
+package com.kt.smartfarm.mapper;
 
-import java.util.HashMap;
-import java.util.List;
-import com.kt.smartfarm.service.CategoryEnvVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
+import java.util.List;
+
 @Repository
-@Mapper("categoryEnvMapper")
-public interface CategoryEnvMapper {
-	
-	Integer insert( CategoryEnvVO vo);	
-	Integer update(CategoryEnvVO vo);	
-	List<CategoryEnvVO> list();
-	CategoryEnvVO selectCategoryDetail(HashMap<String, Object> param);
-	Integer delete(Integer categoryId);
+@Mapper("authCheckMapper")
+public interface AuthCheckMapper {
+	List<HashMap<String, Object>> selectCheckAllowAuth(HashMap<String, Object> param);
+	Integer selectCheckAllowAuth2(HashMap<String, Object> param);
+	Integer isAdminUser(HashMap<String, Object> param);
+	Integer selectUserIdxForOauthClientId(String user_id);
 }

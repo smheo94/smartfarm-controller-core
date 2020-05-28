@@ -1,9 +1,8 @@
-package com.kt.smartfarm.supervisor.mapper;
+package com.kt.smartfarm.mapper;
 
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

@@ -12,35 +12,26 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
-package com.kt.smartfarm.supervisor.mapper;
+ */                                                               
+package com.kt.smartfarm.mapper;
 
-import com.kt.smartfarm.service.ThresholdVO;
+import java.util.HashMap;
+import java.util.List;
+
+import com.kt.smartfarm.service.ControlLogicDeviceVO;
+import com.kt.smartfarm.service.ControlLogicPropertiesVO;
+import com.kt.smartfarm.service.ControlLogicV2VO;
+import com.kt.smartfarm.service.ControlLogicVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Map;
-
-/**
- * monitoring에 관한 데이터처리 매퍼 클래스
- *
- * @author  Sean
- * @since 2018.07.23
- * @version 1.0
- * @see <pre>
- *  == 개정이력(Modification Information) ==
- *
- *  수정일          			수정자           	수정내용
- *  -----------    		-----   	---------------------------
- *  2018.07.23        	Sean        최초 생성
- *
- * </pre>
- */
 @Repository
-@Mapper("systemMapper")
-public interface SystemMapper {
-
-	Map<String,Object> getAppVersion(Map<String,Object> param);
+@Mapper("controlLogicMapper")
+public interface ControlLogicMapper {
+	List<ControlLogicVO> getLogicList();
+	List<ControlLogicV2VO> getLogicListV2();
+	List<ControlLogicDeviceVO> getLogicDeviceList(@Param("logicId") Integer logicId);
+	List<HashMap<String,Object>> getLogicPropertyList(@Param("logicId") Integer logicId);
+	List<ControlLogicPropertiesVO> getLogicPropertyListV2(@Param("logicId") Integer logicId);
 }

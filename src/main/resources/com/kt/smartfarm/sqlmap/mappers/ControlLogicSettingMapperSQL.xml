@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kt.smartfarm.supervisor.mapper.ControlLogicSettingMapper">
+<mapper namespace="com.kt.smartfarm.mapper.ControlLogicSettingMapper">
 
     <resultMap id="ControlCheckConditionMap" type="controlLogicSettingCheckConditionVO">
         <id property="id" column="id"/>
@@ -56,7 +56,7 @@
                     column="control_setting_id" select="getControlDevices"/>
         <collection property="logicDeviceList" javaType="java.util.ArrayList"
                     ofType="controlLogicDeviceVO"
-                    column="{logicId=def_logic_id}" select="com.kt.smartfarm.supervisor.mapper.ControlLogicMapper.getLogicDeviceList"/>
+                    column="{logicId=def_logic_id}" select="com.kt.smartfarm.mapper.ControlLogicMapper.getLogicDeviceList"/>
     </resultMap>
 
 
@@ -142,7 +142,7 @@
         SELECT CL.id AS def_logic_id, CL.name AS def_logic_name, CL.java_class_name, CL.default_period_size,
         CL.can_multi_logic, CL.ui_class_name, CL.description, CL.ui_help,
         CS.id AS control_setting_id, CS.green_house_id, CS.logic_name, CS.logic_env, CS.logic_period_env, CS.logic_period_size, CS.auto_manual_mode, CS.update_dt,
-        CS.view_order, CS.create_dt,CSPO.pre_order_setting_id,
+        CS.view_order, CS.create_dt, CS.update_system, CSPO.pre_order_setting_id,
         GH.gsm_key
         FROM control_logic CL
         INNER JOIN control_setting CS ON CL.id = CS.logic_id

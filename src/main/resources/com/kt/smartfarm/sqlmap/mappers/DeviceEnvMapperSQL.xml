@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kt.smartfarm.supervisor.mapper.DeviceEnvMapper">
+<mapper namespace="com.kt.smartfarm.mapper.DeviceEnvMapper">
 
 	<resultMap id="deviceEnvVOMap" type="deviceEnvVO" autoMapping="true">
 		<result column="properties" property="properties" typeHandler="com.kt.cmmn.util.JsonTypeHandler"/>
@@ -51,7 +51,7 @@
 			<if test="modbusAddress1 != null">,modbus_address1 = #{modbusAddress1} </if>
 			<if test="modbusAddress2 != null">,modbus_address2 = #{modbusAddress2} </if>
 			<if test="modbusAddress3 != null">,modbus_address3 = #{modbusAddress3} </if>
-			<if test="noStopControl != null">,no_stop_control = #{noStopControl} </if>
+			/*<if test="noStopControl != null">,no_stop_control = #{noStopControl} </if>*/
 			<if test="mode != null">,MODE = #{mode} </if>
 			<if test="updateDate != null">,update_date = NOW() </if>
 			<if test="autoManualMode != null">,auto_manual_mode = #{autoManualMode} </if>
@@ -73,7 +73,7 @@
 		    device.green_house_id, controller_id, nickname, device_type_nickname,
 			device.description, setup_date, x_position, y_position, x2_position,
 			y2_position, memo, modbus_address1, modbus_address2, modbus_address3,
-			no_stop_control, MODE, update_date, auto_manual_mode, STATUS, properties
+			/*no_stop_control, */ `mode`, update_date, auto_manual_mode, `status`, properties
 			,CDT.device_type, CDT.device_type_group, CDT.device_type_name, CDT.description AS device_type_description, CDT.kind, CDT.dcac
 			,CDT.round_number,CDT.topic_group,CDT.reset_point,CDT.accum_m,CDT.accum_h,CDT.accum_d,CDT.op_time,CDT.value_type
 			,CDT.opmode_error, CDT.value_exchange, CDT.sensing_timeout

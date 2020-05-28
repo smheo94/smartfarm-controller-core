@@ -13,6 +13,7 @@ import java.util.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kt.cmmn.util.ClassUtil;
+import com.kt.cmmn.util.RestClientUtil;
 import com.kt.cmmn.util.WeatherCastGPSUtil;
 import com.kt.smartfarm.service.UltraShortWeatherVO.UltraShortWeatherVO;
 import org.json.JSONArray;
@@ -248,6 +249,7 @@ public class TaskScheduler {
 										+"&ny="+ny
 								);
 								RestTemplate restTemplate = new RestTemplate();
+								RestClientUtil.setIgnoreCertificateSSL(restTemplate);
 								String result = restTemplate.getForObject(uri, String.class);
 								ObjectMapper mapper = new ObjectMapper();
 								UltraShortWeatherVO ultraShortWeatherVO = mapper.readValue(result , UltraShortWeatherVO.class);

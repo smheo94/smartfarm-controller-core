@@ -69,7 +69,7 @@ public class ThresholdController {
 				return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, "Query Failed");
 			}
 		} catch(Exception e) {
-			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, "오류가 발생했습니다. 관리자에게 문의해 주세요"); /*e.getMessage());*/
 		}
 	}
 	

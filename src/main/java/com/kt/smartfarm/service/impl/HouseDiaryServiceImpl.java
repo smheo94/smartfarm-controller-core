@@ -4,7 +4,7 @@ package com.kt.smartfarm.service.impl;
 import com.kt.smartfarm.service.HouseCropsDiaryVO;
 import com.kt.smartfarm.service.HouseDiaryService;
 import com.kt.smartfarm.service.HouseDiaryVO;
-import com.kt.smartfarm.supervisor.mapper.HouseDiaryMapper;
+import com.kt.smartfarm.mapper.HouseDiaryMapper;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

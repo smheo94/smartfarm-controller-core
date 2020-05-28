@@ -8,7 +8,6 @@ import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.junit.Test;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 
@@ -16,6 +15,7 @@ import java.net.URI;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertTrue;
@@ -27,24 +27,17 @@ public class SystemServiceImplTest {
         select, update
     }
     @Test
+    public void hashTest() {
+        assertTrue(("adb" + "def").hashCode() == ("adb" + "def").hashCode());
+    }
+    @Test
     public void encrypt(){
 
+        //"SELECT TABLE_NAME, update, COLUMN_TYPE FROM  information_schema.COLUMNS  WHERE TABLE_SCHEMA = 'sf_main_2'"
         String queryType = QUERY_TYPE.update.name();
         String [] anyQueryList = {
-                "INSERT IGNORE INTO control_logic (id,NAME,java_class_name,description,can_multi_logic,default_period_size,view_order,last_update)	VALUES (70,'온도제어(창)','TemperaturePositionControllerV3','온도에 따라 DC 구동기의 위치를 결정',1,3,101,'2020-01-17 22:16:56');",
-                "INSERT IGNORE INTO control_properties (id,ui_class_name,description,properties_json,bootstrap_size,last_update)	VALUES (700010,'low_temperature2','온도1(저온)','{\"min\":-40,\"max\":100,\"unit\":\"℃\",\"type\":\"number\", \"default\": 10}',12,'2020-01-17 22:16:57.000');",
-                "INSERT IGNORE INTO control_properties (id,ui_class_name,description,properties_json,bootstrap_size,last_update)	VALUES (700020,'low_temperature1','온도2(저온)','{\"min\":-40,\"max\":100,\"unit\":\"℃\",\"type\":\"number\", \"default\": 20}',12,'2020-01-17 22:16:57.000');",
-                "INSERT IGNORE INTO control_properties (id,ui_class_name,description,properties_json,bootstrap_size,last_update)	VALUES (700030,'high_temperature1','온도3(고온)','{\"min\":0,\"max\":100,\"unit\":\"℃\",\"type\":\"number\", \"default\": 25}',12,'2020-01-17 22:16:57.000');",
-                "INSERT IGNORE INTO control_properties (id,ui_class_name,description,properties_json,bootstrap_size,last_update)	VALUES (700040,'high_temperature2','온도4(고온)','{\"min\":0,\"max\":100,\"unit\":\"℃\",\"type\":\"number\", \"default\": 30}',12,'2020-01-17 22:16:57.000');",
-                "INSERT IGNORE INTO control_properties (id,ui_class_name,description,properties_json,bootstrap_size,last_update)	VALUES (700015,'low_temperature2_pos','위치1','{\"min\":0,\"max\":100,\"unit\":\"%\",\"type\":\"number\", \"default\": 0}',12,'2020-01-17 22:16:57.000');",
-                "INSERT IGNORE INTO control_properties (id,ui_class_name,description,properties_json,bootstrap_size,last_update)	VALUES (700025,'low_temperature1_pos','위치2','{\"min\":0,\"max\":100,\"unit\":\"%\",\"type\":\"number\", \"default\": 0}',12,'2020-01-17 22:16:57.000');",
-                "INSERT IGNORE INTO control_properties (id,ui_class_name,description,properties_json,bootstrap_size,last_update)	VALUES (700035,'high_temperature1_pos','위치3','{\"min\":0,\"max\":100,\"unit\":\"%\",\"type\":\"number\", \"default\": 50}',12,'2020-01-17 22:16:57.000');",
-                "INSERT IGNORE  INTO control_properties (id,ui_class_name,description,properties_json,bootstrap_size,last_update)	VALUES (700045,'high_temperature2_pos','위치4','{\"min\":0,\"max\":100,\"unit\":\"%\",\"type\":\"number\", \"default\": 100}',12,'2020-01-17 22:16:57.000');",
-                "INSERT  IGNORE INTO control_properties (id,ui_class_name,description,properties_json,bootstrap_size,last_update)	VALUES (700050,'use_rain','감우사용','{\"type\":\"boolean\",\"default\":\"false\"}',12,'2020-01-17 22:16:57.000');",
-                "INSERT IGNORE INTO control_properties (id,ui_class_name,description,properties_json,bootstrap_size,last_update)	VALUES (700060,'use_rain','강풍사용','{\"type\":\"boolean\",\"default\":\"false\"}',12,'2020-01-17 22:16:57.000');",
-                "INSERT IGNORE INTO `control_logic_property_lnk` (`logic_id`, `properties_id`, `is_period`, `priority`, `on_pc`, `on_mobile`, `on_panel`, `manual_command_num`, `last_update`, `depend_device`) VALUES('70', '700010', '2', '10', '1', '1', '1', '0', '2020-01-17 22:16:57', NULL), ('70', '700015', '2', '20', '1', '1', '1', '0', '2020-01-17 22:16:57', NULL), ('70', '700020', '2', '30', '1', '1', '1', '0', '2020-01-17 22:16:57', NULL),  ('70', '700025', '2', '40', '1', '1', '1', '0', '2020-01-17 22:16:57', NULL), ('70', '700030', '2', '50', '1', '1', '1', '0', '2020-01-17 22:16:57', NULL), ('70', '700035', '2', '60', '1', '1', '1', '0', '2020-01-17 22:16:57', NULL), ('70', '700040', '2', '70', '1', '1', '1', '0', '2020-01-17 22:16:57', NULL), ('70', '700045', '2', '80', '1', '1', '1', '0', '2020-01-17 22:16:57', NULL),  ('70', '700050', '0', '90', '1', '1', '1', '0', '2020-01-17 22:16:57', NULL),('70', '346', '0', '100', '1', '1', '1', '0', '2020-01-17 22:16:57', NULL),('70', '700060', '0', '110', '1', '1', '1', '0', '2020-01-17 22:16:57', NULL),('70', '345', '0', '120', '1', '1', '1', '0', '2020-01-17 22:16:57', NULL),('70', '151', '0', '130', '1', '1', '1', '0', '2020-01-17 22:16:57', NULL),('70', '68', '0', '140', '1', '1', '1', '0', '2020-01-17 22:16:57', NULL);",
-                "INSERT IGNORE INTO `control_logic_device` (`id`, `logic_id`, `device_num`, `device_param_code`, `device_param_name`, `device_type`, `is_main`, `required`, `able_array`, `description`, `display_order`, `is_used`, `relative_device_num`, `last_update`) VALUES (700001, '70', '1', 'dcActuator', '구동기(DC)', 'DC', '0', '0', '1', NULL, '1', '1', NULL, '2020-03-19 17:26:31');",
-                "INSERT IGNORE INTO `control_logic_device` (`id`, `logic_id`, `device_num`, `device_param_code`, `device_param_name`, `device_type`, `is_main`, `required`, `able_array`, `description`, `display_order`, `is_used`, `relative_device_num`, `last_update`) VALUES (700002, '70', '2', 'temp', '온도', 'SENSOR', '0', '1', '0', NULL, '1', '1', NULL, '2020-03-19 17:30:33');"
+                "UPDATE `control_logic_device` SET `device_type` = 'SENSOR' WHERE `id` = '44011'; "
+        //"ALTER TABLE `control_setting_device` DROP FOREIGN KEY `fx_control_setting_device`;"
         };
 
         //"select * from phone_setting where phone_number = '010-7237-1525'";
@@ -78,9 +71,11 @@ public class SystemServiceImplTest {
         //String oAuthserver = "http://dev1705.vivans.net:47900";
         //String oAuthserver = "https://oauth-smartfarm.argos-labs.com";
         String oAuthserver = "https://oauthsmartfarm.kt.co.kr";
+        //String oAuthserver = "http://test.oauthsmartfarm.kt.co.kr";
 
-        //String apiUrl ="http://dev1705.vivans.net:47100/env/system/data/";
+        //String apiUrl = "http://dev1705.vivans.net:47100/env/system/data/";
         String apiUrl = "https://apismartfarm.kt.co.kr/env/system/data/";
+        //String apiUrl = "http://test.apismartfarm.kt.co.kr/env/system/data/";
 
 
         //RestClientUtil client = new RestClientUtil(oAuthserver, "kt-gsm-controller", "05dc8fbd5e01a6625e8a6eb1ddf482c9");//"51724690439c3e4e89a9efc5e2ca567d5e4b09e6fa69a06bd65e7597418737cc");
@@ -99,7 +94,23 @@ public class SystemServiceImplTest {
         ResponseEntity<HashMap<String, Object>> hashMapResponseEntity = client.oauth2exchange(apiUrl, HttpMethod.GET, param, false);
         if( hashMapResponseEntity != null && hashMapResponseEntity.getStatusCode().is2xxSuccessful()) {
             log.info( "Result :  {}", hashMapResponseEntity.getBody());
+            List<Map<String,Object>> dataList = (List<Map<String,Object>>)hashMapResponseEntity.getBody().get("data");
+            if( dataList != null ) {
+                printData(dataList);
+            }
         }
+    }
+
+    private void printData(List<Map<String, Object>> dataList) {
+        Map<String,Object> headerLine = dataList.get(0);
+        StringBuilder sb = new StringBuilder();
+        headerLine.keySet().stream().forEachOrdered(k -> sb.append(k).append(",") );
+        dataList.stream().forEachOrdered(d -> {
+            sb.append("\n");
+            d.values().stream().forEachOrdered(v -> sb.append(v).append(","));
+        });
+        sb.append("\n");
+        log.info("DATA : \n {}", sb.toString());
     }
 
 

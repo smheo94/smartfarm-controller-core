@@ -12,26 +12,22 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */                                                               
-package com.kt.smartfarm.supervisor.mapper;
+ */
+package com.kt.smartfarm.mapper;
 
 import java.util.HashMap;
 import java.util.List;
-
-import com.kt.smartfarm.service.ControlLogicDeviceVO;
-import com.kt.smartfarm.service.ControlLogicPropertiesVO;
-import com.kt.smartfarm.service.ControlLogicV2VO;
-import com.kt.smartfarm.service.ControlLogicVO;
+import com.kt.smartfarm.service.CategoryEnvVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@Mapper("controlLogicMapper")
-public interface ControlLogicMapper {
-	List<ControlLogicVO> getLogicList();
-	List<ControlLogicV2VO> getLogicListV2();
-	List<ControlLogicDeviceVO> getLogicDeviceList(@Param("logicId") Integer logicId);
-	List<HashMap<String,Object>> getLogicPropertyList(@Param("logicId") Integer logicId);
-	List<ControlLogicPropertiesVO> getLogicPropertyListV2(@Param("logicId") Integer logicId);
+@Mapper("categoryEnvMapper")
+public interface CategoryEnvMapper {
+	
+	Integer insert( CategoryEnvVO vo);	
+	Integer update(CategoryEnvVO vo);	
+	List<CategoryEnvVO> list();
+	CategoryEnvVO selectCategoryDetail(HashMap<String, Object> param);
+	Integer delete(Integer categoryId);
 }

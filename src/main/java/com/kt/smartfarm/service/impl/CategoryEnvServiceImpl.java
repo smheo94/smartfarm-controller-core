@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-import com.kt.smartfarm.supervisor.mapper.CategoryEnvMapper;
+import com.kt.smartfarm.mapper.CategoryEnvMapper;
 
 import javax.annotation.Resource;
 

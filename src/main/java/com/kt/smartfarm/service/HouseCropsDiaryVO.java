@@ -1,14 +1,11 @@
 package com.kt.smartfarm.service;
 
-import com.mysql.jdbc.Blob;
-
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Data
 @Getter

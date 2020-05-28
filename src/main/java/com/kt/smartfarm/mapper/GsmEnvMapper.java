@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kt.smartfarm.supervisor.mapper;
+package com.kt.smartfarm.mapper;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.kt.smartfarm.service.GsmEnvVO;
 import com.kt.smartfarm.service.GsmThresholdVO;

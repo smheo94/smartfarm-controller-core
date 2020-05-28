@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kt.smartfarm.supervisor.mapper.ControlLogicMapper">
+<mapper namespace="com.kt.smartfarm.mapper.ControlLogicMapper">
 
 	<resultMap id="controlLogicPropertiesMap"
-			   type="com.kt.smartfarm.service.ControlLogicPropertiesVO" autoMapping="true">
+               type="com.kt.smartfarm.service.ControlLogicPropertiesVO" autoMapping="true">
 		<result column="properties_json" property="propertiesJson" typeHandler="com.kt.cmmn.util.JsonTypeHandler"/>
 		<result column="depend_device" property="dependDevice" typeHandler="com.kt.cmmn.util.JsonTypeHandler"/>
 	</resultMap>

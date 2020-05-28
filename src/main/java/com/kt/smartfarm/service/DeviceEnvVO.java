@@ -38,7 +38,7 @@ public class DeviceEnvVO {
 	String modbusAddress1;
 	String modbusAddress2;
 	String modbusAddress3;
-	Integer noStopControl;
+	//Integer noStopControl;
 	Integer mode;
 	String updateDate;
 	Integer autoManualMode;

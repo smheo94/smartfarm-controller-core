@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kt.smartfarm.supervisor.mapper.ControllerInfoMapper">
+<mapper namespace="com.kt.smartfarm.mapper.ControllerInfoMapper">
 
 
 	<resultMap id="controllerInfo"
-			   type="com.kt.smartfarm.service.ControllerInfoVO" autoMapping="true">
+               type="com.kt.smartfarm.service.ControllerInfoVO" autoMapping="true">
 	</resultMap>
 
 	<select id="list" resultMap="controllerInfo">		

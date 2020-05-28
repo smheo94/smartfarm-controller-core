@@ -1,7 +1,9 @@
 package com.kt.smartfarm.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
+import org.springframework.core.env.Environment;
 import org.springframework.web.servlet.config.annotation.*;
 
 import springfox.documentation.builders.PathSelectors;
@@ -19,6 +21,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Configuration
 @EnableSwagger2
@@ -31,8 +34,10 @@ public class SwaggerConfig extends WebMvcConfigurerAdapter {
     private String clientId;
     @Value("${security.oauth2.client.client-secret}")
     private String clientSecret;
-
+    @Autowired
+    Environment env;
     @Bean
+    @Profile({"dev"})
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
@@ -63,11 +68,13 @@ public class SwaggerConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("swagger-ui.html")
-                .addResourceLocations("classpath:/META-INF/resources/");
+        if(!Arrays.asList(env.getActiveProfiles()).stream().filter(s-> Objects.equals(s, "prod")).findFirst().isPresent()) {
+            registry.addResourceHandler("swagger-ui.html")
+                    .addResourceLocations("classpath:/META-INF/resources/");
 
-        registry.addResourceHandler("/webjars/**")
-                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+            registry.addResourceHandler("/webjars/**")
+                    .addResourceLocations("classpath:/META-INF/resources/webjars/");
+        }
 
     }
 

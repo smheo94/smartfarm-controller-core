@@ -16,9 +16,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kt.cmmn.util.MapUtils;
+import com.kt.cmmn.util.RestClientUtil;
 import com.kt.smartfarm.config.SmartfarmInterceptorConfig;
 import com.kt.smartfarm.service.*;
-import com.kt.smartfarm.supervisor.mapper.*;
+import com.kt.smartfarm.mapper.*;
 import com.kt.cmmn.util.ClassUtil;
 import com.kt.smartfarm.config.SecurityConfig;
 import com.kt.smartfarm.intercepter.ResponseResult;
@@ -26,13 +27,13 @@ import com.kt.smartfarm.intercepter.SmartFarmDataInterceptor;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -145,6 +146,7 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 
 	@Override
 	public Long insert(GsmEnvVO gsmInfo) {
+
 		gsmEnvMap.remove(gsmInfo.getGsmKey());
 		Long gsmKey = gsmEnvMapper.insert(gsmInfo);
 		//gsmEnvMapper.createGSMSeq(gsmInfo.getGsmKey());
@@ -396,15 +398,16 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 		}
 		return new HttpEntity<String>(strData, headers);
 	}
-	public HttpEntity sendRestBodyData(HttpServletRequest request, String server, Integer port, String url, HttpMethod method, Long gsmKey, Object data) {
+	public HttpEntity sendRestBodyData(HttpServletRequest request, String httpSchema, String server, Integer port, String url, HttpMethod method, Long gsmKey, Object data) {
 		try {
-		    URI uri = new URI("http", null, server, port, null, null, null);
+		    URI uri = new URI(httpSchema, null, server, port, null, null, null);
 			uri = UriComponentsBuilder.fromUri(uri).path(url).build(true).toUri();
 			HttpEntity httpEntity = getHttpEntity(request, gsmKey, data);
 			if (httpEntity == null) {
 				return null;
 			}
 			RestTemplate restTemplate = new RestTemplate();
+			RestClientUtil.setIgnoreCertificateSSL(restTemplate);
 			restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
 
 			log.debug("sendPost : {} , {}, {}", gsmKey, uri, request.getMethod());
@@ -420,9 +423,11 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 			if (gsmEnvVO == null) {
 				throw new HttpClientErrorException(HttpStatus.NOT_FOUND, NOT_FOUND_GSM_INFO);
 			}
+			String httpSchema = gsmEnvVO.getHttpSchema();
 			String server = gsmEnvVO.getSystemHost();
 			Integer port = gsmEnvVO.getSystemPort();
-			return sendRestBodyData(request, server, port, url, method, gsmKey, data);
+
+			return sendRestBodyData(request, httpSchema, server, port, url, method, gsmKey, data);
 	}
 
 
@@ -435,6 +440,7 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 				return null;
 			}
 			RestTemplate restTemplate = new RestTemplate();
+			RestClientUtil.setIgnoreCertificateSSL(restTemplate);
 			restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
 
 			log.debug("sendPost : {} , {}, {}", gsmKey, uri, request.getMethod());
@@ -446,5 +452,44 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 		return null;
 	}
 
+	@Override
+	public Integer autoSync(Long gsmkey, HttpServletRequest request) {
+
+		final List<ControlLogicSettingVO> logicSettingList = controlLogicSettingService.getLogicSetting(gsmkey, null, null);
+
+		final GsmEnvVO gsmEnvVO = get(gsmkey, true);
+		String httpSchema = gsmEnvVO.getHttpSchema();
+		String server  = gsmEnvVO.getSystemHost();
+		Integer port = gsmEnvVO.getSystemPort();
+		try {
+			URI uri = new URI(httpSchema, null, server, port, null, null, null);
+			uri = UriComponentsBuilder.fromUri(uri).path("/env/control_logic_setting").build(true).toUri();
+			HttpHeaders headers = new HttpHeaders();
+			Enumeration<String> headerNames = request.getHeaderNames();
+			while (headerNames.hasMoreElements()) {
+				String headerName = headerNames.nextElement();
+				headers.set(headerName, request.getHeader(headerName));
+			}
+			RestTemplate restTemplate = new RestTemplate();
+			RestClientUtil.setIgnoreCertificateSSL(restTemplate);
+			for(ControlLogicSettingVO  logicSettingVO : logicSettingList ) {
+				try {
+					HttpEntity httpEntity = new HttpEntity<String>(null, headers);
+					uri = UriComponentsBuilder.fromUri(uri).path(String.format("/env/control_logic_setting/%s", logicSettingVO.controlSettingId)).build(true).toUri();
+					ResponseEntity<ResponseResult> returnValue = restTemplate.exchange(uri, HttpMethod.valueOf(request.getMethod()), httpEntity, ResponseResult.class);
+					httpEntity = new HttpEntity<String>( objMapper.writeValueAsString(logicSettingVO), headers);
+					uri = UriComponentsBuilder.fromUri(uri).path(String.format("/env/control_logic_setting", logicSettingVO.controlSettingId)).build(true).toUri();
+					returnValue = restTemplate.exchange(uri, HttpMethod.valueOf(request.getMethod()), httpEntity, ResponseResult.class);
+				} catch (JsonProcessingException e) {
+					log.error("autoSync Error : {}", e);
+					return 0;
+				}
+			}
+		} catch (URISyntaxException e) {
+			log.error("autoSync Error : {}", e);
+			return 0;
+		}
+		return 1;
+	}
 
 }

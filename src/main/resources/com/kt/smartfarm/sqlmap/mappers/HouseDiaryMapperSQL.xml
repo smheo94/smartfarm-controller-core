@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kt.smartfarm.supervisor.mapper.HouseDiaryMapper">
+<mapper namespace="com.kt.smartfarm.mapper.HouseDiaryMapper">
 	<resultMap id="houseDiaryMap" type="houseDiaryVO" autoMapping="true">
 		<id column="id" property="id"/>
 		<result column="diary_data" property="diaryData" typeHandler="com.kt.cmmn.util.JsonTypeHandler"/>
