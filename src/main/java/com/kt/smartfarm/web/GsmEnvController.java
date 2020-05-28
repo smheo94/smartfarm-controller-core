@@ -57,10 +57,6 @@ public class GsmEnvController {
 	@Resource(name = "gsmEnvService")
 	private GsmEnvService gsmEnvService;
 
-
-	@Resource(name = "autoSyncService")
-	private AutoSyncService autoSyncService;
-		
 	@Resource(name ="houseEnvService")
 	private HouseEnvService houseEnvService;
 
@@ -322,7 +318,7 @@ public class GsmEnvController {
 			if( !authCheckService.authCheck(gsmKey, null, null, null) ) {
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
 			}
-			return new Result(autoSyncService.autoSync(gsmKey, request));
+			return new Result(gsmEnvService.autoSync(gsmKey, request));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}

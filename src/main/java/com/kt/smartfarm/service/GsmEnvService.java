@@ -23,4 +23,6 @@ public interface GsmEnvService {
 	Integer syncToSmartfarm(HttpServletRequest request, Long gsmKey);
 	Integer syncToSupervisor(HttpServletRequest request);
 	GsmEnvVO get(Long gsmKey, boolean forced);
+
+	Integer autoSync(Long gmsKey, HttpServletRequest request);
 }

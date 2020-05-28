@@ -27,6 +27,7 @@ import com.kt.smartfarm.intercepter.SmartFarmDataInterceptor;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -451,5 +452,44 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 		return null;
 	}
 
+	@Override
+	public Integer autoSync(Long gsmkey, HttpServletRequest request) {
+
+		final List<ControlLogicSettingVO> logicSettingList = controlLogicSettingService.getLogicSetting(gsmkey, null, null);
+
+		final GsmEnvVO gsmEnvVO = get(gsmkey, true);
+		String httpSchema = gsmEnvVO.getHttpSchema();
+		String server  = gsmEnvVO.getSystemHost();
+		Integer port = gsmEnvVO.getSystemPort();
+		try {
+			URI uri = new URI(httpSchema, null, server, port, null, null, null);
+			uri = UriComponentsBuilder.fromUri(uri).path("/env/control_logic_setting").build(true).toUri();
+			HttpHeaders headers = new HttpHeaders();
+			Enumeration<String> headerNames = request.getHeaderNames();
+			while (headerNames.hasMoreElements()) {
+				String headerName = headerNames.nextElement();
+				headers.set(headerName, request.getHeader(headerName));
+			}
+			RestTemplate restTemplate = new RestTemplate();
+			RestClientUtil.setIgnoreCertificateSSL(restTemplate);
+			for(ControlLogicSettingVO  logicSettingVO : logicSettingList ) {
+				try {
+					HttpEntity httpEntity = new HttpEntity<String>(null, headers);
+					uri = UriComponentsBuilder.fromUri(uri).path(String.format("/env/control_logic_setting/%s", logicSettingVO.controlSettingId)).build(true).toUri();
+					ResponseEntity<ResponseResult> returnValue = restTemplate.exchange(uri, HttpMethod.valueOf(request.getMethod()), httpEntity, ResponseResult.class);
+					httpEntity = new HttpEntity<String>( objMapper.writeValueAsString(logicSettingVO), headers);
+					uri = UriComponentsBuilder.fromUri(uri).path(String.format("/env/control_logic_setting", logicSettingVO.controlSettingId)).build(true).toUri();
+					returnValue = restTemplate.exchange(uri, HttpMethod.valueOf(request.getMethod()), httpEntity, ResponseResult.class);
+				} catch (JsonProcessingException e) {
+					log.error("autoSync Error : {}", e);
+					return 0;
+				}
+			}
+		} catch (URISyntaxException e) {
+			log.error("autoSync Error : {}", e);
+			return 0;
+		}
+		return 1;
+	}
 
 }
