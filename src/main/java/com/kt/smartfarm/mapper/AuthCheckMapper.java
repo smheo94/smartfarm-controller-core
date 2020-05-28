@@ -21,7 +21,6 @@ import org.springframework.stereotype.Repository;
 import java.util.HashMap;
 import java.util.List;
 
-@Repository
 @Mapper("authCheckMapper")
 public interface AuthCheckMapper {
 	List<HashMap<String, Object>> selectCheckAllowAuth(HashMap<String, Object> param);

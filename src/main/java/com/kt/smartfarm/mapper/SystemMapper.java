@@ -35,7 +35,7 @@ import java.util.Map;
  *
  * </pre>
  */
-@Repository
+
 @Mapper("systemMapper")
 public interface SystemMapper {
 

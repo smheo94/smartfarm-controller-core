@@ -23,7 +23,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Map;
 
-@Repository
+
 @Mapper("controlLogicSettingMapper")
 public interface ControlLogicSettingMapper {
 	List<ControlLogicSettingVO> getControlLogicSetting(@Param("gsm_key") Long gsmKey, @Param("green_house_id") Long greenHouseId,

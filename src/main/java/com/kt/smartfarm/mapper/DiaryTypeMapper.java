@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
+
 @Mapper("diaryTypeMapper")
 public interface DiaryTypeMapper {
     public List<DiaryTypeVO> getDiaryTypeList(@Param(value="gsmKey") Long gsmKey, @Param(value="houseId") Long houseId, @Param(value="userIdx") Long userIdx);

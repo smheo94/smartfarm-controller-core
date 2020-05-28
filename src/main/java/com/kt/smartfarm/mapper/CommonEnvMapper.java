@@ -36,7 +36,6 @@ import org.springframework.stereotype.Repository;
  *
  * </pre>
  */
-@Repository
 @Mapper("commonEnvMapper")
 public interface CommonEnvMapper {
 	CommonEnvVO getOutWeather(Long gsmKey);

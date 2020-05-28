@@ -25,7 +25,6 @@ import java.util.Objects;
 
 @Configuration
 @EnableSwagger2
-@ComponentScan( basePackages = "com.kt.smartfarm.web.*")
 @PropertySource(value={"classpath:application.properties","file:/myapp/application.properties","file:/home/gsm/v4/conf/smartfarm-mgr-env.properties"}, ignoreResourceNotFound=true)
 @SuppressWarnings("PMD")
 @EnableWebMvc
