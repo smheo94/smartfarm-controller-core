@@ -1,5 +1,8 @@
 package com.kt.smartfarm.service;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.kt.cmmn.util.MapJsonDeserializer;
+import com.kt.cmmn.util.MapUtils;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -46,7 +49,13 @@ public class HouseEnvVO {
 	Double selectHumSensor;
 	Long gsmKey;
 	String houseNameI18n;
+
+	@JsonDeserialize(using = MapJsonDeserializer.class)
 	HashMap<String,Object> properties = new HashMap<>();
-	
+//
+//	public void setProperties(String properties) {
+//		this.properties = (HashMap<String,Object>)MapUtils.fromJson(properties);
+//	}
+//
 	List<CCTVSettingVO> cctv;
 }
