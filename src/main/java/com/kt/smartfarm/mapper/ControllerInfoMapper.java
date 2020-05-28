@@ -37,7 +37,7 @@ import org.springframework.stereotype.Repository;
  *
  * </pre>
  */
-@Repository
+
 @Mapper("controllerInfoMapper")
 public interface ControllerInfoMapper {	
 	List<ControllerInfoVO> list(Map<String,Object> map);	

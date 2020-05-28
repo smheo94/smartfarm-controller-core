@@ -23,7 +23,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Map;
 
-@Repository
+
 @Mapper("controlLogicSettingTemplateMapper")
 public interface ControlLogicSettingTemplateMapper {
 	ControlLogicSettingTemplateVO getControlLogicSettingTemplate(@Param("id") Long controlLogicSettingTemplateId);

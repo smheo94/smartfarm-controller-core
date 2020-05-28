@@ -26,7 +26,7 @@ import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-@Repository
+
 @Mapper("houseEnvMapper")
 public interface HouseEnvMapper {
 	Long insert(HouseEnvVO map);

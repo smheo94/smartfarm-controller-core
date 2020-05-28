@@ -23,7 +23,7 @@ import com.kt.smartfarm.service.HouseDiaryVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import org.springframework.stereotype.Repository;
 
-@Repository
+
 @Mapper("houseDiaryMapper")
 public interface HouseDiaryMapper {
 

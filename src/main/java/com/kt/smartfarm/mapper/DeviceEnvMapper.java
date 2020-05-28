@@ -24,7 +24,7 @@ import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-@Repository
+
 @Mapper("deviceEnvMapper")
 public interface DeviceEnvMapper {
 	Integer insert( DeviceEnvVO device);

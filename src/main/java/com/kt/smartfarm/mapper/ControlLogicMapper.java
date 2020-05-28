@@ -26,7 +26,7 @@ import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-@Repository
+
 @Mapper("controlLogicMapper")
 public interface ControlLogicMapper {
 	List<ControlLogicVO> getLogicList();

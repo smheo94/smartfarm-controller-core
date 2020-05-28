@@ -39,7 +39,7 @@ import org.springframework.stereotype.Repository;
  *
  * </pre>
  */
-@Repository
+
 @Mapper("thresholdMapper")
 public interface ThresholdMapper {
 

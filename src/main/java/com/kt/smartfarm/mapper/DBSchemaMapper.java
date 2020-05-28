@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Map;
 
-@Repository
+
 @Mapper("dbSchemaMapper")
 public interface DBSchemaMapper {
     void schemaUpdate_20181129_1();

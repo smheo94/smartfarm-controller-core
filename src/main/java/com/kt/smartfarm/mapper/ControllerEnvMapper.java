@@ -27,7 +27,6 @@ import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-@Repository
 @Mapper("controllerEnvMapper")
 public interface ControllerEnvMapper {
 
