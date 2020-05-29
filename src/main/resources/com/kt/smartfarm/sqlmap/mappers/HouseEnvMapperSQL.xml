@@ -109,8 +109,9 @@
 	</delete>
 	<update id="update" parameterType="houseEnvVO">
 		UPDATE green_house
-		SET
-			<if test="productMethodId != null">	product_method_id = #{productMethodId}</if>
+
+		SET last_update = NOW()
+			<if test="productMethodId != null">,	product_method_id = #{productMethodId}</if>
 			<if test="greenHouseTypeId != null">, green_house_type_id = #{greenHouseTypeId}</if>
 			<if test="houseName != null">,	house_name = #{houseName}</if>
 			<if test="latitude != null">,	latitude = #{latitude}</if>
@@ -133,7 +134,7 @@
 			<if test="selectHumSensor != null">,select_hum_sensor = #{selectHumSensor}</if>	
 			<if test="houseNameI18n != null">,	house_name_i18n = #{houseNameI18n}</if>
 		    <if test="properties != null">,	properties = '${@com.kt.cmmn.util.MapUtils@toJson(properties)}'</if>
-			,last_update = NOW()	
+
 		WHERE gsm_key = #{gsmKey} AND id = #{id};
 	</update>
 	
