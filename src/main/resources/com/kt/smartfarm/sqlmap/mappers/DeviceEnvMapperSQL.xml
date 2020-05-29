@@ -38,7 +38,8 @@
     <update id="update" parameterType="deviceEnvVO">
 		UPDATE device
 		SET
-			<if test="deviceTypeId != null"> device_type_id = #{deviceTypeId} </if>
+			update_date = NOW()
+			<if test="deviceTypeId != null">,device_type_id = #{deviceTypeId} </if>
 			<if test="deviceTypeIdx != null">,device_type_idx = #{deviceTypeIdx} </if>
 			<if test="controllerId != null">,controller_id = #{controllerId} </if>
 			<if test="nickname != null">,nickname = #{nickname} </if>
@@ -53,7 +54,6 @@
 			<if test="modbusAddress3 != null">,modbus_address3 = #{modbusAddress3} </if>
 			/*<if test="noStopControl != null">,no_stop_control = #{noStopControl} </if>*/
 			<if test="mode != null">,MODE = #{mode} </if>
-			<if test="updateDate != null">,update_date = NOW() </if>
 			<if test="autoManualMode != null">,auto_manual_mode = #{autoManualMode} </if>
 			<if test="status != null">,STATUS = #{status} </if>
 			<if test="properties != null">,properties = '${@com.kt.cmmn.util.MapUtils@toJson(properties)}' </if>
@@ -252,11 +252,11 @@
 
 	<update id="updateEDeviceEnv" parameterType="eDeviceEnvVO">
 		UPDATE device_electric_dep_device
-		SET
+		<set>
 			<if test="deviceId!=null">device_id = #{deviceId}</if>
 			<if test="parentDeviceId != null">,p_device_id = #{parentDeviceId}</if>
-		WHERE
-		id=#{id}
+		</set>
+		WHERE id=#{id}
 	</update>
 
 	<delete id="deleteVDevicesEnv">

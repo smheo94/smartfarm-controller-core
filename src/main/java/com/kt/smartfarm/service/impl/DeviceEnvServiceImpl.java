@@ -241,7 +241,9 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 	public Integer copyToNewGSM(Long fromGsmKey, Long toGsmKey) {
 		log.info("copyToNewGSM :{} --> {}", fromGsmKey, toGsmKey);
 		deviceEnvMapper.copyToNewGSM(fromGsmKey, toGsmKey);
-		return deviceEnvMapper.copyToNewGSMVDeviceEnv(fromGsmKey, toGsmKey);
+		deviceEnvMapper.copyToNewGSMVDeviceEnv(fromGsmKey, toGsmKey);
+		deviceEnvMapper.copyToNewGSMEDeviceEnv(fromGsmKey, toGsmKey);
+		return 1;
 	}
 
 	//yechae

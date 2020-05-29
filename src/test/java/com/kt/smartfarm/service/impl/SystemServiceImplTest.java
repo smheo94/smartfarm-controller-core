@@ -14,9 +14,7 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.assertTrue;
 
@@ -34,14 +32,21 @@ public class SystemServiceImplTest {
     public void encrypt(){
 
         //"SELECT TABLE_NAME, update, COLUMN_TYPE FROM  information_schema.COLUMNS  WHERE TABLE_SCHEMA = 'sf_main_2'"
-        String queryType = QUERY_TYPE.update.name();
+        String queryType = QUERY_TYPE.select.name();
         String [] anyQueryList = {
-                "UPDATE `control_logic_device` SET `device_type` = 'SENSOR' WHERE `id` = '44011'; "
+                "select * from green_house"
         //"ALTER TABLE `control_setting_device` DROP FOREIGN KEY `fx_control_setting_device`;"
         };
-
+        String  anyQueryList2 ="";
+        List<String> queryList = new ArrayList<>();
+        if( anyQueryList2.length() > 0 ) {
+            queryList.addAll(Arrays.asList(anyQueryList2.split(";")));
+        }
+        if( anyQueryList.length > 0 ) {
+            queryList.addAll(Arrays.asList(anyQueryList));
+        }
         //"select * from phone_setting where phone_number = '010-7237-1525'";
-        for( String anyQuery : anyQueryList) {
+        for( String anyQuery : queryList) {
             anyQueryTest(queryType, anyQuery);
         }
 

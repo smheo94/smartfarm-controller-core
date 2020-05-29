@@ -27,6 +27,9 @@ import com.kt.smartfarm.mapper.HouseEnvMapper;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -38,6 +41,8 @@ import java.util.*;
 @Service("controlLogicSettingService")
 public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl implements ControlLogicSettingService {
 
+	@Autowired
+	ApplicationEventPublisher publisher;
 	@Autowired
 	SmartfarmInterceptorConfig config;
 
@@ -186,6 +191,7 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 		}
 		final HouseEnvVO houseEnvVO = houseEnvMapper.get(null, vo.greenHouseId);
 		vo.setTmpGsmKey(houseEnvVO.getGsmKey());
+		List<ControlLogicSettingVO> dbSettingList = mapper.getControlLogicSetting(null, null, vo.controlSettingId, null);
 		mapper.updateControlSetting(vo);
 		if (vo.getPreOrderSettingId() != null) {
 			log.info("exists getPreOrderSettingId {}", vo.controlSettingId);
@@ -224,24 +230,36 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 				}
 			}
 		}
-		if( config.isSmartfarmSystem() && Objects.equals(vo.autoManualMode,  "manual") ) {
-			HashMap<String,Object> param = new HashMap<>();
-			param.put("controlSettingId", vo.controlSettingId);
-			param.put("logicId", vo.logicId);
-			param.put("command", "manual_mode_change");
-			try{
-				log.info("manual command");
-				RestTemplate client = new RestTemplate();
-				RestClientUtil.setIgnoreCertificateSSL(client);
-				String url = "http://127.0.0.1:9876/api/v1/device/operation_command";
-				HashMap<String, Object> responseData = (HashMap<String, Object>) client.postForObject(url, param, HashMap.class);
-				String result = MapUtils.toJson(responseData);
-				log.info("command ========== " + result);
-			}catch(Exception e){
-				log.error("command : {}", param,  e);
+
+		if( config.isSmartfarmSystem() ) {
+			if (dbSettingList != null && dbSettingList.size() > 0 && dbSettingList.get(0) != null) {
+				ControlLogicSettingVO dbSetting = dbSettingList.get(0);
+				if (!Objects.equals(dbSetting.autoManualMode, vo.autoManualMode)) {
+					publisher.publishEvent(vo);
+				}
 			}
 		}
 		return vo;
+	}
+
+	@Async
+	@EventListener
+	public void sendControlModeChange(ControlLogicSettingVO vo) {
+		HashMap<String,Object> param = new HashMap<>();
+		param.put("controlSettingId", vo.controlSettingId);
+		param.put("logicId", vo.logicId);
+		param.put("command", "manual_mode_change");
+		try{
+			log.info("manual command");
+			RestTemplate client = new RestTemplate();
+			RestClientUtil.setIgnoreCertificateSSL(client);
+			String url = "http://127.0.0.1:9876/api/v1/device/operation_command";
+			HashMap<String, Object> responseData = (HashMap<String, Object>) client.postForObject(url, param, HashMap.class);
+			String result = MapUtils.toJson(responseData);
+			log.info("command ========== " + result);
+		}catch(Exception e){
+			log.error("command : {}", param,  e);
+		}
 	}
 
 	@Override

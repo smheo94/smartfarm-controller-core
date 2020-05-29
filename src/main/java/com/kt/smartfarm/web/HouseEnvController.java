@@ -190,8 +190,9 @@ public class HouseEnvController {
 				lampLog.forbidden();
 				return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
 			}
+			Result<HouseEnvVO>  result = new Result(houseEnvService.delete(gsmKey, greenHouseId));
 			lampLog.success();
-			return new Result(houseEnvService.delete(gsmKey, greenHouseId));
+			return result;
 		} catch (Exception e) {
 			lampLog.exception(e.getMessage());
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);

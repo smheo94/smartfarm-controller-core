@@ -109,8 +109,9 @@
 	</delete>
 	<update id="update" parameterType="houseEnvVO">
 		UPDATE green_house
-		SET
-			<if test="productMethodId != null">	product_method_id = #{productMethodId}</if>
+
+		SET last_update = NOW()
+			<if test="productMethodId != null">,	product_method_id = #{productMethodId}</if>
 			<if test="greenHouseTypeId != null">, green_house_type_id = #{greenHouseTypeId}</if>
 			<if test="houseName != null">,	house_name = #{houseName}</if>
 			<if test="latitude != null">,	latitude = #{latitude}</if>
@@ -133,7 +134,7 @@
 			<if test="selectHumSensor != null">,select_hum_sensor = #{selectHumSensor}</if>	
 			<if test="houseNameI18n != null">,	house_name_i18n = #{houseNameI18n}</if>
 		    <if test="properties != null">,	properties = '${@com.kt.cmmn.util.MapUtils@toJson(properties)}'</if>
-			,last_update = NOW()	
+
 		WHERE gsm_key = #{gsmKey} AND id = #{id};
 	</update>
 	
@@ -527,12 +528,12 @@
 	</insert>
 	<insert id="copyToNewGSMHouseProduct">
 		INSERT INTO green_house_product (id, gsm_key, green_house_id, prd_code, start_date, end_date, properties)
-		SELECT   (${to_gsm_key}  * 1000000000) + (id %  1000000000)
+		SELECT   (${to_gsm_key}  * 1000000000) + (D.id %  1000000000)
 				 ,${to_gsm_key}
-			 	 ,(${to_gsm_key}  * 1000000000) + (green_house_id %  1000000000)
-			, prd_code, start_date, end_date, properties
+			 	 ,(${to_gsm_key}  * 1000000000) + (D.green_house_id %  1000000000)
+			, D.prd_code, D.start_date, D.end_date, D.properties
 		FROM green_house_product D
-				 INNER JOIN green_house GH on GH.id = D.green_house_id
+		INNER JOIN green_house GH on GH.id = D.green_house_id
 		WHERE GH.gsm_key = #{from_gsm_key};
 	</insert>
 </mapper>
