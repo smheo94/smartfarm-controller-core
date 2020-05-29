@@ -527,12 +527,12 @@
 	</insert>
 	<insert id="copyToNewGSMHouseProduct">
 		INSERT INTO green_house_product (id, gsm_key, green_house_id, prd_code, start_date, end_date, properties)
-		SELECT   (${to_gsm_key}  * 1000000000) + (id %  1000000000)
+		SELECT   (${to_gsm_key}  * 1000000000) + (D.id %  1000000000)
 				 ,${to_gsm_key}
-			 	 ,(${to_gsm_key}  * 1000000000) + (green_house_id %  1000000000)
-			, prd_code, start_date, end_date, properties
+			 	 ,(${to_gsm_key}  * 1000000000) + (D.green_house_id %  1000000000)
+			, D.prd_code, D.start_date, D.end_date, D.properties
 		FROM green_house_product D
-				 INNER JOIN green_house GH on GH.id = D.green_house_id
+		INNER JOIN green_house GH on GH.id = D.green_house_id
 		WHERE GH.gsm_key = #{from_gsm_key};
 	</insert>
 </mapper>
