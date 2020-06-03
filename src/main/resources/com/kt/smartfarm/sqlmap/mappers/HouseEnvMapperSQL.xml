@@ -287,7 +287,7 @@
 	</select>
 
 	<select id ="getHouseControlSettings" resultType="controlLogicSettingVO" parameterType="Long" >
-		SELECT CL.id AS logic_id, CL.name AS def_logic_name, CL.java_class_name, CL.default_period_size,
+		SELECT CL.id AS logic_id, CL.name AS def_logic_name, CL.java_class_name, CL.ui_class_name, CL.description, CL.ui_help, CL.default_period_size,
 		CS.id AS control_setting_id, CS.green_house_id, CS.logic_name, CS.logic_env, CS.logic_period_env, CS.logic_period_size, CS.auto_manual_mode, CS.update_dt,
 		CS.view_order, CS.create_dt, CS.update_system,
 		GH.gsm_key
