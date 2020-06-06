@@ -38,10 +38,7 @@ public class UltraShortWeatherVO {
     }
 
     public boolean isRequestSuccess(){
-        if(response.getHeader().getResultCode().equals("00")){
-            return true;
-        }
-        return false;
+        return response.getHeader().getResultCode().equals("00");
     }
 
     public LinkedHashMap<String, Object> ultraOjbToMap(String baseTime){

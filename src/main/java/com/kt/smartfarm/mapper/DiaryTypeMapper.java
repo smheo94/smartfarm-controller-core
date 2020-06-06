@@ -12,7 +12,7 @@ import java.util.List;
 
 @Mapper("diaryTypeMapper")
 public interface DiaryTypeMapper {
-    public List<DiaryTypeVO> getDiaryTypeList(@Param(value="gsmKey") Long gsmKey, @Param(value="houseId") Long houseId, @Param(value="userIdx") Long userIdx);
-    public List<DiaryTypePropertiesVO> getDiaryTypePropertyList(@Param(value="diaryTypeId") Long diaryTypeId);
+    List<DiaryTypeVO> getDiaryTypeList(@Param(value = "gsmKey") Long gsmKey, @Param(value = "houseId") Long houseId, @Param(value = "userIdx") Long userIdx);
+    List<DiaryTypePropertiesVO> getDiaryTypePropertyList(@Param(value = "diaryTypeId") Long diaryTypeId);
 
 }

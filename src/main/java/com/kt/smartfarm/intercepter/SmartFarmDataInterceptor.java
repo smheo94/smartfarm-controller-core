@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.Objects;
 
@@ -285,7 +286,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
         }
         RestTemplate restTemplate = new RestTemplate();
         RestClientUtil.setIgnoreCertificateSSL(restTemplate);
-        restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
+        restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8));
 
         log.debug("Send Proxy Request : {} , {}, {}", gsmKey, uri, request.getMethod());
         final ResponseEntity<ResponseResult> returnValue = restTemplate.exchange(uri, HttpMethod.valueOf(request.getMethod()), httpEntity, ResponseResult.class);

@@ -261,7 +261,7 @@ public final class StringUtil  {
 
     public static String numberFormat( int value )
     {
-        return new java.text.DecimalFormat  (",##0.##").format( (long)value );
+        return new java.text.DecimalFormat  (",##0.##").format(value);
 
     }
 

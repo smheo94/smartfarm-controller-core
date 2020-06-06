@@ -21,10 +21,10 @@ public interface DeviceEnvService {
 	List<HashMap<String,Object>> getDeviceTypeList();
 	
 	List<VDeviceInfoVO> getVDeviceList();
-	List<VDeviceEnvVO> insertVDeviceEnv(List<VDeviceEnvVO> vo)  throws HttpStatusCodeException;;
+	List<VDeviceEnvVO> insertVDeviceEnv(List<VDeviceEnvVO> vo)  throws HttpStatusCodeException;
 
 
-	List<VDeviceEnvVO> getVDeviceEnvList(Long deviceId);
+    List<VDeviceEnvVO> getVDeviceEnvList(Long deviceId);
 	
 	VDeviceEnvVO updateVDeviceEnv(VDeviceEnvVO vo) throws HttpStatusCodeException;
 	Integer deleteVDeviceEnv(Long id, Long pDeviceId,  Integer deviceNum , Integer deviceInsertOrder);

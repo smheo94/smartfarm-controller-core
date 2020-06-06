@@ -22,7 +22,7 @@ public class GSMUtil {
             sb.append(value);
             return sb.toString();
         }
-        return String.valueOf(value);
+        return value;
     }
 
     public static Double getAdjustmentValue(Double sensorValue, Double sensorMinValaue, Double sensorMaxValue, Double adjustmentMinValue, Double adjustmentMaxValue) {
@@ -127,7 +127,7 @@ public class GSMUtil {
                     InetAddress inetAddress = enumIpAddr.nextElement();
 
                     if (!inetAddress.isLoopbackAddress() && !inetAddress.isLinkLocalAddress() && inetAddress.isSiteLocalAddress() == isSiteLocal) {
-                        result = inetAddress.getHostAddress().toString();
+                        result = inetAddress.getHostAddress();
                         break;
                     }
 

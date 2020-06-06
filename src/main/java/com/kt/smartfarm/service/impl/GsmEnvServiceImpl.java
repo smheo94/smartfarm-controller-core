@@ -29,6 +29,7 @@ import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -409,7 +410,7 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 			}
 			RestTemplate restTemplate = new RestTemplate();
 			RestClientUtil.setIgnoreCertificateSSL(restTemplate);
-			restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
+			restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8));
 
 			log.debug("sendPost : {} , {}, {}", gsmKey, uri, request.getMethod());
 			final ResponseEntity<ResponseResult> returnValue = restTemplate.exchange(uri, method, httpEntity, ResponseResult.class);
@@ -420,8 +421,8 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 		return null;
 	}
     public HttpEntity sendRestBodyData(HttpServletRequest request, String url, HttpMethod method, Long gsmKey,  Object data)  {
-			final GsmEnvVO gsmEnvVO = get(gsmKey, false);;
-			if (gsmEnvVO == null) {
+			final GsmEnvVO gsmEnvVO = get(gsmKey, false);
+        if (gsmEnvVO == null) {
 				throw new HttpClientErrorException(HttpStatus.NOT_FOUND, NOT_FOUND_GSM_INFO);
 			}
 			String httpSchema = gsmEnvVO.getHttpSchema();
@@ -442,7 +443,7 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 			}
 			RestTemplate restTemplate = new RestTemplate();
 			RestClientUtil.setIgnoreCertificateSSL(restTemplate);
-			restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
+			restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8));
 
 			log.debug("sendPost : {} , {}, {}", gsmKey, uri, request.getMethod());
 			final ResponseEntity<ResponseResult> returnValue = restTemplate.exchange(uri, method, httpEntity, ResponseResult.class);

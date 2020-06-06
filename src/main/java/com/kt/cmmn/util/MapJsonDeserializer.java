@@ -12,7 +12,7 @@ public class MapJsonDeserializer extends JsonDeserializer<HashMap<String,Object>
 
 
     @Override
-    public HashMap<String, Object> deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
+    public HashMap<String, Object> deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         try {
             HashMap<String, Object> map = new HashMap<>();
             map = super.deserialize(jsonParser,deserializationContext, map);
