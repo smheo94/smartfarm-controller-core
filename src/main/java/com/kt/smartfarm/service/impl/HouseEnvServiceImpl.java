@@ -138,6 +138,12 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 
 	public List<CCTVSettingVO> getCCTVList(Long houseId) {
 		List<CCTVSettingVO> cctvList = houseEnvMapper.getCctvList(houseId);
+		if ( cctvList != null && cctvList.size() > 0 ) {
+			cctvList.forEach( c -> {
+				c.setCctvUid("****");
+				c.setCctvPwd("****");
+			});
+		}
 		return cctvList;
 	}
 	public List<HashMap<String, Object>> list(Long gsmKey, boolean all, boolean detail, Boolean isSmartfarmSystem) {
@@ -397,6 +403,10 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 
 	@Override
 	public Integer updateCctv(CCTVSettingVO cctv) {
+		if ( cctv.getCctvUid() != null && "****".equals(cctv.getCctvUid()) )
+			cctv.setCctvUid(null);
+		if ( cctv.getCctvPwd() != null && "****".equals(cctv.getCctvPwd()) )
+			cctv.setCctvPwd(null);
 		return houseEnvMapper.updateCctv(cctv);
 	}
 }
