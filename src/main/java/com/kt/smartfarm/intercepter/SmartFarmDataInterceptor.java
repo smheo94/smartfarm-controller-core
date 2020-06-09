@@ -142,6 +142,10 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
         HttpStatus responseStatus = HttpStatus.valueOf(response.getStatus());
         HandlerMethod handlerMethod = null;
         try {
+//            boolean logIntercept = handlerMethod.getMethod().getAnnotation(InterceptLog.class) != null;
+//            if (logIntercept) {
+//                writeAPILog(request);
+//            }
             if( isSmartfarmSystem ) {
                 //스마트팜에서 Post 필터가 필요 없음
                 return;
@@ -188,7 +192,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
 
             }
         } catch(Exception e){
-            log.debug(e.getMessage());
+            log.info(e.getMessage());
         }
 //        finally {
 //            if( handlerMethod != null) {
