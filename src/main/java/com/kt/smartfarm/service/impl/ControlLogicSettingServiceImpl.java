@@ -128,13 +128,14 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
                 if( env.isObject() ) {
                     JsonNode conditionNode = env.get("condition");
                     JsonNode timeNode = env.get("on_start_time");
-                    if( timeNode == null ) {
+
+                    if( timeNode == null || timeNode.isNull()) {
                         timeNode=  env.get("relative_start_time");
                     }
-                    if( timeNode == null ) {
+                    if( timeNode == null || timeNode.isNull() ) {
                         timeNode=  env.get("relative_time");
                     }
-                    if( timeNode == null || conditionNode == null) {
+                    if( timeNode == null || conditionNode == null || timeNode.isNull()) {
                         unsortedNodes.add(env);
 						continue;
                     }

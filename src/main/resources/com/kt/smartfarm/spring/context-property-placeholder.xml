@@ -10,7 +10,7 @@
 					 ignore-unresolvable="true"
 					 system-properties-mode="OVERRIDE" />-->
 
-	<bean id="encryptorConfig" class="org.jasypt.encryption.pbe.config.EnvironmentPBEConfig">
+	<!--<bean id="encryptorConfig" class="org.jasypt.encryption.pbe.config.EnvironmentPBEConfig">
 		<property name="algorithm" value="PBEWithMD5AndDES" />
 		<property name="password" value="SMARTFARM-PASS" />
 	</bean>
@@ -23,7 +23,7 @@
 		<constructor-arg ref="encryptor" />
 		<property name="ignoreUnresolvablePlaceholders" value="true"/>
 		<property name="ignoreResourceNotFound" value="true"/>
-		<property name="systemPropertiesMode" value="2"/><!--NEVER:0, FALLBACK:1, OVERRIDE:2 -->
+		<property name="systemPropertiesMode" value="2"/>&lt;!&ndash;NEVER:0, FALLBACK:1, OVERRIDE:2 &ndash;&gt;
 		<property name="locations" >
 			<list>
 				<value>classpath:application.properties</value>
@@ -31,6 +31,6 @@
 				<value>file:/home/gsm/v4/conf/smartfarm-mgr-env.properties</value>
 			</list>
 		</property>
-	</bean>
+	</bean>-->
 
 </beans>
