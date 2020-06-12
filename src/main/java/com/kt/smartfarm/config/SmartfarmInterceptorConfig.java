@@ -17,10 +17,7 @@ import javax.annotation.Resource;
 @Configuration
 @Slf4j
 @EnableWebMvc
-//@PropertySource("classpath:smartfarm-mgr-env.properties")
-//@PropertySource(value={"classpath:application.properties","classpath:smartfarm-mgr-env.properties"}, ignoreResourceNotFound=true)
-@PropertySource(value={"classpath:application.properties","file:/myapp/application.properties","file:/home/gsm/v4/conf/smartfarm-mgr-env.properties"}, ignoreResourceNotFound=true)
-//@PropertySource(value={"classpath:application.properties","classpath:encryption.properties","file:/myapp/application.properties","file:/home/gsm/v4/conf/smartfarm-mgr-env.properties"}, ignoreResourceNotFound=true)
+//@PropertySource(value={"classpath:application.properties","file:/myapp/application.properties","file:/home/gsm/v4/conf/smartfarm-mgr-env.properties"}, ignoreResourceNotFound=true)
 @SuppressWarnings("PMD")
 public class SmartfarmInterceptorConfig extends WebMvcConfigurerAdapter {
 
@@ -44,7 +41,6 @@ public class SmartfarmInterceptorConfig extends WebMvcConfigurerAdapter {
     }
 
     @Override
-    @DependsOn( {"propertyConfig"})
     public void addInterceptors(InterceptorRegistry registry) {
         log.info("Load Config : {}, {}, {}", GSM_KEY, SYSTEM_TYPE, DB_URL);
 //        System.out.println("PASS */* = " + pass);

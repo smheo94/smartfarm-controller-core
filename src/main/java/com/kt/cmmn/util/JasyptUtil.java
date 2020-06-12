@@ -24,7 +24,9 @@ public class JasyptUtil {
     }
 
     public static String decrypt(String password, String encText) {
-        String algorithm = "PBEWithMD5AndDES";
+        return decrypt("PBEWithMD5AndDES", password, encText);
+    }
+    public static String decrypt(String algorithm, String password, String encText) {
         StandardPBEStringEncryptor pbeEnc = new StandardPBEStringEncryptor();
         pbeEnc.setAlgorithm(algorithm);
         pbeEnc.setPassword(password);

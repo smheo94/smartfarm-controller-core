@@ -9,7 +9,7 @@
     <import resource="context-property-placeholder.xml" />
 
     <!-- Mysql (POM에서 commons-dbcp, mysql-connector-java 관련 라이브러리 설정 ) -->
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" >
         <property name="driverClassName" value="${smartfarm.db.driver-class-name}"/>
         <property name="url" value="${smartfarm.db.url}"/>
         <property name="username" value="${smartfarm.db.username}"/>

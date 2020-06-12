@@ -25,7 +25,7 @@ import java.util.Objects;
 
 @Configuration
 @EnableSwagger2
-@PropertySource(value={"classpath:application.properties","file:/myapp/application.properties","file:/home/gsm/v4/conf/smartfarm-mgr-env.properties"}, ignoreResourceNotFound=true)
+//@PropertySource(value={"classpath:application.properties","file:/myapp/application.properties","file:/home/gsm/v4/conf/smartfarm-mgr-env.properties"}, ignoreResourceNotFound=true)
 @SuppressWarnings("PMD")
 @EnableWebMvc
 public class SwaggerConfig extends WebMvcConfigurerAdapter {
@@ -51,7 +51,6 @@ public class SwaggerConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    @DependsOn("propertySourcesPlaceholderConfigurer")
     public SecurityConfiguration securityInfo() {
         SecurityConfiguration sc = new SecurityConfiguration(clientId, clientSecret, "spring_oauth", clientId, "", ApiKeyVehicle.HEADER, "api-key", " ");
         return sc;

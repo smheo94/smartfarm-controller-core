@@ -32,12 +32,20 @@ public class SystemServiceImplTest {
     public void encrypt(){
 
         //"SELECT TABLE_NAME, update, COLUMN_TYPE FROM  information_schema.COLUMNS  WHERE TABLE_SCHEMA = 'sf_main_2'"
-        String queryType = QUERY_TYPE.select.name();
+        String queryType = QUERY_TYPE.update.name();
         String [] anyQueryList = {
-                "select * from green_house"
+//                "ALTER TABLE `user_info`   " +
+//                        "  ADD COLUMN `old_pwd1` LONGTEXT NULL AFTER `is_deleted`," +
+//                        "  ADD COLUMN `old_pwd2` LONGTEXT NULL AFTER `old_pwd1`," +
+//                        "  ADD COLUMN `old_pwd_update1` DATETIME NULL AFTER `old_pwd2`," +
+//                        "  ADD COLUMN `old_pwd_update2` DATETIME NULL AFTER `old_pwd_update1`"
+                //"UPDATE gsm_info SET system_host = 'epistest.vivans.net' where gsm_key = 338001"
+                //"UPDATE gsm_info SET system_host = 'epis0001.ddns.net' where gsm_key = 338001"
+                //"UPDATE control_setting SET logic_period_env = '[]' WHERE logic_period_env = '{}'"
         //"ALTER TABLE `control_setting_device` DROP FOREIGN KEY `fx_control_setting_device`;"
         };
-        String  anyQueryList2 ="";
+        String  anyQueryList2 =
+                "UPDATE `gsm_info` SET `system_host` = 'sf-005452.iptime.org', system_port = 30005   WHERE `gsm_key` = '5452'; ";
         List<String> queryList = new ArrayList<>();
         if( anyQueryList2.length() > 0 ) {
             queryList.addAll(Arrays.asList(anyQueryList2.split(";")));
