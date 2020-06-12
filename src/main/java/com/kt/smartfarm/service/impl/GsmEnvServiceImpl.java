@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kt.cmmn.util.MapUtils;
 import com.kt.cmmn.util.RestClientUtil;
+import com.kt.cmmn.util.TimeInfo;
 import com.kt.smartfarm.config.SmartfarmInterceptorConfig;
 import com.kt.smartfarm.service.*;
 import com.kt.smartfarm.mapper.*;
@@ -24,6 +25,7 @@ import com.kt.cmmn.util.ClassUtil;
 import com.kt.smartfarm.config.SecurityConfig;
 import com.kt.smartfarm.intercepter.ResponseResult;
 import com.kt.smartfarm.intercepter.SmartFarmDataInterceptor;
+import com.mysql.jdbc.TimeUtil;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
 import java.net.URI;

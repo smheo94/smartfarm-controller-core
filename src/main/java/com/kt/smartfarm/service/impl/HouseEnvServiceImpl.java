@@ -157,11 +157,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 		}else{
 			map.put("gsm_key",  gsmKey);
 			result = houseEnvMapper.getHouseDetail(map);
-
 			for(int i=0; i<result.size(); i++){
-				List<HashMap<String,Object>> controllerList = new ArrayList<HashMap<String,Object>>();
-				List<CCTVSettingVO> cctv = new ArrayList<>();
-				List<DeviceEnvVO> mappedDeviceList = new ArrayList<>();
 				final HashMap<String, Object> houseMap = result.get(i);
 				map.put("green_house_id",houseMap.get("id"));
                 List<Long> deviceIds = houseEnvMapper.getMappedDevice(map);
@@ -170,13 +166,14 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 				houseMap.put("deviceList", devices);
 				Long houseId = ClassUtil.castToSomething(houseMap.get("id"), Long.class);
 				if( all ) {
+					List<HashMap<String,Object>> controllerList = new ArrayList<HashMap<String,Object>>();
 					map.put("deviceIds", deviceIds);
 					if( deviceIds.size() > 0 ) {
 						controllerList = houseEnvMapper.getMappedController(map);
 						for (int j = 0; j < controllerList.size(); j++) {
 							HashMap<String, Object> param = new HashMap<>();
 							param.put("controller_id", controllerList.get(j).get("id"));
-							mappedDeviceList = deviceEnvMapper.list(param);
+							List<DeviceEnvVO> mappedDeviceList = deviceEnvMapper.list(param);
 							controllerList.get(j).put("deviceList", mappedDeviceList);
 						}
 					}
@@ -204,6 +201,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 					houseMap.put("sunriseInfo", sunriseSunset.getSunriseSunSetMap());
 				}
 				if( isCCTVOnly || detail ) {
+					List<CCTVSettingVO> cctv = new ArrayList<>();
 					if( isSmartfarmSystem == false) {
 						cctv = getCCTVList(houseId);
 					}
