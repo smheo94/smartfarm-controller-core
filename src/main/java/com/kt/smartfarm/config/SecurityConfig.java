@@ -9,16 +9,19 @@ package com.kt.smartfarm.config;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationManager;
 import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
+import org.springframework.security.web.savedrequest.NullRequestCache;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import javax.servlet.http.HttpServletRequest;
@@ -48,38 +51,39 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Value("${smartfarm.farm.auth-basic-usersecret}")
 	private String authBasicUserSecret;
 
+
+	@Autowired
+	Environment env;
 	@Autowired
 	BasicAuthenticationPoint authEntryPoint;
 	@Autowired
 	RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+	private String [] getMatchersList() {
+	    try {
+            if (env != null && "dev".equals(env.getProperty("spring.profiles.active"))) {
+                return new String[]{"/otp/**", "/userInfo/resetPassword", "/userInfo/device", "/**/openapi/**", "/system/ping/**",
+                        "/swagger-ui/**", "/v3/api-docs/**", "/index.jsp", "/swagger-resources/**", "/swagger-ui.html",
+                        "/v2/api-docs", "/webjars/**"};
+            }
+        } catch (Exception e) {
+	        log.warn("getMatchersList Error: {}", env, e);
+        }
+        return new String[] {"/otp/**", "/userInfo/resetPassword", "/userInfo/device", "/**/openapi/**", "/system/ping/**"};
+    }
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		// @formatter:off
 		log.info("LoadSecurityConfig : {} \t\n", tokenInfoUri);
-		http.headers().frameOptions().disable().and()
-			.requestMatcher(new BasicRequestMatcher())
-			.authorizeRequests()
-			.antMatchers(HttpMethod.OPTIONS).permitAll()
-			.antMatchers("/swagger-ui/**",  "/v3/api-docs/**", "/index.jsp", "/swagger-resources/**","/swagger-ui.html",
-					"/v2/api-docs", "/webjars/**").permitAll() // Swagger Support
-			.antMatchers("/otp/**", "/userInfo/resetPassword", "/userInfo/device", "/**/openapi/**").permitAll() // OTP 코드 생성, 검증, 비밀번호 변경
-			.anyRequest().authenticated()
-			.and().httpBasic().authenticationEntryPoint(authEntryPoint)
-			.and().exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint)
+        http.headers().frameOptions().disable().and()
+                .requestMatcher(new BasicRequestMatcher())
+                .authorizeRequests()
+                .antMatchers(HttpMethod.OPTIONS).permitAll()
+                .antMatchers(getMatchersList()).permitAll()
+                .anyRequest().authenticated()
+                .and().requestCache().requestCache(new NullRequestCache())
+                .and().httpBasic().authenticationEntryPoint(authEntryPoint)
+                .and().exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint);
 
-//			.and().exceptionHandling().accessDeniedHandler(new AccessDeniedHandler() {
-//			@Override
-//			public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException e) throws IOException, ServletException {
-//				httpServletResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
-//ObjectMapper objectMapper = new ObjectMapper();
-//				Map<String, Object> data = new HashMap<>();
-//				data.put("timestamp", Calendar.getInstance().getTime());
-//				data.put("reason","오류가 발생했습니다. 관리자에게 문의해 주세요1");
-//				httpServletResponse.getOutputStream()
-//						.println(objectMapper.writeValueAsString(data));
-//			}
-//		})
-		;
 		// @formatter:on
 	}
 	private static class BasicRequestMatcher implements RequestMatcher {
@@ -89,10 +93,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			return (auth != null && auth.startsWith("Basic"));
 		}
 	}
+	@Bean
+	public PasswordEncoder getPasswordEncoder(){
+		return new MyPasswordEncoder();
+	}
+
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		auth.inMemoryAuthentication().withUser(authBasicAPIId).password(authBasicAPISecret).roles("API-USER").
-		and().withUser(authBasicUserId).password(authBasicUserSecret).roles("USER");
+		auth.inMemoryAuthentication().withUser(authBasicAPIId).password(authBasicAPISecret).roles("API-USER").and().passwordEncoder(getPasswordEncoder());
+		auth.inMemoryAuthentication().withUser(authBasicUserId).password(authBasicUserSecret).roles("USER").and().passwordEncoder(getPasswordEncoder());
 	}
 	@Override
 	@Bean
@@ -110,24 +119,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	    tokenService.setClientSecret(clientSecret);
 	    return tokenService;
 	}
-//
-//	@Bean
-//	public OpenAPI customOpenAPI() {
-//
-//		return new OpenAPI().components(new Components()
-//				.addSecuritySchemes("basicScheme",
-//						new SecurityScheme().type(SecurityScheme.Type.OAUTH2).scheme("oauth2"))).info(new Info().title("RPA Common API").version("100")).addTagsItem(new Tag().name("mytag"));
-//	}
-//
-//	@Bean
-//	public OpenAPI customOpenAPI(@Value("3.0") String appVersion) {
-//		return new OpenAPI()
-//				.components(new Components().addSecuritySchemes("basicScheme",
-//						new SecurityScheme().type(SecurityScheme.Type.OAUTH2).scheme("oauth2")))
-//				.info(new Info().title("SpringShop API").version(appVersion)
-//						.license(new License().name("Apache 2.0").url("http://springdoc.org")));
-//	}
-
-
-
 }

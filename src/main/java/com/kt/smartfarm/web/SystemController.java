@@ -18,11 +18,14 @@ package com.kt.smartfarm.web;
 import com.kt.cmmn.util.Result;
 import com.kt.smartfarm.service.SystemService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -60,4 +63,20 @@ public class SystemController {
 			return new Result( e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, null);
 		}
 	}
+	@Autowired
+	Environment env;
+	@RequestMapping(value= "/ping/", method = RequestMethod.GET)
+	@ResponseBody
+	public Result<String> ping() {
+		final StringBuilder profile = new StringBuilder();
+		String [] profiles = env.getActiveProfiles();
+		if( profiles != null  ){
+			Arrays.asList(profiles).stream().forEach(s -> profile.append(",").append(s));
+		}
+		profile.append("/").append(env.getProperty("spring.profiles.active"));
+		profile.append(":").append(System.getProperty("spring.profiles.active"));
+
+		return new Result(profile  );
+	}
+
 }

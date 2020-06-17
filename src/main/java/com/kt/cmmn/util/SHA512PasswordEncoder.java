@@ -8,6 +8,7 @@ import java.security.MessageDigest;
 @Slf4j
 public class SHA512PasswordEncoder implements PasswordEncoder {
 
+
     @Override
     public boolean matches(CharSequence charSequence, String testPassword) {
         String encodedPassword = this.encode(charSequence);

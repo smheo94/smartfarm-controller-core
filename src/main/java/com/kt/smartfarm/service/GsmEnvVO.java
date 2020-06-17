@@ -1,12 +1,12 @@
 package com.kt.smartfarm.service;
 
-import java.util.List;
-import java.util.Map;
-
 import com.kt.cmmn.util.ClassUtil;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
+import java.util.Map;
 
 
 @Data
@@ -54,6 +54,22 @@ public class GsmEnvVO {
 	Integer deviceCount;
 	Long readTime;
 
+	public String getHttpSchema() {
+		if( systemHost.startsWith("https://")) {
+			return "https";
+		} else {
+			return "http";
+		}
+	}
+	public String getSystemHostWithoutSchema() {
+		if( systemHost.startsWith("https://")) {
+			return systemHost.replaceAll("https://","");
+		} else if( systemHost.startsWith("http://")) {
+			return systemHost.replaceAll("http://","");
+		} else {
+			return "http";
+		}
+	}
 	Map<String,Object> properties;
 //	String trdPtCompanyName;
 //	public void setTrdPtId(String value) {

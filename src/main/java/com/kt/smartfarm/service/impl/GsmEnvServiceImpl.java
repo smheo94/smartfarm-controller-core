@@ -15,17 +15,15 @@ package com.kt.smartfarm.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kt.cmmn.util.ClassUtil;
 import com.kt.cmmn.util.MapUtils;
 import com.kt.cmmn.util.RestClientUtil;
-import com.kt.cmmn.util.TimeInfo;
-import com.kt.smartfarm.config.SmartfarmInterceptorConfig;
-import com.kt.smartfarm.service.*;
-import com.kt.smartfarm.mapper.*;
-import com.kt.cmmn.util.ClassUtil;
 import com.kt.smartfarm.config.SecurityConfig;
+import com.kt.smartfarm.config.SmartfarmInterceptorConfig;
 import com.kt.smartfarm.intercepter.ResponseResult;
 import com.kt.smartfarm.intercepter.SmartFarmDataInterceptor;
-import com.mysql.jdbc.TimeUtil;
+import com.kt.smartfarm.mapper.GsmEnvMapper;
+import com.kt.smartfarm.service.*;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
 import java.net.URI;
@@ -41,7 +39,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.HttpStatusCodeException;
@@ -51,6 +48,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.charset.Charset;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import static com.kt.smartfarm.message.ApplicationMessage.NOT_FOUND_GSM_INFO;
 
@@ -428,7 +431,7 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 				throw new HttpClientErrorException(HttpStatus.NOT_FOUND, NOT_FOUND_GSM_INFO);
 			}
 			String httpSchema = gsmEnvVO.getHttpSchema();
-			String server = gsmEnvVO.getSystemHost();
+			String server = gsmEnvVO.getSystemHostWithoutSchema();
 			Integer port = gsmEnvVO.getSystemPort();
 
 			return sendRestBodyData(request, httpSchema, server, port, url, method, gsmKey, data);
@@ -463,7 +466,7 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 
 		final GsmEnvVO gsmEnvVO = get(gsmkey, true);
 		String httpSchema = gsmEnvVO.getHttpSchema();
-		String server  = gsmEnvVO.getSystemHost();
+		String server  = gsmEnvVO.getSystemHostWithoutSchema();
 		Integer port = gsmEnvVO.getSystemPort();
 		try {
 			URI uri = new URI(httpSchema, null, server, port, null, null, null);

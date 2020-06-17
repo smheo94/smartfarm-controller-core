@@ -3,6 +3,7 @@ package com.kt.smartfarm.service.impl;
 import com.kt.cmmn.util.JasyptUtil;
 import com.kt.cmmn.util.MapUtils;
 import com.kt.cmmn.util.RestClientUtil;
+import com.kt.cmmn.util.SHA512PasswordEncoder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -45,7 +46,9 @@ public class SystemServiceImplTest {
         //"ALTER TABLE `control_setting_device` DROP FOREIGN KEY `fx_control_setting_device`;"
         };
         String  anyQueryList2 =
-                "UPDATE `gsm_info` SET `system_host` = 'sf-005452.iptime.org', system_port = 30005   WHERE `gsm_key` = '5452'; ";
+              //  "UPDATE `gsm_info` SET `system_host` = 'sf-005455.iptime.org', system_port = 30005   WHERE `gsm_key` = '5455'; ";
+             //     "UPDATE `gsm_info` SET `system_host` = 'sf-666666.vivans.net', system_port = 9876, master_system_port =9876," +
+                          "master_system_host = 'sf-666666.vivans.net'    WHERE `gsm_key` = '666666'; ";
         List<String> queryList = new ArrayList<>();
         if( anyQueryList2.length() > 0 ) {
             queryList.addAll(Arrays.asList(anyQueryList2.split(";")));
@@ -66,6 +69,78 @@ public class SystemServiceImplTest {
 
     }
 
+    @Test
+    public void getUserInfo() {
+        anyQueryTest(QUERY_TYPE.select.name(),
+                "SELECT A.user_id, B.auth_group_id, C.roles_id FROM user_info A LEFT JOIN user_info_auth_group B ON A.idx =  B.user_idx LEFT JOIN user_info_roles C ON A.idx = C.user_idx" +
+                        " WHERE idx = 99615870 ");
+        assertTrue(true);
+    }
+    @Test
+    public void updateGSMHost() {
+        Integer gsm_key = 618014;
+        Integer port = 30005;
+        String baseDomain = "vivans.net";
+        String qText = String.format("UPDATE `gsm_info` SET `system_host` = 'sf-%1$06d.%3$s', system_port = %2$s, master_system_port =%2$s," +
+                "master_system_host = 'sf-%1$06d.%3$s'    WHERE `gsm_key` = '%1$s'; ",
+                gsm_key, port, baseDomain);
+        log.info(qText);
+        anyQueryTest(QUERY_TYPE.update.name(), qText);
+        assertTrue(true);
+    }
+
+    @Test
+    public void getGroupMANAGER() {
+        anyQueryTest(QUERY_TYPE.select.name(),
+                " SELECT * FROM auth_group  WHERE id = 56");
+        assertTrue(true);
+    }
+
+
+    @Test
+    public void insertNewCropDiary() {
+        anyQueryTest(QUERY_TYPE.update.name(), "INSERT INTO `control_setting_liquid` " +
+                "(`id`, `publish_level`, `title`, `prd_code`, `liquid_id`, `packing_size`, `mix_type`, `mix_rate`, `watering_amt`, `comment`) " +
+                "VALUES ('601', 'OPEN', '블루베리-비료', '0601', 'LIQ', '20', 'RATIO', '200', '600', '기본 희석비'); ");
+//        anyQueryTest(QUERY_TYPE.update.name(), "UPDATE `control_setting_liquid` " +
+//                "SET title ='사과-비료' WHERE id = 601;");
+
+    }
+    @Test
+    public void deleteGROUPAUTH() {
+        anyQueryTest(QUERY_TYPE.update.name(), "DELETE  FROM user_info_auth_group WHERE user_idx='99615870'");
+        assertTrue(true);
+    }
+    @Test
+    public void deletePhoneSetting() {
+        anyQueryTest(QUERY_TYPE.update.name(), "DELETE  FROM phone_setting WHERE phone_number='010-7237-1525'");
+        assertTrue(true);
+    }
+    @Test
+    public void getPhoneSetting() {
+        anyQueryTest(QUERY_TYPE.select.name(), "SELECT * FROM phone_setting " +
+                " WHERE phone_number='01072371525'");
+        assertTrue(true);
+    }
+    @Test
+    public void getGSMStatus() {
+        anyQueryTest(QUERY_TYPE.select.name(), "SELECT gsm_key, system_version, FROM_UNIXTIME(update_date/1000000) AS onTime FROM gsm_status ");
+        assertTrue(true);
+    }
+    @Test
+    public void updatepdTest() {
+
+        String s = "";
+        SHA512PasswordEncoder encoder = new SHA512PasswordEncoder();
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.MILLISECOND, 0);
+        String salt = String.format("%1$s%1$s", c.getTimeInMillis());
+        String encodedPwd = encoder.encode(s+salt);
+        log.info( "'{}', '{}', '{}', '{}'", s, encodedPwd, c.getTime(), salt );
+
+
+        assertTrue(true);
+    }
     private void anyQueryTest(String queryType, String anyQuery) {
         //String anyQuery = "select * from event where gsm_key = 1110 order by id desc  limit 20";
         //String anyQuery = "UPDATE `device_v_dep_device` SET `device_num` = '1' WHERE id = 82";
@@ -120,7 +195,7 @@ public class SystemServiceImplTest {
         headerLine.keySet().stream().forEachOrdered(k -> sb.append(k).append(",") );
         dataList.stream().forEachOrdered(d -> {
             sb.append("\n");
-            d.values().stream().forEachOrdered(v -> sb.append(v).append(","));
+            d.values().stream().forEachOrdered(v -> sb.append( String.valueOf(v).replaceAll("\n","") ).append(","));
         });
         sb.append("\n");
         log.info("DATA : \n {}", sb.toString());

@@ -276,7 +276,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
         if( gsmEnvVO == null ) {
             throw new HttpClientErrorException( HttpStatus.NOT_FOUND, NOT_FOUND_GSM_INFO);
         }
-        String server  = gsmEnvVO.getSystemHost();
+        String server  = gsmEnvVO.getSystemHostWithoutSchema();
         Integer port = gsmEnvVO.getSystemPort();
         String httpSchema = gsmEnvVO.getHttpSchema();
         String requestUrl = request.getRequestURI();
