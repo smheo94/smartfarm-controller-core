@@ -16,9 +16,11 @@
 package com.kt.smartfarm.web;
 
 import com.kt.cmmn.util.Result;
+import com.kt.smartfarm.config.EncryptConfig;
 import com.kt.smartfarm.config.SmartfarmInterceptorConfig;
 import com.kt.smartfarm.service.*;
 //import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -29,6 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
+@Slf4j
 @Controller
 @RequestMapping(value="")
 public class CodeDataController {
@@ -160,6 +163,22 @@ public class CodeDataController {
 	public Result<List<LiquidVO>> liquidList(@RequestParam(name = "liquidId", required = false) String liquidId){
 		try {
 			return new Result(controlLogicSettingService.getCdLiquid(liquidId));
+		} catch(Exception e) {
+			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
+		}
+	}
+
+	/**
+	 * @description 컨트롤 셋팅 오퍼레이터 리스트
+	 * @return
+	 */
+	@RequestMapping(value= "/enc_text", method = RequestMethod.GET)
+	//@ApiOperation(value = "액체 비료 목록을 전달")
+	@ResponseBody
+	public Result<String> encText(@RequestParam(name = "text", required = true) String originText){
+		try {
+			log.info("receive text : {}", originText);
+			return new Result(EncryptConfig.encryptor.encrypt(originText));
 		} catch(Exception e) {
 			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
 		}
