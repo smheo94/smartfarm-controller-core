@@ -2,10 +2,13 @@ package com.kt.smartfarm.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
-import org.springframework.web.servlet.config.annotation.*;
-
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiKey;
@@ -21,8 +24,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
+@Profile("dev")
 @Configuration
 @EnableSwagger2
 //@PropertySource(value={"classpath:application.properties","file:/myapp/application.properties","file:/home/gsm/v4/conf/smartfarm-mgr-env.properties"}, ignoreResourceNotFound=true)
@@ -35,8 +38,9 @@ public class SwaggerConfig extends WebMvcConfigurerAdapter {
     private String clientSecret;
     @Autowired
     Environment env;
+
+    @Profile("dev")
     @Bean
-    @Profile({"dev"})
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
@@ -50,6 +54,7 @@ public class SwaggerConfig extends WebMvcConfigurerAdapter {
         return new ApiKey("Authorization", "api-key", "header");
     }
 
+    @Profile("dev")
     @Bean
     public SecurityConfiguration securityInfo() {
         SecurityConfiguration sc = new SecurityConfiguration(clientId, clientSecret, "spring_oauth", clientId, "", ApiKeyVehicle.HEADER, "api-key", " ");
@@ -66,14 +71,11 @@ public class SwaggerConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        if(!Arrays.asList(env.getActiveProfiles()).stream().filter(s-> Objects.equals(s, "prod")).findFirst().isPresent()) {
-            registry.addResourceHandler("swagger-ui.html")
-                    .addResourceLocations("classpath:/META-INF/resources/");
+        registry.addResourceHandler("swagger-ui.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
 
-            registry.addResourceHandler("/webjars/**")
-                    .addResourceLocations("classpath:/META-INF/resources/webjars/");
-        }
-
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
     private List<SecurityContext> securityContexts() {
