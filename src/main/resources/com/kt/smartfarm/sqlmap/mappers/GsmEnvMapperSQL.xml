@@ -83,7 +83,7 @@
 		SELECT
 			gsm_info.gsm_key as gsmKey, gsm_info.user_info_id as userInfoId, is_mine as isMine, area_code as areaCode,
  			farm_nickname as farmNickname, gsm_info.update_date as updateDate, owner_user_info_id as ownerUserInfoId, master_system_host as masterSystemHost,
- 			master_system_port as masterSystemPort, system_host as systemHost, system_port as systemPort, cropsurl, imsurl,
+ 			master_system_port as masterSystemPort,  system_host as systemHost, system_port as systemPort, cropsurl, imsurl,
  			mqtt_broker_host as mqttbrokerHost, mqtt_broker_port as mqttBrokerPort, server_read_time as serverReadTime, product_interval as productInterval,
  			monitoring_interval as monitoringInterval, history_save_db_interval as historySaveDbInterval, sensor_current_retention_period as sensorCurrentRetentionPeriod,
  			debug_stop_event as debugStopEvent, debug_stop_crops as debugStopCrops, debug_stop_device_auto_control as debugStopDeviceAutoContorl, debug_stop_ims as debugStopIms,
@@ -150,7 +150,7 @@
 		SELECT
 			gsm_info.gsm_key as gsmKey, gsm_info.user_info_id as userInfoId, is_mine as isMine, area_code as areaCode,
  			farm_nickname as farmNickname, gsm_info.update_date as updateDate, owner_user_info_id as ownerUserInfoId, master_system_host as masterSystemHost,
- 			master_system_port as masterSystemPort, system_host as systemHost, system_port as systemPort,  
+ 			master_system_port as masterSystemPort, system_host as systemHost, system_port as systemPort,
  			mqtt_broker_host as mqttbrokerHost, mqtt_broker_port as mqttBrokerPort, server_read_time as serverReadTime, product_interval as productInterval,
  			monitoring_interval as monitoringInterval, history_save_db_interval as historySaveDbInterval,
  			delay_auto_control_start as delayAutoControlStart, package_version as packageVersion, schema_version as schemaVersion, nutrient_monitoring_interval as nutrientMonitoringInterval,

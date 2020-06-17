@@ -9,16 +9,18 @@ package com.kt.smartfarm.config;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationManager;
 import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
+import org.springframework.security.web.savedrequest.NullRequestCache;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import javax.servlet.http.HttpServletRequest;
@@ -64,6 +66,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 					"/v2/api-docs", "/webjars/**").permitAll() // Swagger Support
 			.antMatchers("/otp/**", "/userInfo/resetPassword", "/userInfo/device", "/**/openapi/**").permitAll() // OTP 코드 생성, 검증, 비밀번호 변경
 			.anyRequest().authenticated()
+				.and().requestCache().requestCache(new NullRequestCache())
 			.and().httpBasic().authenticationEntryPoint(authEntryPoint)
 			.and().exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint)
 
@@ -89,10 +92,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			return (auth != null && auth.startsWith("Basic"));
 		}
 	}
+	@Bean
+	public PasswordEncoder getPasswordEncoder(){
+		return new MyPasswordEncoder();
+	}
+
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		auth.inMemoryAuthentication().withUser(authBasicAPIId).password(authBasicAPISecret).roles("API-USER").
-		and().withUser(authBasicUserId).password(authBasicUserSecret).roles("USER");
+		auth.inMemoryAuthentication().withUser(authBasicAPIId).password(authBasicAPISecret).roles("API-USER").and().passwordEncoder(getPasswordEncoder());
+		auth.inMemoryAuthentication().withUser(authBasicUserId).password(authBasicUserSecret).roles("USER").and().passwordEncoder(getPasswordEncoder());
 	}
 	@Override
 	@Bean
