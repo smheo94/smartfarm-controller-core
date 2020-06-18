@@ -1,5 +1,21 @@
 package com.kt.smartfarm.task.scheduler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kt.cmmn.util.ClassUtil;
+import com.kt.cmmn.util.DateUtil;
+import com.kt.cmmn.util.RestClientUtil;
+import com.kt.cmmn.util.WeatherCastGPSUtil;
+import com.kt.smartfarm.service.HouseEnvService;
+import com.kt.smartfarm.service.UltraShortWeatherVO.UltraShortWeatherVO;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -11,24 +27,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kt.cmmn.util.ClassUtil;
-import com.kt.cmmn.util.RestClientUtil;
-import com.kt.cmmn.util.WeatherCastGPSUtil;
-import com.kt.smartfarm.service.UltraShortWeatherVO.UltraShortWeatherVO;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.stereotype.Component;
-
-import com.kt.cmmn.util.DateUtil;
-import com.kt.smartfarm.service.HouseEnvService;
-import org.springframework.web.client.RestTemplate;
-
 /*
  * 1시간 단위 동네예보 스케쥴러 
  * 노지채소 전용
@@ -36,7 +34,7 @@ import org.springframework.web.client.RestTemplate;
  * TODO : profile리스트 가지고 오는것. db에 넣는 것.
  */
 @Component
-@PropertySource(value={"classpath:application.properties","file:/myapp/application.properties","file:/home/gsm/v4/conf/smartfarm-mgr-env.properties"}, ignoreResourceNotFound=true)
+//@PropertySource(value={"classpath:application.properties","file:/myapp/application.properties","file:/home/gsm/v4/conf/smartfarm-mgr-env.properties"}, ignoreResourceNotFound=true)
 public class TaskScheduler {
 	private static final Logger log = LoggerFactory.getLogger(TaskScheduler.class);
 	@Value("${smartfarm.system.type}")
