@@ -16,7 +16,13 @@
 package com.kt.smartfarm.web;
 
 import com.kt.cmmn.util.Result;
-import com.kt.smartfarm.service.*;
+import com.kt.smartfarm.config.Message;
+import com.kt.smartfarm.service.ControlLogicDeviceVO;
+import com.kt.smartfarm.service.ControlLogicEnvService;
+import com.kt.smartfarm.service.ControlLogicPropertiesVO;
+import com.kt.smartfarm.service.ControlLogicV2VO;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,59 +36,66 @@ import java.util.List;
 //import io.swagger.annotations.ApiOperation;
 
 
+@Slf4j
 @Controller
-@RequestMapping(value={"/v2/controllogic"})
+@RequestMapping(value = {"/v2/controllogic"})
 public class ControlLogicEnvV2Controller {
 
-	public static final String DEFAULT_SETUP_FILE_PATH = "data/env-default/";
-	private static final String extraUrl = "";
+    public static final String DEFAULT_SETUP_FILE_PATH = "data/env-default/";
+    private static final String extraUrl = "";
 
-	@Resource(name = "controlLogicEnvService")
-	private ControlLogicEnvService controlLogicEnvService;
+    @Autowired
+    private Message msg;
+    @Resource(name = "controlLogicEnvService")
+    private ControlLogicEnvService controlLogicEnvService;
 
-	/**
-	 * 제어로직 전체 list
-	 * @return
-	 */
-	@RequestMapping(value= "", method = RequestMethod.GET)
-	//@ApiOperation("정의된 제어로직 목록을 조회합니다.")
-	@ResponseBody
-	public Result<List<ControlLogicV2VO>> list(){
-		try {
-			return new Result(controlLogicEnvService.getAllLogicListV2());
-		} catch(Exception e) {
-			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
-		}
-	}
+    /**
+     * 제어로직 전체 list
+     *
+     * @return
+     */
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    //@ApiOperation("정의된 제어로직 목록을 조회합니다.")
+    @ResponseBody
+    public Result<List<ControlLogicV2VO>> list() {
+        try {
+            return new Result(controlLogicEnvService.getAllLogicListV2());
+        } catch (Exception e) {
+            log.warn("Exception :", e);
+            return new Result(msg.getMessage("errors.ask_to_admin"), HttpStatus.CONFLICT, null);
+        }
+    }
 
-	/**
-	 * @description 제어로직 프로퍼티 조회
-	 * @return
-	 */
-	@RequestMapping(value= "/{logicId}/controlproperty ", method = RequestMethod.GET)
-	//@ApiOperation("특정 제어로직에 사용될 프로퍼티 목록을 조회합니다.")
-	@ResponseBody
-	public Result<List<ControlLogicPropertiesVO>> getLogicPropertyList(@PathVariable("logicId") Integer logicId){
-		try {
-			return new Result(controlLogicEnvService.getLogicPropertyListV2(logicId));
-		} catch(Exception e) {
-			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
-		}
-	}
+    /**
+     * @return
+     * @description 제어로직 프로퍼티 조회
+     */
+    @RequestMapping(value = "/{logicId}/controlproperty ", method = RequestMethod.GET)
+    //@ApiOperation("특정 제어로직에 사용될 프로퍼티 목록을 조회합니다.")
+    @ResponseBody
+    public Result<List<ControlLogicPropertiesVO>> getLogicPropertyList(@PathVariable("logicId") Integer logicId) {
+        try {
+            return new Result(controlLogicEnvService.getLogicPropertyListV2(logicId));
+        } catch (Exception e) {
+            log.warn("Exception :{}", logicId, e);
+            return new Result(msg.getMessage("errors.ask_to_admin"), HttpStatus.CONFLICT, null);
+        }
+    }
 
-	/**
-	 * @description 제어로직 프로퍼티 조회
-	 * @return
-	 */
-	@RequestMapping(value= "/{logicId}/controldevice", method = RequestMethod.GET)
-	//@ApiOperation("특정 제어로직에 사용될  제어 디바이스 종류를 조회합니다.")
-	@ResponseBody
-	public Result<List<ControlLogicDeviceVO>> getLogicDeviceList(@PathVariable("logicId") Integer logicId){
-		try {
-			return new Result(controlLogicEnvService.getLogicDeviceList(logicId));
-		} catch(Exception e) {
-			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
-		}
-	}
+    /**
+     * @return
+     * @description 제어로직 프로퍼티 조회
+     */
+    @RequestMapping(value = "/{logicId}/controldevice", method = RequestMethod.GET)
+    //@ApiOperation("특정 제어로직에 사용될  제어 디바이스 종류를 조회합니다.")
+    @ResponseBody
+    public Result<List<ControlLogicDeviceVO>> getLogicDeviceList(@PathVariable("logicId") Integer logicId) {
+        try {
+            return new Result(controlLogicEnvService.getLogicDeviceList(logicId));
+        } catch (Exception e) {
+            log.warn("Exception :{}", logicId, e);
+            return new Result(msg.getMessage("errors.ask_to_admin"), HttpStatus.CONFLICT, null);
+        }
+    }
 
 }

@@ -15,14 +15,12 @@
  */
 package com.kt.smartfarm.web;
 
-import java.util.List;
-
 import com.kt.cmmn.util.Result;
+import com.kt.smartfarm.config.Message;
 import com.kt.smartfarm.service.ControllerInfoService;
 import com.kt.smartfarm.service.ControllerInfoVO;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,40 +28,49 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+
 /*
  * mgrEnv
  * 온실환경설정 및 제어환경설정
  * 센서구성,제어기구성,온실구성,제어로직구성,외부기상대구성,임계치구성
  */
+@Slf4j
 @Controller
-@RequestMapping(value="/controllerinfo")
+@RequestMapping(value = "/controllerinfo")
 public class ControllerInfoController {
 
-	public static final String DEFAULT_SETUP_FILE_PATH = "data/env-default/";
-	private static final String extraUrl = "";
-	
-	@Resource(name = "controllerInfoService")
-	private ControllerInfoService controllerInfoService;
-		
-	
-	@RequestMapping(value= "/", method = RequestMethod.GET)
-	@ResponseBody
-	public Result<List<ControllerInfoVO>> list(HttpServletRequest request){
-		try {
-			return new Result(controllerInfoService.list());
-		} catch(Exception e) {
-			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
-		}
-	}
-	
-	@RequestMapping(value= "/{controllerTypeId}", method = RequestMethod.GET)
-	@ResponseBody
-	public Result<ControllerInfoVO> get(HttpServletRequest request,  @PathVariable("controllerTypeId") Integer controllerTypeId){
-		try {
-			return new Result(controllerInfoService.get(controllerTypeId));
-		} catch(Exception e) {
-			return new Result(e.getMessage(), HttpStatus.CONFLICT, null);
-		}
-	}
+    @Autowired
+    private Message msg;
+    public static final String DEFAULT_SETUP_FILE_PATH = "data/env-default/";
+    private static final String extraUrl = "";
+
+    @Resource(name = "controllerInfoService")
+    private ControllerInfoService controllerInfoService;
+
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @ResponseBody
+    public Result<List<ControllerInfoVO>> list(HttpServletRequest request) {
+        try {
+            return new Result(controllerInfoService.list());
+        } catch (Exception e) {
+            log.warn("Exception :", e);
+            return new Result(msg.getMessage("errors.ask_to_admin"), HttpStatus.CONFLICT, null);
+        }
+    }
+
+    @RequestMapping(value = "/{controllerTypeId}", method = RequestMethod.GET)
+    @ResponseBody
+    public Result<ControllerInfoVO> get(HttpServletRequest request, @PathVariable("controllerTypeId") Integer controllerTypeId) {
+        try {
+            return new Result(controllerInfoService.get(controllerTypeId));
+        } catch (Exception e) {
+            log.warn("Exception :{}", controllerTypeId, e);
+            return new Result(msg.getMessage("errors.ask_to_admin"), HttpStatus.CONFLICT, null);
+        }
+    }
 
 }

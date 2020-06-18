@@ -16,6 +16,7 @@
 package com.kt.smartfarm.web;
 
 import com.kt.cmmn.util.Result;
+import com.kt.smartfarm.config.Message;
 import com.kt.smartfarm.service.SystemService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,52 +32,55 @@ import java.util.Map;
 
 @Slf4j
 @Controller
-@RequestMapping(value="/system")
+@RequestMapping(value = "/system")
 public class SystemController {
-	@Resource(name = "systemService")
-	private SystemService systemService;
-		
-	
-	/**
-	 * @description 앱 버전 정보 조회 ( 최신버전 )
-	 * @param appName
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	@RequestMapping(value= "/openapi/app/", method = RequestMethod.GET)
-	@ResponseBody
-	public Result<Map<String,Object>> getLastVersion(@RequestParam("app_name") String appName){
-		try {
-			return new Result(systemService.getAppVersion(appName));
-		} catch(Exception e) {
-			return new Result( e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, null);
-		}
-	}
+    @Autowired
+    private Message msg;
+    @Resource(name = "systemService")
+    private SystemService systemService;
 
 
-	@RequestMapping(value= "/data/", method = RequestMethod.GET)
-	@ResponseBody
-	public Result<Map<String,Object>> getData(@RequestBody HashMap<String,Object> param){
-		try {
-			return new Result(systemService.getAnyQueryResult(param));
-		} catch(Exception e) {
-			return new Result( e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, null);
-		}
-	}
-	@Autowired
-	Environment env;
-	@RequestMapping(value= "/ping/", method = RequestMethod.GET)
-	@ResponseBody
-	public Result<String> ping() {
-		final StringBuilder profile = new StringBuilder();
-		String [] profiles = env.getActiveProfiles();
-		if( profiles != null  ){
-			Arrays.asList(profiles).stream().forEach(s -> profile.append(",").append(s));
-		}
-		profile.append("/").append(env.getProperty("spring.profiles.active"));
-		profile.append(":").append(System.getProperty("spring.profiles.active"));
+    /**
+     * @param appName
+     * @return
+     * @description 앱 버전 정보 조회 ( 최신버전 )
+     */
+    @SuppressWarnings("unchecked")
+    @RequestMapping(value = "/openapi/app/", method = RequestMethod.GET)
+    @ResponseBody
+    public Result<Map<String, Object>> getLastVersion(@RequestParam("app_name") String appName) {
+        try {
+            return new Result(systemService.getAppVersion(appName));
+        } catch (Exception e) {
+            log.warn("App Version :{}", appName, e);
+            return new Result(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, null);
+        }
+    }
 
-		return new Result(profile  );
-	}
+
+    @RequestMapping(value = "/data/", method = RequestMethod.GET)
+    @ResponseBody
+    public Result<Map<String, Object>> getData(@RequestBody HashMap<String, Object> param) {
+        try {
+            return new Result(systemService.getAnyQueryResult(param));
+        } catch (Exception e) {
+            return new Result(msg.getMessage("errors.ask_to_admin"), HttpStatus.INTERNAL_SERVER_ERROR, null);
+        }
+    }
+
+    @Autowired
+    Environment env;
+
+    @RequestMapping(value = "/ping/", method = RequestMethod.GET)
+    @ResponseBody
+    public Result<String> ping() {
+        final StringBuilder profile = new StringBuilder();
+        String[] profiles = env.getActiveProfiles();
+        if (profiles != null) {
+            Arrays.asList(profiles).stream().forEach(s -> profile.append(",").append(s));
+        }
+        profile.append("/").append(env.getProperty("spring.profiles.active"));
+        return new Result(profile);
+    }
 
 }
