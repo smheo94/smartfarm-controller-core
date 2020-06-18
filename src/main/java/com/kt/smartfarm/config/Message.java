@@ -14,7 +14,7 @@ public class Message {
     @Autowired
     private MessageSource messageSource;
 
-    @Value("smartfarm.lang_tag:ko-KR")
+    @Value("smartfarm.lang_tag:ko-kr")
     public String langTag;
     @Bean
     public MessageSourceAccessor getMessageSource() {
