@@ -85,7 +85,7 @@ public class EncryptConfig {
                 byte[] saltBytes = bytes;
 
                 SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-                PBEKeySpec spec = new PBEKeySpec(key.toCharArray(), saltBytes, 70000, 128);
+                PBEKeySpec spec = new PBEKeySpec(key.toCharArray(), saltBytes, 1000, 128);
                 SecretKey secretKey = factory.generateSecret(spec);
                 SecretKeySpec secret = new SecretKeySpec(secretKey.getEncoded(), "AES");
                 Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
@@ -117,7 +117,7 @@ public class EncryptConfig {
                 buffer.get(encryoptedTextBytes);
 
                 SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-                PBEKeySpec spec = new PBEKeySpec(key.toCharArray(), saltBytes, 70000, 128);
+                PBEKeySpec spec = new PBEKeySpec(key.toCharArray(), saltBytes, 1000, 128);
                 SecretKey secretKey = factory.generateSecret(spec);
                 SecretKeySpec secret = new SecretKeySpec(secretKey.getEncoded(), "AES");
                 cipher.init(Cipher.DECRYPT_MODE, secret, new IvParameterSpec(ivBytes));
