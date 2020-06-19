@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
-    <context:component-scan base-package="com.kt">
+    <context:component-scan base-package="com.kt.smartfarm">
        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
     </context:component-scan>
 
@@ -12,9 +12,7 @@
 	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
 		<property name="basenames">
 			<list>
-				<value>classpath:com/kt/smartfarm/message/message-common</value>
-<!--				<value>classpath:egovframework/rte/fdl/idgnr/messages/idgnr</value>-->
-<!--				<value>classpath:egovframework/rte/fdl/property/messages/properties</value>-->
+				<value>classpath:/com/kt/smartfarm/message/message-common</value>
 			</list>
 		</property>
 		<property name="cacheSeconds">

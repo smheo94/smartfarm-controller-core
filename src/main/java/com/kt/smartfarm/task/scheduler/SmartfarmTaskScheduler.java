@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -35,8 +36,8 @@ import java.util.*;
  */
 @Component
 //@PropertySource(value={"classpath:application.properties","file:/myapp/application.properties","file:/home/gsm/v4/conf/smartfarm-mgr-env.properties"}, ignoreResourceNotFound=true)
-public class TaskScheduler {
-	private static final Logger log = LoggerFactory.getLogger(TaskScheduler.class);
+public class SmartfarmTaskScheduler {
+	private static final Logger log = LoggerFactory.getLogger(SmartfarmTaskScheduler.class);
 	@Value("${smartfarm.system.type}")
     public String SYSTEM_TYPE;
 	
@@ -54,7 +55,8 @@ public class TaskScheduler {
 
 	static String ULTRASRTNCST_URL = "http://apis.data.go.kr/1360000/VilageFcstInfoService/getUltraSrtNcst";
 	static String ultraCertKey = "RxrU3O5OC4pUiE6GEGShKBl181iacSPsFyXR32lZv0ohgQy6Frr5CRikB1qGdSVOZqHtX55VFoMoje2o3HJegg%3D%3D";
-	
+
+	@Scheduled(cron="0 15 2,5,8,11,14,17,20,23 * * *")
 	public void runWeatherSchedule(){
 		List<HashMap<String,Object>> houseList = new ArrayList<>();
 //		DateUtil dateUtil = new DateUtil();
@@ -148,8 +150,8 @@ public class TaskScheduler {
 	}
 	
 		// 온실 리스트 가져와서 위경도 겹치는거 빼고 
-	
-	
+
+	@Scheduled(cron="0 1 0 * * *")
 	public void runSunriseSchedule(){
 		if(SYSTEM_TYPE.equalsIgnoreCase("supervisor")){
 			List<HashMap<String,Object>> houseList = new ArrayList<>();
@@ -204,7 +206,7 @@ public class TaskScheduler {
 
 
 
-
+	@Scheduled(cron="0 40 0/1 * * *")
 	public void runUltraShortWeatherSchedule() throws URISyntaxException {
 		log.info("Get ultraShortWeather Data...");
 		if(SYSTEM_TYPE.equalsIgnoreCase("supervisor")){
