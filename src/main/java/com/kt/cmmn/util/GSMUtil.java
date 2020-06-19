@@ -185,10 +185,10 @@ public class GSMUtil {
     }
 
     public static String getGSMUrl(String systemHost, String systemPort) {
-        if( systemHost.startsWith("https://")) {
+        if( systemHost.startsWith("http")) {
             return systemHost + ":" + systemPort;
         } else {
-            return "https://" + systemHost + ":" + systemPort;
+            return "http://" + systemHost + ":" + systemPort;
         }
     }
 
