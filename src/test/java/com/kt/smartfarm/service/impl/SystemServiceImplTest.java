@@ -107,8 +107,8 @@ public class SystemServiceImplTest {
 
     }
     @Test
-    public void deleteGROUPAUTH() {
-        anyQueryTest(QUERY_TYPE.update.name(), "DELETE  FROM user_info_auth_group WHERE user_idx='99615870'");
+    public void insertCDLLIQUID() {
+        anyQueryTest(QUERY_TYPE.update.name(), "INSERT INTO `cd_liquid` (`liquid_id`, `liquid_name`, `default_mix_rate`) VALUES ('ENZ', '효소', '200'); ");
         assertTrue(true);
     }
     @Test

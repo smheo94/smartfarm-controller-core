@@ -67,7 +67,7 @@ public class GsmEnvVO {
 		} else if( systemHost.startsWith("http://")) {
 			return systemHost.replaceAll("http://","");
 		} else {
-			return "http";
+			return systemHost;
 		}
 	}
 	Map<String,Object> properties;

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.jsontype.TypeDeserializer;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -20,7 +20,7 @@ public class MapJsonDeserializer extends  JsonDeserializer<Object> {
                     ctxt.getTypeFactory().constructMapType(Map.class, String.class, Object.class));
             deserializer.deserialize(jsonParser, ctxt, o);
             return o;
-        } catch(java.lang.UnsupportedOperationException e) {
+        } catch(java.lang.UnsupportedOperationException  | JsonMappingException e) {
             return (HashMap<String, Object>) MapUtils.fromJson(jsonParser.getText());
         }
     }

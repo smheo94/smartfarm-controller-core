@@ -3,15 +3,17 @@ package com.kt.smartfarm.intercepter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kt.cmmn.util.*;
+import com.kt.smartfarm.mapper.GsmEnvMapper;
 import com.kt.smartfarm.message.ApplicationMessage;
 import com.kt.smartfarm.service.GsmEnvVO;
-import com.kt.smartfarm.mapper.GsmEnvMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.*;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.security.web.firewall.FirewalledRequest;
+import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
@@ -28,7 +30,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.Objects;
@@ -61,10 +62,10 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
             }
             //boolean preIntercept = handlerMethod.getMethod().getAnnotation(InterceptPre.class) != null;
             boolean postIntercept = handlerMethod.getMethod().getAnnotation(InterceptPost.class) != null;
-            boolean logIntercept = handlerMethod.getMethod().getAnnotation(InterceptLog.class) != null;
-            if (logIntercept) {
-                writeAPILog(request);
-            }
+//            boolean logIntercept = handlerMethod.getMethod().getAnnotation(InterceptLog.class) != null;
+//            if (logIntercept) {
+//                writeAPILog(request);
+//            }
             if (isSmartfarmSystem) {
                 if (handlerMethod.getMethod().getAnnotation(InterceptIgnoreGSMKey.class) == null && (headerGsmKey == null || !Objects.equals(headerGsmKey, myGSMKey))) {
                     setErrorResult(response, String.format(ApplicationMessage.MISS_MATCHING_GSM_KEY, headerGsmKey),
@@ -105,22 +106,27 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
         }
         return true;
     }
-
+    private ContentCachingRequestWrapper getCachingRequest(HttpServletRequest request) {
+       if( request instanceof SecurityContextHolderAwareRequestWrapper   ) {
+           return getCachingRequest( (HttpServletRequest)((SecurityContextHolderAwareRequestWrapper)request).getRequest() );
+       } else if( request instanceof  FirewalledRequest ) {
+           return getCachingRequest( (HttpServletRequest)((FirewalledRequest)request).getRequest() );
+       } else if( request instanceof  ContentCachingRequestWrapper ) {
+           return (ContentCachingRequestWrapper) request;
+       } else {
+           return new ContentCachingRequestWrapper(request);
+       }
+    }
     private void writeAPILog(HttpServletRequest request) throws IOException {
 
         try {
             AuthorityChecker authChecker = new AuthorityChecker();
-
-            ContentCachingRequestWrapper requestCacheWrapperObject = null;
-            if( request instanceof  ContentCachingRequestWrapper) {
-                requestCacheWrapperObject = ((ContentCachingRequestWrapper) request);
-            } else {
-                requestCacheWrapperObject = new ContentCachingRequestWrapper(request);
-            }
+            //ring requestBody ="";
+            ContentCachingRequestWrapper wrapper = getCachingRequest(request);
             //((ContentCachingRequestWrapper) request).getContentAsByteArray()
             String encoding = StringUtils.isBlank(request.getCharacterEncoding()) ? Charsets.toCharset("UTF-8").name() : Charsets.toCharset(request.getCharacterEncoding()).name();
             //ContentCachingRequestWrapper request = WebUtils.getNativeRequest(request, ContentCachingRequestWrapper.class);
-            String requestBody = IOUtils.toString(requestCacheWrapperObject.getContentAsByteArray(), encoding);
+            String requestBody = IOUtils.toString(wrapper.getContentAsByteArray(), encoding);
             String requestPath = request.getRequestURI();
             log.info("{}/{} : {} - {}", authChecker.getName(), authChecker.getRemoteAddr(), requestPath, requestBody);
         } catch (Exception e) {
@@ -143,10 +149,13 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
         HttpStatus responseStatus = HttpStatus.valueOf(response.getStatus());
         HandlerMethod handlerMethod = null;
         try {
-//            boolean logIntercept = handlerMethod.getMethod().getAnnotation(InterceptLog.class) != null;
-//            if (logIntercept) {
-//                writeAPILog(request);
-//            }
+            if( handler instanceof HandlerMethod ) {
+                handlerMethod = (HandlerMethod) handler;
+                boolean logIntercept = handlerMethod.getMethod().getAnnotation(InterceptLog.class) != null;
+                if (logIntercept) {
+                    writeAPILog(request);
+                }
+            }
             if( isSmartfarmSystem ) {
                 //스마트팜에서 Post 필터가 필요 없음
                 return;

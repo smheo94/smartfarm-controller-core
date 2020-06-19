@@ -2,7 +2,7 @@ package com.kt.smartfarm.service;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.kt.cmmn.util.MapJsonDeserializer;
-import com.kt.cmmn.util.MapUtils;
+import com.kt.cmmn.util.MapJsonOldDeserializer;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -50,6 +50,7 @@ public class HouseEnvVO {
 	Long gsmKey;
 	String houseNameI18n;
 
+	@org.codehaus.jackson.map.annotate.JsonDeserialize(using = MapJsonOldDeserializer.class)
 	@JsonDeserialize(using = MapJsonDeserializer.class)
 	HashMap<String,Object> properties = new HashMap<>();
 //
