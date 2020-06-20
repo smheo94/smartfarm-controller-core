@@ -1,16 +1,16 @@
 package com.kt.smartfarm.config;
 
-import com.kt.smartfarm.mapper.GsmEnvMapper;
 import com.kt.cmmn.SystemType;
 import com.kt.smartfarm.intercepter.SmartFarmDataInterceptor;
+import com.kt.smartfarm.mapper.GsmEnvMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import javax.annotation.Resource;
@@ -40,6 +40,16 @@ public class SmartfarmInterceptorConfig extends WebMvcConfigurerAdapter {
 
     public Boolean isSmartfarmSystem() {
         return SystemType.SYSTEM_TYPE_SMARTFARM.equalsIgnoreCase(SYSTEM_TYPE);
+    }
+
+    @Profile("dev")
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("swagger-ui.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
+
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
     @Override
