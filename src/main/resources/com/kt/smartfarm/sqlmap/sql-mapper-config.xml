@@ -33,7 +33,7 @@
         <typeAlias alias="thresholdVO" type="com.kt.smartfarm.service.ThresholdVO"/>
 		
 		<typeAlias alias="houseDiaryVO" type="com.kt.smartfarm.service.HouseDiaryVO"/>
-		<typeAlias alias="housePicDiaryVO" type="com.kt.smartfarm.service.HousePictureDiaryVO"/>
+<!--		<typeAlias alias="housePicDiaryVO" type="com.kt.smartfarm.service.HousePictureDiaryVO"/>-->
 		<typeAlias alias="cropsDiaryVO" type="com.kt.smartfarm.service.HouseCropsDiaryVO"/>
 		<typeAlias alias="vDeviceInfoVO" type="com.kt.smartfarm.service.VDeviceInfoVO"/>
 		<typeAlias alias="vDeviceEnvVO" type="com.kt.smartfarm.service.VDeviceEnvVO"/>

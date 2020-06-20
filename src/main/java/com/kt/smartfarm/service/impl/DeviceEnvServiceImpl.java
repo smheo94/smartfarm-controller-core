@@ -12,25 +12,22 @@
  */
 package com.kt.smartfarm.service.impl;
 
+import com.kt.smartfarm.mapper.DeviceEnvMapper;
 import com.kt.smartfarm.service.*;
-import com.mysql.jdbc.MysqlErrorNumbers;
-import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import com.kt.smartfarm.mapper.DeviceEnvMapper;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpStatusCodeException;
 
 import javax.annotation.Resource;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @Service("deviceEnvService")
@@ -48,8 +45,8 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 				try {
 					deviceEnvMapper.insert(vo);
 				} catch (Exception se) {
-					if (se instanceof MySQLIntegrityConstraintViolationException) {
-						if (((MySQLIntegrityConstraintViolationException) se).getErrorCode() == MysqlErrorNumbers.ER_DUP_ENTRY) {
+					if (se instanceof SQLException) {
+						if (((SQLException) se).getErrorCode() == 1062) {
 							log.warn("중복 오류 발생 : {}", se.getMessage());
 							continue;
 						}
@@ -61,8 +58,8 @@ public class DeviceEnvServiceImpl extends EgovAbstractServiceImpl implements Dev
 						try {
 							deviceEnvMapper.insertVDeviceEnv(vDevice);
 						} catch (Exception se) {
-							if (se instanceof MySQLIntegrityConstraintViolationException) {
-								if (((MySQLIntegrityConstraintViolationException) se).getErrorCode() == MysqlErrorNumbers.ER_DUP_ENTRY) {
+							if (se instanceof SQLException) {
+								if (((SQLException) se).getErrorCode() == 1062) {
 									log.warn("중복 오류 발생 : {}", se.getMessage());
 									continue;
 								}
