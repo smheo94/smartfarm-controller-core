@@ -74,6 +74,7 @@
   <filter-mapping>
     <filter-name>springSecurityFilterChain</filter-name>
     <url-pattern>/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
   </filter-mapping>
   <context-param>
     <param-name>contextConfigLocation</param-name>
@@ -89,16 +90,16 @@
       <param-name>contextConfigLocation</param-name>
       <param-value>/WEB-INF/config/com/kt/smartfarm/springmvc/dispatcher-servlet.xml</param-value>
     </init-param>
-    <load-on-startup>1</load-on-startup>
+    <load-on-startup>2</load-on-startup>
   </servlet>
 
   <servlet-mapping>
     <servlet-name>action</servlet-name>
     <url-pattern>/</url-pattern>
   </servlet-mapping>
-  <welcome-file-list>
-    <welcome-file>index.jsp</welcome-file>
-  </welcome-file-list>
+<!--  <welcome-file-list>-->
+<!--    <welcome-file>index.jsp</welcome-file>-->
+<!--  </welcome-file-list>-->
   <login-config>
     <auth-method>BASIC</auth-method>
   </login-config>
@@ -113,52 +114,52 @@
     <auth-constraint />
   </security-constraint>
 
-  <error-page>
-    <location>/common/error.jsp</location>
-  </error-page>
-  <error-page>
-    <error-code>404</error-code>
-    <location>/common/error.jsp</location>
-  </error-page>
-  <error-page>
-  <error-code>401</error-code>
-    <location>/common/error.jsp</location>
-  </error-page>
-  <error-page>
-    <error-code>402</error-code>
-    <location>/common/error.jsp</location>
-  </error-page>
-  <error-page>
-    <error-code>403</error-code>
-    <location>/common/error.jsp</location>
-  </error-page>
-  <error-page>
-    <error-code>405</error-code>
-    <location>/common/error.jsp</location>
-  </error-page>
-  <error-page>
-    <error-code>406</error-code>
-    <location>/common/error.jsp</location>
-  </error-page>
-  <error-page>
-    <error-code>500</error-code>
-    <location>/common/error.jsp</location>
-  </error-page>
-  <error-page>
-    <error-code>501</error-code>
-    <location>/common/error.jsp</location>
-  </error-page>
-  <error-page>
-    <error-code>502</error-code>
-    <location>/common/error.jsp</location>
-  </error-page>
-  <error-page>
-    <error-code>503</error-code>
-    <location>/common/error.jsp</location>
-  </error-page>
-  <error-page>
-    <error-code>504</error-code>
-    <location>/common/error.jsp</location>
-  </error-page>
+<!--  <error-page>-->
+<!--    <location>/common/error.jsp</location>-->
+<!--  </error-page>-->
+<!--  <error-page>-->
+<!--    <error-code>404</error-code>-->
+<!--    <location>/common/error.jsp</location>-->
+<!--  </error-page>-->
+<!--  <error-page>-->
+<!--  <error-code>401</error-code>-->
+<!--    <location>/common/error.jsp</location>-->
+<!--  </error-page>-->
+<!--  <error-page>-->
+<!--    <error-code>402</error-code>-->
+<!--    <location>/common/error.jsp</location>-->
+<!--  </error-page>-->
+<!--  <error-page>-->
+<!--    <error-code>403</error-code>-->
+<!--    <location>/common/error.jsp</location>-->
+<!--  </error-page>-->
+<!--  <error-page>-->
+<!--    <error-code>405</error-code>-->
+<!--    <location>/common/error.jsp</location>-->
+<!--  </error-page>-->
+<!--  <error-page>-->
+<!--    <error-code>406</error-code>-->
+<!--    <location>/common/error.jsp</location>-->
+<!--  </error-page>-->
+<!--  <error-page>-->
+<!--    <error-code>500</error-code>-->
+<!--    <location>/common/error.jsp</location>-->
+<!--  </error-page>-->
+<!--  <error-page>-->
+<!--    <error-code>501</error-code>-->
+<!--    <location>/common/error.jsp</location>-->
+<!--  </error-page>-->
+<!--  <error-page>-->
+<!--    <error-code>502</error-code>-->
+<!--    <location>/common/error.jsp</location>-->
+<!--  </error-page>-->
+<!--  <error-page>-->
+<!--    <error-code>503</error-code>-->
+<!--    <location>/common/error.jsp</location>-->
+<!--  </error-page>-->
+<!--  <error-page>-->
+<!--    <error-code>504</error-code>-->
+<!--    <location>/common/error.jsp</location>-->
+<!--  </error-page>-->
 
 </web-app>
