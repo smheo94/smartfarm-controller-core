@@ -6,7 +6,7 @@
 		<result column="properties" property="properties" typeHandler="com.kt.cmmn.util.JsonTypeHandler"/>
 	</resultMap>
 	<resultMap id="gsmConfigVOMap" type="gsmConfigVO" autoMapping="true">
-		<collection property="extWeather" autoMapping="true"  column="gsm_key" select="getGSMConfigWeather" />
+		<collection property="extWeather" autoMapping="true"  column="gsmKey" select="getGSMConfigWeather" />
 	</resultMap>
 	<insert id="insert" parameterType="gsmEnvVO">
 		INSERT INTO gsm_info (
@@ -231,13 +231,21 @@
 		FROM  gsm_config_weather GW
 		WHERE gsm_key = #{gsm_key};
 	</select>
-    <insert id ="insertGSMConfigWeather" parameterType="gsmConfigVO">
-        INSERT INTO gsm_config_weather ( gsm_key, ext_idx, ext_mqtt_host, ext_mqtt_port, ext_type)
-        VALUES
-        <foreach collection="extWeather" item="weather" separator=",">
-            ( #{gsmKey}, #{weather.extIdx}, #{weather.extMqttHost}, #{weather.extMqttPort}, #{weather.extType} )
-        </foreach>
-    </insert>
+	<insert id ="insertGSMConfigWeather" parameterType="map">
+		INSERT INTO gsm_config_weather ( gsm_key, ext_idx, ext_mqtt_host, ext_mqtt_port, ext_type)
+		VALUES
+			( #{gsmKey}, #{extIdx}, #{extMqttHost}, #{extMqttPort}, #{extType} )
+
+	</insert>
+
+
+<!--    <insert id ="insertGSMConfigWeather" parameterType="gsmConfigVO">-->
+<!--        INSERT INTO gsm_config_weather ( gsm_key, ext_idx, ext_mqtt_host, ext_mqtt_port, ext_type)-->
+<!--        VALUES-->
+<!--        <foreach collection="extWeather" item="weather" separator=",">-->
+<!--            ( #{gsmKey}, #{weather.extIdx}, #{weather.extMqttHost}, #{weather.extMqttPort}, #{weather.extType} )-->
+<!--        </foreach>-->
+<!--    </insert>-->
 	<delete id="deleteGSMConfigWeather" parameterType="gsmConfigVO">
 		DELETE FROM gsm_config_weather WHERE gsm_key = #{gsmKey};
 	</delete>

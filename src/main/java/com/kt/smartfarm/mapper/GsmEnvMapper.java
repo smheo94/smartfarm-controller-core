@@ -15,13 +15,14 @@
  */
 package com.kt.smartfarm.mapper;
 
-import com.kt.smartfarm.service.GsmEnvVO;
 import com.kt.smartfarm.service.GsmConfigVO;
+import com.kt.smartfarm.service.GsmEnvVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Mapper("gsmEnvMapper")
@@ -38,7 +39,7 @@ public interface GsmEnvMapper {
 
 	Long insertGSMConfig(GsmConfigVO gsmConfigVO);
 	Long updateGSMConfig(GsmConfigVO gsmConfigVO);
-	Long insertGSMConfigWeather(GsmConfigVO gsmConfigVO);
+	Long insertGSMConfigWeather(Map<String,Object> gsmConfigVO);
 	Long deleteGSMConfigWeather(GsmConfigVO gsmConfigVO);
 	GsmConfigVO getGSMConfig(HashMap<String,Object> param);
 }

@@ -196,7 +196,15 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 	public GsmConfigVO insertGSMConfig(GsmConfigVO gsmConfigVO) {
 		gsmEnvMapper.insertGSMConfig(gsmConfigVO);
 		if(gsmConfigVO.extWeather != null && gsmConfigVO.extWeather.size() > 0 ) {
-			gsmEnvMapper.insertGSMConfigWeather(gsmConfigVO);
+			gsmConfigVO.extWeather.stream().forEach( w -> {
+				try {
+					Map<String, Object> param = ClassUtil.toHashMap(w);
+					param.put("gsmKey", gsmConfigVO.getGsmKey());
+					gsmEnvMapper.insertGSMConfigWeather(param);
+				} catch ( Exception e) {
+					log.warn("Insert GSM Config Weather : {}",gsmConfigVO, e);
+				}
+			});
 		}
 		return gsmConfigVO;
 	}
@@ -206,7 +214,15 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 		gsmEnvMapper.updateGSMConfig(gsmConfigVO);
 		gsmEnvMapper.deleteGSMConfigWeather(gsmConfigVO);
 		if(gsmConfigVO.extWeather != null && gsmConfigVO.extWeather.size() > 0 ) {
-			gsmEnvMapper.insertGSMConfigWeather(gsmConfigVO);
+		    gsmConfigVO.extWeather.stream().forEach( w -> {
+		        try {
+                    Map<String, Object> param = ClassUtil.toHashMap(w);
+                    param.put("gsmKey", gsmConfigVO.getGsmKey());
+                    gsmEnvMapper.insertGSMConfigWeather(param);
+                } catch ( Exception e) {
+		            log.warn("Insert GSM Config Weather : {}",gsmConfigVO, e);
+                }
+            });
 		}
 		return gsmConfigVO;
 	}
