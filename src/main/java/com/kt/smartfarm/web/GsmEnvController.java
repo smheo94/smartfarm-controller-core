@@ -388,7 +388,6 @@ public class GsmEnvController {
     }
 
     @RequestMapping(value = {"/{gsmKey}/threshold",  "/{gsmKey}/env_config"}, method = RequestMethod.GET)
-
     @ResponseBody
     public Result getGSMConfig(@PathVariable Long gsmKey) {
         try {

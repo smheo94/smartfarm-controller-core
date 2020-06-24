@@ -43,31 +43,31 @@
 <!--		</property>-->
 <!--    </bean>-->
 
-<!--    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">-->
-<!--&lt;!&ndash;        <property name="interceptors">&ndash;&gt;-->
-<!--&lt;!&ndash;            <list>&ndash;&gt;-->
-<!--&lt;!&ndash;                <ref bean="localeChangeInterceptor" />&ndash;&gt;-->
-<!--&lt;!&ndash;            </list>&ndash;&gt;-->
-<!--&lt;!&ndash;        </property>&ndash;&gt;-->
-<!--    </bean>-->
-<!--    -->
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+<!--        <property name="interceptors">-->
+<!--            <list>-->
+<!--                <ref bean="localeChangeInterceptor" />-->
+<!--            </list>-->
+<!--        </property>-->
+    </bean>
+
 <!--    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver" />-->
 <!--    &lt;!&ndash; 쿠키를 이용한 Locale 이용시 <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver"/> &ndash;&gt;-->
 <!--    <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">-->
 <!--        <property name="paramName" value="language" />-->
 <!--    </bean>-->
 
-<!--    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">-->
-<!--&lt;!&ndash;        <property name="defaultErrorView" value="cmmn/egovError"/>&ndash;&gt;-->
-<!--&lt;!&ndash;        <property name="exceptionMappings">&ndash;&gt;-->
-<!--&lt;!&ndash;            <props>&ndash;&gt;-->
-<!--&lt;!&ndash;                <prop key="org.springframework.dao.DataAccessException">cmmn/dataAccessFailure</prop>&ndash;&gt;-->
-<!--&lt;!&ndash;                <prop key="org.springframework.transaction.TransactionException">cmmn/transactionFailure</prop>&ndash;&gt;-->
-<!--&lt;!&ndash;                <prop key="egovframework.rte.fdl.cmmn.exception.EgovBizException">cmmn/egovError</prop>&ndash;&gt;-->
-<!--&lt;!&ndash;                <prop key="org.springframework.security.AccessDeniedException">cmmn/egovError</prop>&ndash;&gt;-->
-<!--&lt;!&ndash;            </props>&ndash;&gt;-->
-<!--&lt;!&ndash;        </property>&ndash;&gt;-->
-<!--    </bean>-->
+    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+<!--        <property name="defaultErrorView" value="cmmn/egovError"/>-->
+<!--        <property name="exceptionMappings">-->
+<!--            <props>-->
+<!--                <prop key="org.springframework.dao.DataAccessException">cmmn/dataAccessFailure</prop>-->
+<!--                <prop key="org.springframework.transaction.TransactionException">cmmn/transactionFailure</prop>-->
+<!--                <prop key="egovframework.rte.fdl.cmmn.exception.EgovBizException">cmmn/egovError</prop>-->
+<!--                <prop key="org.springframework.security.AccessDeniedException">cmmn/egovError</prop>-->
+<!--            </props>-->
+<!--        </property>-->
+    </bean>
 
 
 
