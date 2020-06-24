@@ -248,8 +248,9 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 		//return syncToSmartfarm(request, toGsmKey);
     }
 
-    private final String CONTROLLER_INSERT_URL = "/env/%s/controller/";
 	private final String CONTROLLER_UPDATE_URL = "/env/%s/controller/%s";
+    private final String CONTROLLER_INSERT_URL = "/env/%s/controller/";
+	private final String GSN_ENV_CONFIG = "/env/gsm/env_onfig";
 	private final String DEVICE_INSERT_URL = "/env/device";
 	private final String DEVICE_RELATION_DELETE_URL = "/env/device/%s/relationdevices";
 	private final String DEVICE_RELATION_INSERT_URL = "/env/device/%s/relationdevices";
@@ -270,6 +271,9 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 		final Map<String, Object> gsmInfo = this.get(gsmKey, true, true);
 		List<Map<String,Object>> houseList = (List<Map<String,Object>>)gsmInfo.get("houseList");
         //List<Map<String,Object>> controllerList = (List<Map<String,Object>>)gsmInfo.get("controllerList");
+
+		GsmConfigVO gsmConfig = gsmEnvMapper.getGSMConfig(gsmInfo);
+		sendRestBodyData(request, GSN_ENV_CONFIG, HttpMethod.PUT, gsmKey, gsmConfig);
 		final List<ControllerEnvVO> contorollerEnvList = controllerEnvService.controllerDeviceList(gsmKey);
 
 		if( contorollerEnvList != null ) {
