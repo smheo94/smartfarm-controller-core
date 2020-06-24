@@ -11,7 +11,7 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
     <context:component-scan base-package="com.kt.smartfarm.service, com.kt.smartfarm.config, com.kt.smartfarm.web, com.kt.smartfarm.task.scheduler">
-        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>               
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
     </context:component-scan>
@@ -25,31 +25,31 @@
     </bean>
      -->
      
-     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
-<!--        <property name="webBindingInitializer">-->
-<!--            <bean class="com.kt.cmmn.web.EgovBindingInitializer"/>-->
-<!--        </property>-->
-        <property name="messageConverters">
-			<list>
-				<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
-				<bean class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter" >
-				    <property name = "supportedMediaTypes">
-					    <list>
-					        <value>*/*;charset=UTF-8</value>
-					    </list>
-					</property>
-					</bean>
-			</list>
-		</property>
-    </bean>
+<!--     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">-->
+<!--&lt;!&ndash;        <property name="webBindingInitializer">&ndash;&gt;-->
+<!--&lt;!&ndash;            <bean class="com.kt.cmmn.web.EgovBindingInitializer"/>&ndash;&gt;-->
+<!--&lt;!&ndash;        </property>&ndash;&gt;-->
+<!--        <property name="messageConverters">-->
+<!--			<list>-->
+<!--				<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />-->
+<!--				<bean class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter" >-->
+<!--				    <property name = "supportedMediaTypes">-->
+<!--					    <list>-->
+<!--					        <value>*/*;charset=UTF-8</value>-->
+<!--					    </list>-->
+<!--					</property>-->
+<!--					</bean>-->
+<!--			</list>-->
+<!--		</property>-->
+<!--    </bean>-->
 
-    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
-<!--        <property name="interceptors">-->
-<!--            <list>-->
-<!--                <ref bean="localeChangeInterceptor" />-->
-<!--            </list>-->
-<!--        </property>-->
-    </bean>
+<!--    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">-->
+<!--&lt;!&ndash;        <property name="interceptors">&ndash;&gt;-->
+<!--&lt;!&ndash;            <list>&ndash;&gt;-->
+<!--&lt;!&ndash;                <ref bean="localeChangeInterceptor" />&ndash;&gt;-->
+<!--&lt;!&ndash;            </list>&ndash;&gt;-->
+<!--&lt;!&ndash;        </property>&ndash;&gt;-->
+<!--    </bean>-->
 <!--    -->
 <!--    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver" />-->
 <!--    &lt;!&ndash; 쿠키를 이용한 Locale 이용시 <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver"/> &ndash;&gt;-->
@@ -57,17 +57,17 @@
 <!--        <property name="paramName" value="language" />-->
 <!--    </bean>-->
 
-    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
-<!--        <property name="defaultErrorView" value="cmmn/egovError"/>-->
-<!--        <property name="exceptionMappings">-->
-<!--            <props>-->
-<!--                <prop key="org.springframework.dao.DataAccessException">cmmn/dataAccessFailure</prop>-->
-<!--                <prop key="org.springframework.transaction.TransactionException">cmmn/transactionFailure</prop>-->
-<!--                <prop key="egovframework.rte.fdl.cmmn.exception.EgovBizException">cmmn/egovError</prop>-->
-<!--                <prop key="org.springframework.security.AccessDeniedException">cmmn/egovError</prop>-->
-<!--            </props>-->
-<!--        </property>-->
-    </bean>
+<!--    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">-->
+<!--&lt;!&ndash;        <property name="defaultErrorView" value="cmmn/egovError"/>&ndash;&gt;-->
+<!--&lt;!&ndash;        <property name="exceptionMappings">&ndash;&gt;-->
+<!--&lt;!&ndash;            <props>&ndash;&gt;-->
+<!--&lt;!&ndash;                <prop key="org.springframework.dao.DataAccessException">cmmn/dataAccessFailure</prop>&ndash;&gt;-->
+<!--&lt;!&ndash;                <prop key="org.springframework.transaction.TransactionException">cmmn/transactionFailure</prop>&ndash;&gt;-->
+<!--&lt;!&ndash;                <prop key="egovframework.rte.fdl.cmmn.exception.EgovBizException">cmmn/egovError</prop>&ndash;&gt;-->
+<!--&lt;!&ndash;                <prop key="org.springframework.security.AccessDeniedException">cmmn/egovError</prop>&ndash;&gt;-->
+<!--&lt;!&ndash;            </props>&ndash;&gt;-->
+<!--&lt;!&ndash;        </property>&ndash;&gt;-->
+<!--    </bean>-->
 
 
 
