@@ -231,13 +231,13 @@
 		FROM  gsm_config_weather GW
 		WHERE gsm_key = #{gsm_key};
 	</select>
-	<insert id ="insertGSMConfigWeather" parameterType="gsmConfigVO">
-	INSERT INTO gsm_config_weather ( gsm_key, ext_idx, ext_mqtt_host, ext_mqtt_port, ext_type)	
-	VALUES 
-	<foreach collection="extWeather" item="weather" open="(" close=")" separator=",">
-		#{gsmKey}, #{weather.extIdx}, , #{weather.extMqttHost}, , #{weather.extMqttPort}, , #{weather.extType}
-	</foreach>
-	</insert>
+    <insert id ="insertGSMConfigWeather" parameterType="gsmConfigVO">
+        INSERT INTO gsm_config_weather ( gsm_key, ext_idx, ext_mqtt_host, ext_mqtt_port, ext_type)
+        VALUES
+        <foreach collection="extWeather" item="weather" separator=",">
+            ( #{gsmKey}, #{weather.extIdx}, #{weather.extMqttHost}, #{weather.extMqttPort}, #{weather.extType} )
+        </foreach>
+    </insert>
 	<delete id="deleteGSMConfigWeather" parameterType="gsmConfigVO">
 		DELETE FROM gsm_config_weather WHERE gsm_key = #{gsmKey};
 	</delete>

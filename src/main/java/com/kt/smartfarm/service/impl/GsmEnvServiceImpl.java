@@ -25,14 +25,6 @@ import com.kt.smartfarm.intercepter.SmartFarmDataInterceptor;
 import com.kt.smartfarm.mapper.GsmEnvMapper;
 import com.kt.smartfarm.service.*;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -47,6 +39,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import static com.kt.smartfarm.message.ApplicationMessage.NOT_FOUND_GSM_INFO;
 
@@ -197,7 +195,9 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 	@Override
 	public GsmConfigVO insertGSMConfig(GsmConfigVO gsmConfigVO) {
 		gsmEnvMapper.insertGSMConfig(gsmConfigVO);
-		gsmEnvMapper.insertGSMConfigWeather(gsmConfigVO);
+		if(gsmConfigVO.extWeather != null && gsmConfigVO.extWeather.size() > 0 ) {
+			gsmEnvMapper.insertGSMConfigWeather(gsmConfigVO);
+		}
 		return gsmConfigVO;
 	}
 
@@ -205,7 +205,9 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 	public GsmConfigVO updateGSMConfig(GsmConfigVO gsmConfigVO) {
 		gsmEnvMapper.updateGSMConfig(gsmConfigVO);
 		gsmEnvMapper.deleteGSMConfigWeather(gsmConfigVO);
-		gsmEnvMapper.insertGSMConfigWeather(gsmConfigVO);
+		if(gsmConfigVO.extWeather != null && gsmConfigVO.extWeather.size() > 0 ) {
+			gsmEnvMapper.insertGSMConfigWeather(gsmConfigVO);
+		}
 		return gsmConfigVO;
 	}
 
