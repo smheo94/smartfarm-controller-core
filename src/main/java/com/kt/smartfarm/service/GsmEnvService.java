@@ -16,9 +16,9 @@ public interface GsmEnvService {
 	List<Map<String, Object>> list(boolean all, Integer userInfoId, Integer categoryId, String farmName, String authUserIdx, Boolean isSmartfarmSystem, Boolean hasCCTVOnly);
 	List<GsmEnvVO> notMappedList();
 	Integer userRegisterGSM(HashMap<String, Object> param, Long gsmKey);
-	GsmThresholdVO gsmThresholdInsert(GsmThresholdVO gsmThresholdVO);
-	GsmThresholdVO gsmThresholdUpdate(GsmThresholdVO gsmThresholdVO);
-	GsmThresholdVO gsmThresholdGet(HashMap<String,Object> param);
+	GsmConfigVO insertGSMConfig(GsmConfigVO gsmConfigVO);
+	GsmConfigVO updateGSMConfig(GsmConfigVO gsmConfigVO);
+	GsmConfigVO getGSMConfig(HashMap<String,Object> param);
 	Integer copyToNewGsm(HttpServletRequest request, Long fromGsmKey, Long toGsmKey);
 	Integer syncToSmartfarm(HttpServletRequest request, Long gsmKey);
 	Integer syncToSupervisor(HttpServletRequest request);

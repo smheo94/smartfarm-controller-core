@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 
 /**
  * 외부기상대 설정 
@@ -15,7 +17,7 @@ import lombok.Setter;
 @Data
 @Getter
 @Setter
-public class GsmThresholdVO {
+public class GsmConfigVO {
 	// gsmKey
 	Long gsmKey;
 	// 수정일자	
@@ -60,4 +62,6 @@ public class GsmThresholdVO {
 	String weatherMqttHost;
 	// 기상대 mqtt port
 	int weatherMqttPort;
+
+	public List<GsmConfigWeatherVO> extWeather;
 }

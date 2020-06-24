@@ -5,6 +5,9 @@
 	<resultMap id="gsmEnvVOMap" type="gsmEnvVO" autoMapping="true">
 		<result column="properties" property="properties" typeHandler="com.kt.cmmn.util.JsonTypeHandler"/>
 	</resultMap>
+	<resultMap id="gsmConfigVOMap" type="gsmConfigVO" autoMapping="true">
+		<collection property="extWeather" autoMapping="true"  column="gsm_key" select="getGSMConfigWeather" />
+	</resultMap>
 	<insert id="insert" parameterType="gsmEnvVO">
 		INSERT INTO gsm_info (
 			gsm_key,
@@ -192,7 +195,7 @@
 		WHERE gsm_key = #{gsmKey}
 	</update>
 
-	<select id ="gsmThresholdGet" parameterType="map" resultType="gsmThresholdVO">
+	<select id ="getGSMConfig" parameterType="map" resultMap="gsmConfigVOMap">
 		SELECT 
 			gsm_key AS gsmKey ,
 			update_date AS updateDate ,			
@@ -220,7 +223,25 @@
   		WHERE gsm_key = #{gsmKey}
 	</select>
 
-	<insert id ="gsmThresholdInsert" parameterType="gsmThresholdVO">
+	<select id ="getGSMConfigWeather" resultType="gsmConfigWeatherVO">
+		SELECT 	GW.ext_idx AS extIdx,
+				  GW.ext_mqtt_host AS extMqttHost,
+				  GW.ext_mqtt_port AS extMqttPort,
+				  GW.ext_type AS extType
+		FROM  gsm_config_weather GW
+		WHERE gsm_key = #{gsm_key};
+	</select>
+	<insert id ="insertGSMConfigWeather" parameterType="gsmConfigVO">
+	INSERT INTO gsm_config_weather ( gsm_key, ext_idx, ext_mqtt_host, ext_mqtt_port, ext_type)	
+	VALUES 
+	<foreach collection="extWeather" item="weather" open="(" close=")" separator=",">
+		#{gsmKey}, #{weather.extIdx}, , #{weather.extMqttHost}, , #{weather.extMqttPort}, , #{weather.extType}
+	</foreach>
+	</insert>
+	<delete id="deleteGSMConfigWeather" parameterType="gsmConfigVO">
+		DELETE FROM gsm_config_weather WHERE gsm_key = #{gsmKey};
+	</delete>
+	<insert id ="insertGSMConfig" parameterType="gsmConfigVO">
 		INSERT INTO gsm_config(
 			gsm_key, update_date, storm_limit, storm_sensing_delay, storm_terminate_delay, wind_direction_waiting_time, wind_direction_degree, 
 			rain_sensing_delay, rain_terminate_delay, top_window_left_degree, top_window_right_degree, sensor_select, use_wind_dectector, use_rain_dectector, 
@@ -235,7 +256,7 @@
 		) 
 	</insert>
 	
-	<update id ="gsmThresholdUpdate" parameterType="gsmThresholdVO">
+	<update id ="updateGSMConfig" parameterType="gsmConfigVO">
 		UPDATE gsm_config
 		SET 			 
 			 <if test="stormLimit != null">storm_limit = #{stormLimit},</if>

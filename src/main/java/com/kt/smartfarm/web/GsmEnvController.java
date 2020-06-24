@@ -354,49 +354,50 @@ public class GsmEnvController {
         }
     }
 
-    @RequestMapping(value = "/threshold", method = RequestMethod.POST)
+    @RequestMapping(value = {"/threshold", "/env_config"}, method = RequestMethod.POST)
     @ResponseBody
     @InterceptLog
     @InterceptPost
-    public Result gsmThresholdInsert(@RequestBody GsmThresholdVO gsmThresholdVO) {
+    public Result insertGSMConfig(@RequestBody GsmConfigVO gsmConfigVO) {
         try {
-            if (!authCheckService.authCheck(gsmThresholdVO.getGsmKey(), null, null, null)) {
-                return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmThresholdVO);
+            if (!authCheckService.authCheck(gsmConfigVO.getGsmKey(), null, null, null)) {
+                return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmConfigVO);
             }
-            return new Result(gsmEnvService.gsmThresholdInsert(gsmThresholdVO));
+            return new Result(gsmEnvService.insertGSMConfig(gsmConfigVO));
         } catch (Exception e) {
-            log.warn("gsmThresholdInsert :{}", gsmThresholdVO, e);
+            log.warn("gsmThresholdInsert :{}", gsmConfigVO, e);
             return new Result(msg.getMessage("errors.ask_to_admin"), HttpStatus.CONFLICT, null);
         }
     }
 
 
-    @RequestMapping(value = "/threshold", method = RequestMethod.PUT)
+    @RequestMapping(value = {"/threshold", "/env_onfig"}, method = RequestMethod.PUT)
     @ResponseBody
     @InterceptLog
     @InterceptPost
-    public Result gsmThresholdUpdate(@RequestBody GsmThresholdVO gsmThresholdVO) {
+    public Result updateGSMConfig(@RequestBody GsmConfigVO gsmConfigVO) {
         try {
-            if (!authCheckService.authCheck(gsmThresholdVO.getGsmKey(), null, null, null)) {
-                return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmThresholdVO);
+            if (!authCheckService.authCheck(gsmConfigVO.getGsmKey(), null, null, null)) {
+                return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmConfigVO);
             }
-            return new Result(gsmEnvService.gsmThresholdUpdate(gsmThresholdVO));
+            return new Result(gsmEnvService.updateGSMConfig(gsmConfigVO));
         } catch (Exception e) {
-            log.warn("gsmThresholdUpdate :{}", gsmThresholdVO, e);
+            log.warn("gsmThresholdUpdate :{}", gsmConfigVO, e);
             return new Result(msg.getMessage("errors.ask_to_admin"), HttpStatus.CONFLICT, null);
         }
     }
 
-    @RequestMapping(value = "/{gsmKey}/threshold", method = RequestMethod.GET)
+    @RequestMapping(value = {"/{gsmKey}/threshold",  "/{gsmKey}/env_config"}, method = RequestMethod.GET)
+
     @ResponseBody
-    public Result gsmThresholdGet(@PathVariable Long gsmKey) {
+    public Result getGSMConfig(@PathVariable Long gsmKey) {
         try {
             if (!authCheckService.authCheck(gsmKey, null, null, null)) {
                 return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
             }
             HashMap<String, Object> param = new HashMap<String, Object>();
             param.put("gsmKey", gsmKey);
-            return new Result(gsmEnvService.gsmThresholdGet(param));
+            return new Result(gsmEnvService.getGSMConfig(param));
         } catch (Exception e) {
             log.warn("gsmThresholdGet :{}", gsmKey, e);
             return new Result(msg.getMessage("errors.ask_to_admin"), HttpStatus.CONFLICT, null);

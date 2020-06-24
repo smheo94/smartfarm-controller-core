@@ -28,7 +28,6 @@ import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -48,12 +47,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.charset.Charset;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 import static com.kt.smartfarm.message.ApplicationMessage.NOT_FOUND_GSM_INFO;
 
@@ -202,20 +195,23 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 	}
 
 	@Override
-	public GsmThresholdVO gsmThresholdInsert(GsmThresholdVO gsmThresholdVO) {
-		gsmEnvMapper.gsmThresholdInsert(gsmThresholdVO);
-		return gsmThresholdVO;
+	public GsmConfigVO insertGSMConfig(GsmConfigVO gsmConfigVO) {
+		gsmEnvMapper.insertGSMConfig(gsmConfigVO);
+		gsmEnvMapper.insertGSMConfigWeather(gsmConfigVO);
+		return gsmConfigVO;
 	}
 
 	@Override
-	public GsmThresholdVO gsmThresholdUpdate(GsmThresholdVO gsmThresholdVO) {
-		gsmEnvMapper.gsmThresholdUpdate(gsmThresholdVO);
-		return gsmThresholdVO;
+	public GsmConfigVO updateGSMConfig(GsmConfigVO gsmConfigVO) {
+		gsmEnvMapper.updateGSMConfig(gsmConfigVO);
+		gsmEnvMapper.deleteGSMConfigWeather(gsmConfigVO);
+		gsmEnvMapper.insertGSMConfigWeather(gsmConfigVO);
+		return gsmConfigVO;
 	}
 
 	@Override
-	public GsmThresholdVO gsmThresholdGet(HashMap<String, Object> param) {
-		return gsmEnvMapper.gsmThresholdGet(param);
+	public GsmConfigVO getGSMConfig(HashMap<String, Object> param) {
+		return gsmEnvMapper.getGSMConfig(param);
 	}
 
 	@Override
