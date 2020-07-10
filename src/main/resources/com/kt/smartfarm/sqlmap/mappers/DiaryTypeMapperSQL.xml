@@ -7,6 +7,16 @@
 		<result column="properties_json" property="propertiesJson" typeHandler="com.kt.cmmn.util.JsonTypeHandler"/>
 	</resultMap>
 
+
+	<select id="getDiaryAbleHouseId" resultType="diaryTypeAbleHouseVO">
+		SELECT prd_code, GH.id as house_id
+		FROM green_house GH
+				 INNER JOIN green_house_product GHP ON GH.id = GHP.green_house_id
+				 INNER JOIN cd_diary_depend_mclass DPM ON DPM.depend_mclasscode = GHP.prd_code
+		WHERE GH.gsm_key = #{gsmKey}  AND 	DPM.diary_type_id = #{diaryTypeId}
+	</select>
+
+
 	<select id="getDiaryTypeList" resultType="diaryTypeVO">
 	SELECT DT.id, DT.diary_type, DT.type_name, DT.is_base_diary, IF( DT.is_base_diary  = 1, DT.id,  DT.base_diary_type_id)  base_diary_type_id
 	 	, GROUP_CONCAT(DR.depend_type) AS user_role_depend_type

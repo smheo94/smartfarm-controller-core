@@ -1,9 +1,6 @@
 package com.kt.smartfarm.service.impl;
 
-import com.kt.cmmn.util.JasyptUtil;
-import com.kt.cmmn.util.MapUtils;
-import com.kt.cmmn.util.RestClientUtil;
-import com.kt.cmmn.util.SHA512PasswordEncoder;
+import com.kt.cmmn.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -46,9 +43,12 @@ public class SystemServiceImplTest {
         //"ALTER TABLE `control_setting_device` DROP FOREIGN KEY `fx_control_setting_device`;"
         };
         String  anyQueryList2 =
-              //  "UPDATE `gsm_info` SET `system_host` = 'sf-005455.iptime.org', system_port = 30005   WHERE `gsm_key` = '5455'; ";
-             //     "UPDATE `gsm_info` SET `system_host` = 'sf-666666.vivans.net', system_port = 9876, master_system_port =9876," +
-                          "master_system_host = 'sf-666666.vivans.net'    WHERE `gsm_key` = '666666'; ";
+                "\n" +
+                        "INSERT INTO `SDK_SMS_SEND` (`MSG_ID`, `USER_ID`, `SCHEDULE_TYPE`, `SUBJECT`, `SMS_MSG`, `CALLBACK_URL`, `NOW_DATE`, `SEND_DATE`, `CALLBACK`, \n" +
+                        "`DEST_TYPE`, `DEST_COUNT`, `DEST_INFO`, `KT_OFFICE_CODE`, `CDR_ID`, `RESERVED1`, `RESERVED2`,\n" +
+                        " `RESERVED3`, `RESERVED4`, `RESERVED5`, `RESERVED6`, `RESERVED7`, `RESERVED8`, `RESERVED9`, `SEND_STATUS`, `SEND_COUNT`, `SEND_RESULT`, `SEND_PROC_TIME`, `STD_ID`) VALUES('1','saup2farm01','0',NULL,'[임계치초과 발생] 메인테스트(무안 테스트 농가1) 온도1(31.0) 기준(20) 초과','\n" +
+                        " ','202006301731441','202006301731441','070-7450-5274','0','0','^01034496214',\n" +
+                        "NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0','0','0',NULL,NULL)";
         List<String> queryList = new ArrayList<>();
         if( anyQueryList2.length() > 0 ) {
             queryList.addAll(Arrays.asList(anyQueryList2.split(";")));
@@ -69,18 +69,61 @@ public class SystemServiceImplTest {
 
     }
 
+
+    @Test
+    public void selectAny() {
+        anyQueryTestList(QUERY_TYPE.select.name(),"SELECT * FROM SDK_SMS_REPORT ORDER BY  MSG_ID DESC LIMIT 10",
+                "SELECT * FROM SDK_SMS_REPORT_DETAIL ORDER BY MSG_ID DESC LIMIT 10"
+        //"SELECT * FROM alarm_setting where phone_number = '01034496214'"
+        );
+        assertTrue(true);
+    }
+    @Test
+    public void updateAny() {
+        anyQueryTest(QUERY_TYPE.update.name(),
+                "");
+        assertTrue(true);
+    }
+
+
     @Test
     public void getUserInfo() {
         anyQueryTest(QUERY_TYPE.select.name(),
-                "SELECT A.user_id, B.auth_group_id, C.roles_id FROM user_info A LEFT JOIN user_info_auth_group B ON A.idx =  B.user_idx LEFT JOIN user_info_roles C ON A.idx = C.user_idx" +
-                        " WHERE idx = 99615870 ");
+                "SELECT C.phone_number, G.house_name, GI.farm_nickname, C.sms_push, C.event_type, C.event_sub_type, C.on_off, C.user_idx AS user_info_id, PS.token\n" +
+                        "\t\tFROM alarm_setting C\n" +
+                        "\t    LEFT JOIN phone_setting PS ON PS.user_idx = C.user_idx\n" +
+                        "\t\tLEFT JOIN (\n" +
+                        "\t\t\tSELECT DISTINCT gsm_key, user_idx\n" +
+                        "\t\t\tFROM\n" +
+                        "\t\t\t(\n" +
+                        "\t\t\tSELECT DISTINCT gi.gsm_key, ua.user_idx\n" +
+                        "\t\t\tFROM gsm_category_view gc\n" +
+                        "\t\t\tINNER JOIN gsm_info gi ON gi.category_id = gc.child_category_id\n" +
+                        "\t\t\tINNER JOIN auth_group_detail ad ON ad.category_id = gc.category_id\n" +
+                        "\t\t\tINNER JOIN user_info_auth_group ua ON ua.auth_group_id = ad.group_id\n" +
+                        "\t\t\tUNION ALL\n" +
+                        "\t\t\tSELECT DISTINCT ad.gsm_key,  ua.user_idx\n" +
+                        "\t\t\tFROM auth_group_detail ad\n" +
+                        "\t\t\tINNER JOIN user_info_auth_group ua ON ua.auth_group_id = ad.group_id\n" +
+                        "\t\t\tWHERE ad.category_id = '0'\n" +
+                        "\t\t\tUNION ALL\n" +
+                        "\t\t\tSELECT gsm_key , user_info_id AS user_idx\n" +
+                        "\t\t\tFROM gsm_info\n" +
+                        "\t\t\t) A\n" +
+                        "\t\t) UAUTH ON UAUTH.user_idx = C.user_idx \n" +
+                        "\t\t\tAND UAUTH.gsm_key = 6370\n" +
+                        "\t\tLEFT JOIN gsm_info GI ON GI.gsm_key = GI.gsm_key AND GI.gsm_key = UAUTH.gsm_key\n" +
+                        "\t\tLEFT JOIN green_house G ON G.gsm_key = GI.gsm_key\n" +
+                        "\t\tWHERE  C.on_off  = '1' AND ( G.id = 637000033 OR ( 6370 != null AND  G.id IS NULL ))"
+        );
+
         assertTrue(true);
     }
     @Test
     public void updateGSMHost() {
-        Integer gsm_key = 618014;
+        Integer gsm_key = 618316;
         Integer port = 30005;
-        String baseDomain = "vivans.net";
+        String baseDomain ="vivans.net";
         String qText = String.format("UPDATE `gsm_info` SET `system_host` = 'sf-%1$06d.%3$s', system_port = %2$s, master_system_port =%2$s," +
                 "master_system_host = 'sf-%1$06d.%3$s'    WHERE `gsm_key` = '%1$s'; ",
                 gsm_key, port, baseDomain);
@@ -90,12 +133,30 @@ public class SystemServiceImplTest {
     }
 
     @Test
-    public void getGroupMANAGER() {
-        anyQueryTest(QUERY_TYPE.select.name(),
-                " SELECT * FROM auth_group  WHERE id = 56");
+    public void selectUser() {
+        String userName = "화수" ;
+
+        anyQueryTest(QUERY_TYPE.select.name(), "SELECT * FROM user_info WHERE user_name LIKE '%" + userName + "%'");
+
+        //anyQueryTest(QUERY_TYPE.select.name(), "SELECT * FROM user_info WHERE user_id = 'taebaek012'");
+
         assertTrue(true);
     }
-
+    @Test
+    public void updateUserPassword() {
+        String userId = "taebaek013" ;
+        String newP = "ghktn12#";
+        SHA512PasswordEncoder encoder = new SHA512PasswordEncoder();
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.MILLISECOND, 0);
+        String salt = String.format("%1$s%1$s", c.getTimeInMillis());
+        String encodedPwd = encoder.encode(newP+salt);
+        Date pwdUpdateDate = c.getTime();
+        String dateStr = DateUtil.getDateTimeStr(pwdUpdateDate);
+        anyQueryTest(QUERY_TYPE.update.name(), String.format("  UPDATE user_info  SET update_date = NOW() , pwd = '%s', pwd_update_date = '%s'" +
+                " Where user_id = '%s'",encodedPwd, dateStr, userId));
+        assertTrue(true);
+    }
 
     @Test
     public void insertNewCropDiary() {
@@ -123,6 +184,11 @@ public class SystemServiceImplTest {
         assertTrue(true);
     }
     @Test
+    public void deleteNOTINDEVICEList() {
+        anyQueryTest(QUERY_TYPE.update.name(), "DELETE FROM `event` WHERE ( device_id != 0 AND device_id NOT IN ( SELECT device_id FROM map_green_house_device ) )");
+        assertTrue(true);
+    }
+    @Test
     public void getGSMStatus() {
         anyQueryTest(QUERY_TYPE.select.name(), "SELECT gsm_key, system_version, FROM_UNIXTIME(update_date/1000000) AS onTime FROM gsm_status ");
         assertTrue(true);
@@ -141,7 +207,12 @@ public class SystemServiceImplTest {
 
         assertTrue(true);
     }
-    private void anyQueryTest(String queryType, String anyQuery) {
+    private void anyQueryTestList(String queryType, String ... anyQuery ) {
+        for(String q : anyQuery) {
+            anyQueryTest(queryType, q);
+        }
+    }
+    private void anyQueryTest(String queryType, String  anyQuery ) {
         //String anyQuery = "select * from event where gsm_key = 1110 order by id desc  limit 20";
         //String anyQuery = "UPDATE `device_v_dep_device` SET `device_num` = '1' WHERE id = 82";
 
@@ -152,9 +223,11 @@ public class SystemServiceImplTest {
 
         //SELECT * FROM `sf_main`.`oauth_client_details` LIMIT 0, 1000;
         String key = "**" + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE) + "123";
+
         String result = JasyptUtil.encrypt(key, anyQuery);
         System.out.println(key);
         System.out.println(result);
+
 
         //String oAuthserver = "http://dev1705.vivans.net:47900";
         //String oAuthserver = "https://oauth-smartfarm.argos-labs.com";

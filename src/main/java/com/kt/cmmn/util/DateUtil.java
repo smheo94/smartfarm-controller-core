@@ -1,22 +1,18 @@
 package com.kt.cmmn.util;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Locale;
-import java.util.TimeZone;
-
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.*;
 
 public class DateUtil {
 
@@ -1488,6 +1484,12 @@ public class DateUtil {
 		return sdf.format(date);
 	}
 
+	public static String getDateTimeStr(Date date) {
+		if (date == null)
+			return "";
+		SimpleDateFormat sdf = new SimpleDateFormat(GeneralDateTimeFormat);
+		return sdf.format(date);
+	}
 	public static Date getDateFromStr(String dateTimeStr) {
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat(GeneralDateTimeFormat);

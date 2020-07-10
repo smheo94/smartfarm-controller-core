@@ -38,11 +38,11 @@ public class DiaryTypeServiceImpl extends EgovAbstractServiceImpl implements Dia
 	@Override
 	public List<DiaryTypeVO> getDiaryTypeList(Long gsmKey, Long houseId, Long userIdx) {
 		final List<DiaryTypeVO> diaryTypeList = mapper.getDiaryTypeList(gsmKey, houseId, userIdx);
-
 		final List<DiaryTypePropertiesVO> diaryTypePropertyList = mapper.getDiaryTypePropertyList(null);
 		diaryTypeList.forEach( cl ->{
 			try {
 				cl.setPropertyList(diaryTypePropertyList.stream().filter(m -> Objects.equals(m.getDiaryTypeId(), cl.getId())).collect(Collectors.toList()));
+				cl.setAbleHouseList(mapper.getDiaryAbleHouseId(gsmKey, cl.getId()));
 			} catch (Exception e) {
 				log.debug(e.getMessage());
 			}

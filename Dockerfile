@@ -10,6 +10,7 @@ ARG WAR_FILE
 ADD docker/.sf.k.d /etc/.sf.k
 ADD docker/.sf.k.z /home/gsm/.sf.k
 ADD docker/.sf.k.a /usr/local/etc/.sf.k
+RUN echo "tomcat.util.http.parser.HttpParser.requestTargetAllow=|{}"  >> /usr/local/tomcat/conf/catalina.properties
 ADD target/${WAR_FILE} /usr/local/tomcat/webapps/ROOT.war
 ADD docker/*.jar /usr/local/tomcat/lib/
 #RUN dnsmasq -k &
