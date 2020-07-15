@@ -28,7 +28,7 @@
 
     <resultMap id="ControlLogicSettingMap" type="controlLogicSettingVO">
         <id column="control_setting_id" property="controlSettingId"/>
-        <result column="tmp_gsm_key" property="tmpGsmKey"/>
+        <result column="gsm_key" property="tmpGsmKey"/>
         <result column="log_dt" property="logDt"/>
         <result column="green_house_id" property="greenHouseId"/>
         <result column="def_logic_id" property="logicId"/>
@@ -291,7 +291,7 @@
 
 
     <insert id="insertControlSettingDevice" parameterType="controlLogicSettingDeviceVO" useGeneratedKeys="true">
-        INSERT INTO control_setting_device ( gsm_key, control_setting_id, logic_id, device_num, device_insert_order, device_id,id  )
+        INSERT INTO control_setting_device ( gsm_key, control_setting_id, logic_id, device_num, device_insert_order, device_id, id  )
         VALUES( #{tmpGsmKey}, #{controlSettingId}, #{logicId}, #{deviceNum}, #{deviceInsertOrder}, #{deviceId}
         <if test="id == null">
             ,NEXTVAL_control_setting_device(#{tmpGsmKey})
@@ -315,7 +315,7 @@
         DELETE FROM
         control_setting_device
         <where>
-            <if test="id != null">AND id = #{id};</if>
+            <if test="id != null">id = #{id};</if>
             <if test="control_setting_id != null">AND control_setting_id = #{control_setting_id};</if>
         </where>
     </delete>

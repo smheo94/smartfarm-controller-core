@@ -390,6 +390,35 @@ public class HouseEnvController {
         }
     }
 
+    @RequestMapping(value = "/v2/weather_cast", method = RequestMethod.GET)
+    @ResponseBody
+    public Result weatherCastV2(@PathVariable("gsm_key") Long gsmKey,@RequestParam(value = "house_id", required = false) Long houseId, @RequestParam(value = "from_date", required = false) String fromDate,
+                              @RequestParam(value = "to_date", required = false) String toDate) {
+        try {
+            if (!authCheckService.authCheck(null, houseId, null, null)) {
+                return new Result("Not Allowed", HttpStatus.FORBIDDEN, houseId);
+            }
+            return new Result(houseEnvService.getWeatherCastV2(houseId, fromDate, toDate, config.isSmartfarmSystem()));
+        } catch (Exception e) {
+            log.warn("weather_cast :{}, {}, {}", houseId, fromDate, toDate, e);
+            return new Result(msg.getMessage("errors.ask_to_admin"), HttpStatus.CONFLICT, null);
+        }
+    }
+
+    @RequestMapping(value = "/{houseId}/ushort_weather", method = RequestMethod.GET)
+    @ResponseBody
+    public Result<UltraShortWeatherDataVO> getUltraShortWeatherData(@PathVariable("gsm_key") Long gsmKey,@PathVariable(value = "houseId") Long houseId) {
+        try {
+            if (!authCheckService.authCheck(null, houseId, null, null)) {
+                return new Result("Not Allowed", HttpStatus.FORBIDDEN, houseId);
+            }
+            return new Result(houseEnvService.getUltraShortWeatherData(houseId,  config.isSmartfarmSystem()));
+        } catch (Exception e) {
+            log.warn("ushort_weather :{},", houseId,  e);
+            return new Result(msg.getMessage("errors.ask_to_admin"), HttpStatus.CONFLICT, null);
+        }
+    }
+
     @RequestMapping(value = "/weather_category", method = RequestMethod.GET)
     @ResponseBody
     public Result weatherCategory() {

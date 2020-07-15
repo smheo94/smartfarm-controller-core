@@ -15,25 +15,18 @@ package com.kt.smartfarm.service.impl;
 import com.kt.cmmn.util.ClassUtil;
 import com.kt.cmmn.util.SunriseSunset;
 import com.kt.cmmn.util.WeatherCastGPSUtil;
+import com.kt.smartfarm.mapper.ControlLogicSettingMapper;
+import com.kt.smartfarm.mapper.DeviceEnvMapper;
+import com.kt.smartfarm.mapper.HouseEnvMapper;
 import com.kt.smartfarm.service.*;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.kt.smartfarm.mapper.ControlLogicSettingMapper;
-import com.kt.smartfarm.mapper.DeviceEnvMapper;
-import com.kt.smartfarm.mapper.HouseEnvMapper;
-
 import javax.annotation.Resource;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service("houseEnvService")
@@ -303,6 +296,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 		return houseEnvMapper.deleteHouseProduct(gsmKey, houseId, houseProductId);
 	}
 
+
 	@Override
 	public List<HashMap<String,Object>> groundDeviceList(Long houseId) {
 		List<HashMap<String,Object>> tempDeviceList = new ArrayList<>();
@@ -356,12 +350,10 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 			HashMap<String,Object> gridXY = new HashMap<>();
 			houseInfo = get(null, houseId, isSmartfarmSystem);
 			houseDetail = (List<HashMap<String, Object>>) houseInfo.get("houseDetail");
-			Double longitude = Double.parseDouble(houseDetail.get(0).get("latitude").toString());
-			Double latitude = Double.parseDouble(houseDetail.get(0).get("longitude").toString());
-			
-			
-			latitude = Math.ceil(latitude);
-			longitude = Math.ceil(longitude);		
+			Double latitude = Double.parseDouble(houseDetail.get(0).get("latitude").toString());
+			Double longitude = Double.parseDouble(houseDetail.get(0).get("longitude").toString());
+//			latitude = Math.ceil(latitude);
+//			longitude = Math.ceil(longitude);
 			gridXY= WeatherCastGPSUtil.getGridxy(latitude,longitude);
 			param.put("house_id", houseId);
 			param.put("from_date", fromDate);
@@ -375,14 +367,62 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 	}
 
 	@Override
+	public UltraShortWeatherDataVO getUltraShortWeatherData(Long houseId, Boolean isSmartfarmSystem) {
+		HashMap<String,Object> param = new HashMap<>();
+		try{
+			HashMap<String,Object> houseInfo = new HashMap<>();
+			List<HashMap<String,Object>> houseDetail = new ArrayList<>();
+			HashMap<String,Object> gridXY = new HashMap<>();
+			houseInfo = get(null, houseId, isSmartfarmSystem);
+			houseDetail = (List<HashMap<String, Object>>) houseInfo.get("houseDetail");
+			Double latitude = ClassUtil.castToSomething(houseDetail.get(0).get("latitude"), Double.class);
+			Double longitude = ClassUtil.castToSomething(houseDetail.get(0).get("longitude"), Double.class);
+//			latitude = Math.ceil(latitude);
+//			longitude = Math.ceil(longitude);
+			gridXY= WeatherCastGPSUtil.getGridxy(latitude,longitude);
+			param.put("house_id", houseId);
+			param.put("nx", gridXY.get("x").toString());
+			param.put("ny", gridXY.get("y").toString());
+		}catch(Exception e){
+			log.warn("getUltraShortWeatherData", e);
+		}
+		return houseEnvMapper.getUltraShortWeatherData(param);
+	}
+
+	@Override
+	public List<HashMap<String, Object>> getWeatherCastV2(Long houseId, String fromDate, String toDate, Boolean isSmartfarmSystem) {
+		HashMap<String,Object> param = new HashMap<>();
+		try{
+			HashMap<String,Object> houseInfo = new HashMap<>();
+			List<HashMap<String,Object>> houseDetail = new ArrayList<>();
+			HashMap<String,Object> gridXY = new HashMap<>();
+			houseInfo = get(null, houseId, isSmartfarmSystem);
+			houseDetail = (List<HashMap<String, Object>>) houseInfo.get("houseDetail");
+			Double latitude = Double.parseDouble(houseDetail.get(0).get("latitude").toString());
+			Double longitude = Double.parseDouble(houseDetail.get(0).get("longitude").toString());
+//			latitude = Math.ceil(latitude);
+//			longitude = Math.ceil(longitude);
+			gridXY= WeatherCastGPSUtil.getGridxy(latitude,longitude);
+			param.put("house_id", houseId);
+			param.put("from_date", fromDate);
+			param.put("to_date", toDate);
+			param.put("nx", gridXY.get("x").toString());
+			param.put("ny", gridXY.get("y").toString());
+		}catch(Exception e){
+			log.debug(e.getMessage());
+		}
+		return houseEnvMapper.getWeatherCastV2(param);
+	}
+
+	@Override
 	public List<HashMap<String, Object>> getWeatherCategory() {
 		return houseEnvMapper.getWeatherCategory();
 	}
 
-	@Override
-	public Integer insertSunriseData(HashMap<String, Object> hm) {
-		return houseEnvMapper.insertSunriseData(hm);		
-	}
+//	@Override
+//	public Integer insertSunriseData(HashMap<String, Object> hm) {
+//		return houseEnvMapper.insertSunriseData(hm);
+//	}
 	
 	@Override
 	public Integer insertCctv(CCTVSettingVO cctv) {
@@ -406,5 +446,20 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 		if ( cctv.getCctvPwd() != null && "****".equals(cctv.getCctvPwd()) )
 			cctv.setCctvPwd(null);
 		return houseEnvMapper.updateCctv(cctv);
+	}
+
+
+	@Override
+	public void deleteOldForecastData() {
+		houseEnvMapper.deleteOldForecastData();
+		houseEnvMapper.deleteOldForecastDataV2();
+	}
+	@Override
+	public void deleteOldWeatherData() {
+		houseEnvMapper.deleteOldWeatherData();
+	}
+	@Override
+	public void insertForecastV2Data(LinkedHashMap<String, Object> foreCastData) {
+		houseEnvMapper.insertForecastV2Data(foreCastData);
 	}
 }

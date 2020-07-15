@@ -21,10 +21,7 @@ import com.kt.cmmn.util.InterceptPre;
 import com.kt.cmmn.util.Result;
 import com.kt.smartfarm.config.Message;
 import com.kt.smartfarm.config.SmartfarmInterceptorConfig;
-import com.kt.smartfarm.service.AuthCheckService;
-import com.kt.smartfarm.service.ControlLogicSettingService;
-import com.kt.smartfarm.service.ControlLogicSettingVO;
-import com.kt.smartfarm.service.ControlSettingLiquidVO;
+import com.kt.smartfarm.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -199,13 +196,30 @@ public class ControlLogicSettingController {
         }
     }
 
+    @RequestMapping(value = "/{controlSettingId}/device_update", method = RequestMethod.PUT)
+    @ResponseBody
+    @InterceptPre
+    @InterceptLog
+    public Result<String> updateDeviceList(@PathVariable("controlSettingId") Long controlSettingId,@RequestBody List<ControlLogicSettingDeviceVO> voList) {
+        try {
+            log.info("device_update logic : {}", voList);
+            service.updateLogicSettingDeviceList(null, controlSettingId, voList);
+            // TODO : JSON
+            return new Result("Success");
+        } catch (Exception e) {
+            log.error("env update error : {}, {}", controlSettingId, voList, e);
+            return new Result(msg.getMessage("errors.ask_to_admin"), HttpStatus.CONFLICT , controlSettingId);
+        }
+    }
+
+
     @RequestMapping(value = "/{controlSettingId}/env_upudate", method = RequestMethod.PUT)
     @ResponseBody
     @InterceptPre
     @InterceptLog
     public Result<String> updateEnv(@PathVariable("controlSettingId") Long controlSettingId, @RequestBody Map<String, Object> param) {
         try {
-            log.error("env_upudate logic : {}", param);
+            log.info("env_upudate logic : {}", param);
             service.updateLogicSettingEnv(param);
             // TODO : JSON
             return new Result("Success");

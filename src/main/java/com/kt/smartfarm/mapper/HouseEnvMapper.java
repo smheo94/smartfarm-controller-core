@@ -15,16 +15,14 @@
  */
 package com.kt.smartfarm.mapper;
 
+import com.kt.smartfarm.service.*;
+import egovframework.rte.psl.dataaccess.mapper.Mapper;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.kt.smartfarm.service.*;
-import egovframework.rte.psl.dataaccess.mapper.Mapper;
-
-import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
 
 
 @Mapper("houseEnvMapper")
@@ -64,12 +62,12 @@ public interface HouseEnvMapper {
 	List<HouseProductVO> listHouseProduct(@Param("gsmKey")Long gsmKey, @Param("greenHouseId") Long greenHouseId, @Param("id")Long houseProductId);
 
 	Integer insertForecastData(LinkedHashMap<String, Object> hm);
-	Integer insertSunriseData(HashMap<String, Object> hm);
+//	Integer insertSunriseData(HashMap<String, Object> hm);
 	Integer insertUltraShortWeatherData(LinkedHashMap<String , Object> hm);
 	
 	List<HashMap<String, Object>> getWeatherCast(HashMap<String, Object> param);
 	List<HashMap<String, Object>> getWeatherCategory();
-	HashMap<String, Object> getSunriseInfo(Map<String, Object> map);
+//	HashMap<String, Object> getSunriseInfo(Map<String, Object> map);
 	
 	List<HashMap<String, Object>> getGroundDeviceList(Long houseId);
 	List<DeviceTypeVO> getHouseDeviceTypeList(Long houseId);
@@ -78,5 +76,11 @@ public interface HouseEnvMapper {
 	Integer copyToNewGSMMapGreenHouseDevice(@Param("from_gsm_key") Long fromGsmKey, @Param("to_gsm_key") Long toGsmKey );
 	Integer copyToNewGSMHouseProduct(@Param("from_gsm_key") Long fromGsmKey, @Param("to_gsm_key") Long toGsmKey );
 
+    void deleteOldWeatherData();
+	void deleteOldForecastData();
+	void deleteOldForecastDataV2();
+	void insertForecastV2Data(Map<String, Object> foreCastData);
+	List<HashMap<String, Object>> getWeatherCastV2(Map<String, Object> param);
 
+	UltraShortWeatherDataVO getUltraShortWeatherData(HashMap<String, Object> param);
 }

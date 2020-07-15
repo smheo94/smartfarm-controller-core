@@ -1467,28 +1467,38 @@ public class DateUtil {
 	}
 
 	public static String getDateStrOnly(Date date) {
-		if (date == null)
-			return "";
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		return sdf.format(date);
+	    return getDateStrOnly(date,"yyyy-MM-dd");
 	}
+    public static String getDateStrOnly(Date date, String format) {
+        if (date == null)
+            return "";
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        return sdf.format(date);
+    }
 
 	public static String getTimeStrOnly(long date) {
 		return getTimeStrOnly(new Date(date));
 	}
 
 	public static String getTimeStrOnly(Date date) {
-		if (date == null)
-			return "";
-		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-		return sdf.format(date);
+        return getTimeStrOnly(date,"HH:mm:ss");
 	}
+    public static String getTimeStrOnly(Date date, String format) {
+        if (date == null)
+            return "";
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        return sdf.format(date);
+    }
+
+    public static String getDateTimeStr(Date date, String format) {
+        if (date == null)
+            return "";
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        return sdf.format(date);
+    }
 
 	public static String getDateTimeStr(Date date) {
-		if (date == null)
-			return "";
-		SimpleDateFormat sdf = new SimpleDateFormat(GeneralDateTimeFormat);
-		return sdf.format(date);
+	    return getDateTimeStr(date,GeneralDateTimeFormat );
 	}
 	public static Date getDateFromStr(String dateTimeStr) {
 		try {
@@ -1594,4 +1604,6 @@ public class DateUtil {
 		return Date.from(dateTime.atZone(ZoneId.systemDefault())
 				.toInstant());
 	}
+
+
 }

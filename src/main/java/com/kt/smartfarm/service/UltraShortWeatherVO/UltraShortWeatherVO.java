@@ -24,9 +24,7 @@ public class UltraShortWeatherVO {
         VEC("vec"),
         VVV("vvv"),
         WSD("wsd");
-
         private String category;
-
         CategoryEnum(String pty) {
             this.category = pty;
         }

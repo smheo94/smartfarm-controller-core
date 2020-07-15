@@ -5,7 +5,7 @@
     <groupId>smartfarm.kt.com</groupId>
 	<artifactId>smartfarm-mgr-env</artifactId>
 	<packaging>war</packaging>
-	<version>3.7.0</version>
+	<version>3.0.1</version>
 	<name>smartfarm-mgr-env</name>
 	<url>http://www.egovframe.go.kr</url>
 	<properties>
@@ -461,19 +461,54 @@
                          <goal>build</goal>
                      </goals>
                  </execution>
+                <execution>
+                    <id>tag-version</id>
+                    <configuration>
+                        <tag>${project.version}</tag>
+                    </configuration>
+                    <phase>install</phase>
+                    <goals>
+                        <goal>tag</goal>
+                    </goals>
+                </execution>
+                <execution>
+                    <id>tag-latest</id>
+                    <configuration>
+                        <tag>latest</tag>
+                    </configuration>
+                    <phase>install</phase>
+                    <goals>
+                        <goal>tag</goal>
+                    </goals>
+                </execution>
                  <execution>
                      <id>push-image</id>
                      <phase>install</phase>
                      <goals>
                          <goal>push</goal>
                      </goals>
+                     <configuration>
+                         <tag>latest</tag>
+                     </configuration>
                  </execution>
+
+                    <execution>
+                        <id>push-image-version</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>push</goal>
+                        </goals>
+                        <configuration>
+                            <tag>${project.version}</tag>
+                        </configuration>
+                    </execution>
                 </executions>
                 <configuration> 
                     <username>argos</username>
                     <password>gksfutneh</password>
                     <repository>repo.docker.vivans.net/${project.artifactId}</repository>
-                    <!--<tag>${project.version}</tag>-->
+                    <tag>${project.version}</tag>
+                    <tag>latest</tag>
                     <buildArgs>
                         <WAR_FILE>${project.build.finalName}.war</WAR_FILE>
                     </buildArgs>

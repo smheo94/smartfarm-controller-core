@@ -54,6 +54,10 @@
 		<typeAlias alias="cctvMiniVMSVO" type="com.kt.smartfarm.service.CCTVMiniVMSVO"/>
 		<typeAlias alias="gsmConfigVO" type="com.kt.smartfarm.service.GsmConfigVO"/>
 		<typeAlias alias="gsmConfigWeatherVO" type="com.kt.smartfarm.service.GsmConfigWeatherVO"/>
+		<typeAlias alias="ultraShortWeatherDataVO" type="com.kt.smartfarm.service.UltraShortWeatherDataVO"/>
+
+
+
 
     </typeAliases>
 

@@ -23,7 +23,6 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -59,31 +58,26 @@ public class SmartfarmTaskScheduler {
 	@Scheduled(cron="0 15 2,5,8,11,14,17,20,23 * * *")
 	public void runWeatherSchedule(){
 		List<HashMap<String,Object>> houseList = new ArrayList<>();
-//		DateUtil dateUtil = new DateUtil();
-//		String regDay = dateUtil.getCurrentDateString();
-//		String regTimeString   = new java.text.SimpleDateFormat("HH").format(new java.util.Date());
-//		regTimeString = getBaseTime(regTimeString);
-
 		//시간계산이 복잡하여 단순화함
 		if(SYSTEM_TYPE.equalsIgnoreCase("supervisor")){
 			Calendar c = Calendar.getInstance();
 			int h = c.get(Calendar.HOUR_OF_DAY);
 			c.add(Calendar.HOUR_OF_DAY, -(h%3+1));
-	
-			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyyMMdd");
-			SimpleDateFormat sdf2 = new SimpleDateFormat("HH00");
-			String regDay = sdf1.format(c.getTime());
-			String regTimeString = sdf2.format(c.getTime());
-	
+			String regDay = DateUtil.getDateStrOnly(c.getTime(), "yyyyMMdd");
+			String regTimeString = DateUtil.getDateStrOnly(c.getTime(), "HH00");
+			houseEnvService.deleteOldForecastData();
 			houseList = houseEnvService.getAllList();
 			for(int i=0; i<houseList.size(); i++){
-				if(houseList.get(i).get("latitude") != null && houseList.get(i).get("longitude") != null){
-					Double longitude = Double.parseDouble(houseList.get(i).get("longitude").toString());
-					Double latitude = Double.parseDouble(houseList.get(i).get("latitude").toString());
+
+				HashMap<String, Object> house = houseList.get(i);
+				if(house.get("latitude") != null && house.get("longitude") != null){
+					Double longitude = Double.parseDouble(house.get("longitude").toString());
+					Double latitude = Double.parseDouble(house.get("latitude").toString());
 					HashMap<String,Object> gridXY = WeatherCastGPSUtil.getGridxy(latitude,longitude);
 					String nx = gridXY.get("x").toString();
 					String ny = gridXY.get("y").toString();
-					Long houseId = ClassUtil.castToSomething(houseList.get(i).get("id"), Long.class);
+					Long houseId = ClassUtil.castToSomething(house.get("id"), Long.class);
+
 					if(Integer.parseInt(nx) > 0 && Integer.parseInt(ny) >0){
 						try{
 							URL url = new URL(FORECAST_URL
@@ -121,25 +115,35 @@ public class SmartfarmTaskScheduler {
 	
 					        String baseDate = itemArray.getJSONObject(0).get("baseDate").toString();
 					        String baseTime = itemArray.getJSONObject(0).get("baseTime").toString();
-					      
+					        Map<String, LinkedHashMap<String,Object>> simpleForecastMap = new HashMap<>();
+
 				        	for(int j=0 ; j<itemArray.length();j++){
-					        	LinkedHashMap<String,Object> hm = new LinkedHashMap<String,Object>();
 					        	JSONObject item = itemArray.getJSONObject(j);
 					        	// 당일 예보가 아닌경우 break
 					        	if(item.get("fcstDate").equals(baseDate)){
 					        		break;
-					        	}				        	
-					        	hm.put("base_date", baseDate);//발표일자
-					        	hm.put("base_time", baseTime);//발표시각
-					        	hm.put("fcst_date", item.get("fcstDate").toString());//예보일자
-					        	hm.put("fcst_time", item.get("fcstTime").toString());//에보시각
-					        	hm.put("fcst_value", item.get("fcstValue").toString());//카테고리에 해당하는 예보 값
-					        	hm.put("nx", item.get("nx").toString());//예보지점 X좌표
-					        	hm.put("ny", item.get("ny").toString());//예보지점 Y좌표
-					        	hm.put("category", item.get("category").toString());
-					        	hm.put("house_id", houseId);
+					        	}
+								String forecastKey = item.get("fcstDate").toString() + item.get("fcstTime").toString();
+								LinkedHashMap<String,Object> hm = simpleForecastMap.getOrDefault(forecastKey, new LinkedHashMap<String,Object>() {
+									{
+										put("base_date", baseDate);//발표일자
+										put("base_time", baseTime);//발표시각
+										put("house_id", houseId);
+										put("fcst_date", item.get("fcstDate"));//예보일자
+										put("fcst_time", item.get("fcstTime"));//에보시각
+										put("nx", item.get("nx"));//예보지점 X좌표
+										put("ny", item.get("ny"));//예보지점 Y좌표
+										simpleForecastMap.put(forecastKey, this);
+									}
+								});
+					        	hm.put("fcst_value", item.get("fcstValue"));//카테고리에 해당하는 예보 값
+					        	hm.put("category", item.get("category"));
+					        	hm.put(item.get("category").toString(), item.get("fcstValue"));
 					        	houseEnvService.insertForecastData(hm);
-				        	}		        	
+				        	}
+				        	for(Map.Entry<String, LinkedHashMap<String,Object>> hmEntry : simpleForecastMap.entrySet()) {
+								houseEnvService.insertForecastV2Data(hmEntry.getValue());
+							}
 			        	}catch(Exception e){
 			        		log.debug(e.getMessage());
 			        	}
@@ -151,58 +155,59 @@ public class SmartfarmTaskScheduler {
 	
 		// 온실 리스트 가져와서 위경도 겹치는거 빼고 
 
-	@Scheduled(cron="0 1 0 * * *")
-	public void runSunriseSchedule(){
-		if(SYSTEM_TYPE.equalsIgnoreCase("supervisor")){
-			List<HashMap<String,Object>> houseList = new ArrayList<>();
-			DateUtil dateUtil = new DateUtil();
-			String regDay = DateUtil.getCurrentDateString();
-			houseList = houseEnvService.getAllList();
-			for(int i=0; i<houseList.size(); i++){
-				if(houseList.get(i).get("latitude") != null && houseList.get(i).get("longitude") != null){
-					HashMap<String,Object> hm = new HashMap<>();
-					Double longitude = Double.parseDouble(houseList.get(i).get("longitude").toString());
-					Double latitude = Double.parseDouble(houseList.get(i).get("latitude").toString());
-					
-					try{
-						URL url = new URL(SUNRISE_URL
-								+"?ServiceKey="+sunCertKey
-								+"&longitude="+longitude
-								+"&latitude="+latitude
-								+"&locdate="+regDay
-								+"&dnYn=Y"						
-								+"&_type=json"
-								);
-						HttpURLConnection http = (HttpURLConnection) url.openConnection();
-				        http.setConnectTimeout(10000);
-				        http.setUseCaches(false);
-				
-				        BufferedReader br = new BufferedReader(new InputStreamReader(http.getInputStream()));
-				        StringBuilder sb = new StringBuilder();
-				        while (true) {
-				            String line = br.readLine();
-				            if (line == null){
-				                break;
-				            }
-				            sb.append(line);
-				        }
-				        br.close();
-				        http.disconnect();
-				        
-				        JSONObject json = new JSONObject(sb.toString());
-				        JSONObject body = json.getJSONObject("response").getJSONObject("body").getJSONObject("items").getJSONObject("item");
-				        hm.put("house_id", houseList.get(i).get("id"));
-				        hm.put("sunrise", body.get("sunrise"));
-				        hm.put("sunset", body.get("sunset"));
-				        hm.put("loc_date", body.get("locdate").toString());
-				        houseEnvService.insertSunriseData(hm);
-					}catch(Exception e){
-						log.debug(e.getMessage());
-					}
-				}
-			}
-		}
-	}
+//	@Scheduled(cron="0 1 0 * * *")
+//	public void runSunriseSchedule(){
+//		if(SYSTEM_TYPE.equalsIgnoreCase("supervisor")){
+//			List<HashMap<String,Object>> houseList = new ArrayList<>();
+//			DateUtil dateUtil = new DateUtil();
+//			String regDay = DateUtil.getCurrentDateString();
+//			houseList = houseEnvService.getAllList();
+//			for(int i=0; i<houseList.size(); i++){
+//				HashMap<String, Object> house = houseList.get(i);
+//				if(house.get("latitude") != null && house.get("longitude") != null){
+//					HashMap<String,Object> hm = new HashMap<>();
+//					Double longitude = Double.parseDouble(house.get("longitude").toString());
+//					Double latitude = Double.parseDouble(house.get("latitude").toString());
+//
+//					try{
+//						URL url = new URL(SUNRISE_URL
+//								+"?ServiceKey="+sunCertKey
+//								+"&longitude="+longitude
+//								+"&latitude="+latitude
+//								+"&locdate="+regDay
+//								+"&dnYn=Y"
+//								+"&_type=json"
+//								);
+//						HttpURLConnection http = (HttpURLConnection) url.openConnection();
+//				        http.setConnectTimeout(10000);
+//				        http.setUseCaches(false);
+//
+//				        BufferedReader br = new BufferedReader(new InputStreamReader(http.getInputStream()));
+//				        StringBuilder sb = new StringBuilder();
+//				        while (true) {
+//				            String line = br.readLine();
+//				            if (line == null){
+//				                break;
+//				            }
+//				            sb.append(line);
+//				        }
+//				        br.close();
+//				        http.disconnect();
+//
+//				        JSONObject json = new JSONObject(sb.toString());
+//				        JSONObject body = json.getJSONObject("response").getJSONObject("body").getJSONObject("items").getJSONObject("item");
+//				        hm.put("house_id", house.get("id"));
+//				        hm.put("sunrise", body.get("sunrise"));
+//				        hm.put("sunset", body.get("sunset"));
+//				        hm.put("loc_date", body.get("locdate").toString());
+//				        houseEnvService.insertSunriseData(hm);
+//					}catch(Exception e){
+//						log.debug(e.getMessage());
+//					}
+//				}
+//			}
+//		}
+//	}
 
 
 
@@ -210,6 +215,7 @@ public class SmartfarmTaskScheduler {
 	public void runUltraShortWeatherSchedule() throws URISyntaxException {
 		log.info("Get ultraShortWeather Data...");
 		if(SYSTEM_TYPE.equalsIgnoreCase("supervisor")){
+			houseEnvService.deleteOldWeatherData();
 			List<HashMap<String,Object>> houseList = new ArrayList<>();
 			houseList = houseEnvService.getAllList();
 			LocalDateTime now = LocalDateTime.now();
@@ -219,22 +225,23 @@ public class SmartfarmTaskScheduler {
 			String baseTime = now.format(baseTimeFormatter);
 			HashMap<Double, Double> locationMap = new HashMap<>();
 			for(int i=0; i<houseList.size(); i++){
-				if(houseList.get(i).get("latitude") != null && houseList.get(i).get("longitude") != null){
-					Double longitude = Double.parseDouble(houseList.get(i).get("longitude").toString());
-					Double latitude = Double.parseDouble(houseList.get(i).get("latitude").toString());
+				HashMap<String, Object> house = houseList.get(i);
+				if(house.get("latitude") != null && house.get("longitude") != null){
+					Double longitude = Double.parseDouble(house.get("longitude").toString());
+					Double latitude = Double.parseDouble(house.get("latitude").toString());
 					//log.info("longitude: {} , latitude : {}", longitude, latitude);
 
 					//중복 제거
 					Double existLocation = locationMap.get(latitude);
 					//log.info("map 보자 : longitude : {}, latitude : {}", latitude, existLocation);
 					if(existLocation == null) {
-						//log.info("[UltraSrcNcst] NEW LOCATION HOUSE id : {}, greenHouseId : {}", houseList.get(i).get("id"));
+						//log.info("[UltraSrcNcst] NEW LOCATION HOUSE id : {}, greenHouseId : {}", house.get("id"));
 						locationMap.put(latitude, longitude);
 
 						HashMap<String,Object> gridXY = WeatherCastGPSUtil.getGridxy(latitude,longitude);
 						String nx = gridXY.get("x").toString();
 						String ny = gridXY.get("y").toString();
-						//log.info("[UltraSrcNcst] NEW LOCATION HOUSE id : {}, nx : {}, ny : {}",houseList.get(i).get("id"), nx, ny);
+						//log.info("[UltraSrcNcst] NEW LOCATION HOUSE id : {}, nx : {}, ny : {}",house.get("id"), nx, ny);
 
 						if(Integer.parseInt(nx) > 0 && Integer.parseInt(ny) >0){
 							try{

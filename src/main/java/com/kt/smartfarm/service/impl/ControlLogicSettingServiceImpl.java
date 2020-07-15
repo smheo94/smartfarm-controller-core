@@ -219,17 +219,7 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 			});
 		}
 		if (vo.getDeviceList() != null) {
-			vo.getDeviceList().size();
-			for (int i = 0, size = vo.getDeviceList().size(); i < size; i++) {
-				ControlLogicSettingDeviceVO device = vo.getDeviceList().get(i);
-				device.setControlSettingId(vo.getControlSettingId());
-				device.setTmpGsmKey(vo.tmpGsmKey);
-				Long id = device.getId();
-				int isExist = mapper.updateControlSettingDevice(device);
-				if (isExist == 0) {
-					mapper.insertControlSettingDevice(device);
-				}
-			}
+			updateLogicSettingDeviceList(vo.tmpGsmKey, vo.controlSettingId, vo.getDeviceList());
 		}
 
 		if( config.isSmartfarmSystem() ) {
@@ -241,6 +231,30 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 			}
 		}
 		return vo;
+	}
+
+
+	@Override
+	public void updateLogicSettingDeviceList(Long gsmKey, Long controlSettingId, List<ControlLogicSettingDeviceVO> voList) {
+		Long tmpGSMKey = gsmKey;
+		if( gsmKey == null )  {
+			List<ControlLogicSettingVO> dbSettingList = mapper.getControlLogicSetting(null, null, controlSettingId, null);
+			if( dbSettingList != null && dbSettingList.size() > 0 ) {
+				tmpGSMKey = dbSettingList.get(0).getTmpGsmKey();
+			}
+		}
+		mapper.deleteControlSettingDevice(null, controlSettingId);
+		for (int i = 0, size = voList.size(); i < size; i++) {
+			ControlLogicSettingDeviceVO device = voList.get(i);
+			device.setControlSettingId(controlSettingId);
+			device.setTmpGsmKey(tmpGSMKey);
+			mapper.insertControlSettingDevice(device);
+//			Long id = device.getId();
+//			int isExist = mapper.updateControlSettingDevice(device);
+//			if (isExist == 0) {
+//				mapper.insertControlSettingDevice(device);
+//			}
+		}
 	}
 
 	@Async
@@ -313,6 +327,8 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 	public int deleteControlSettingLiquid(Long id, Integer ownerUserIdx) {
 		return mapper.deleteControlSettingLiquid(id, ownerUserIdx);
 	}
+
+
 
 	@Override
 	public Integer copyToNewGSM(Long fromGsmKey, Long toGsmKey) {
