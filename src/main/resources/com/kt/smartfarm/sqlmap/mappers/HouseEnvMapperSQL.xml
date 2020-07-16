@@ -488,15 +488,15 @@
 		WHERE GH.gsm_key = #{from_gsm_key};
 	</insert>
 	<delete id="deleteOldForecastData">
-		DELETE FROM weather_cast WHERE  DATE_SUB(NOW(), INTERVAL 1 YEAR)  > base_date;
+		DELETE FROM weather_cast WHERE  DATE_SUB(NOW(), INTERVAL 1 YEAR)  <![CDATA[ > ]]> base_date;
 	</delete>
 
 	<delete id="deleteOldForecastDataV2">
-		DELETE FROM weather_cast_v2 WHERE DATE_SUB(NOW(), INTERVAL 1 YEAR > base_date );
+		DELETE FROM weather_cast_v2 WHERE DATE_SUB(NOW(), INTERVAL 1 YEAR) <![CDATA[ > ]]> base_date ;
 	</delete>
 
 	<delete id="deleteOldWeatherData">
-		DELETE FROM ultra_weather_cast WHERE DATE_SUB(NOW(), INTERVAL 1 YEAR > base_date );
+		DELETE FROM ultra_weather_cast WHERE DATE_SUB(NOW(), INTERVAL 1 YEAR) <![CDATA[ > ]]> base_date ;
 	</delete>
 
 
