@@ -49,6 +49,10 @@ public class UltraShortWeatherVO {
         hm.put("ny", items.get(0).getNy());
         for(UltraShortWeatherVOItem item : items){
             CategoryEnum catEnum = CategoryEnum.valueOf(item.getCategory());
+            if(item.getObsrValue() <= -900 || item.getObsrValue() >= 900 ) {
+                hm = null;
+                break;
+            }
             hm.put(catEnum.getCategory(), item.getObsrValue());
         }
         return hm;

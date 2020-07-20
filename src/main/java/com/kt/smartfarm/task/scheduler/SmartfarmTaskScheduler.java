@@ -229,19 +229,15 @@ public class SmartfarmTaskScheduler {
 				if(house.get("latitude") != null && house.get("longitude") != null){
 					Double longitude = Double.parseDouble(house.get("longitude").toString());
 					Double latitude = Double.parseDouble(house.get("latitude").toString());
-					//log.info("longitude: {} , latitude : {}", longitude, latitude);
 
 					//중복 제거
 					Double existLocation = locationMap.get(latitude);
-					//log.info("map 보자 : longitude : {}, latitude : {}", latitude, existLocation);
 					if(existLocation == null) {
-						//log.info("[UltraSrcNcst] NEW LOCATION HOUSE id : {}, greenHouseId : {}", house.get("id"));
 						locationMap.put(latitude, longitude);
 
 						HashMap<String,Object> gridXY = WeatherCastGPSUtil.getGridxy(latitude,longitude);
 						String nx = gridXY.get("x").toString();
 						String ny = gridXY.get("y").toString();
-						//log.info("[UltraSrcNcst] NEW LOCATION HOUSE id : {}, nx : {}, ny : {}",house.get("id"), nx, ny);
 
 						if(Integer.parseInt(nx) > 0 && Integer.parseInt(ny) >0){
 							try{
@@ -260,13 +256,12 @@ public class SmartfarmTaskScheduler {
 								String result = restTemplate.getForObject(uri, String.class);
 								ObjectMapper mapper = new ObjectMapper();
 								UltraShortWeatherVO ultraShortWeatherVO = mapper.readValue(result , UltraShortWeatherVO.class);
-								//log.info("URI : {}", uri.toString());
-								//log.info("result code : {}", ultraShortWeatherVO.getResponse().getHeader().getResultCode());
 								if(ultraShortWeatherVO.getResponse().getHeader().getResultCode().equals("00")){
 									LinkedHashMap<String, Object> ultraSrtMap = ultraShortWeatherVO.ultraOjbToMap(baseDate);
-									//log.info("baseTime : {}", baseTime);
-									//log.info("cast! : nx : {}, ny : {} , nx :{}, ny : {}", ultraSrtMap.get("nx"), ultraSrtMap.get("ny"), ultraShortWeatherVO.getResponse().getBody().getItems().getItem().get(0).getNx(), ultraShortWeatherVO.getResponse().getBody().getItems().getItem().get(0).getNy() );
-									houseEnvService.insertUltraShortWeather(ultraSrtMap);
+									if(!(ultraSrtMap == null)) {
+										houseEnvService.insertUltraShortWeather(ultraSrtMap);
+									}
+
 								}
 							}catch(Exception e){
 								log.error("run Ultra Short Ncst Exception : {}" , e);
