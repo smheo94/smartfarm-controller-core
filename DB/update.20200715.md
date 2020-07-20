@@ -28,4 +28,15 @@ CREATE TABLE `weather_cast_v2` (
 ) ENGINE=INNODB  DEFAULT CHARSET=utf8;
 
 ALTER TABLE `ultra_weather_cast` ADD KEY `idx_utra_weather_key` (`base_date`, `base_time`, `nx`, `ny`); 
-```
+
+# 관수 개선 - 펌프 개수 증설
+```sql 
+INSERT INTO `control_logic_device` (`id`, `logic_id`, `device_num`, `device_param_code`, `device_param_name`, `device_type`, `is_main`, `required`, `able_array`, `description`, `display_order`, `is_used`, `relative_device_num`, `last_update`) 
+VALUES (730044, '44', '16', 'pump3', '펌프2', 'AC', '0', '1', '1', NULL, '1', '1', NULL, '2020-06-06 14:33:41'); 
+UPDATE `control_logic_device` SET `device_param_name` = '펌프1' WHERE `id` = '44001'; 
+UPDATE `control_logic_device` SET `device_param_name` = '펌프3(흡입)' WHERE `id` = '44012'; 
+INSERT INTO `control_logic_device` (`id`, `logic_id`, `device_num`, `device_param_code`, `device_param_name`, `device_type`, `is_main`, `required`, `able_array`, `description`, `display_order`, `is_used`, `relative_device_num`, `last_update`) 
+VALUES (730049, '41', '14', 'pump3', '펌프2', 'AC', '0', '0', '0', NULL, '8', '1', NULL, '2020-06-06 11:43:06'); 
+UPDATE `control_logic_device` SET `device_param_name` = '펌프1' WHERE `id` = '410060'; 
+UPDATE `control_logic_device` SET `device_param_name` = '펌프3(흡입)' WHERE `id` = '410050';
+``` 

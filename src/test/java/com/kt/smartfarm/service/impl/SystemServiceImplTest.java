@@ -81,7 +81,7 @@ public class SystemServiceImplTest {
     @Test
     public void updateAny() {
         anyQueryTest(QUERY_TYPE.update.name(),
-                "");
+                "UPDATE control_setting_liquid SET watering_amt = 600;");
         assertTrue(true);
     }
 
