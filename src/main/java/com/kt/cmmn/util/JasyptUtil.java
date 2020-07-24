@@ -3,16 +3,14 @@ package com.kt.cmmn.util;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 
 public class JasyptUtil {
-
+    private static String algorithm = "PBEWithMD5AndDES";
     public static String encrypt(String text) {
-        String algorithm = "PBEWithMD5AndDES";
         //String password = "SMARTFARM-PASS";
         String password = null;
         return encrypt(algorithm, password, text);
     }
 
     public static String encrypt(String password, String text) {
-        String algorithm = "PBEWithMD5AndDES";
         return encrypt(algorithm, password, text);
     }
 
@@ -24,7 +22,7 @@ public class JasyptUtil {
     }
 
     public static String decrypt(String password, String encText) {
-        return decrypt("PBEWithMD5AndDES", password, encText);
+        return decrypt(algorithm, password, encText);
     }
     public static String decrypt(String algorithm, String password, String encText) {
         StandardPBEStringEncryptor pbeEnc = new StandardPBEStringEncryptor();
