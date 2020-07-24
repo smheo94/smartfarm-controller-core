@@ -1,22 +1,18 @@
 package com.kt.cmmn.util;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Locale;
-import java.util.TimeZone;
-
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.*;
 
 public class DateUtil {
 
@@ -1471,23 +1467,39 @@ public class DateUtil {
 	}
 
 	public static String getDateStrOnly(Date date) {
-		if (date == null)
-			return "";
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		return sdf.format(date);
+	    return getDateStrOnly(date,"yyyy-MM-dd");
 	}
+    public static String getDateStrOnly(Date date, String format) {
+        if (date == null)
+            return "";
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        return sdf.format(date);
+    }
 
 	public static String getTimeStrOnly(long date) {
 		return getTimeStrOnly(new Date(date));
 	}
 
 	public static String getTimeStrOnly(Date date) {
-		if (date == null)
-			return "";
-		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-		return sdf.format(date);
+        return getTimeStrOnly(date,"HH:mm:ss");
 	}
+    public static String getTimeStrOnly(Date date, String format) {
+        if (date == null)
+            return "";
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        return sdf.format(date);
+    }
 
+    public static String getDateTimeStr(Date date, String format) {
+        if (date == null)
+            return "";
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        return sdf.format(date);
+    }
+
+	public static String getDateTimeStr(Date date) {
+	    return getDateTimeStr(date,GeneralDateTimeFormat );
+	}
 	public static Date getDateFromStr(String dateTimeStr) {
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat(GeneralDateTimeFormat);
@@ -1592,4 +1604,6 @@ public class DateUtil {
 		return Date.from(dateTime.atZone(ZoneId.systemDefault())
 				.toInstant());
 	}
+
+
 }

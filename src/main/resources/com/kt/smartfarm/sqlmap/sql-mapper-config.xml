@@ -48,10 +48,16 @@
 		<typeAlias alias="controlLogicSettingCheckConditionVO" type="com.kt.smartfarm.service.ControlLogicSettingCheckConditionVO"/>
 		<typeAlias alias="controlSettingOperatorVO" type="com.kt.smartfarm.service.ControlSettingOperatorVO"/>
 		<typeAlias alias="diaryTypeVO" type="com.kt.smartfarm.service.DiaryTypeVO"/>
+		<typeAlias alias="diaryTypeAbleHouseVO" type="com.kt.smartfarm.service.DiaryTypeAbleHouseVO"/>
+
 		<typeAlias alias="cctv" type="com.kt.smartfarm.service.CCTVSettingVO"/>
 		<typeAlias alias="cctvMiniVMSVO" type="com.kt.smartfarm.service.CCTVMiniVMSVO"/>
 		<typeAlias alias="gsmConfigVO" type="com.kt.smartfarm.service.GsmConfigVO"/>
 		<typeAlias alias="gsmConfigWeatherVO" type="com.kt.smartfarm.service.GsmConfigWeatherVO"/>
+		<typeAlias alias="ultraShortWeatherDataVO" type="com.kt.smartfarm.service.UltraShortWeatherDataVO"/>
+
+
+
 
     </typeAliases>
 

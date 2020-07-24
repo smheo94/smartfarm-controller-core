@@ -159,17 +159,13 @@
  			farm_nickname_i18n as farmNicknameI18n, farm_db_id as farmDbId, category_id as categoryId, properties,
 			UNIX_TIMESTAMP(NOW()) AS readTime
 		FROM gsm_info
-		<if test="isSmartfarmSystem != true and authUserIdx != null and userInfoId == null and categoryId == null and farmName == null">
-			INNER JOIN vw_gsm_user_auth VGA ON VGA.gsm_key = gsm_info.gsm_key
-		</if>
 		<where>
+			<if test="isSmartfarmSystem != true and authUserIdx != null and userInfoId == null and categoryId == null and farmName == null">
+				gsm_info.gsm_key IN ( SELECT VGA.gsm_key FROM vw_gsm_user_auth VGA WHERE VGA.user_idx = #{authUserIdx} ) </if>
 			<if test="gsmKey != null"> AND gsm_info.gsm_key = #{gsmKey}</if>
 			<if test="userInfoId != null"> AND gsm_info.user_info_id = #{userInfoId}</if>
 			<if test="categoryId != null"> AND gsm_info.category_id = #{categoryId}</if>
 			<if test="farmName != null"> AND gsm_info.farm_nickname LIKE CONCAT('%', #{farmName}, '%')</if>
-			<if test="isSmartfarmSystem != true and authUserIdx != null and userInfoId == null and categoryId == null and farmName == null">
-				AND VGA.user_idx = #{authUserIdx}
-			</if>
 		</where>
 	</select>
 

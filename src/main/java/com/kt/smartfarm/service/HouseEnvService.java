@@ -1,10 +1,10 @@
 package com.kt.smartfarm.service;
 
+import org.springframework.stereotype.Component;
+
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-
-import org.springframework.stereotype.Component;
 
 @Component
 public interface HouseEnvService {	
@@ -22,8 +22,13 @@ public interface HouseEnvService {
 	List<HashMap<String, Object>> getAllList();
 	Integer insertForecastData(LinkedHashMap<String, Object> hm);
 	List<HashMap<String,Object>> getWeatherCast(Long houseId, String fromDate, String toDate, Boolean isSmartfarmSystem);
+
+	UltraShortWeatherDataVO getUltraShortWeatherData(Long houseId, Boolean isSmartfarmSystem);
+
+	List<HashMap<String,Object>> getWeatherCastV2(Long houseId, String fromDate, String toDate, Boolean isSmartfarmSystem);
+
 	List<HashMap<String,Object>> getWeatherCategory();
-	Integer insertSunriseData(HashMap<String, Object> hm);
+//	Integer insertSunriseData(HashMap<String, Object> hm);
 	Integer insertUltraShortWeather(LinkedHashMap<String, Object> ultraVO);
 
 	List<HashMap<String,Object>> groundDeviceList(Long houseId);
@@ -48,4 +53,11 @@ public interface HouseEnvService {
 	Integer deleteHouseProduct(Long gsmKey, Long houseId, Long houseProductId);
 
 	Integer updateMiniVmsHash(List<CCTVMiniVMSVO> miniVmsList);
+
+	void deleteOldForecastData();
+
+	void insertForecastV2Data(LinkedHashMap<String, Object> value);
+
+
+	void deleteOldWeatherData();
 }

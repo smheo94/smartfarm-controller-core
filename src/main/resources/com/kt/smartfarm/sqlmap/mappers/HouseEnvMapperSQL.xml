@@ -32,18 +32,6 @@
 		</selectKey>
 	</insert>
 
-<!--	ALTER TABLE  `green_house_product`-->
-<!--	CHANGE `gsm_key` `gsm_key` BIGINT(20) NULL COMMENT '제어기 키',-->
-<!--	ADD COLUMN IF NOT EXISTS `create_dt` DATETIME NULL COMMENT '입력날짜' AFTER `end_date`,-->
-<!--	ADD COLUMN IF NOT EXISTS `delete_dt` DATETIME NULL COMMENT '삭제날짜' AFTER `update_dt`,-->
-<!--	CHANGE `properties` `properties` VARCHAR(4096) CHARSET utf8 COLLATE utf8_general_ci NULL COMMENT '기타 하우스 속성',-->
-<!--	ADD COLUMN IF NOT EXISTS `planted_area` DOUBLE NULL COMMENT '면적(m2)' AFTER `properties`,-->
-<!--	ADD COLUMN IF NOT EXISTS `area_horizontal` DOUBLE NULL COMMENT '가로(m)' AFTER `planted_area`,-->
-<!--	ADD COLUMN IF NOT EXISTS `area_vertical` DOUBLE NULL COMMENT '세로(m)' AFTER `area_horizontal`,-->
-<!--	ADD COLUMN IF NOT EXISTS `plant_spacing` DOUBLE NULL COMMENT '재식간격' AFTER `area_vertical`,-->
-<!--	ADD COLUMN IF NOT EXISTS `per_tree` INT NULL COMMENT '주당수량' AFTER `plant_spacing`,-->
-<!--	ADD COLUMN IF NOT EXISTS `is_deleted` INT DEFAULT 0 NULL COMMENT '삭제 여부 ( 미사용 )' AFTER `per_tree`;-->
-
 	<insert id="insertHouseProduct" useGeneratedKeys="true" parameterType="houseProductVO">
 		INSERT INTO green_house_product (
 		 gsm_key, green_house_id, prd_code, start_date, end_date, properties, create_dt, id
@@ -206,23 +194,6 @@
 	    GROUP BY cpm.growth_level
 	    ORDER BY cpm.id
 	</select>
-	
-	<!-- 
-	<select id ="getHouseDetail" parameterType="map" resultType="map">
-		SELECT 
-			id, product_method_id, green_house_type_id, house_name,
-			latitude, longitude, description, build_date, last_update, addr_1,
-			addr_2, zip, nutrient_common_id, change_gh, change_temperature,
-			floor_space, house_horizontal, house_vertical, house_height,
-			plant_spacing, crop_cnt, house_direction, select_temp_sensor,
-			select_hum_sensor, gsm_key, house_name_i18n
-		FROM green_house
-		WHERE
-		 gsm_key = #{gsm_key}
-		 AND id = #{green_house_id}
-	</select>
-	 -->
-
 	 
 	<select id ="getHouseDetail" parameterType="map" resultType="map">
 		SELECT 
@@ -422,27 +393,7 @@
 	</insert>
 	
 	<select id="getWeatherCast" parameterType="map" resultType="map">
-	<!-- 	SELECT 
-			house_id,
-			base_date,
-			base_time,
-			fcst_date,
-			fcst_time,
-			fcst_value,
-			nx,
-			ny,
-			category
-		FROM weather_cast
-		WHERE 1=1
-			AND house_id = #{house_id}
-			<if test="from_date!=null">
-			AND fcst_date BETWEEN #{from_date} AND #{to_date}
-			</if>
-			<if test="from_date==null">
-			AND fcst_date BETWEEN NOW() AND NOW() + INTERVAL 1 DAY
-			</if>
-		ORDER BY id; -->
-		SELECT 
+		SELECT
 			house_id,
 			base_date,
 			base_time,
@@ -475,25 +426,25 @@
 	</select>	
 	
 	
-	<insert id="insertSunriseData" parameterType="map" useGeneratedKeys="true">
-		INSERT INTO sunrise_info(
-			house_id,loc_date,sunrise,sunset
-		)VALUES(
-			#{house_id},#{loc_date},#{sunrise},#{sunset}
-		)
-		<selectKey keyProperty="id" resultType="int">
-			SELECT LAST_INSERT_ID() AS id;
-		</selectKey>
-	</insert>
+<!--	<insert id="insertSunriseData" parameterType="map" useGeneratedKeys="true">-->
+<!--		INSERT INTO sunrise_info(-->
+<!--			house_id,loc_date,sunrise,sunset-->
+<!--		)VALUES(-->
+<!--			#{house_id},#{loc_date},#{sunrise},#{sunset}-->
+<!--		)-->
+<!--		<selectKey keyProperty="id" resultType="int">-->
+<!--			SELECT LAST_INSERT_ID() AS id;-->
+<!--		</selectKey>-->
+<!--	</insert>-->
 	
-	<select id="getSunriseInfo" parameterType="map" resultType="map">
-		SELECT house_id,loc_date,sunrise,sunset
-		FROM sunrise_info
-		WHERE 
-			loc_date = CURRENT_DATE()
-			AND house_id = #{green_house_id}
-	
-	</select>
+<!--	<select id="getSunriseInfo" parameterType="map" resultType="map">-->
+<!--		SELECT house_id,loc_date,sunrise,sunset-->
+<!--		FROM sunrise_info-->
+<!--		WHERE -->
+<!--			loc_date = CURRENT_DATE()-->
+<!--			AND house_id = #{green_house_id}-->
+<!--	-->
+<!--	</select>-->
 
 	<insert id="insertUltraShortWeatherData" parameterType="map" useGeneratedKeys="true">
 		INSERT INTO ultra_weather_cast(
@@ -537,4 +488,58 @@
 		INNER JOIN green_house GH on GH.id = D.green_house_id
 		WHERE GH.gsm_key = #{from_gsm_key};
 	</insert>
+	<delete id="deleteOldForecastData">
+		DELETE FROM weather_cast WHERE  DATE_SUB(NOW(), INTERVAL 1 YEAR)  <![CDATA[ > ]]> base_date;
+	</delete>
+
+	<delete id="deleteOldForecastDataV2">
+		DELETE FROM weather_cast_v2 WHERE DATE_SUB(NOW(), INTERVAL 1 YEAR) <![CDATA[ > ]]> base_date ;
+	</delete>
+
+	<delete id="deleteOldWeatherData">
+		DELETE FROM ultra_weather_cast WHERE DATE_SUB(NOW(), INTERVAL 1 YEAR) <![CDATA[ > ]]> base_date ;
+	</delete>
+
+
+	<insert id="insertForecastV2Data" parameterType="map" useGeneratedKeys="true">
+		INSERT INTO weather_cast_v2(
+		house_id, base_date, base_time, fcst_date, fcst_time, nx, ny, pop, pty, r06, reh, s06, sky, t3h, tmn, uuu, vec, vvv, wsd, tmx, wav
+		)VALUES(
+		#{house_id}, #{base_date}, #{base_time}, #{fcst_date}, #{fcst_time}, #{nx}, #{ny}, #{POP}, #{PTY}, #{R06}, #{REH}, #{S06}, #{SKY}, #{T3H}, #{TMN}, #{UUU}, #{VEC}, #{VVV}, #{WSD}, #{TMX}, #{WAV}
+		)
+		<selectKey keyProperty="id" resultType="int">
+			SELECT LAST_INSERT_ID() AS id;
+		</selectKey>
+	</insert>
+
+
+	<select id="getUltraShortWeatherData" parameterType="map" resultType="ultraShortWeatherDataVO">
+		SELECT
+		base_date, base_time, nx, ny, pty, reh, rn1, t1h, uuu, vec, vvv, wsd
+		FROM ultra_weather_cast
+		WHERE nx = #{nx} AND ny = #{ny}  AND base_date = CURRENT_DATE AND base_time BETWEEN DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 2 HOUR), '%H%i') AND DATE_FORMAT(NOW(),'%H%i')
+		ORDER BY base_date DESC, base_time DESC
+		LIMIT 1;
+	</select>
+
+	<select id="getWeatherCastV2" parameterType="map" resultType="map">
+		SELECT
+		house_id,base_date,base_time,fcst_date,fcst_time,fcst_value,nx,ny,
+		pop, pty, r06, reh, s06, sky, t3h, tmn, uuu, vec, vvv, wsd, tmx, wav
+		FROM weather_cast
+		WHERE id IN (
+			SELECT
+			MAX(id)
+			FROM weather_cast
+			WHERE house_id = #{house_id}
+			<if test="from_date != null">
+				AND fcst_date BETWEEN #{from_date} AND #{to_date}
+			</if>
+			<if test="from_date == null">
+				AND fcst_date BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL 3 DAY
+			</if>
+			GROUP BY house_id, fcst_date, fcst_time, category
+		)
+		ORDER BY id;
+	</select>
 </mapper>

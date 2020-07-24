@@ -5,52 +5,10 @@
     <groupId>smartfarm.kt.com</groupId>
 	<artifactId>smartfarm-mgr-env</artifactId>
 	<packaging>war</packaging>
-	<version>3.7.0</version>
+	<version>3.0.2</version>
 	<name>smartfarm-mgr-env</name>
 	<url>http://www.egovframe.go.kr</url>
-
-    <profiles>
-        <profile>
-            <id>dev-smartfarm</id>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-compiler-plugin</artifactId>
-                            <configuration>
-                                <excludes>**/SwaggerConfig.java</excludes>
-                                <source>1.8</source>
-                                <target>1.8</target>
-                                <encoding>UTF-8</encoding>
-                            </configuration>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-            </build>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-        </profile>
-        <profile>
-            <id>dev-center</id>
-            <dependencies>
-                <dependency>
-                    <groupId>io.springfox</groupId>
-                    <artifactId>springfox-swagger-ui</artifactId>
-                    <version>2.6.1</version>
-                </dependency>
-                <dependency>
-                    <groupId>io.springfox</groupId>
-                    <artifactId>springfox-swagger2</artifactId>
-                    <version>2.6.1</version>
-                </dependency>
-            </dependencies>
-        </profile>
-
-    </profiles>
 	<properties>
-        <!--<env>dev-center</env>-->
 		<!-- 컨텍스트 루트 지정 -->
 		<wtpContextName>/</wtpContextName>
 		<m2eclipse.wtp.contextRoot>/</m2eclipse.wtp.contextRoot>
@@ -111,6 +69,16 @@
 		    <groupId>egovframework.rte</groupId>
 		    <artifactId>egovframework.rte.psl.dataaccess</artifactId>
 		    <version>${egovframework.rte.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>2.6.1</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>2.6.1</version>
         </dependency>
 <!--        <dependency>-->
 <!--			<groupId>egovframework.rte</groupId>-->
@@ -493,19 +461,54 @@
                          <goal>build</goal>
                      </goals>
                  </execution>
+                <execution>
+                    <id>tag-version</id>
+                    <configuration>
+                        <tag>${project.version}</tag>
+                    </configuration>
+                    <phase>install</phase>
+                    <goals>
+                        <goal>tag</goal>
+                    </goals>
+                </execution>
+                <execution>
+                    <id>tag-latest</id>
+                    <configuration>
+                        <tag>latest</tag>
+                    </configuration>
+                    <phase>install</phase>
+                    <goals>
+                        <goal>tag</goal>
+                    </goals>
+                </execution>
                  <execution>
                      <id>push-image</id>
                      <phase>install</phase>
                      <goals>
                          <goal>push</goal>
                      </goals>
+                     <configuration>
+                         <tag>latest</tag>
+                     </configuration>
                  </execution>
+
+                    <execution>
+                        <id>push-image-version</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>push</goal>
+                        </goals>
+                        <configuration>
+                            <tag>${project.version}</tag>
+                        </configuration>
+                    </execution>
                 </executions>
                 <configuration> 
                     <username>argos</username>
                     <password>gksfutneh</password>
                     <repository>repo.docker.vivans.net/${project.artifactId}</repository>
-                    <!--<tag>${project.version}</tag>-->
+                    <tag>${project.version}</tag>
+                    <tag>latest</tag>
                     <buildArgs>
                         <WAR_FILE>${project.build.finalName}.war</WAR_FILE>
                     </buildArgs>

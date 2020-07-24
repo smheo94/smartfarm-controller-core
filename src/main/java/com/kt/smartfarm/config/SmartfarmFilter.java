@@ -1,25 +1,16 @@
 package com.kt.smartfarm.config;
 
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.DispatcherServlet;
-import org.springframework.web.util.ContentCachingResponseWrapper;
 import org.springframework.web.util.ContentCachingRequestWrapper;
+import org.springframework.web.util.ContentCachingResponseWrapper;
 
-import java.io.IOException;
-
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 public class SmartfarmFilter implements  javax.servlet.Filter {
-	
-	
+
 //    @Override
 //    protected void doDispatch(HttpServletRequest request, HttpServletResponse response) throws Exception {
 //        try {        	

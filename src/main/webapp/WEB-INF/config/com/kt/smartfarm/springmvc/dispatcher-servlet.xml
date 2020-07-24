@@ -25,23 +25,23 @@
     </bean>
      -->
      
-<!--     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">-->
-<!--&lt;!&ndash;        <property name="webBindingInitializer">&ndash;&gt;-->
-<!--&lt;!&ndash;            <bean class="com.kt.cmmn.web.EgovBindingInitializer"/>&ndash;&gt;-->
-<!--&lt;!&ndash;        </property>&ndash;&gt;-->
-<!--        <property name="messageConverters">-->
-<!--			<list>-->
-<!--				<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />-->
-<!--				<bean class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter" >-->
-<!--				    <property name = "supportedMediaTypes">-->
-<!--					    <list>-->
-<!--					        <value>*/*;charset=UTF-8</value>-->
-<!--					    </list>-->
-<!--					</property>-->
-<!--					</bean>-->
-<!--			</list>-->
-<!--		</property>-->
-<!--    </bean>-->
+     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+<!--        <property name="webBindingInitializer">-->
+<!--            <bean class="com.kt.cmmn.web.EgovBindingInitializer"/>-->
+<!--        </property>-->
+        <property name="messageConverters">
+			<list>
+				<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
+				<bean class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter" >
+				    <property name = "supportedMediaTypes">
+					    <list>
+					        <value>*/*;charset=UTF-8</value>
+					    </list>
+					</property>
+					</bean>
+			</list>
+		</property>
+    </bean>
 
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
 <!--        <property name="interceptors">-->

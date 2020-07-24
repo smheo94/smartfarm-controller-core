@@ -12,7 +12,6 @@
 		<Logger name="com.kt" level="INFO" additivity="false">
 			<AppenderRef ref="console" />
 		</Logger>
-		log SQL with timing information, post execution
 		<Logger name="jdbc.sqltiming" level="INFO" additivity="false">
 			<AppenderRef ref="console" />
 		</Logger>

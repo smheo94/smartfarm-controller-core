@@ -26,7 +26,7 @@ public class DiaryTypeVO {
 	String isBaseDiary;
 	String baseDiaryTypeId;
 	String userRoleDependType;
-	List<Long> ableHouseIdList;
+	List<DiaryTypeAbleHouseVO> ableHouseList;
 	List<DiaryTypePropertiesVO> propertyList;
 	public Map<String,Object> toMap() {
 		return ClassUtil.toHashMap(this);
