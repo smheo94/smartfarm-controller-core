@@ -150,7 +150,7 @@ public class ControlLogicSettingController {
             }
             voList.stream().filter(s -> StringUtils.isEmpty(s.updateSystem)).forEach(s -> s.updateSystem = config.SYSTEM_TYPE);
             List<ControlLogicSettingVO> resultList = new ArrayList<>();
-            voList.stream().forEach(vo -> resultList.add(service.insertLogicSetting(vo)));
+            voList.stream().forEachOrdered(vo -> resultList.add(service.insertLogicSetting(vo)));
             return new Result(resultList);
         } catch (Exception e) {
             log.error("logic new list error ", e);
@@ -171,7 +171,7 @@ public class ControlLogicSettingController {
             }
             voList.stream().filter(s -> StringUtils.isEmpty(s.updateSystem)).forEach(s -> s.updateSystem = config.SYSTEM_TYPE);
             List<ControlLogicSettingVO> resultList = new ArrayList<>();
-            voList.stream().forEach(vo -> resultList.add(service.updateLogicSetting(vo)));
+            voList.stream().forEachOrdered(vo -> resultList.add(service.updateLogicSetting(vo)));
             return new Result(resultList);
         } catch (Exception e) {
             log.error("update list error {}",voList, e);

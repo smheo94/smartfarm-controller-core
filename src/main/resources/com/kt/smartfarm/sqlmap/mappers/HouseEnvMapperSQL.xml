@@ -69,6 +69,7 @@
 		<if test="prdCode != null">,	prd_code = #{prdCode}</if>
 		<if test="startDate != null">,	start_date = #{startDate}</if>
 		<if test="endDate != null">,	end_date = #{endDate}</if>
+		<if test="isDeleted == null">,	is_deleted = 0</if>
 		<if test="isDeleted != null">,	is_deleted = #{isDeleted}</if>
 		<if test="properties != null">,	properties = '${@com.kt.cmmn.util.MapUtils@toJson(properties)}'</if>
 		WHERE id = #{id};
@@ -89,7 +90,7 @@
 			gsm_key, green_house_id, prd_code, start_date, end_date, properties, id
 		FROM green_house_product
 		<where>
-		    is_deleted = 0
+		    is_deleted != 1
 			<if test="gsmKey != null">AND gsm_key = #{gsmKey}</if>
 			<if test="greenHouseId != null">AND green_house_id = #{greenHouseId}</if>
 			<if test="id != null">AND id = #{id}</if>
