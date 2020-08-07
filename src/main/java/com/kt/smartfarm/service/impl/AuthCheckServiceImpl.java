@@ -98,6 +98,7 @@ public class AuthCheckServiceImpl extends EgovAbstractServiceImpl implements Aut
 		Integer isAllowUser = authCheckMapper.selectCheckAllowAuth2(param);
         return isAllowUser != null && isAllowUser > 0;
     }
+
 	public String getAuthUserIdx() {
 		final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if(authentication ==null)

@@ -46,14 +46,16 @@ public class SmartfarmTaskScheduler {
 	// 매시간 41분마다 API 데이터를 제공한다.
 	// 기준 시간은 
 	
-	static String FORECAST_URL = "http://newsky2.kma.go.kr/service/SecndSrtpdFrcstInfoService2/ForecastSpaceData";
-	static String weatherCertKey = "Y0VECgYwtbnfuvNYklX9OChRmOn3vCibz%2Fxe3YFrqoWiyCjkSnKRMpC9I6ybpZbHnKA5OxhNjyBGy28lrfomjQ%3D%3D";
+	static String FORECAST_URL =  "http://apis.data.go.kr/1360000/VilageFcstInfoService/getVilageFcst";
+	static String weatherCertKey = "RxrU3O5OC4pUiE6GEGShKBl181iacSPsFyXR32lZv0ohgQy6Frr5CRikB1qGdSVOZqHtX55VFoMoje2o3HJegg%3D%3D";
+	//static String weatherCertKey = "Y0VECgYwtbnfuvNYklX9OChRmOn3vCibz%2Fxe3YFrqoWiyCjkSnKRMpC9I6ybpZbHnKA5OxhNjyBGy28lrfomjQ%3D%3D";
 	
 	static String SUNRISE_URL = "http://apis.data.go.kr/B090041/openapi/service/RiseSetInfoService/getLCRiseSetInfo";
 	static String sunCertKey = "l%2FgDtDXE6ZralE2VJSrcon%2FKyKps%2FPANA9o497NfusyEYyei0Zv1fAWqJoxz8jaah7nv853ln7cxCWJypWOMLA%3D%3D";
 
 	static String ULTRASRTNCST_URL = "http://apis.data.go.kr/1360000/VilageFcstInfoService/getUltraSrtNcst";
 	static String ultraCertKey = "RxrU3O5OC4pUiE6GEGShKBl181iacSPsFyXR32lZv0ohgQy6Frr5CRikB1qGdSVOZqHtX55VFoMoje2o3HJegg%3D%3D";
+
 
 	@Scheduled(cron="0 15 2,5,8,11,14,17,20,23 * * *")
 	public void runWeatherSchedule(){
@@ -67,8 +69,8 @@ public class SmartfarmTaskScheduler {
 			String regTimeString = DateUtil.getDateStrOnly(c.getTime(), "HH00");
 			houseEnvService.deleteOldForecastData();
 			houseList = houseEnvService.getAllList();
+			Map<String,JSONObject> positionJson = new HashMap<>();
 			for(int i=0; i<houseList.size(); i++){
-
 				HashMap<String, Object> house = houseList.get(i);
 				if(house.get("latitude") != null && house.get("longitude") != null){
 					Double longitude = Double.parseDouble(house.get("longitude").toString());
@@ -77,83 +79,92 @@ public class SmartfarmTaskScheduler {
 					String nx = gridXY.get("x").toString();
 					String ny = gridXY.get("y").toString();
 					Long houseId = ClassUtil.castToSomething(house.get("id"), Long.class);
-
+					String positionKey = nx +"_" + ny;
 					if(Integer.parseInt(nx) > 0 && Integer.parseInt(ny) >0){
-						try{
-							URL url = new URL(FORECAST_URL
-									+"?ServiceKey="+weatherCertKey
-									+"&base_date="+regDay
-									+"&base_time="+regTimeString
-									+"&numOfRows=1000"
-									+"&nx="+nx
-									+"&ny="+ny
-									+"&_type=json"
-									);
-						 	HttpURLConnection http = (HttpURLConnection) url.openConnection();
-					        http.setConnectTimeout(10000);
-					        http.setUseCaches(false);
-					
-					        BufferedReader br = new BufferedReader(new InputStreamReader(http.getInputStream()));
-					        StringBuilder sb = new StringBuilder();
-					        while (true) {
-					            String line = br.readLine();
-					            if (line == null){
-					                break;
-					            }
-					            sb.append(line);
-					        }
-					        br.close();
-					        http.disconnect();
-					        
-					        JSONObject json = new JSONObject(sb.toString());
-					        if(!json.getJSONObject("response").getJSONObject("header").get("resultCode").toString().equals("0000")){
-					        	continue;
-					        }
-					        JSONObject body = json.getJSONObject("response").getJSONObject("body");
-					        JSONObject items = body.getJSONObject("items");
-					        JSONArray itemArray = items.getJSONArray("item");
-	
-					        String baseDate = itemArray.getJSONObject(0).get("baseDate").toString();
-					        String baseTime = itemArray.getJSONObject(0).get("baseTime").toString();
-					        Map<String, LinkedHashMap<String,Object>> simpleForecastMap = new HashMap<>();
+						if( positionJson.containsKey(positionKey)) {
+							insertForeCastFromJson(houseId, positionJson.get(positionKey));
+						} else {
+							try {
+								URL url = new URL(FORECAST_URL
+										+ "?serviceKey=" + weatherCertKey
+										+ "&dataType=JSON"
+										+ "&base_date=" + regDay
+										+ "&base_time=" + regTimeString
+										+ "&numOfRows=100"
+										+ "&nx=" + nx
+										+ "&ny=" + ny
+								);
+								HttpURLConnection http = (HttpURLConnection) url.openConnection();
+								http.setConnectTimeout(10000);
+								http.setUseCaches(false);
 
-				        	for(int j=0 ; j<itemArray.length();j++){
-					        	JSONObject item = itemArray.getJSONObject(j);
-					        	// 당일 예보가 아닌경우 break
-					        	if(item.get("fcstDate").equals(baseDate)){
-					        		break;
-					        	}
-								String forecastKey = item.get("fcstDate").toString() + item.get("fcstTime").toString();
-								LinkedHashMap<String,Object> hm = simpleForecastMap.getOrDefault(forecastKey, new LinkedHashMap<String,Object>() {
-									{
-										put("base_date", baseDate);//발표일자
-										put("base_time", baseTime);//발표시각
-										put("house_id", houseId);
-										put("fcst_date", item.get("fcstDate"));//예보일자
-										put("fcst_time", item.get("fcstTime"));//에보시각
-										put("nx", item.get("nx"));//예보지점 X좌표
-										put("ny", item.get("ny"));//예보지점 Y좌표
-										simpleForecastMap.put(forecastKey, this);
+								BufferedReader br = new BufferedReader(new InputStreamReader(http.getInputStream()));
+								StringBuilder sb = new StringBuilder();
+								while (true) {
+									String line = br.readLine();
+									if (line == null) {
+										break;
 									}
-								});
-					        	hm.put("fcst_value", item.get("fcstValue"));//카테고리에 해당하는 예보 값
-					        	hm.put("category", item.get("category"));
-					        	hm.put(item.get("category").toString(), item.get("fcstValue"));
-					        	houseEnvService.insertForecastData(hm);
-				        	}
-				        	for(Map.Entry<String, LinkedHashMap<String,Object>> hmEntry : simpleForecastMap.entrySet()) {
-								houseEnvService.insertForecastV2Data(hmEntry.getValue());
+									sb.append(line);
+								}
+								br.close();
+								http.disconnect();
+								JSONObject json = new JSONObject(sb.toString());
+
+								if (insertForeCastFromJson(houseId, json)) continue;
+							} catch (Exception e) {
+								log.debug(e.getMessage());
 							}
-			        	}catch(Exception e){
-			        		log.debug(e.getMessage());
-			        	}
+						}
 					}				
 				}
 			}
 		}
 	}
-	
-		// 온실 리스트 가져와서 위경도 겹치는거 빼고 
+
+	private boolean insertForeCastFromJson(Long houseId, JSONObject json) {
+		if(!json.getJSONObject("response").getJSONObject("header").get("resultCode").toString().equals("00")){
+			return true;
+		}
+		JSONObject body = json.getJSONObject("response").getJSONObject("body");
+		JSONObject items = body.getJSONObject("items");
+		JSONArray itemArray = items.getJSONArray("item");
+
+		String baseDate = itemArray.getJSONObject(0).get("baseDate").toString();
+		String baseTime = itemArray.getJSONObject(0).get("baseTime").toString();
+		Map<String, LinkedHashMap<String,Object>> simpleForecastMap = new HashMap<>();
+
+		for(int j=0 ; j<itemArray.length();j++){
+			JSONObject item = itemArray.getJSONObject(j);
+//					        	// 당일 예보가 아닌경우 break ( 상관있나? )
+//					        	if(!item.get("fcstDate").equals(baseDate)){
+//					        		break;
+//					        	}
+			String forecastKey = item.get("fcstDate").toString() + item.get("fcstTime").toString();
+			LinkedHashMap<String,Object> hm = simpleForecastMap.getOrDefault(forecastKey, new LinkedHashMap<String,Object>() {
+				{
+					put("base_date", baseDate);//발표일자
+					put("base_time", baseTime);//발표시각
+					put("house_id", houseId);
+					put("fcst_date", item.get("fcstDate"));//예보일자
+					put("fcst_time", item.get("fcstTime"));//에보시각
+					put("nx", item.get("nx"));//예보지점 X좌표
+					put("ny", item.get("ny"));//예보지점 Y좌표
+					simpleForecastMap.put(forecastKey, this);
+				}
+			});
+			hm.put("fcst_value", item.get("fcstValue"));//카테고리에 해당하는 예보 값
+			hm.put("category", item.get("category"));
+			hm.put(item.get("category").toString(), item.get("fcstValue"));
+			houseEnvService.insertForecastData(hm);
+		}
+		for(Map.Entry<String, LinkedHashMap<String,Object>> hmEntry : simpleForecastMap.entrySet()) {
+			houseEnvService.insertForecastV2Data(hmEntry.getValue());
+		}
+		return false;
+	}
+
+	// 온실 리스트 가져와서 위경도 겹치는거 빼고
 
 //	@Scheduled(cron="0 1 0 * * *")
 //	public void runSunriseSchedule(){
@@ -238,8 +249,10 @@ public class SmartfarmTaskScheduler {
 						HashMap<String,Object> gridXY = WeatherCastGPSUtil.getGridxy(latitude,longitude);
 						String nx = gridXY.get("x").toString();
 						String ny = gridXY.get("y").toString();
-
+						String positionKey = nx +"_" + ny;
 						if(Integer.parseInt(nx) > 0 && Integer.parseInt(ny) >0){
+
+
 							try{
 								URI uri = new URI(ULTRASRTNCST_URL
 										+"?serviceKey=" + ultraCertKey

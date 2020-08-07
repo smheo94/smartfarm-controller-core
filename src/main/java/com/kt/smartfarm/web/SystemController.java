@@ -83,4 +83,9 @@ public class SystemController {
         return new Result(profile);
     }
 
+    @RequestMapping(value = "/time/", method = RequestMethod.GET)
+    @ResponseBody
+    public Result<Long> systemtime() {
+        return new Result<>(System.currentTimeMillis());
+    }
 }
