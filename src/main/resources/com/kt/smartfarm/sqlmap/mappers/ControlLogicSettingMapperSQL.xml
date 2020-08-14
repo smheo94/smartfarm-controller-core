@@ -291,7 +291,7 @@
 
 
     <insert id="insertControlSettingDevice" parameterType="controlLogicSettingDeviceVO" useGeneratedKeys="true">
-        INSERT INTO control_setting_device ( gsm_key, control_setting_id, logic_id, device_num, device_insert_order, device_id, id  )
+        REPLACE INTO control_setting_device ( gsm_key, control_setting_id, logic_id, device_num, device_insert_order, device_id, id  )
         VALUES( #{tmpGsmKey}, #{controlSettingId}, #{logicId}, #{deviceNum}, #{deviceInsertOrder}, #{deviceId}
         <if test="id == null">
             ,NEXTVAL_control_setting_device(#{tmpGsmKey})

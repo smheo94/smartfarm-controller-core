@@ -50,8 +50,8 @@ public class SmartfarmTaskScheduler {
 	static String weatherCertKey = "RxrU3O5OC4pUiE6GEGShKBl181iacSPsFyXR32lZv0ohgQy6Frr5CRikB1qGdSVOZqHtX55VFoMoje2o3HJegg%3D%3D";
 	//static String weatherCertKey = "Y0VECgYwtbnfuvNYklX9OChRmOn3vCibz%2Fxe3YFrqoWiyCjkSnKRMpC9I6ybpZbHnKA5OxhNjyBGy28lrfomjQ%3D%3D";
 	
-	static String SUNRISE_URL = "http://apis.data.go.kr/B090041/openapi/service/RiseSetInfoService/getLCRiseSetInfo";
-	static String sunCertKey = "l%2FgDtDXE6ZralE2VJSrcon%2FKyKps%2FPANA9o497NfusyEYyei0Zv1fAWqJoxz8jaah7nv853ln7cxCWJypWOMLA%3D%3D";
+//	static String SUNRISE_URL = "http://apis.data.go.kr/B090041/openapi/service/RiseSetInfoService/getLCRiseSetInfo";
+//	static String sunCertKey = "l%2FgDtDXE6ZralE2VJSrcon%2FKyKps%2FPANA9o497NfusyEYyei0Zv1fAWqJoxz8jaah7nv853ln7cxCWJypWOMLA%3D%3D";
 
 	static String ULTRASRTNCST_URL = "http://apis.data.go.kr/1360000/VilageFcstInfoService/getUltraSrtNcst";
 	static String ultraCertKey = "RxrU3O5OC4pUiE6GEGShKBl181iacSPsFyXR32lZv0ohgQy6Frr5CRikB1qGdSVOZqHtX55VFoMoje2o3HJegg%3D%3D";
@@ -84,41 +84,45 @@ public class SmartfarmTaskScheduler {
 						if( positionJson.containsKey(positionKey)) {
 							insertForeCastFromJson(houseId, positionJson.get(positionKey));
 						} else {
-							try {
-								URL url = new URL(FORECAST_URL
-										+ "?serviceKey=" + weatherCertKey
-										+ "&dataType=JSON"
-										+ "&base_date=" + regDay
-										+ "&base_time=" + regTimeString
-										+ "&numOfRows=100"
-										+ "&nx=" + nx
-										+ "&ny=" + ny
-								);
-								HttpURLConnection http = (HttpURLConnection) url.openConnection();
-								http.setConnectTimeout(10000);
-								http.setUseCaches(false);
-
-								BufferedReader br = new BufferedReader(new InputStreamReader(http.getInputStream()));
-								StringBuilder sb = new StringBuilder();
-								while (true) {
-									String line = br.readLine();
-									if (line == null) {
-										break;
-									}
-									sb.append(line);
-								}
-								br.close();
-								http.disconnect();
-								JSONObject json = new JSONObject(sb.toString());
-
-								if (insertForeCastFromJson(houseId, json)) continue;
-							} catch (Exception e) {
-								log.debug(e.getMessage());
-							}
+							getWeatherCastData(regDay, regTimeString, nx, ny, houseId);
 						}
 					}				
 				}
 			}
+		}
+	}
+
+	private void getWeatherCastData(String regDay, String regTimeString, String nx, String ny, Long houseId) {
+		try {
+			URL url = new URL(FORECAST_URL
+					+ "?serviceKey=" + weatherCertKey
+					+ "&dataType=JSON"
+					+ "&base_date=" + regDay
+					+ "&base_time=" + regTimeString
+					+ "&numOfRows=100"
+					+ "&nx=" + nx
+					+ "&ny=" + ny
+			);
+			HttpURLConnection http = (HttpURLConnection) url.openConnection();
+			http.setConnectTimeout(10000);
+			http.setUseCaches(false);
+
+			BufferedReader br = new BufferedReader(new InputStreamReader(http.getInputStream()));
+			StringBuilder sb = new StringBuilder();
+			while (true) {
+				String line = br.readLine();
+				if (line == null) {
+					break;
+				}
+				sb.append(line);
+			}
+			br.close();
+			http.disconnect();
+			JSONObject json = new JSONObject(sb.toString());
+
+			if (insertForeCastFromJson(houseId, json)) return;
+		} catch (Exception e) {
+			log.debug(e.getMessage());
 		}
 	}
 
@@ -251,41 +255,43 @@ public class SmartfarmTaskScheduler {
 						String ny = gridXY.get("y").toString();
 						String positionKey = nx +"_" + ny;
 						if(Integer.parseInt(nx) > 0 && Integer.parseInt(ny) >0){
-
-
-							try{
-								URI uri = new URI(ULTRASRTNCST_URL
-										+"?serviceKey=" + ultraCertKey
-										+"&pageNo=1"
-										+"&numOfRows=10"
-										+"&dataType=JSON"
-										+"&base_date="+baseDate
-										+"&base_time="+baseTime
-										+"&nx=" + nx
-										+"&ny="+ny
-								);
-								RestTemplate restTemplate = new RestTemplate();
-								RestClientUtil.setIgnoreCertificateSSL(restTemplate);
-								String result = restTemplate.getForObject(uri, String.class);
-								ObjectMapper mapper = new ObjectMapper();
-								UltraShortWeatherVO ultraShortWeatherVO = mapper.readValue(result , UltraShortWeatherVO.class);
-								if(ultraShortWeatherVO.getResponse().getHeader().getResultCode().equals("00")){
-									LinkedHashMap<String, Object> ultraSrtMap = ultraShortWeatherVO.ultraOjbToMap(baseDate);
-									if(!(ultraSrtMap == null)) {
-										houseEnvService.insertUltraShortWeather(ultraSrtMap);
-									}
-
-								}
-							}catch(Exception e){
-								log.error("run Ultra Short Ncst Exception : {}" , e);
-							}
+							getUltraShortWeather(baseDate, baseTime, nx, ny);
 						}
 					}
 				}
 			}
 		}
 	}
-	
+
+	private void getUltraShortWeather(String baseDate, String baseTime, String nx, String ny) {
+		try{
+			URI uri = new URI(ULTRASRTNCST_URL
+					+"?serviceKey=" + ultraCertKey
+					+"&pageNo=1"
+					+"&numOfRows=10"
+					+"&dataType=JSON"
+					+"&base_date="+baseDate
+					+"&base_time="+baseTime
+					+"&nx=" + nx
+					+"&ny="+ny
+			);
+			RestTemplate restTemplate = new RestTemplate();
+			RestClientUtil.setIgnoreCertificateSSL(restTemplate);
+			String result = restTemplate.getForObject(uri, String.class);
+			ObjectMapper mapper = new ObjectMapper();
+			UltraShortWeatherVO ultraShortWeatherVO = mapper.readValue(result , UltraShortWeatherVO.class);
+			if(ultraShortWeatherVO.getResponse().getHeader().getResultCode().equals("00")){
+				LinkedHashMap<String, Object> ultraSrtMap = ultraShortWeatherVO.ultraOjbToMap(baseDate);
+				if(!(ultraSrtMap == null)) {
+					houseEnvService.insertUltraShortWeather(ultraSrtMap);
+				}
+
+			}
+		}catch(Exception e){
+			log.error("run Ultra Short Ncst Exception : {}" , e);
+		}
+	}
+
 	private String getBaseTime(String regTimeString) {
 		final int[] standardTime = {2, 5, 8, 11, 14, 17, 20, 23};
 		String regTimeToString="";

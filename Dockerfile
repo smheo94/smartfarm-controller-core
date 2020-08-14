@@ -7,6 +7,9 @@ RUN export TZ=Asia/Seoul
 ADD docker/.sf.k.d /etc/.sf.k
 ADD docker/.sf.k.z /home/gsm/.sf.k
 ADD docker/.sf.k.a /usr/local/etc/.sf.k
+ADD DB/update.20200715.md /var/file/
+ADD DB/update.20200806.md /var/file/
+
 RUN sed -i "s,</Host>,<Valve className=\"org.apache.catalina.valves.ErrorReportValve\" showReport=\"false\" showServerInfo=\"false\" errorCode.400=\"/common/error.jsp\" /></Host>,g" /usr/local/tomcat/conf/server.xml
 #redirectPort=\"8443\" />.redirectPort=\"8443\"  URIEncoding=\"UTF-8\" relaxedQueryChars='[]\|{}^&#x5c;&#x60;&quot;&lt;&gt;' />.g" /usr/local/tomcat/conf/server.xml
 RUN echo "tomcat.util.http.parser.HttpParser.requestTargetAllow=|{}"  >> /usr/local/tomcat/conf/catalina.properties

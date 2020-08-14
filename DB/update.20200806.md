@@ -19,3 +19,24 @@ DELETE FROM `control_logic_property_lnk` WHERE `logic_id` = '70' AND `properties
 DELETE FROM `control_logic_property_lnk` WHERE `logic_id` = '70' AND `properties_id` = '700040' AND `is_period` = '2' AND `manual_command_num` = '0'; 
 DELETE FROM `control_logic_property_lnk` WHERE `logic_id` = '70' AND `properties_id` = '700045' AND `is_period` = '2' AND `manual_command_num` = '0'; 
 ```
+
+# 생육일지 프로퍼티 추가 
+```
+INSERT INTO `cd_diary_depend_mclass` (`diary_type_id`, `depend_mclasscode`) VALUES ('5010', '1209'); 
+INSERT INTO `cd_diary_depend_mclass` (`diary_type_id`, `depend_mclasscode`) VALUES ('5011', '1201'); 
+INSERT INTO `cd_diary_depend_mclass` (`diary_type_id`, `depend_mclasscode`) VALUES ('5013', '0659'); 
+INSERT INTO `cd_diary_depend_mclass` (`diary_type_id`, `depend_mclasscode`) VALUES ('5012', '1201'); 
+INSERT INTO `cd_diary_depend_mclass` (`diary_type_id`, `depend_mclasscode`) VALUES ('5014', '1001'); 
+INSERT INTO `cd_diary_depend_mclass` (`diary_type_id`, `depend_mclasscode`) VALUES ('5015', '0601'); 
+INSERT INTO `cd_diary_depend_mclass` (`diary_type_id`, `depend_mclasscode`) VALUES ('5016', '1202'); 
+INSERT INTO `cd_diary_depend_mclass` (`diary_type_id`, `depend_mclasscode`) VALUES ('5017', '0614'); 
+UPDATE `cd_diary_depend_mclass` SET `depend_type` = 'ACCESS' WHERE `diary_type_id` = '5010' AND `depend_mclasscode` = '1209'; 
+UPDATE `cd_diary_depend_mclass` SET `depend_type` = 'ACCESS' WHERE `diary_type_id` = '5011' AND `depend_mclasscode` = '1201'; 
+UPDATE `cd_diary_depend_mclass` SET `depend_type` = 'ACCESS' WHERE `diary_type_id` = '5012' AND `depend_mclasscode` = '1201'; 
+UPDATE `cd_diary_depend_mclass` SET `depend_type` = 'ACCESS' WHERE `diary_type_id` = '5013' AND `depend_mclasscode` = '0659'; 
+UPDATE `cd_diary_depend_mclass` SET `depend_type` = 'ACCESS' WHERE `diary_type_id` = '5014' AND `depend_mclasscode` = '1001'; 
+UPDATE `cd_diary_depend_mclass` SET `depend_type` = 'ACCESS' WHERE `diary_type_id` = '5015' AND `depend_mclasscode` = '0601'; 
+UPDATE `cd_diary_depend_mclass` SET `depend_type` = 'ACCESS' WHERE `diary_type_id` = '5016' AND `depend_mclasscode` = '1202'; 
+UPDATE `cd_diary_depend_mclass` SET `depend_type` = 'ACCESS' WHERE `diary_type_id` = '5017' AND `depend_mclasscode` = '0614'; 
+
+```
