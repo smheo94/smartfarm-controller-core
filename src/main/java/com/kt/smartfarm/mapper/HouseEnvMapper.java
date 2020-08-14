@@ -61,10 +61,10 @@ public interface HouseEnvMapper {
 	Integer deleteHouseProduct(@Param("gsmKey")Long gsmKey, @Param("greenHouseId") Long greenHouseId, @Param("id")Long houseProductId);
 	List<HouseProductVO> listHouseProduct(@Param("gsmKey")Long gsmKey, @Param("greenHouseId") Long greenHouseId, @Param("id")Long houseProductId);
 
-	Integer insertForecastData(LinkedHashMap<String, Object> hm);
+	Integer insertForecastData(Map<String, Object> hm);
 //	Integer insertSunriseData(HashMap<String, Object> hm);
-	Integer insertUltraShortWeatherData(LinkedHashMap<String , Object> hm);
-
+	Integer insertUltraShortWeatherData(Map<String , Object> hm);
+	Integer deleteUltraShortWeatherData(Map<String , Object> hm);
 	Integer getWeatherConfigExists();
 	
 	List<HashMap<String, Object>> getWeatherCast(HashMap<String, Object> param);

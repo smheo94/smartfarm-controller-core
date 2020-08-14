@@ -338,6 +338,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 
 	@Override
 	public Integer insertUltraShortWeather(LinkedHashMap<String, Object> hm){
+		houseEnvMapper.deleteUltraShortWeatherData(hm);
 		return houseEnvMapper.insertUltraShortWeatherData(hm);
 	}
 

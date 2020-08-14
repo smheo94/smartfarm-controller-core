@@ -17,6 +17,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.PostConstruct;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -225,7 +226,6 @@ public class SmartfarmTaskScheduler {
 //	}
 
 
-
 	@Scheduled(cron="0 10,40 * * * *")
 	public void runUltraShortWeatherSchedule() throws URISyntaxException {
 		log.info("Get ultraShortWeather Data...");
@@ -274,6 +274,7 @@ public class SmartfarmTaskScheduler {
 					+"&dataType=JSON"
 					+"&base_date="+baseDate
 					+"&base_time="+baseTime
+					//+"&base_time=2100"
 					+"&nx=" + nx
 					+"&ny="+ny
 			);
@@ -287,7 +288,6 @@ public class SmartfarmTaskScheduler {
 				if(!(ultraSrtMap == null)) {
 					houseEnvService.insertUltraShortWeather(ultraSrtMap);
 				}
-
 			}
 		}catch(Exception e){
 			log.error("run Ultra Short Ncst Exception : {}" , e);

@@ -449,6 +449,10 @@
 	<select id="getWeatherConfigExists" resultType="Integer">
 		SELECT COUNT(gsm_key) FROM gsm_config_weather WHERE ext_type = 'kma';
 	</select>
+	<delete id="deleteUltraShortWeatherData" parameterType="map">
+		DELETE FROM ultra_weather_cast
+		WHERE base_date = #{base_date} AND  base_time = #{base_time} AND nx = #{nx} AND ny = #{ny};
+	</delete>
 	<insert id="insertUltraShortWeatherData" parameterType="map" useGeneratedKeys="true">
 		INSERT INTO ultra_weather_cast(
 		 base_date, base_time, nx, ny, pty, reh, rn1, t1h, uuu, vec, vvv, wsd
@@ -519,8 +523,9 @@
 	<select id="getUltraShortWeatherData" parameterType="map" resultType="ultraShortWeatherDataVO">
 		SELECT
 		base_date, base_time, nx, ny, pty, reh, rn1, t1h, uuu, vec, vvv, wsd
-		FROM ultra_weather_cast
-		WHERE nx = #{nx} AND ny = #{ny}  AND base_date = CURRENT_DATE AND base_time BETWEEN DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 2 HOUR), '%H%i') AND DATE_FORMAT(NOW(),'%H%i')
+		FROM ultra_weather_cast A
+		WHERE nx = #{nx} AND ny = #{ny}
+		AND CONCAT(DATE(base_date),' ',  SUBSTRING(base_time, 1, 2), ':', SUBSTRING(base_time, 3, 2), ':00') > DATE_SUB(NOW(), INTERVAL 2 HOUR)
 		ORDER BY base_date DESC, base_time DESC
 		LIMIT 1;
 	</select>
