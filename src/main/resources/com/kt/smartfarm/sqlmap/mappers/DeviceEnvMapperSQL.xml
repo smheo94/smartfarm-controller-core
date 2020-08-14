@@ -31,7 +31,7 @@
 		</if>
 		)
 	 	<selectKey keyProperty="id" resultType ="long">
-	   		SELECT LASTVAL_device(#{gsmKey}) AS id;
+			SELECT <if test="id != null">#{id}</if><if test="id == null">LASTVAL_device(#{gsmKey})</if> AS id;
 	    </selectKey>
 	</insert>
 
@@ -159,7 +159,7 @@
 			<if test="id != null">,#{id}</if>
 		);
 		<selectKey keyProperty="id" resultType ="long">
-			SELECT LASTVAL_device_v_dep_device((SELECT gsm_key FROM device WHERE id = #{deviceId})) AS id;
+			SELECT <if test="id != null">#{id}</if><if test="id == null">LASTVAL_device_v_dep_device((SELECT gsm_key FROM device WHERE id = #{deviceId}))</if> AS id;
 		</selectKey>
 	</insert>
 
@@ -239,7 +239,7 @@
 		);
 
 		<selectKey keyProperty="id" resultType ="long">
-			SELECT LASTVAL_device_electric_dep_device((SELECT gsm_key FROM device WHERE id = #{deviceId})) AS id;
+			SELECT <if test="id != null">#{id}</if><if test="id == null">LASTVAL_device_electric_dep_device((SELECT gsm_key FROM device WHERE id = #{deviceId}))</if> AS id;
 		</selectKey>
 	</insert>
 

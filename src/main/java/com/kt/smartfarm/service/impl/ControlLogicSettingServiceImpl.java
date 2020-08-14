@@ -21,9 +21,9 @@ import com.kt.cmmn.util.GSMUtil;
 import com.kt.cmmn.util.MapUtils;
 import com.kt.cmmn.util.RestClientUtil;
 import com.kt.smartfarm.config.SmartfarmInterceptorConfig;
-import com.kt.smartfarm.service.*;
 import com.kt.smartfarm.mapper.ControlLogicSettingMapper;
 import com.kt.smartfarm.mapper.HouseEnvMapper;
+import com.kt.smartfarm.service.*;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -219,7 +219,9 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 			});
 		}
 		if (vo.getDeviceList() != null) {
-			updateLogicSettingDeviceList(vo.tmpGsmKey, vo.controlSettingId, vo.getDeviceList());
+			if(!config.isSmartfarmSystem()) {
+				updateLogicSettingDeviceList(vo.tmpGsmKey, vo.controlSettingId, vo.getDeviceList());
+			}
 		}
 
 		if( config.isSmartfarmSystem() ) {
