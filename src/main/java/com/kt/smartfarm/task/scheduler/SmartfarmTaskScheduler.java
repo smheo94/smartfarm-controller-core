@@ -229,7 +229,7 @@ public class SmartfarmTaskScheduler {
 	@Scheduled(cron="0 40 0/1 * * *")
 	public void runUltraShortWeatherSchedule() throws URISyntaxException {
 		log.info("Get ultraShortWeather Data...");
-		if(SYSTEM_TYPE.equalsIgnoreCase("supervisor")){
+		if(SYSTEM_TYPE.equalsIgnoreCase("supervisor") || houseEnvService.getWeatherConfigExists() > 0 ){
 			houseEnvService.deleteOldWeatherData();
 			List<HashMap<String,Object>> houseList = new ArrayList<>();
 			houseList = houseEnvService.getAllList();

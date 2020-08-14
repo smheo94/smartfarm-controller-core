@@ -211,6 +211,9 @@ public class GsmEnvServiceImpl extends EgovAbstractServiceImpl implements GsmEnv
 
 	@Override
 	public GsmConfigVO updateGSMConfig(GsmConfigVO gsmConfigVO) {
+		if( smartfarmConfig.isSmartfarmSystem() && gsmConfigVO.getGsmKey() == null ) {
+			gsmConfigVO.setGsmKey(Long.valueOf(smartfarmConfig.GSM_KEY));
+		}
 		gsmEnvMapper.updateGSMConfig(gsmConfigVO);
 		gsmEnvMapper.deleteGSMConfigWeather(gsmConfigVO);
 		if(gsmConfigVO.extWeather != null && gsmConfigVO.extWeather.size() > 0 ) {

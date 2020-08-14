@@ -458,6 +458,12 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 	public void deleteOldWeatherData() {
 		houseEnvMapper.deleteOldWeatherData();
 	}
+
+	@Override
+	public Integer getWeatherConfigExists() {
+		return houseEnvMapper.getWeatherConfigExists();
+	}
+
 	@Override
 	public void insertForecastV2Data(LinkedHashMap<String, Object> foreCastData) {
 		houseEnvMapper.insertForecastV2Data(foreCastData);

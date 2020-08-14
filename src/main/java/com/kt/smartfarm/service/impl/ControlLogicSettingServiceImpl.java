@@ -243,6 +243,18 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 				tmpGSMKey = dbSettingList.get(0).getTmpGsmKey();
 			}
 		}
+		HashMap<Long, Integer> idCount = new HashMap<>();
+		for (int i = 0, size = voList.size(); i < size; i++) {
+			ControlLogicSettingDeviceVO sd = voList.get(i);
+			Integer count = idCount.getOrDefault(sd.getId(),null);
+			if( count == null ) {
+				idCount.put(sd.getId(), new Integer(1));
+			} else {
+				//TODO : 꼭 고쳐
+				return;
+			}
+		}
+
 		mapper.deleteControlSettingDevice(null, controlSettingId);
 		for (int i = 0, size = voList.size(); i < size; i++) {
 			ControlLogicSettingDeviceVO device = voList.get(i);

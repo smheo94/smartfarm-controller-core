@@ -286,7 +286,7 @@
 		WHERE mghd.green_house_id = #{houseId}			
 	</select>
 	
-	<select id="getGroundDeviceList" parameterType="Long" resultType="map">
+	<select id="getGroundDeviceList" parameterType="Long" resultType="HashMap">
 		SELECT device.* ,cpt.device_type AS dt, cpt.device_type_group AS dtg
 		FROM map_green_house_device  AS mghd
 		INNER JOIN device ON device.id = mghd.device_id
@@ -392,7 +392,7 @@
 		</selectKey>
 	</insert>
 	
-	<select id="getWeatherCast" parameterType="map" resultType="map">
+	<select id="getWeatherCast" parameterType="map" resultType="HashMap">
 		SELECT
 			house_id,
 			base_date,
@@ -420,7 +420,7 @@
 		)
 		ORDER BY id;
 	</select>
-	<select id="getWeatherCategory" resultType="map">
+	<select id="getWeatherCategory" resultType="HashMap">
 		SELECT id, category, category_desc, sub_category_desc, unit
 		FROM cd_weather_category_type		
 	</select>	
@@ -446,6 +446,9 @@
 <!--	-->
 <!--	</select>-->
 
+	<select id="getWeatherConfigExists" resultType="Integer">
+		SELECT COUNT(gsm_key) FROM gsm_config_weather WHERE ext_type = 'kma';
+	</select>
 	<insert id="insertUltraShortWeatherData" parameterType="map" useGeneratedKeys="true">
 		INSERT INTO ultra_weather_cast(
 		 base_date, base_time, nx, ny, pty, reh, rn1, t1h, uuu, vec, vvv, wsd
@@ -522,7 +525,7 @@
 		LIMIT 1;
 	</select>
 
-	<select id="getWeatherCastV2" parameterType="map" resultType="map">
+	<select id="getWeatherCastV2" parameterType="map" resultType="HashMap">
 		SELECT
 		house_id,base_date,base_time,fcst_date,fcst_time,fcst_value,nx,ny,
 		pop, pty, r06, reh, s06, sky, t3h, tmn, uuu, vec, vvv, wsd, tmx, wav
