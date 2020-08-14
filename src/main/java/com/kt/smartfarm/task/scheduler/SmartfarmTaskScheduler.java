@@ -226,9 +226,10 @@ public class SmartfarmTaskScheduler {
 
 
 
-	@Scheduled(cron="0 40 0/1 * * *")
+	@Scheduled(cron="0 10,40 * * * *")
 	public void runUltraShortWeatherSchedule() throws URISyntaxException {
 		log.info("Get ultraShortWeather Data...");
+		Long start = System.currentTimeMillis();
 		if(SYSTEM_TYPE.equalsIgnoreCase("supervisor") || houseEnvService.getWeatherConfigExists() > 0 ){
 			houseEnvService.deleteOldWeatherData();
 			List<HashMap<String,Object>> houseList = new ArrayList<>();
@@ -261,6 +262,7 @@ public class SmartfarmTaskScheduler {
 				}
 			}
 		}
+		log.info("Get ultraShortWeather Data Don ... : {}", System.currentTimeMillis() - start);
 	}
 
 	private void getUltraShortWeather(String baseDate, String baseTime, String nx, String ny) {

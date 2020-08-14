@@ -18,14 +18,17 @@ package com.kt.smartfarm.web;
 import com.kt.cmmn.util.Result;
 import com.kt.smartfarm.config.Message;
 import com.kt.smartfarm.service.SystemService;
+import com.kt.smartfarm.task.scheduler.SmartfarmTaskScheduler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -87,5 +90,20 @@ public class SystemController {
     @ResponseBody
     public Result<Long> systemtime() {
         return new Result<>(System.currentTimeMillis());
+    }
+
+    @Autowired
+    SmartfarmTaskScheduler taskScheduler;
+
+    @PreAuthorize("hasRole('ROLE_SYS')")
+    @ResponseBody
+    public void RunSchedule(String schedulerName)  {
+        if( "UltraWeather".equalsIgnoreCase(schedulerName)) {
+            try {
+                taskScheduler.runUltraShortWeatherSchedule();
+            } catch (URISyntaxException e) {
+                log.error("Run Ultra Weater Error : {}", e);
+            }
+        }
     }
 }
