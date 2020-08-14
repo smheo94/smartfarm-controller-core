@@ -28,7 +28,7 @@
 		</if>
 		);
 		<selectKey keyProperty="id" resultType="long">
-			SELECT LASTVAL_green_house(#{gsmKey}) AS id;
+			SELECT <if test="id != null">#{id}</if><if test="id == null">LASTVAL_green_house(#{gsmKey})</if> AS id;
 		</selectKey>
 	</insert>
 
@@ -48,7 +48,7 @@
 		</if>
 		);
 		<selectKey keyProperty="id" resultType="long">
-			SELECT LASTVAL_green_house_product(#{gsmKey}) AS id;
+			SELECT <if test="id != null">#{id}</if><if test="id == null">LASTVAL_green_house_product(#{gsmKey})</if> AS id;
 		</selectKey>
 	</insert>
 	<update id="updateHouseProduct" parameterType="houseProductVO">

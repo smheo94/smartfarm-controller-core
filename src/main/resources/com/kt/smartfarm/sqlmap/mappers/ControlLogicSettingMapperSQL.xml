@@ -271,7 +271,7 @@
         </if>
         );
         <selectKey keyProperty="id" resultType="Long" keyColumn="id">
-            SELECT LASTVAL_control_setting_chk_condition(#{tmpGsmKey}) AS id;
+            SELECT <if test="id != null">#{id}</if><if test="id == null">LASTVAL_control_setting_chk_condition(#{tmpGsmKey})</if> AS id;
         </selectKey>
     </insert>
     <update id="updateControlSettingChkCondition" parameterType="controlLogicSettingCheckConditionVO">
@@ -301,7 +301,7 @@
         </if>
         );
         <selectKey keyProperty="id" resultType="Long" keyColumn="id">
-            SELECT LASTVAL_control_setting_device(#{tmpGsmKey}) AS id;
+            SELECT <if test="id != null">#{id}</if><if test="id == null">LASTVAL_control_setting_device(#{tmpGsmKey})</if> AS id;
         </selectKey>
     </insert>
     <update id="updateControlSettingDevice" parameterType="controlLogicSettingDeviceVO">
@@ -354,7 +354,7 @@
         </if>
         );
         <selectKey keyProperty="controlSettingId" resultType="Long" keyColumn="id">
-            SELECT LASTVAL_control_setting(#{tmpGsmKey}) AS id;
+            SELECT <if test="controlSettingId != null">#{controlSettingId}</if><if test="controlSettingId == null">LASTVAL_control_setting(#{tmpGsmKey})</if> AS id;
         </selectKey>
     </insert>
     <update id="updateControlSetting" parameterType="controlLogicSettingVO">

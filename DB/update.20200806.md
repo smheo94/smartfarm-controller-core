@@ -40,3 +40,10 @@ UPDATE `cd_diary_depend_mclass` SET `depend_type` = 'ACCESS' WHERE `diary_type_i
 UPDATE `cd_diary_depend_mclass` SET `depend_type` = 'ACCESS' WHERE `diary_type_id` = '5017' AND `depend_mclasscode` = '0614'; 
 
 ```
+
+
+# 컴프레셔/밸브 별개 입력
+``
+UPDATE `control_logic_device` SET `device_param_name` = '컴프레셔밸브/펌프' , `able_array` = '1' WHERE `id` = '67003'; 
+```
+

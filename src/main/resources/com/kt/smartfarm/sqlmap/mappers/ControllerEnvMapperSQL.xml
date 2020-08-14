@@ -32,7 +32,7 @@
 		</if>
 		);
 		<selectKey keyProperty="id" resultType="long">
-			SELECT LASTVAL_controller(#{gsmKey}) AS id;
+			SELECT <if test="id != null">#{id}</if><if test="id == null">LASTVAL_controller(#{gsmKey})</if> AS id;
 		</selectKey>
 	</insert>
 
