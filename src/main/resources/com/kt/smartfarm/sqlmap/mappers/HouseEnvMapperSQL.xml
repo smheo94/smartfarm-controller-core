@@ -520,7 +520,8 @@
 		SELECT
 		base_date, base_time, nx, ny, pty, reh, rn1, t1h, uuu, vec, vvv, wsd
 		FROM ultra_weather_cast
-		WHERE nx = #{nx} AND ny = #{ny}  AND base_date = CURRENT_DATE AND base_time BETWEEN DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 2 HOUR), '%H%i') AND DATE_FORMAT(NOW(),'%H%i')
+		WHERE nx = #{nx} AND ny = #{ny}
+		  AND CONCAT(DATE(base_date),' ',  SUBSTRING(base_time, 1, 2), ':', SUBSTRING(base_time, 3, 2), ':00') > DATE_SUB(NOW(), INTERVAL 2 HOUR)
 		ORDER BY base_date DESC, base_time DESC
 		LIMIT 1;
 	</select>
