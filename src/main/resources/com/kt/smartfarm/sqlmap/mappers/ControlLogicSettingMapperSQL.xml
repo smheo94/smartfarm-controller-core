@@ -419,6 +419,21 @@
     </update>
 
 
+    <delete id="deleteControlSettingByGSMKey">
+        DELETE FROM control_setting WHERE gsm_key = #{gsmKey};
+    </delete>
+    <delete id="deleteControlSettingChkConditionByGSMKey">
+        DELETE FROM control_setting_chk_condition WHERE gsm_key = #{gsmKey};
+    </delete>
+    <delete id="deleteControlSettingChkConditionDeviceByGSMKey">
+        DELETE FROM control_setting_chk_condition_device WHERE gsm_key = #{gsmKey};
+    </delete>
+    <delete id="deleteControlSettingDeviceByGSMKey">
+        DELETE FROM control_setting_device WHERE gsm_key = #{gsmKey};
+    </delete>
+    <delete id="deleteControlSettingPreOrderByGSMKey">
+        DELETE FROM control_setting_pre_order WHERE gsm_key = #{gsmKey};
+    </delete>
     <insert id="copyToNewGSMContolSetting">
         INSERT INTO control_setting
           (id, gsm_key, green_house_id, logic_name, logic_id, logic_period_size, logic_env, logic_period_env, create_dt, update_dt, auto_manual_mode, java_class_name, control_status, view_order)

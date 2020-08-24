@@ -18,7 +18,6 @@ package com.kt.smartfarm.mapper;
 import com.kt.smartfarm.service.*;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
@@ -60,7 +59,11 @@ public interface ControlLogicSettingMapper {
 	Integer updateControlSettingEnv(Map<String, Object> param);
 	Integer deleteControlSetting(@Param("control_setting_id") Long controlSettingId);
 	Integer delChkConditionSetting(Long chkConditionId);
-
+	Integer deleteControlSettingByGSMKey(@Param("gsmKey") Long gsmKey);
+	Integer deleteControlSettingChkConditionByGSMKey(@Param("gsmKey") Long gsmKey);
+	Integer deleteControlSettingChkConditionDeviceByGSMKey(@Param("gsmKey") Long gsmKey);
+	Integer deleteControlSettingDeviceByGSMKey(@Param("gsmKey") Long gsmKey);
+	Integer deleteControlSettingPreOrderByGSMKey(@Param("gsmKey") Long gsmKey);
 	Integer copyToNewGSMContolSetting(@Param("from_gsm_key") Long fromGsmKey, @Param("to_gsm_key") Long toGsmKey );
 	Integer copyToNewGSMContolSettingCheckCondition(@Param("from_gsm_key") Long fromGsmKey, @Param("to_gsm_key") Long toGsmKey );
 	Integer copyToNewGSMContolSettingCheckConditionDevice(@Param("from_gsm_key") Long fromGsmKey, @Param("to_gsm_key") Long toGsmKey );

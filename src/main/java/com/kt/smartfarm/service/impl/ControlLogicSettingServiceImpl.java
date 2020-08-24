@@ -219,9 +219,9 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 			});
 		}
 		if (vo.getDeviceList() != null) {
-			if(!config.isSmartfarmSystem()) {
+			//if(!config.isSmartfarmSystem()) {
 				updateLogicSettingDeviceList(vo.tmpGsmKey, vo.controlSettingId, vo.getDeviceList());
-			}
+			//}
 		}
 
 		if( config.isSmartfarmSystem() ) {
@@ -248,6 +248,9 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 		HashMap<Long, Integer> idCount = new HashMap<>();
 		for (int i = 0, size = voList.size(); i < size; i++) {
 			ControlLogicSettingDeviceVO sd = voList.get(i);
+			if( sd.getId() == null ) {
+				continue;
+			}
 			Integer count = idCount.getOrDefault(sd.getId(),null);
 			if( count == null ) {
 				idCount.put(sd.getId(), new Integer(1));
@@ -346,6 +349,16 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 
 	@Override
 	public Integer copyToNewGSM(Long fromGsmKey, Long toGsmKey) {
+		try {
+			mapper.deleteControlSettingByGSMKey(toGsmKey);
+			mapper.deleteControlSettingChkConditionByGSMKey(toGsmKey);
+			mapper.deleteControlSettingChkConditionDeviceByGSMKey(toGsmKey);
+			mapper.deleteControlSettingDeviceByGSMKey(toGsmKey);
+			mapper.deleteControlSettingPreOrderByGSMKey(toGsmKey);
+		} catch (Exception e) {
+			log.warn("copyToNew Error : ", e);
+		}
+
 		Integer result = mapper.copyToNewGSMContolSetting(fromGsmKey,toGsmKey);
 		mapper.copyToNewGSMContolSettingCheckCondition(fromGsmKey,toGsmKey);
 		mapper.copyToNewGSMContolSettingCheckConditionDevice(fromGsmKey,toGsmKey);
