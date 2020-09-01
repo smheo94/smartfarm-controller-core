@@ -228,8 +228,8 @@
     , CDT.device_type, CDT.device_type_group, CDT.device_type_name, CDT.kind, CDT.dcac
     FROM control_setting_device CSD
     INNER JOIN control_logic_device CLD ON CLD.logic_id = CSD.logic_id AND CLD.device_num = CSD.device_num
-    INNER JOIN device D ON D.id = CSD.device_id
-    INNER JOIN cd_device_type CDT ON CDT.id = D.device_type_id
+    LEFT JOIN device D ON D.id = CSD.device_id
+    LEFT JOIN cd_device_type CDT ON CDT.id = D.device_type_id
     WHERE CSD.control_setting_id = #{control_setting_id}
     ORDER BY CSD.device_num, CSD.device_insert_order;
     </select>
