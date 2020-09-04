@@ -17,7 +17,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import javax.annotation.PostConstruct;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -262,7 +261,7 @@ public class SmartfarmTaskScheduler {
 				}
 			}
 		}
-		log.info("Get ultraShortWeather Data Don ... : {}", System.currentTimeMillis() - start);
+		log.info("Get ultraShortWeather Data Done ... : {}", System.currentTimeMillis() - start);
 	}
 
 	private void getUltraShortWeather(String baseDate, String baseTime, String nx, String ny) {

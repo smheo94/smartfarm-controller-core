@@ -310,7 +310,7 @@
         </resources>
         <defaultGoal>package</defaultGoal>
         <directory>${basedir}/target</directory>
-        <finalName>${artifactId}-${version}</finalName>
+        <finalName>${project.artifactId}-${project.version}</finalName>
         <pluginManagement>
             <plugins>
 <!--                <plugin>-->
