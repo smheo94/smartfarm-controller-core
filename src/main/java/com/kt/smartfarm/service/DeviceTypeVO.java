@@ -60,5 +60,6 @@ public class DeviceTypeVO {
 	Integer accumH;
 	Integer accumD;
 	Integer opTime;
-	Integer valueType;	
+	Integer valueType;
+	String valueMod;
 }

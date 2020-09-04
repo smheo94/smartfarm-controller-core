@@ -29,12 +29,12 @@ public class DeviceEnvVO {
 	String nickname;
 	String deviceTypeNickname;
 	String description;
-	String setupDate;
-	Integer xPosition;
-	Integer yPosition;
-	Integer x2Position;
-	Integer y2Position;
-	String memo;
+//	String setupDate;
+//	Integer xPosition;
+//	Integer yPosition;
+//	Integer x2Position;
+//	Integer y2Position;
+//	String memo;
 	String modbusAddress1;
 	String modbusAddress2;
 	String modbusAddress3;
@@ -53,12 +53,13 @@ public class DeviceEnvVO {
 	String valueExchange;
 
 	Integer roundNumber;
-	String topicGroup;
-	Double resetPoint;
+//	String topicGroup;
+//	Double resetPoint;
 	Integer accumM;
 	Integer accumH;
 	Integer accumD;
 	Integer opTime;
+	String valueMod;
 	Integer valueType;
 	Map<String,Object> properties;
 //	String properties;

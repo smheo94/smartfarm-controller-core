@@ -68,13 +68,13 @@
 
 	<select id="list" parameterType="map" resultMap="deviceEnvVOMap">
 		SELECT 
-			device.id, device_type_id, device_type_idx, user_info_id, gsm_key,
-		    device.green_house_id, controller_id, nickname, device_type_nickname,
-			device.description, setup_date, x_position, y_position, x2_position,
-			y2_position, memo, modbus_address1, modbus_address2, modbus_address3,
-			`mode`, update_date, auto_manual_mode, `status`, properties
+			device.id, device_type_id, device_type_idx, gsm_key,
+		    device.green_house_id,
+		    controller_id, nickname, device_type_nickname,
+			modbus_address1, modbus_address2, modbus_address3,
+		    update_date, auto_manual_mode, `status`, properties
 			,CDT.device_type, CDT.device_type_group, CDT.device_type_name, CDT.description AS device_type_description, CDT.kind, CDT.dcac
-			,CDT.round_number,CDT.topic_group,CDT.reset_point,CDT.accum_m,CDT.accum_h,CDT.accum_d,CDT.op_time,CDT.value_type
+			,CDT.round_number,CDT.accum_m,CDT.accum_h,CDT.accum_d,CDT.op_time,CDT.value_mod, CDT.value_type
 			,CDT.opmode_error, CDT.value_exchange, CDT.sensing_timeout
 		FROM device
 		INNER JOIN cd_device_type CDT ON CDT.id = device.device_type_id
@@ -98,7 +98,7 @@
 			manufacturer, model_name, model_spec, model_version, is_master,
 			use_house_type, default_address1, default_address2, default_address3,
 			dcac, min_value, MAX_VALUE, description_i18n, device_type_name_i18n,unit,
-			round_number,topic_group,reset_point,accum_m,accum_h,accum_d,op_time,value_type
+			round_number,topic_group,reset_point,accum_m,accum_h,accum_d,op_time,value_type,value_mod
 		FROM cd_device_type
 		<where>
 		<if test="kind != null" >
