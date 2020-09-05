@@ -31,6 +31,18 @@ import javax.servlet.http.HttpServletRequest;
 @EnableWebSecurity
 //@PropertySource(value={"classpath:application.properties","file:/myapp/application.properties","file:/home/gsm/v4/conf/smartfarm-mgr-env.properties"}, ignoreResourceNotFound=true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+	static {
+		java.security.Security.setProperty("networkaddress.cache.ttl" , "60");
+	}
+
+	@Value("${security.oauth2.client.client2-pattern}")
+	public String client2Pattern;
+	@Value("${security.oauth2.client.client-id2}")
+	public String clientId2;
+	@Value("${security.oauth2.client.client-secret2}")
+	public String clientSecret2;
+	@Value("${security.oauth2.resource.token-info-uri2}")
+	public String tokenInfoUri2;
 
 	@Value("${security.oauth2.client.client-id}")
 	public String clientId;
@@ -113,10 +125,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Bean
 	public RemoteTokenServices tokenService() {
-	    RemoteTokenServices tokenService = new RemoteTokenServices();
-	    tokenService.setCheckTokenEndpointUrl(tokenInfoUri);
-	    tokenService.setClientId(clientId);
-	    tokenService.setClientSecret(clientSecret);
-	    return tokenService;
+		CustomRemoteTokenServices customRemoteTokenServices = new CustomRemoteTokenServices();
+		customRemoteTokenServices.setCheckTokenEndpointUrl(tokenInfoUri);
+		customRemoteTokenServices.setClientId(clientId);
+		customRemoteTokenServices.setClientSecret(clientSecret);
+		if( client2Pattern != null ) {
+			RemoteTokenServices remoteTokenServices2 = new RemoteTokenServices();
+			remoteTokenServices2.setCheckTokenEndpointUrl(tokenInfoUri2);
+			remoteTokenServices2.setClientId(clientId2);
+			remoteTokenServices2.setClientSecret(clientSecret2);
+			customRemoteTokenServices.addNewMatchRemoteTokenServices(client2Pattern, remoteTokenServices2);
+		}
+	    return customRemoteTokenServices;
 	}
 }

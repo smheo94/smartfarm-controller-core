@@ -34,6 +34,7 @@ public class SmartfarmFilter implements  javax.servlet.Filter {
 		try {
 			chgRequest = new ContentCachingRequestWrapper((HttpServletRequest) request);
 			chgResponse = new ContentCachingResponseWrapper((HttpServletResponse) response);
+
 		} catch (Exception e) {
 			System.err.println("Do Filter Error : " + e.toString());
 		}

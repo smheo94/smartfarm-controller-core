@@ -29,7 +29,21 @@ public class JasyptUtilTest {
 
     @Test
     public void encryptEncryptConfig() {
-        String originText [] = { "sf_dev", "shddjq01##","farm2019#!","05dc8fbd5e01a6625e8a6eb1ddf482c9", "kt-gsm-controller", "kt-smartfarm", "kt-gsm-fp", "kt-gsm-fp-secret", "http://dev1705.vivans.net:47900/oauth/check_token" , "51724690439c3e4e89a9efc5e2ca567d5e4b09e6fa69a06bd65e7597418737cc"};
+        String originText [] = { "sf_dev", "2019shddjq2019", "shddjq01##","farm2019#!","05dc8fbd5e01a6625e8a6eb1ddf482c9", "kt-gsm-controller", "kt-smartfarm", "kt-gsm-fp", "kt-gsm-fp-secret", "http://dev1705.vivans.net:47900/oauth/check_token" , "51724690439c3e4e89a9efc5e2ca567d5e4b09e6fa69a06bd65e7597418737cc"
+        ,"echo smartfarm2@ | sudo sh /home/vivans/mini_vms_pkg/script/updateGit.sh"
+                ,"echo smartfarm2@ | sudo sh /home/vivans/mini_vms_pkg/script/update.sh"
+                ,"echo smartfarm2@ | sudo sh /home/vivans/mini_vms_pkg/script/restart.sh"
+                ,"echo smartfarm2@ | sudo sh /home/vivans/mini_vms_pkg/script/ffmpeg_rtsp_record.sh %s %s %s"
+                ,"echo smartfarm2@ | sudo sh /home/vivans/mini_vms_pkg/script/startWebRTC.sh"
+                ,"echo smartfarm2@ | sudo sh /home/vivans/mini_vms_pkg/script/stopWebRTC.sh"
+                ,"echo smartfarm2@ | sudo sh /home/vivans/mini_vms_pkg/script/checkWebRTCProcess.sh"
+                ,"ag"
+                ,"smartfarm2@"
+                , "a123456-"
+                , "admin"
+                , "rtsp://admin:a123456-@192.168.2.101/media/video1"
+
+        };
         Arrays.asList(originText).stream().forEachOrdered(s -> {
             String seedText = "64cf3d525a2512ea71ee7ad6b4a178af25ad2c57";
             EncryptConfig.MyEncryptor myEncryptor = new EncryptConfig.MyEncryptor(seedText);

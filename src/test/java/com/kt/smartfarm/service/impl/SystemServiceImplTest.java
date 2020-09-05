@@ -28,27 +28,12 @@ public class SystemServiceImplTest {
     }
     @Test
     public void encrypt(){
-
-        //"SELECT TABLE_NAME, update, COLUMN_TYPE FROM  information_schema.COLUMNS  WHERE TABLE_SCHEMA = 'sf_main_2'"
         String queryType = QUERY_TYPE.update.name();
-        String [] anyQueryList = {
-//                "ALTER TABLE `user_info`   " +
-//                        "  ADD COLUMN `old_pwd1` LONGTEXT NULL AFTER `is_deleted`," +
-//                        "  ADD COLUMN `old_pwd2` LONGTEXT NULL AFTER `old_pwd1`," +
-//                        "  ADD COLUMN `old_pwd_update1` DATETIME NULL AFTER `old_pwd2`," +
-//                        "  ADD COLUMN `old_pwd_update2` DATETIME NULL AFTER `old_pwd_update1`"
-                //"UPDATE gsm_info SET system_host = 'epistest.vivans.net' where gsm_key = 338001"
-                //"UPDATE gsm_info SET system_host = 'epis0001.ddns.net' where gsm_key = 338001"
-                //"UPDATE control_setting SET logic_period_env = '[]' WHERE logic_period_env = '{}'"
-        //"ALTER TABLE `control_setting_device` DROP FOREIGN KEY `fx_control_setting_device`;"
-        };
+        String [] anyQueryList = {};
         String  anyQueryList2 =
-                "\n" +
-                        "INSERT INTO `SDK_SMS_SEND` (`MSG_ID`, `USER_ID`, `SCHEDULE_TYPE`, `SUBJECT`, `SMS_MSG`, `CALLBACK_URL`, `NOW_DATE`, `SEND_DATE`, `CALLBACK`, \n" +
-                        "`DEST_TYPE`, `DEST_COUNT`, `DEST_INFO`, `KT_OFFICE_CODE`, `CDR_ID`, `RESERVED1`, `RESERVED2`,\n" +
-                        " `RESERVED3`, `RESERVED4`, `RESERVED5`, `RESERVED6`, `RESERVED7`, `RESERVED8`, `RESERVED9`, `SEND_STATUS`, `SEND_COUNT`, `SEND_RESULT`, `SEND_PROC_TIME`, `STD_ID`) VALUES('1','saup2farm01','0',NULL,'[임계치초과 발생] 메인테스트(무안 테스트 농가1) 온도1(31.0) 기준(20) 초과','\n" +
-                        " ','202006301731441','202006301731441','070-7450-5274','0','0','^01034496214',\n" +
-                        "NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0','0','0',NULL,NULL)";
+                "UPDATE `control_logic_device` SET `able_array` = '1' WHERE `id` = '410060'; \n" +
+                        "UPDATE `control_logic_device` SET `able_array` = '1' WHERE `id` = '730049'; \n" +
+                        "UPDATE `control_logic_device` SET `able_array` = '1' WHERE `id` = '410050';";
         List<String> queryList = new ArrayList<>();
         if( anyQueryList2.length() > 0 ) {
             queryList.addAll(Arrays.asList(anyQueryList2.split(";")));
@@ -72,19 +57,86 @@ public class SystemServiceImplTest {
 
     @Test
     public void selectAny() {
-        anyQueryTestList(QUERY_TYPE.select.name(),"SELECT * FROM SDK_SMS_REPORT ORDER BY  MSG_ID DESC LIMIT 10",
-                "SELECT * FROM SDK_SMS_REPORT_DETAIL ORDER BY MSG_ID DESC LIMIT 10"
+        anyQueryTestList(QUERY_TYPE.select.name(),
+//"SELECT * FROM event WHERE green_house_id = '630005000000001'"
+//"SELECT * From control_setting_device WHERE gsm_key = 630015 ORDER BY logic_id, device_num, device_insert_order",
+//"SELECT * From control_setting_device WHERE gsm_key = 630003 ORDER BY logic_id, device_num, device_insert_order"
+//"SELECT * From controller WHERE gsm_key = 630015",
+//"SELECT * From control_setting WHERE gsm_key = 630015",
+//"SELECT * From device WHERE gsm_key = 630015",
+//"SELECT * From green_house WHERE gsm_key = 630015"
+            //"SELECT * FROM weather_cast ORDER BY id DESC LIMIT 100"
+        //        "SELECT * FROM user_info where phone LIKE '%819'",
+           //     "SELECT * FROM phone_setting where phone_number LIKE '%819'"
+                //"SELECT * FROM user_info WHERE user_id IN ( 'smheo94', 'dhback', 'syhwang3')"
+//                "SELECT * FROM SDK_SMS_SEND   ORDER BY MSG_ID DESC LIMIT 10\n",
+//                        "SELECT * FROM SDK_SMS_REPORT_DETAIL ORDER BY MSG_ID DESC LIMIT 10" );
+                //"SELECT * FROM user_loging ORDER BY login_time DESC LIMIT 100" );
+                //"SELECT * FROM control_properties"
+                "SELECT * FROM control_logic_property_lnk"
         //"SELECT * FROM alarm_setting where phone_number = '01034496214'"
         );
         assertTrue(true);
     }
     @Test
     public void updateAny() {
-        anyQueryTest(QUERY_TYPE.update.name(),
-                "UPDATE control_setting_liquid SET watering_amt = 600;");
+        anyQueryTestList(QUERY_TYPE.update.name(),
+                        "UPDATE `sf_main`.`control_logic` SET `ui_class_name` = 'fertigation' WHERE `id` = '141'; "
+
+                //"DELETE FROM  control_setting WHERE gsm_key = 630015"
+                //"UPDATE `control_logic_device` SET `device_param_name` = '컴프레셔밸브/펌프' , `able_array` = '1' WHERE `id` = '67003'; "
+   );
         assertTrue(true);
     }
 
+    @Test
+    public void getPhoneInfo() {
+        String number = "965";
+        anyQueryTestList(QUERY_TYPE.select.name(),
+                //"SELECT * FROM weather_cast ORDER BY id DESC LIMIT 100"
+                "SELECT * FROM user_info where phone LIKE '%" + number + "'",
+                "SELECT * FROM phone_setting where phone_number LIKE '%" + number + "'"
+        );
+    }
+
+
+    @Test
+    public void selectUser() {
+        String userName = "김현" ;
+        String phone_num = "965" ;
+        anyQueryTest(QUERY_TYPE.select.name(), "SELECT * FROM user_info WHERE user_name LIKE '%" + userName + "%'");
+        anyQueryTest(QUERY_TYPE.select.name(), "SELECT PS.* FROM user_info UI INNER JOIN phone_setting PS ON PS.user_idx = UI.idx WHERE user_name LIKE '%" + userName + "%'");
+        //anyQueryTest(QUERY_TYPE.select.name(), "SELECT * FROM user_info WHERE user_id = 'parkos'");
+        assertTrue(true);
+    }
+
+    @Test
+    public void updatePhoneInfo() {
+        String userIdx = "99615994";
+        String phoneNumber = "010-5485-6929";
+//        anyQueryTestList(QUERY_TYPE.update.name(),
+//                String.format("UPDATE user_info set phone ='%s' WHERE idx = '%s'", phoneNumber, userIdx),
+//                String.format("UPDATE phone_setting set phone_number ='%s' WHERE user_idx = '%s' ", phoneNumber, userIdx)
+//        );
+
+        anyQueryTestList(QUERY_TYPE.update.name(),
+                String.format("UPDATE user_info set phone ='%s' WHERE idx = '%s'", phoneNumber, userIdx),
+                String.format("INSERT INTO phone_setting (user_idx, imei, token, phone_number)  VALUES        (%s, '', '', '%s' )", userIdx,  phoneNumber)
+        );
+    }
+    @Test
+    public void updatePhoneInfo2() {
+        Integer [] userIdx = {
+        };
+        String [] phoneNumber = {
+        };
+        for( int i = 0; i < userIdx.length ; i++) {
+            anyQueryTestList(QUERY_TYPE.update.name(),
+                    String.format("UPDATE user_info set phone ='%s' WHERE idx = '%s'", phoneNumber[i], userIdx[i]),
+                    String.format("UPDATE phone_setting set phone_number ='%s' WHERE user_idx = '%s' ", phoneNumber[i], userIdx[i])
+            );
+        }
+    }
 
     @Test
     public void getUserInfo() {
@@ -121,9 +173,9 @@ public class SystemServiceImplTest {
     }
     @Test
     public void updateGSMHost() {
-        Integer gsm_key = 618316;
+        Integer gsm_key = 648007;
         Integer port = 30005;
-        String baseDomain ="vivans.net";
+        String baseDomain ="iptime.org";
         String qText = String.format("UPDATE `gsm_info` SET `system_host` = 'sf-%1$06d.%3$s', system_port = %2$s, master_system_port =%2$s," +
                 "master_system_host = 'sf-%1$06d.%3$s'    WHERE `gsm_key` = '%1$s'; ",
                 gsm_key, port, baseDomain);
@@ -133,19 +185,19 @@ public class SystemServiceImplTest {
     }
 
     @Test
-    public void selectUser() {
-        String userName = "화수" ;
+    public void selectGSM() {
+        String gsmKey = "630003" ;
 
-        anyQueryTest(QUERY_TYPE.select.name(), "SELECT * FROM user_info WHERE user_name LIKE '%" + userName + "%'");
+        //anyQueryTest(QUERY_TYPE.select.name(), "SELECT * FROM user_info WHERE user_name LIKE '%" + userName + "%'");
 
-        //anyQueryTest(QUERY_TYPE.select.name(), "SELECT * FROM user_info WHERE user_id = 'taebaek012'");
+        anyQueryTest(QUERY_TYPE.select.name(), "SELECT * FROM gsm_info where gsm_key = '%" + gsmKey + "%'");
 
         assertTrue(true);
     }
     @Test
     public void updateUserPassword() {
-        String userId = "taebaek013" ;
-        String newP = "ghktn12#";
+        String userId = "muan103" ;
+        String newP = "tmdska12#";
         SHA512PasswordEncoder encoder = new SHA512PasswordEncoder();
         Calendar c = Calendar.getInstance();
         c.set(Calendar.MILLISECOND, 0);
@@ -153,7 +205,7 @@ public class SystemServiceImplTest {
         String encodedPwd = encoder.encode(newP+salt);
         Date pwdUpdateDate = c.getTime();
         String dateStr = DateUtil.getDateTimeStr(pwdUpdateDate);
-        anyQueryTest(QUERY_TYPE.update.name(), String.format("  UPDATE user_info  SET update_date = NOW() , pwd = '%s', pwd_update_date = '%s'" +
+        anyQueryTest(QUERY_TYPE.update.name(), String.format("UPDATE user_info  SET update_date = NOW() , pwd = '%s', pwd_update_date = '%s'" +
                 " Where user_id = '%s'",encodedPwd, dateStr, userId));
         assertTrue(true);
     }
@@ -174,13 +226,13 @@ public class SystemServiceImplTest {
     }
     @Test
     public void deletePhoneSetting() {
-        anyQueryTest(QUERY_TYPE.update.name(), "DELETE  FROM phone_setting WHERE phone_number='010-7237-1525'");
+        anyQueryTest(QUERY_TYPE.update.name(), "DELETE  FROM phone_setting WHERE phone_number='010-3086-8580'");
         assertTrue(true);
     }
     @Test
     public void getPhoneSetting() {
         anyQueryTest(QUERY_TYPE.select.name(), "SELECT * FROM phone_setting " +
-                " WHERE phone_number='01072371525'");
+                " WHERE phone_number='010-3086-8580'");
         assertTrue(true);
     }
     @Test
@@ -213,32 +265,18 @@ public class SystemServiceImplTest {
         }
     }
     private void anyQueryTest(String queryType, String  anyQuery ) {
-        //String anyQuery = "select * from event where gsm_key = 1110 order by id desc  limit 20";
-        //String anyQuery = "UPDATE `device_v_dep_device` SET `device_num` = '1' WHERE id = 82";
-
-        //String anyQuery = /*[오후 1:45:53][3 ms]*/ "SELECT * FROM push_history LIMIT 1000";
-        //String anyQuery = /*[오후 1:45:53][1 ms]*/ "SHOW KEYS FROM `sf_main_kt`.`control_logic_property_lnk`;";
-        //String anyQuery = /*[오후 1:45:53][1 ms]*/ "SHOW CREATE TABLE `sf_main_kt`.`control_logic_property_lnk`;";
-        //String anyQuery = "SELECT * FROM`1  device_v_dep_device WHERE p_device_id = '637100053'";
-
-        //SELECT * FROM `sf_main`.`oauth_client_details` LIMIT 0, 1000;
         String key = "**" + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE) + "123";
 
         String result = JasyptUtil.encrypt(key, anyQuery);
         System.out.println(key);
         System.out.println(result);
-
-
         //String oAuthserver = "http://dev1705.vivans.net:47900";
         //String oAuthserver = "https://oauth-smartfarm.argos-labs.com";
         String oAuthserver = "https://oauthsmartfarm.kt.co.kr";
         //String oAuthserver = "http://test.oauthsmartfarm.kt.co.kr";
-
         //String apiUrl = "http://dev1705.vivans.net:47100/env/system/data/";
         String apiUrl = "https://apismartfarm.kt.co.kr/env/system/data/";
         //String apiUrl = "http://test.apismartfarm.kt.co.kr/env/system/data/";
-
-
         //RestClientUtil client = new RestClientUtil(oAuthserver, "kt-gsm-controller", "05dc8fbd5e01a6625e8a6eb1ddf482c9");//"51724690439c3e4e89a9efc5e2ca567d5e4b09e6fa69a06bd65e7597418737cc");
         RestClientUtil client = new RestClientUtil(oAuthserver, "kt-gsm-controller", "05dc8fbd5e01a6625e8a6eb1ddf482c9");//"51724690439c3e4e89a9efc5e2ca567d5e4b09e6fa69a06bd65e7597418737cc");
 
@@ -254,21 +292,81 @@ public class SystemServiceImplTest {
 
         ResponseEntity<HashMap<String, Object>> hashMapResponseEntity = client.oauth2exchange(apiUrl, HttpMethod.GET, param, false);
         if( hashMapResponseEntity != null && hashMapResponseEntity.getStatusCode().is2xxSuccessful()) {
-            log.info( "Result :  {}", hashMapResponseEntity.getBody());
+            //log.info( "Result :  {}", hashMapResponseEntity.getBody());
+            String json = MapUtils.toJson(hashMapResponseEntity.getBody());
+            log.info("Json :  {}", json);
+
             List<Map<String,Object>> dataList = (List<Map<String,Object>>)hashMapResponseEntity.getBody().get("data");
             if( dataList != null ) {
-                printData(dataList);
+                printData2(dataList);
             }
         }
     }
 
+    private void printData2(List<Map<String, Object>> dataList) {
+        if( dataList == null || dataList.size() == 0) {
+            log.info("DATA : \n {}", "NULL");
+            return;
+        }
+        List<String> keyList = new ArrayList<>();
+
+        for( int i = 0; i < dataList.size(); i++){
+            Map<String,Object> headerLine = dataList.get(i);
+            if(headerLine.keySet().size() > keyList.size() ) {
+                keyList.clear();
+                keyList.addAll(headerLine.keySet());
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        for( int i = 0; i < keyList.size() ; i++) {
+            sb.append(keyList.get(i));
+            if( i < keyList.size() -1) {
+                sb.append(",");
+            }
+        }
+        sb.append("\n");
+        dataList.stream().forEachOrdered(d -> {
+            sb.append(",(");
+            for( int i = 0; i < keyList.size() ; i++) {
+                Object o = d.get(keyList.get(i));
+                if( o == null ) {
+                    sb.append( "NULL" );
+                } else if( o instanceof  String) {
+                    sb.append( "'"  + o +"'");
+                } else {
+                    sb.append(o);
+                }
+                if( i < keyList.size() -1) {
+                    sb.append(",");
+                }
+            }
+            sb.append(")\n");
+        }
+        );
+
+//
+//
+//        headerLine.keySet().stream().forEachOrdered(k -> sb.append(k).append(",") );
+//        dataList.stream().forEachOrdered(d -> {
+//            sb.append("\n");
+//            d.values().stream().forEachOrdered(v -> sb.append("'").append( String.valueOf(v).replaceAll("\n","") ).append("',"));
+//        });
+        sb.append("\n");
+        log.info("DATA : \n {}", sb.toString());
+    }
+
+
     private void printData(List<Map<String, Object>> dataList) {
+        if( dataList == null || dataList.size() == 0) {
+            log.info("DATA : \n {}", "NULL");
+            return;
+        }
         Map<String,Object> headerLine = dataList.get(0);
         StringBuilder sb = new StringBuilder();
         headerLine.keySet().stream().forEachOrdered(k -> sb.append(k).append(",") );
         dataList.stream().forEachOrdered(d -> {
             sb.append("\n");
-            d.values().stream().forEachOrdered(v -> sb.append( String.valueOf(v).replaceAll("\n","") ).append(","));
+            d.values().stream().forEachOrdered(v -> sb.append("'").append( String.valueOf(v).replaceAll("\n","") ).append("',"));
         });
         sb.append("\n");
         log.info("DATA : \n {}", sb.toString());

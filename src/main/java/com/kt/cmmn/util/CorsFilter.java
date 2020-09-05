@@ -1,29 +1,20 @@
 package com.kt.cmmn.util;
 
-import org.springframework.web.util.ContentCachingRequestWrapper;
-import org.springframework.web.util.ContentCachingResponseWrapper;
-
-import java.io.IOException;
-
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 public class CorsFilter implements javax.servlet.Filter {
 		public void destroy() {
-	        
-	    }
 
+	    }
+		public static ThreadLocal<ServletRequest> threadLocalRequest = new ThreadLocal<>();
 	    public void doFilter(ServletRequest req, ServletResponse res, FilterChain filterChain)
 	            throws IOException, ServletException {
-	    
+
 	        HttpServletResponse response = (HttpServletResponse) res;
 //	        HttpServletRequest request = (HttpServletRequest) req;
-	        
+			threadLocalRequest.set(req);
 	        response.setHeader("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE"); // CRUD
 	        response.setHeader("Access-Control-Max-Age", "3600");
 	        response.setHeader("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, Accept, Authorization, x-smartfarm-gsm-key");

@@ -50,7 +50,7 @@ import java.util.Map;
 
 @Slf4j
 @Controller
-@RequestMapping(value = "/gsm")
+@RequestMapping(value = {"/local/gsm", "/gsm" } )
 public class GsmEnvController {
 
     public static final String DEFAULT_SETUP_FILE_PATH = "data/env-default/";
