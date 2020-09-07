@@ -1,6 +1,7 @@
 package com.kt.smartfarm.config;
 
 import com.kt.cmmn.util.CorsFilter;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
@@ -51,7 +52,7 @@ public class CustomRemoteTokenServices extends RemoteTokenServices {
         ServletRequest request = CorsFilter.threadLocalRequest.get();
         if( request != null ) {
             HttpServletRequest req = (HttpServletRequest) request;
-            String uri = req.getRequestURI();
+            String uri = StringUtils.join(req.getHeader("x-forwarded-prefix"), req.getRequestURI());
             this.logger.info(uri);
             for (int i = 0; i < matcher.size(); i++) {
                 String match = matcher.get(i);
