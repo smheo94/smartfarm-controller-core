@@ -533,13 +533,13 @@
 
 	<select id="getWeatherCastV2" parameterType="map" resultType="HashMap">
 		SELECT
-		house_id,base_date,base_time,fcst_date,fcst_time,fcst_value,nx,ny,
+		house_id,base_date,base_time,fcst_date,fcst_time,nx,ny,
 		pop, pty, r06, reh, s06, sky, t3h, tmn, uuu, vec, vvv, wsd, tmx, wav
-		FROM weather_cast
+		FROM weather_cast_v2
 		WHERE id IN (
 			SELECT
 			MAX(id)
-			FROM weather_cast
+			FROM weather_cast_v2
 			WHERE house_id = #{house_id}
 			<if test="from_date != null">
 				AND fcst_date BETWEEN #{from_date} AND #{to_date}
@@ -547,7 +547,7 @@
 			<if test="from_date == null">
 				AND fcst_date BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL 3 DAY
 			</if>
-			GROUP BY house_id, fcst_date, fcst_time, category
+			GROUP BY house_id, fcst_date, fcst_time
 		)
 		ORDER BY id;
 	</select>

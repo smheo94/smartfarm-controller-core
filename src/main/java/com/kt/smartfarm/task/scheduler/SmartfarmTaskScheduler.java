@@ -56,7 +56,6 @@ public class SmartfarmTaskScheduler {
 	static String ULTRASRTNCST_URL = "http://apis.data.go.kr/1360000/VilageFcstInfoService/getUltraSrtNcst";
 	static String ultraCertKey = "RxrU3O5OC4pUiE6GEGShKBl181iacSPsFyXR32lZv0ohgQy6Frr5CRikB1qGdSVOZqHtX55VFoMoje2o3HJegg%3D%3D";
 
-
 	@Scheduled(cron="0 15 2,5,8,11,14,17,20,23 * * *")
 	public void runWeatherSchedule(){
 		List<HashMap<String,Object>> houseList = new ArrayList<>();
@@ -145,18 +144,17 @@ public class SmartfarmTaskScheduler {
 //					        		break;
 //					        	}
 			String forecastKey = item.get("fcstDate").toString() + item.get("fcstTime").toString();
-			LinkedHashMap<String,Object> hm = simpleForecastMap.getOrDefault(forecastKey, new LinkedHashMap<String,Object>() {
-				{
-					put("base_date", baseDate);//발표일자
-					put("base_time", baseTime);//발표시각
-					put("house_id", houseId);
-					put("fcst_date", item.get("fcstDate"));//예보일자
-					put("fcst_time", item.get("fcstTime"));//에보시각
-					put("nx", item.get("nx"));//예보지점 X좌표
-					put("ny", item.get("ny"));//예보지점 Y좌표
-					simpleForecastMap.put(forecastKey, this);
-				}
-			});
+			LinkedHashMap<String,Object> hm = simpleForecastMap.getOrDefault(forecastKey, new LinkedHashMap<String,Object>());
+			if( hm.size() == 0) {
+				hm.put("base_date", baseDate);//발표일자
+				hm.put("base_time", baseTime);//발표시각
+				hm.put("house_id", houseId);
+				hm.put("fcst_date", item.get("fcstDate"));//예보일자
+				hm.put("fcst_time", item.get("fcstTime"));//에보시각
+				hm.put("nx", item.get("nx"));//예보지점 X좌표
+				hm.put("ny", item.get("ny"));//예보지점 Y좌표
+				simpleForecastMap.put(forecastKey, hm);
+			};
 			hm.put("fcst_value", item.get("fcstValue"));//카테고리에 해당하는 예보 값
 			hm.put("category", item.get("category"));
 			hm.put(item.get("category").toString(), item.get("fcstValue"));
