@@ -36,6 +36,10 @@ import org.springframework.web.client.RestTemplate;
 import javax.annotation.Resource;
 import java.sql.Time;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 @Slf4j
 @Service("controlLogicSettingService")
@@ -69,45 +73,58 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 		return  mapper.getControlLogicSettingHistoryList(gsmKey, houseId, controlSettingId, fromData, toDate);
 	}
 
-
+	private static Lock lock = new ReentrantLock();
+	private static Condition lockCondition  = lock.newCondition();
 	@Override
 	public ControlLogicSettingVO insertLogicSetting(ControlLogicSettingVO vo) {
-	    if( vo != null ) {
-            vo.logicPeriodEnv = periodSort(vo.logicPeriodEnv);
-        }
-		Long tempControlSettingId = null;
-		if(vo.getControlSettingId() !=null){
-			tempControlSettingId = vo.getControlSettingId();
-		}
-		final HouseEnvVO houseEnvVO = houseEnvMapper.get(null, vo.greenHouseId);
-		vo.setTmpGsmKey(houseEnvVO.getGsmKey());
-		mapper.insertControlSetting(vo);
-		if(vo.getControlSettingId() == 0){
-			vo.setControlSettingId(tempControlSettingId);	
-		}
-		
-		if (vo.getControlSettingId() == null) {
-			return vo;
-		}
-		if (vo.getPreOrderSettingId() != null) {
-			mapper.insertControlSettingPreOrder(vo);
-		}
-		if (vo.getCheckConditionList() != null) {
-			vo.getCheckConditionList().forEach(checkList -> {
-				checkList.setControlSettingId(vo.controlSettingId);
-				checkList.setTmpGsmKey(vo.tmpGsmKey);
-				mapper.insertControlSettingChkCondition(checkList);
-				if (checkList.getId() != null) {
-					mapper.insertControlSettingChkConditionDevice(checkList);
+		boolean locked = false;
+		Long testStartTime = System.currentTimeMillis();
+		try {
+			locked = lock.tryLock(30, TimeUnit.SECONDS);
+			log.info("Get Lock Success : {}", System.currentTimeMillis() - testStartTime);
+			if (vo != null) {
+				vo.logicPeriodEnv = periodSort(vo.logicPeriodEnv);
+			}
+			Long tempControlSettingId = null;
+			if (vo.getControlSettingId() != null) {
+				tempControlSettingId = vo.getControlSettingId();
+			}
+			final HouseEnvVO houseEnvVO = houseEnvMapper.get(null, vo.greenHouseId);
+			vo.setTmpGsmKey(houseEnvVO.getGsmKey());
+			mapper.insertControlSetting(vo);
+			if (vo.getControlSettingId() == 0) {
+				vo.setControlSettingId(tempControlSettingId);
+			}
+
+			if (vo.getControlSettingId() == null) {
+				return vo;
+			}
+			if (vo.getPreOrderSettingId() != null) {
+				mapper.insertControlSettingPreOrder(vo);
+			}
+			if (vo.getCheckConditionList() != null) {
+				vo.getCheckConditionList().forEach(checkList -> {
+					checkList.setControlSettingId(vo.controlSettingId);
+					checkList.setTmpGsmKey(vo.tmpGsmKey);
+					mapper.insertControlSettingChkCondition(checkList);
+					if (checkList.getId() != null) {
+						mapper.insertControlSettingChkConditionDevice(checkList);
+					}
+				});
+			}
+			if (vo.getDeviceList() != null) {
+				for (int i = 0; i < vo.getDeviceList().size(); i++) {
+					ControlLogicSettingDeviceVO device = vo.getDeviceList().get(i);
+					device.setControlSettingId(vo.getControlSettingId());
+					device.setTmpGsmKey(vo.tmpGsmKey);
+					mapper.insertControlSettingDevice(device);
 				}
-			});
-		}
-		if (vo.getDeviceList() != null) {
-			for(int i=0; i<vo.getDeviceList().size();i++){
-				ControlLogicSettingDeviceVO device = vo.getDeviceList().get(i);
-				device.setControlSettingId(vo.getControlSettingId());
-				device.setTmpGsmKey(vo.tmpGsmKey);
-				mapper.insertControlSettingDevice(device);
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} finally {
+			if(locked) {
+				lock.unlock();
 			}
 		}
 		return vo;

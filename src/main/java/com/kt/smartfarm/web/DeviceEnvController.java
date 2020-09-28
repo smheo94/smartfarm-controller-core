@@ -184,17 +184,18 @@ public class DeviceEnvController {
      * @return
      * @description 가상장치 등록
      */
-    @RequestMapping(value = "/{deviceId}/relationdevices", method = RequestMethod.POST)
+    @RequestMapping(value = "/{parentDeviceId}/relationdevices", method = RequestMethod.POST)
     //Device Type 별로 입력 @RequestMapping(value= "/vDeviceList", method = RequestMethod.POST)
     @ResponseBody
     @InterceptPost
     @InterceptLog
-    public Result<List<VDeviceEnvVO>> vDeviceList(@PathVariable("deviceId") Long deviceId, @RequestBody List<VDeviceEnvVO> vo) {
+    public Result<List<VDeviceEnvVO>> vDeviceList(@PathVariable("parentDeviceId") Long parentDeviceId, @RequestBody List<VDeviceEnvVO> vo) {
         try {
-            vo.stream().forEach(v -> v.setParentDeviceId(deviceId));
+            vo.stream().forEach(v -> v.setParentDeviceId(parentDeviceId));
+            deviceEnvService.deleteVDeviceEnv(null, parentDeviceId, null, null);
             return new Result(deviceEnvService.insertVDeviceEnv(vo));
         } catch (Exception e) {
-            log.warn("Exception :{}, {}", deviceId, vo, e);
+            log.warn("Exception :{}, {}", parentDeviceId, vo, e);
             return new Result(msg.getMessage("errors.ask_to_admin"), HttpStatus.CONFLICT, null);
         }
     }
@@ -227,13 +228,15 @@ public class DeviceEnvController {
         }
     }
 
+    @Deprecated
     @RequestMapping(value = "/{parentId}/relationdevicesbyparent", method = RequestMethod.DELETE)
     @ResponseBody
-    @InterceptPre
+    //@InterceptPre
     @InterceptLog
-    public Result<VDeviceEnvVO> deleteVDeviceListByParentId(@PathVariable("parentId") Long parentId) {
+    public Result<Integer> deleteVDeviceListByParentId(@PathVariable("parentId") Long parentId) {
         try {
-            return new Result(deviceEnvService.deleteVDeviceEnv(null, parentId, null, null));
+            //return new Result(deviceEnvService.deleteVDeviceEnv(null, parentId, null, null));
+            return new Result(1);
         } catch (Exception e) {
             log.warn("Exception :{}", parentId, e);
             return new Result(msg.getMessage("errors.ask_to_admin"), HttpStatus.CONFLICT, null);
