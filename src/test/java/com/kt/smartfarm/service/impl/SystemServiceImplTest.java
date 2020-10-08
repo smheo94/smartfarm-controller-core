@@ -73,7 +73,7 @@ public class SystemServiceImplTest {
 //                        "SELECT * FROM SDK_SMS_REPORT_DETAIL ORDER BY MSG_ID DESC LIMIT 10" );
                 //"SELECT * FROM user_loging ORDER BY login_time DESC LIMIT 100" );
                 //"SELECT * FROM control_properties"
-                "SELECT * FROM control_logic_property_lnk"
+                "SELECT * FROM cd_liquid"
         //"SELECT * FROM alarm_setting where phone_number = '01034496214'"
         );
         assertTrue(true);

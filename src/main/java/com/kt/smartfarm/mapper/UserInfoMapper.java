@@ -15,7 +15,7 @@
  */
 package com.kt.smartfarm.mapper;
 
-import com.kt.smartfarm.service.UserInfoVO;
+import com.kt.smartfarm.service .UserInfoVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import org.apache.ibatis.annotations.Param;
 
