@@ -203,7 +203,14 @@
 			floor_space as floorSpace, house_horizontal as houseHorizontal, house_vertical as houseVertical, house_height as houseHeight,
 			plant_spacing as plantSpacing, crop_cnt as cropCnt, house_direction as houseDirection, select_temp_sensor as selectTempSensor,
 			select_hum_sensor as selectHumSensor, gsm_key as gsmKey, house_name_i18n as houseNameI18n, properties
-		FROM green_house		
+			,B.event_date_min as dataTime
+		FROM green_house A
+		LEFT JOIN
+		    (SELECT green_house_id, MAX(event_date_min) event_date_min FROM monitoring_history
+		    WHERE event_date_min  > DATE_SUB(NOW(), INTERVAL 1 WEEK)
+			<if test="green_house_id != null">AND id = #{green_house_id}</if>
+		    GROUP BY green_house_id) AS B
+		ON A.id = B.green_house_id
 		WHERE 1=1
 		<if test="gsm_key != null">AND  gsm_key = #{gsm_key}</if>
 		<if test="green_house_id != null">AND id = #{green_house_id}</if>

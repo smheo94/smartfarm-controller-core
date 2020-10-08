@@ -152,13 +152,15 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 			result = houseEnvMapper.getHouseDetail(map);
 			for(int i=0; i<result.size(); i++){
 				final HashMap<String, Object> houseMap = result.get(i);
-				map.put("green_house_id",houseMap.get("id"));
-                List<Long> deviceIds = houseEnvMapper.getMappedDevice(map);
-				houseMap.put("selectedDeviceList", deviceIds);
+				Long houseId = ClassUtil.castToSomething(houseMap.get("id"), Long.class);
+				map.put("green_house_id",houseId);
 				List<DeviceEnvVO> devices = deviceEnvMapper.list(map);
 				houseMap.put("deviceList", devices);
-				Long houseId = ClassUtil.castToSomething(houseMap.get("id"), Long.class);
 				if( all ) {
+					/** 2020.10.05 ALL 에서 디바이스 목록도 제외함 **/
+					List<Long> deviceIds = houseEnvMapper.getMappedDevice(map);
+					houseMap.put("selectedDeviceList", deviceIds);
+
 					List<HashMap<String,Object>> controllerList = new ArrayList<HashMap<String,Object>>();
 					map.put("deviceIds", deviceIds);
 					if( deviceIds.size() > 0 ) {

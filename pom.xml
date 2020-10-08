@@ -5,7 +5,7 @@
     <groupId>smartfarm.kt.com</groupId>
 	<artifactId>smartfarm-mgr-env</artifactId>
 	<packaging>war</packaging>
-	<version>3.0.4</version>
+	<version>3.0.6</version>
 	<name>smartfarm-mgr-env</name>
 	<url>http://www.egovframe.go.kr</url>
 	<properties>

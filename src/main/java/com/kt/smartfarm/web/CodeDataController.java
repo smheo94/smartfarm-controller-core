@@ -153,7 +153,7 @@ public class CodeDataController {
     @ResponseBody
     public Result<String> serverType() {
         try {
-            return new Result(smartfarmInterceptorConfig.SYSTEM_TYPE);
+            return new Result(SmartfarmInterceptorConfig.getSystemType());
         } catch (Exception e) {
             log.warn("Exception :", e);
             return new Result(msg.getMessage("errors.ask_to_admin"), HttpStatus.CONFLICT, null);

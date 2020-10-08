@@ -1,5 +1,6 @@
 package com.kt.smartfarm.config;
 
+import com.kt.cmmn.SystemType;
 import com.kt.cmmn.util.CorsFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.AuthenticationException;
@@ -20,7 +21,7 @@ public class CustomRemoteTokenServices extends RemoteTokenServices {
     List<String> matcher = new Vector<>();
     List<RemoteTokenServices> matchRemoteTokenService  = new Vector<>();
     AntPathMatcher antPathMatcher = new AntPathMatcher();
-    RemoteTokenServices defaultRemoteTokenServices = defaultRemoteTokenServices = new RemoteTokenServices();
+    RemoteTokenServices defaultRemoteTokenServices =  new RemoteTokenServices();
     public CustomRemoteTokenServices() {
         matcher.add("/**");
         matchRemoteTokenService.add(defaultRemoteTokenServices);
@@ -60,12 +61,16 @@ public class CustomRemoteTokenServices extends RemoteTokenServices {
                     remoteTokenServices = matchRemoteTokenService.get(i);
                 }
             }
-            RemoteTokenServiceCache hash = RemoteTokenServiceCache.getHash(req, remoteTokenServices);
-            if( hash != null ) {
-                return hash.auth;
+            if(SystemType.SYSTEM_TYPE_SMARTFARM.equalsIgnoreCase(SmartfarmInterceptorConfig.getSystemType()) ) {
+                RemoteTokenServiceCache hash = RemoteTokenServiceCache.getHash(req, remoteTokenServices);
+                if (hash != null) {
+                    return hash.auth;
+                }
             }
             OAuth2Authentication oAuth2Authentication = remoteTokenServices.loadAuthentication(accessToken);
-            RemoteTokenServiceCache.putHash(req, remoteTokenServices, oAuth2Authentication);
+            if(SystemType.SYSTEM_TYPE_SMARTFARM.equalsIgnoreCase(SmartfarmInterceptorConfig.getSystemType()) ) {
+                RemoteTokenServiceCache.putHash(req, remoteTokenServices, oAuth2Authentication);
+            }
             return oAuth2Authentication;
         }
         return remoteTokenServices.loadAuthentication(accessToken);

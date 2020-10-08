@@ -123,7 +123,7 @@ public class ControlLogicSettingController {
         try {
             log.error("new logic : {}", vo);
             if (StringUtils.isEmpty(vo.updateSystem)) {
-                vo.updateSystem = config.SYSTEM_TYPE;
+                vo.updateSystem = SmartfarmInterceptorConfig.getSystemType();
             }
             if (!authCheckService.authCheck(null, vo.getGreenHouseId(), null, null)) {
                 return new Result("Not Allowed", HttpStatus.FORBIDDEN, vo);
@@ -145,7 +145,7 @@ public class ControlLogicSettingController {
             if (voList.get(0) == null) {
                 return new Result("Not Allowed", HttpStatus.FORBIDDEN, null);
             }
-            voList.stream().filter(s -> StringUtils.isEmpty(s.updateSystem)).forEach(s -> s.updateSystem = config.SYSTEM_TYPE);
+            voList.stream().filter(s -> StringUtils.isEmpty(s.updateSystem)).forEach(s -> s.updateSystem = SmartfarmInterceptorConfig.getSystemType());
             List<ControlLogicSettingVO> resultList = new ArrayList<>();
             voList.stream().forEachOrdered(vo -> resultList.add(service.insertLogicSetting(vo)));
             return new Result(resultList);
@@ -166,7 +166,7 @@ public class ControlLogicSettingController {
             if (voList.get(0) == null) {
                 return new Result("Not Allowed", HttpStatus.FORBIDDEN, null);
             }
-            voList.stream().filter(s -> StringUtils.isEmpty(s.updateSystem)).forEach(s -> s.updateSystem = config.SYSTEM_TYPE);
+            voList.stream().filter(s -> StringUtils.isEmpty(s.updateSystem)).forEach(s -> s.updateSystem = SmartfarmInterceptorConfig.getSystemType());
             List<ControlLogicSettingVO> resultList = new ArrayList<>();
             voList.stream().forEachOrdered(vo -> resultList.add(service.updateLogicSetting(vo)));
             return new Result(resultList);
@@ -187,7 +187,7 @@ public class ControlLogicSettingController {
                 return new Result("Not Allowed", HttpStatus.FORBIDDEN, vo);
             }
             if (StringUtils.isEmpty(vo.updateSystem)) {
-                vo.updateSystem = config.SYSTEM_TYPE;
+                vo.updateSystem = SmartfarmInterceptorConfig.getSystemType();
             }
             return new Result(service.updateLogicSetting(vo));
         } catch (Exception e) {

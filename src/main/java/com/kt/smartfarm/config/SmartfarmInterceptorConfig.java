@@ -28,7 +28,15 @@ public class SmartfarmInterceptorConfig extends WebMvcConfigurerAdapter {
     @Value("${smartfarm.gsm-key}")
     public String GSM_KEY;
     @Value("${smartfarm.system.type}")
-    public String SYSTEM_TYPE;
+    static String SYSTEM_TYPE;
+    public static String getSystemType() {
+        return SYSTEM_TYPE;
+    }
+    @Value("${smartfarm.system.type}")
+    public void setSYSTEM_TYPE(String systemType) {
+        SYSTEM_TYPE = systemType;
+    }
+
     @Value("${smartfarm.supervisor.subpath}")
     public String PROXY_SUB_PATH;
     @Value("${smartfarm.db.url}")
