@@ -31,9 +31,25 @@ public class SystemServiceImplTest {
         String queryType = QUERY_TYPE.update.name();
         String [] anyQueryList = {};
         String  anyQueryList2 =
-                "UPDATE `control_logic_device` SET `able_array` = '1' WHERE `id` = '410060'; \n" +
-                        "UPDATE `control_logic_device` SET `able_array` = '1' WHERE `id` = '730049'; \n" +
-                        "UPDATE `control_logic_device` SET `able_array` = '1' WHERE `id` = '410050';";
+               "INSERT INTO `control_properties`\n" +
+                       "(`id`, `ui_class_name`, `description`, `ui_help`, `properties_json`, `min_value`, `max_value`, `display_unit`, `default_value`, `default_min_value`, `default_max_value`, `bootstrap_size`, `dep_class_comp_up`, `dep_class_comp_down`, `last_update`) \n" +
+                       "VALUES ('100001', 'add_open_time', '열림추가시간', NULL, '{\\\"min\\\":0,\\\"max\\\":2000,\\\"unit\\\":\\\"초\\\",\\\"type\\\":\\\"number\\\", \\\"default\\\": 100}', NULL, NULL, NULL, NULL, NULL, NULL, '12', NULL, NULL, '2020-09-04 20:02:54'); \n" +
+                       "INSERT INTO `control_properties`\n" +
+                       "(`id`, `ui_class_name`, `description`, `ui_help`, `properties_json`, `min_value`, `max_value`, `display_unit`, `default_value`, `default_min_value`, `default_max_value`, `bootstrap_size`, `dep_class_comp_up`, `dep_class_comp_down`, `last_update`) \n" +
+                       "VALUES ('100002', 'add_close_time', '닫힘추가시간', NULL, '{\\\"min\\\":0,\\\"max\\\":2000,\\\"unit\\\":\\\"초\\\",\\\"type\\\":\\\"number\\\", \\\"default\\\": 100}', NULL, NULL, NULL, NULL, NULL, NULL, '12', NULL, NULL, '2020-09-04 20:02:54'); \n" +
+                       "\n" +
+                       "INSERT INTO control_logic_property_lnk\n" +
+                       "SELECT\n" +
+                       "        logic_id, 100001, is_period, priority + 1 , on_pc, on_mobile, on_panel, manual_command_num, last_update, depend_device, parent_property_id\n" +
+                       "FROM\n" +
+                       "        control_logic_property_lnk\n" +
+                       "WHERE properties_id = 342;\n" +
+                       "INSERT INTO control_logic_property_lnk\n" +
+                       "SELECT\n" +
+                       "        logic_id, 100002, is_period, priority + 1 , on_pc, on_mobile, on_panel, manual_command_num, last_update, depend_device, parent_property_id\n" +
+                       "FROM\n" +
+                       "        control_logic_property_lnk\n" +
+                       "WHERE properties_id = 342;";
         List<String> queryList = new ArrayList<>();
         if( anyQueryList2.length() > 0 ) {
             queryList.addAll(Arrays.asList(anyQueryList2.split(";")));
@@ -73,7 +89,11 @@ public class SystemServiceImplTest {
 //                        "SELECT * FROM SDK_SMS_REPORT_DETAIL ORDER BY MSG_ID DESC LIMIT 10" );
                 //"SELECT * FROM user_loging ORDER BY login_time DESC LIMIT 100" );
                 //"SELECT * FROM control_properties"
-                "SELECT * FROM cd_liquid"
+                "\t\tSELECT \n" +
+                        "\t\t* FROM \n" +
+                        "\t\tuser\n" +
+                        "\t\tORDER BY id DESC LIMIT 100\n" +
+                        "\t\t"
         //"SELECT * FROM alarm_setting where phone_number = '01034496214'"
         );
         assertTrue(true);
@@ -81,7 +101,8 @@ public class SystemServiceImplTest {
     @Test
     public void updateAny() {
         anyQueryTestList(QUERY_TYPE.update.name(),
-                        "UPDATE `sf_main`.`control_logic` SET `ui_class_name` = 'fertigation' WHERE `id` = '141'; "
+        "INSERT INTO `user_info` (`idx`, `user_id`, `user_name`, `pwd`, `level`, `email`, `phone`, `create_date`, `update_date`, `pwd_update_date`, `zip`, `addr_1`, `addr_2`, `keep_session`, `encrypt_pwd`, `pin_code`, `pin_update_date`, `is_deleted`, `old_pwd1`, `old_pwd2`, `old_pwd_update1`, `old_pwd_update2`, `rsa_key`) \n" +
+        "VALUES (NULL, 'jeju-sfarm-api', 'Test', 'b6d9bcbf2306ca9a03d8bba7938e5ed6d8a20a4388a2b070c24d8239a023956816f48bb72e2142a3d6422ee02c22caec7e4e543005c994a08ceb5d198155fb1e', '0', NULL, '01072371525', NULL, '2020-09-17 20:52:49', '2019-02-28 16:30:52', NULL, NULL, NULL, '0', NULL, '5c0ef02ffec77b651e9c2cd1ee15613af401cc69e35daa3bb5f280668844b256a034be7b55674b1db3ff3162f1f24db249c95a0ea4e455549cb63e1e1626e557', '2019-02-28 20:42:02', NULL, NULL, NULL, NULL, NULL, NULL);"
 
                 //"DELETE FROM  control_setting WHERE gsm_key = 630015"
                 //"UPDATE `control_logic_device` SET `device_param_name` = '컴프레셔밸브/펌프' , `able_array` = '1' WHERE `id` = '67003'; "
@@ -102,8 +123,8 @@ public class SystemServiceImplTest {
 
     @Test
     public void selectUser() {
-        String userName = "김현" ;
-        String phone_num = "965" ;
+        String userName = "김상" ;
+        String phone_num = "9961" ;
         anyQueryTest(QUERY_TYPE.select.name(), "SELECT * FROM user_info WHERE user_name LIKE '%" + userName + "%'");
         anyQueryTest(QUERY_TYPE.select.name(), "SELECT PS.* FROM user_info UI INNER JOIN phone_setting PS ON PS.user_idx = UI.idx WHERE user_name LIKE '%" + userName + "%'");
         //anyQueryTest(QUERY_TYPE.select.name(), "SELECT * FROM user_info WHERE user_id = 'parkos'");

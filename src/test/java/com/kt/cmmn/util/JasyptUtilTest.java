@@ -29,7 +29,7 @@ public class JasyptUtilTest {
 
     @Test
     public void encryptEncryptConfig() {
-        String originText [] = { "sf_dev", "2019shddjq2019", "shddjq01##","farm2019#!","05dc8fbd5e01a6625e8a6eb1ddf482c9", "kt-gsm-controller", "kt-smartfarm", "kt-gsm-fp", "kt-gsm-fp-secret", "http://dev1705.vivans.net:47900/oauth/check_token" , "51724690439c3e4e89a9efc5e2ca567d5e4b09e6fa69a06bd65e7597418737cc"
+        String originText [] = { "kt-local-user", "f730660e5cd8e98c1d2621192eb44e32", "sf_dev", "2019shddjq2019", "shddjq01##","farm2019#!","05dc8fbd5e01a6625e8a6eb1ddf482c9", "kt-gsm-controller", "kt-smartfarm", "kt-gsm-fp", "kt-gsm-fp-secret", "http://dev1705.vivans.net:47900/oauth/check_token" , "51724690439c3e4e89a9efc5e2ca567d5e4b09e6fa69a06bd65e7597418737cc"
         ,"echo smartfarm2@ | sudo sh /home/vivans/mini_vms_pkg/script/updateGit.sh"
                 ,"echo smartfarm2@ | sudo sh /home/vivans/mini_vms_pkg/script/update.sh"
                 ,"echo smartfarm2@ | sudo sh /home/vivans/mini_vms_pkg/script/restart.sh"
