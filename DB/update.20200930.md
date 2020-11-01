@@ -69,7 +69,7 @@ VALUES ('kt-gsm-fp-web', NULL, 'a6172bac69d07397e096891a6c884426', 'read,write',
 	INSERT INTO `oauth_client_details` (`client_id`, `resource_ids`, `client_secret`, `scope`, `authorized_grant_types`, `web_server_redirect_uri`, `authorities`, `access_token_validity`, `refresh_token_validity`, `additional_information`, `autoapprove`) 
 	VALUES ('jeju-sfram-api', NULL, 'dcb33de0d5986dde786f5abaf1ee3703', 'read,write', 'client_credentials,implicit,refresh_token', NULL, 'ROLE_JEJU', '36000', '2592000', NULL, NULL); 
 			
-		SELECT MD5(MD5('제주스파트팜12#')), MD5('제주스파트팜12#')
+# SELECT MD5(MD5('제주스파트팜12#')), MD5('제주스파트팜12#')
 # 제주 스마트팜 당지도 연동 항목 추가
 		INSERT INTO `cd_diary_properties` (`id`, `ui_class_name`, `properties_json`, `display_text`, `support_stt`, `input_help_text`, `input_help_waiting`, `valid_text`, `valid_waiting`,
 		 `valid_button_type`, `detail_help_text`, `property_data_type`, `property_data_length`) 
@@ -87,4 +87,35 @@ INSERT INTO `sf_main`.`cd_diary_properties` (`id`, `ui_class_name`, `properties_
   INSERT INTO `cd_diary_properties_lnk` (`diary_type_id`, `properties_id`, `is_array`, `data_level`, `priority`) VALUES ('4', '11', '0', '0', '1'); 
   
   INSERT INTO `cd_diary_properties_lnk` (`diary_type_id`, `properties_id`, `is_array`, `data_level`, `priority`) VALUES ('3', '7', '0', '0', '1'); 
-  INSERT INTO `cd_diary_properties_lnk` (`diary_type_id`, `properties_id`, `is_array`, `data_level`, `priority`) VALUES ('3', '11', '0', '0', '1'); 		   
+  INSERT INTO `cd_diary_properties_lnk` (`diary_type_id`, `properties_id`, `is_array`, `data_level`, `priority`) VALUES ('3', '11', '0', '0', '1');
+  
+  
+# 트랩 하우스 맵핑 테이블
+
+CREATE TABLE `user_info_auth_trap_house` (
+  `user_idx` INT(11) NOT NULL COMMENT '사용자구분자',
+  `house_id` BIGINT NOT NULL COMMENT '스마트팜ID',
+  PRIMARY KEY (`user_idx`,`house_id`),
+  CONSTRAINT `FK_user_info_auth_trap_house_user` FOREIGN KEY (`user_idx`) REFERENCES `user_info` (`idx`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_user_info_auth_trap_house_house` FOREIGN KEY (`house_id`) REFERENCES `green_house` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='사용자별 권한 그룹 설정';
+
+CREATE TABLE `user_info_auth_trap_gsm` (
+  `user_idx` INT(11) NOT NULL COMMENT '사용자구분자',
+  `gsm_key` BIGINT(20) NOT NULL COMMENT '제어기구분키',
+  PRIMARY KEY (`user_idx`,`gsm_key`),  
+  CONSTRAINT `FK_user_info_auth_trap_gsm_gsm` FOREIGN KEY (`gsm_key`) REFERENCES `gsm_info` (`gsm_key`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_user_info_auth_trap_gsm_user` FOREIGN KEY (`user_idx`) REFERENCES `user_info` (`idx`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='사용자별 권한 그룹 설정';
+
+# 하우스에 센서 순서를 지정하도록 함
+ALTER TABLE `map_green_house_device` 
+ADD COLUMN `mapping_num` INT DEFAULT 1 NOT NULL COMMENT '스마트팜에구분순서' AFTER `update_dt`; 
+
+    
+#   SELECT MD5('팜에이트8'), MD5(MD5('팜에이트8'))
+# Farm8 연동
+ INSERT INTO `oauth_client_details` (`client_id`, `resource_ids`, `client_secret`, `scope`, `authorized_grant_types`, `web_server_redirect_uri`, `authorities`, `access_token_validity`, `refresh_token_validity`, `additional_information`, `autoapprove`) 
+ VALUES ('farm8-api', NULL, '1120aad91a7051f39e900df66cff3823', 'read', 'client_credentials,implicit,refresh_token', NULL, 'ROLE_OPEN_APP', '36000', '2592000', NULL, NULL); 
+  INSERT INTO `user_info` (`idx`, `user_id`, `user_name`, `pwd`, `level`, `email`, `phone`, `create_date`, `update_date`, `pwd_update_date`, `zip`, `addr_1`, `addr_2`, `keep_session`, `encrypt_pwd`, `pin_code`, `pin_update_date`, `is_deleted`, `old_pwd1`, `old_pwd2`, `old_pwd_update1`, `old_pwd_update2`, `rsa_key`) VALUES (NULL, 'farm8-api', 'Test', 'b6d9bcbf2306ca9a03d8bba7938e5ed6d8a20a4388a2b070c24d8239a023956816f48bb72e2142a3d6422ee02c22caec7e4e543005c994a08ceb5d198155fb1e', '0', NULL, '01072371525', NULL, '2020-10-22 16:01:43', '2019-02-28 16:30:52', NULL, NULL, NULL, '0', NULL, '5c0ef02ffec77b651e9c2cd1ee15613af401cc69e35daa3bb5f280668844b256a034be7b55674b1db3ff3162f1f24db249c95a0ea4e455549cb63e1e1626e557', '2019-02-28 20:42:02', NULL, NULL, NULL, NULL, NULL, NULL); 
+

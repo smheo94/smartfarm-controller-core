@@ -16,6 +16,7 @@
 
 
         <typeAlias alias="deviceEnvVO" type="com.kt.smartfarm.service.DeviceEnvVO"/>
+		<typeAlias alias="deviceEnvSimpleVO" type="com.kt.smartfarm.service.DeviceEnvSimpleVO"/>
 		<typeAlias alias="deviceTypeVO" type="com.kt.smartfarm.service.DeviceTypeVO"/>
 		<typeAlias alias="houseEnvVO" type="com.kt.smartfarm.service.HouseEnvVO"/>
 

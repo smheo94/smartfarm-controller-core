@@ -154,9 +154,11 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 				final HashMap<String, Object> houseMap = result.get(i);
 				Long houseId = ClassUtil.castToSomething(houseMap.get("id"), Long.class);
 				map.put("green_house_id",houseId);
-				List<DeviceEnvVO> devices = deviceEnvMapper.list(map);
-				houseMap.put("deviceList", devices);
+
+
 				if( all ) {
+					List<DeviceEnvVO> devices = deviceEnvMapper.list(map);
+					houseMap.put("deviceList", devices);
 					/** 2020.10.05 ALL 에서 디바이스 목록도 제외함 **/
 					List<Long> deviceIds = houseEnvMapper.getMappedDevice(map);
 					houseMap.put("selectedDeviceList", deviceIds);
@@ -184,6 +186,9 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 
 					List<HouseProductVO> productList = houseEnvMapper.listHouseProduct(gsmKey, houseId, null);
 					houseMap.put("productList", productList);
+				} else {
+					List<DeviceEnvSimpleVO> devices = deviceEnvMapper.simpleList(map);
+					houseMap.put("deviceList", devices);
 				}
 
 				if(detail ) {
@@ -195,13 +200,13 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 					}
 					houseMap.put("sunriseInfo", sunriseSunset.getSunriseSunSetMap());
 				}
-				if( isCCTVOnly || detail ) {
+				//if( isCCTVOnly || detail ) {
 					List<CCTVSettingVO> cctv = new ArrayList<>();
 					if( isSmartfarmSystem == false) {
 						cctv = getCCTVList(houseId);
 					}
 					houseMap.put("cctvList",cctv);
-				}
+				//}
 			}
 			if( isCCTVOnly && result != null && result.size() > 0 ) {
 			return result.stream().filter( h ->  { List cctvList =  (List)h.get("cctvList"); return cctvList != null && cctvList.size() > 0; })

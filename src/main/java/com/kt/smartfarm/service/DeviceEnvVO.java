@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -18,68 +17,31 @@ import java.util.Map;
 @Data
 @Getter
 @Setter
-public class DeviceEnvVO {
-	Long id;
-	Integer deviceTypeId;
-	Integer deviceTypeIdx;
-	Integer userInfoId;
-	Long gsmKey;
-	Long greenHouseId;
-	Long controllerId;
-	String nickname;
-	String deviceTypeNickname;
-	String description;
-//	String setupDate;
-//	Integer xPosition;
-//	Integer yPosition;
-//	Integer x2Position;
-//	Integer y2Position;
-//	String memo;
-	String modbusAddress1;
-	String modbusAddress2;
-	String modbusAddress3;
-	//Integer noStopControl;
-	Integer mode;
-	String updateDate;
-	Integer autoManualMode;
+public class DeviceEnvVO extends DeviceEnvSimpleVO {
+
+	Integer userInfoId; //deprecated
+	Long gsmKey; //deprecated
+	Long greenHouseId; //deprecated
+	Long controllerId; //deprecated
+	String deviceTypeNickname;  //deprecated
+	String description; //deprecated
 	Integer status;
-	String deviceType;
-    String deviceTypeGroup;
-    String deviceTypeName;
-    String deviceTypeDescription;
-    String kind;
-    String dcac;
-    String opmodeError;
-	String valueExchange;
+	String modbusAddress1; //deprecated
+	String modbusAddress2; //deprecated
+	String modbusAddress3; //deprecated
+	Integer mode; //deprecated
+	String updateDate; //deprecated
+    String deviceTypeName; //deprecated
+    String deviceTypeDescription; //deprecated
+    String opmodeError; //deprecated
+	String valueExchange; //deprecated
 
-	Integer roundNumber;
-//	String topicGroup;
-//	Double resetPoint;
-	Integer accumM;
-	Integer accumH;
-	Integer accumD;
-	Integer opTime;
-	String valueMod;
-	Integer valueType;
-	Map<String,Object> properties;
-//	String properties;
-//
-//	String trdPtId;
-//
-//	public void setTrdPtId(String value) {
-//		this.trdPtId = value;
-//		makeProperties();
-//	}
-//	public void makeProperties() {
-//		HashMap<String,Object> propertiesMap = new HashMap<>();
-//		propertiesMap.put("trd_pt_id", trdPtId);
-//		properties = MapUtils.toJson(propertiesMap);
-//	}
+	Integer roundNumber; //deprecated
+	Integer accumM; //deprecated
+	Integer accumH; //deprecated
+	Integer accumD; //deprecated
+	Integer opTime; //deprecated
 
-
-	List<VDeviceEnvVO> relationDeviceList;
-	List<EDeviceEnvVO> electricDeviceList;
-	public String getDeviceTypeKey() {
-		return deviceType + "$" + deviceTypeIdx;
-	}
+	List<VDeviceEnvVO> relationDeviceList; //deprecated
+	List<EDeviceEnvVO> electricDeviceList; //deprecated
 }

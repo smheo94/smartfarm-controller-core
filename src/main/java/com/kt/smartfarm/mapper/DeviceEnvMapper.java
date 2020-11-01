@@ -15,14 +15,13 @@
  */
 package com.kt.smartfarm.mapper;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.kt.smartfarm.service.*;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @Mapper("deviceEnvMapper")
@@ -38,7 +37,6 @@ public interface DeviceEnvMapper {
 	List<DeviceTypeVO> getDeviceTypeByHouseType(HashMap<String, Object> param);
 	String[] getHouseType();
 	String[] getKind();
-	List<HashMap<String, Object>> getDeviceTypeByHouseType();
 	List<HashMap<String, Object>> getDeviceTypeList();
 	List<VDeviceInfoVO> getVDeviceList();
 
@@ -64,4 +62,5 @@ public interface DeviceEnvMapper {
 	Integer deleteVDevicesEnv(Long parentDeviceId);
 
 
+    List<DeviceEnvSimpleVO> simpleList(Map<String, Object> map);
 }

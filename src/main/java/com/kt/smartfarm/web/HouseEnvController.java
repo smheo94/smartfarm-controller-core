@@ -478,7 +478,10 @@ public class HouseEnvController {
     }
 
     // CCTV UPDATE
-    @RequestMapping(value = "/cctv/minivms", method = RequestMethod.PUT)
+    @RequestMapping(value = "/ccls" +
+            "" +
+            "" +
+            "/minivms", method = RequestMethod.PUT)
     @ResponseBody
     @InterceptLog
     public Result<CCTVSettingVO> updateCctvMiniVms(@PathVariable("gsm_key") Long gsmKey, @RequestBody List<CCTVMiniVMSVO> miniVmsList) {
