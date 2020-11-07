@@ -42,4 +42,6 @@ public interface GsmEnvMapper {
 	Long insertGSMConfigWeather(Map<String,Object> gsmConfigVO);
 	Long deleteGSMConfigWeather(GsmConfigVO gsmConfigVO);
 	GsmConfigVO getGSMConfig(Map<String,Object> param);
+
+
 }

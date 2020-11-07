@@ -61,4 +61,5 @@ public interface HouseEnvService {
 
 	void deleteOldWeatherData();
 	Integer getWeatherConfigExists();
+ void updateDataTime();
 }

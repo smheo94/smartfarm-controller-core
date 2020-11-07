@@ -20,7 +20,6 @@ import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -85,4 +84,5 @@ public interface HouseEnvMapper {
 	List<HashMap<String, Object>> getWeatherCastV2(Map<String, Object> param);
 
 	UltraShortWeatherDataVO getUltraShortWeatherData(HashMap<String, Object> param);
+	void updateDataTime(@Param("greenHouseId") Long greenHouseId);
 }

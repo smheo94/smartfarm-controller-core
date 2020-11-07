@@ -25,4 +25,5 @@ public interface GsmEnvService {
 	GsmEnvVO get(Long gsmKey, boolean forced);
 
 	Integer autoSync(Long gmsKey, HttpServletRequest request);
+
 }

@@ -56,6 +56,12 @@ public class SmartfarmTaskScheduler {
 	static String ULTRASRTNCST_URL = "http://apis.data.go.kr/1360000/VilageFcstInfoService/getUltraSrtNcst";
 	static String ultraCertKey = "RxrU3O5OC4pUiE6GEGShKBl181iacSPsFyXR32lZv0ohgQy6Frr5CRikB1qGdSVOZqHtX55VFoMoje2o3HJegg%3D%3D";
 
+	@Scheduled(cron="10 5 * * * * ")
+	public void updateGSMDataTime(){
+		if(SYSTEM_TYPE.equalsIgnoreCase("supervisor")){
+			houseEnvService.updateDataTime();
+		}
+	}
 	@Scheduled(cron="0 15 2,5,8,11,14,17,20,23 * * *")
 	public void runWeatherSchedule(){
 		List<HashMap<String,Object>> houseList = new ArrayList<>();

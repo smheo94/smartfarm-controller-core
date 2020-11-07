@@ -368,6 +368,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 			param.put("to_date", toDate);
 			param.put("nx", gridXY.get("x").toString());
 			param.put("ny", gridXY.get("y").toString());
+			//log.info("GetWeatherCase : {}", param);
 		}catch(Exception e){
 			log.debug(e.getMessage());
 		}		 
@@ -475,5 +476,14 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 	@Override
 	public void insertForecastV2Data(LinkedHashMap<String, Object> foreCastData) {
 		houseEnvMapper.insertForecastV2Data(foreCastData);
+	}
+	public void updateDataTime(){
+		List<HashMap<String, Object>> allList = houseEnvMapper.getAllList();
+		for(HashMap<String, Object> houseInfo : allList) {
+			Long houseId = ClassUtil.castToSomething(houseInfo.get("id"), Long.class, 0L);
+			if (houseId != 0L) {
+				houseEnvMapper.updateDataTime(houseId);
+			}
+		}
 	}
 }

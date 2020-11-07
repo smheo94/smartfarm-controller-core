@@ -130,7 +130,7 @@
     WHERE id = #{id} AND owner_user_idx = #{ownerUserIdx};
     </update>
     <delete id="deleteControlSettingLiquid">
-    DELETE control_setting_liquid
+    DELETE FROM control_setting_liquid
     WHERE id  = #{id} AND owner_user_idx = #{ownerUserIdx};
     </delete>
 

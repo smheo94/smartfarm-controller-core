@@ -35,20 +35,20 @@ public class HouseEnvVO {
 	String addr1;
 	String addr2;
 	String zip;
-	Integer nutrientCommonId;
-	Integer changeGh;
-	Integer changeTemperature;
-	Double floorSpace;
-	Double houseHorizontal;
-	Double houseVertical;
-	Double houseHeight;
-	Double plantSpacing;
-	Integer cropCnt;
-	Double houseDirection;
-	Double selectTempSensor;
-	Double selectHumSensor;
+	//Integer nutrientCommonId;
+	//Integer changeGh;
+	//Integer changeTemperature;
+	//Double floorSpace;
+	//Double houseHorizontal;
+	//Double houseVertical;
+	//Double houseHeight;
+	//Double plantSpacing;
+	//Integer cropCnt;
+	//Double houseDirection;
+	//Double selectTempSensor;
+	//Double selectHumSensor;
 	Long gsmKey;
-	String houseNameI18n;
+	//String houseNameI18n;
 
 	@org.codehaus.jackson.map.annotate.JsonDeserialize(using = MapJsonOldDeserializer.class)
 	@JsonDeserialize(using = MapJsonDeserializer.class)

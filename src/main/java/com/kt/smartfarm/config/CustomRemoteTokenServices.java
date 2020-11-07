@@ -54,21 +54,21 @@ public class CustomRemoteTokenServices extends RemoteTokenServices {
         if( request != null ) {
             HttpServletRequest req = (HttpServletRequest) request;
             String uri = StringUtils.join(req.getHeader("x-forwarded-prefix"), req.getRequestURI());
-            this.logger.info(uri);
+            //this.logger.info(uri);
             for (int i = 0; i < matcher.size(); i++) {
                 String match = matcher.get(i);
                 if (antPathMatcher.match(match, uri)) {
                     remoteTokenServices = matchRemoteTokenService.get(i);
                 }
             }
-            if(SystemType.SYSTEM_TYPE_SMARTFARM.equalsIgnoreCase(SmartfarmInterceptorConfig.getSystemType()) ) {
+            if(SystemType.SYSTEM_TYPE_SMARTFARM.equalsIgnoreCase(SmartfarmInterceptorConfig.getSystemTypeGlobal()) ) {
                 RemoteTokenServiceCache hash = RemoteTokenServiceCache.getHash(req, remoteTokenServices);
                 if (hash != null) {
                     return hash.auth;
                 }
             }
             OAuth2Authentication oAuth2Authentication = remoteTokenServices.loadAuthentication(accessToken);
-            if(SystemType.SYSTEM_TYPE_SMARTFARM.equalsIgnoreCase(SmartfarmInterceptorConfig.getSystemType()) ) {
+            if(SystemType.SYSTEM_TYPE_SMARTFARM.equalsIgnoreCase(SmartfarmInterceptorConfig.getSystemTypeGlobal()) ) {
                 RemoteTokenServiceCache.putHash(req, remoteTokenServices, oAuth2Authentication);
             }
             return oAuth2Authentication;

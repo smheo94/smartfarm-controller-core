@@ -135,12 +135,14 @@
 	
 	<select id="list" parameterType="map" resultMap="houseEnvVOMap">
 		SELECT 
-			id, product_method_id, green_house_type_id, house_name,
+			id, gsm_key, product_method_id, green_house_type_id, house_name,
 			latitude, longitude, description, build_date, last_update, addr_1,
-			addr_2, zip, nutrient_common_id, change_gh, change_temperature,
+			addr_2, zip, properties
+			/*, nutrient_common_id, change_gh, change_temperature,
 			floor_space, house_horizontal, house_vertical, house_height,
 			plant_spacing, crop_cnt, house_direction, select_temp_sensor,
-			select_hum_sensor, gsm_key, house_name_i18n, properties
+			select_hum_sensor, house_name_i18n
+			*/
 		FROM green_house
 		WHERE
 		 gsm_key = #{gsm_key}
@@ -149,12 +151,14 @@
 
 	<select id ="get" resultMap="houseEnvVOMap">
 		SELECT
-		id, product_method_id, green_house_type_id, house_name,
+		id, gsm_key,product_method_id, green_house_type_id, house_name,
 		latitude, longitude, description, build_date, last_update, addr_1,
-		addr_2, zip, nutrient_common_id, change_gh, change_temperature,
+		addr_2, zip, properties
+		/*, nutrient_common_id, change_gh, change_temperature,
 		floor_space, house_horizontal, house_vertical, house_height,
 		plant_spacing, crop_cnt, house_direction, select_temp_sensor,
-		select_hum_sensor, gsm_key, house_name_i18n, properties
+		select_hum_sensor,  house_name_i18n
+		*/
 		FROM green_house
 		WHERE 1=1
 		<if test="gsm_key != null">AND  gsm_key = #{gsm_key}</if>
@@ -197,20 +201,15 @@
 	 
 	<select id ="getHouseDetail" parameterType="map" resultType="map">
 		SELECT 
-			id, product_method_id AS productMethodId, green_house_type_id as greenHouseTypeId, house_name as houseName,
+			id,  gsm_key as gsmKey,product_method_id AS productMethodId, green_house_type_id as greenHouseTypeId, house_name as houseName,
 			latitude, longitude, description, build_date as buildDate, last_update as lastUpdate, addr_1 as addr1,
-			addr_2 as addr2, zip, change_gh as changeGh, change_temperature as changeTemperature,
+			addr_2 as addr2, zip, properties, IF( A.data_time > DATE_SUB(NOW(), INTERVAL 1 WEEK),  A.data_time, NULL) AS data_time
+		    /*, change_gh as changeGh, change_temperature as changeTemperature,
 			floor_space as floorSpace, house_horizontal as houseHorizontal, house_vertical as houseVertical, house_height as houseHeight,
 			plant_spacing as plantSpacing, crop_cnt as cropCnt, house_direction as houseDirection, select_temp_sensor as selectTempSensor,
-			select_hum_sensor as selectHumSensor, gsm_key as gsmKey, house_name_i18n as houseNameI18n, properties
-			,B.event_date_min as dataTime
+			select_hum_sensor as selectHumSensor, house_name_i18n as houseNameI18n
+		    */
 		FROM green_house A
-		LEFT JOIN
-		    (SELECT green_house_id, MAX(event_date_min) event_date_min FROM monitoring_history
-		    WHERE event_date_min  > DATE_SUB(NOW(), INTERVAL 1 WEEK)
-			<if test="green_house_id != null">AND id = #{green_house_id}</if>
-		    GROUP BY green_house_id) AS B
-		ON A.id = B.green_house_id
 		WHERE 1=1
 		<if test="gsm_key != null">AND  gsm_key = #{gsm_key}</if>
 		<if test="green_house_id != null">AND id = #{green_house_id}</if>
@@ -378,12 +377,14 @@
 	
 	
 	<select id="getAllList" resultType="map">
-		SELECT id, product_method_id AS productMethodId, green_house_type_id as greenHouseTypeId, house_name as houseName,
+		SELECT id,gsm_key as gsmKey, product_method_id AS productMethodId, green_house_type_id as greenHouseTypeId, house_name as houseName,
 			latitude, longitude, description, build_date as buildDate, last_update as lastUpdate, addr_1 as addr1,
-			addr_2 as addr2, zip, nutrient_common_id as nutrientCommonId, change_gh as changeGh, change_temperature as changeTemperature,
+			addr_2 as addr2, zip
+			/*, nutrient_common_id as nutrientCommonId, change_gh as changeGh, change_temperature as changeTemperature,
 			floor_space as floorSpace, house_horizontal as houseHorizontal, house_vertical as houseVertical, house_height as houseHeight,
 			plant_spacing as plantSpacing, crop_cnt as cropCnt, house_direction as houseDirection, select_temp_sensor as selectTempSensor,
-			select_hum_sensor as selectHumSensor, gsm_key as gsmKey, house_name_i18n as houseNameI18n
+			select_hum_sensor as selectHumSensor,  house_name_i18n as houseNameI18n
+			*/
 		FROM green_house
 	</select>
 	
@@ -475,14 +476,16 @@
 	<insert id="copyToNewGSM">
 		INSERT INTO green_house(
 		product_method_id, green_house_type_id, house_name, latitude, longitude, description, build_date, last_update, addr_1, addr_2, zip,
-		                        nutrient_common_id, change_gh, change_temperature, floor_space,
-		                        house_horizontal, house_vertical, house_height, plant_spacing, crop_cnt, house_direction, select_temp_sensor, select_hum_sensor,
-		                        gsm_key, house_name_i18n,id
+		gsm_key, id
+			/*,nutrient_common_id, change_gh, change_temperature, floor_space,
+		    house_horizontal, house_vertical, house_height, plant_spacing, crop_cnt, house_direction, select_temp_sensor, select_hum_sensor,
+		    house_name_i18n*/
 		)
 		SELECT product_method_id, green_house_type_id, house_name, latitude, longitude, description, build_date, last_update, addr_1, addr_2, zip,
-		       nutrient_common_id, change_gh, change_temperature, floor_space,
+		 #{to_gsm_key}, (${to_gsm_key}  * 1000000000) + (id %  1000000000) AS id
+		       /*nutrient_common_id, change_gh, change_temperature, floor_space,
 		       house_horizontal, house_vertical, house_height, plant_spacing, crop_cnt, house_direction, select_temp_sensor, select_hum_sensor,
-		       #{to_gsm_key}, house_name_i18n	, (${to_gsm_key}  * 1000000000) + (id %  1000000000)
+		        house_name_i18n*/
 		FROM green_house
         WHERE gsm_key = #{from_gsm_key}
 	</insert>
@@ -558,4 +561,20 @@
 		)
 		ORDER BY id;
 	</select>
+	<update id="updateDataTime" parameterType="map">
+		UPDATE green_house GH
+			INNER JOIN  (
+				SELECT green_house_id, MAX(event_date_min) event_date_min FROM monitoring_history
+				WHERE event_date_min  > DATE_SUB(NOW(), INTERVAL 1 WEEK)
+				<if test="greenHouseId != null">
+				AND  green_house_id = #{greenHouseId}
+				</if>
+				GROUP BY green_house_id
+
+		) A ON A.green_house_id = GH.id
+		SET GH.data_time = A.event_date_min
+		<if test="greenHouseId != null">
+		WHERE GH.id = #{greenHouseId}
+		</if>
+	</update>
 </mapper>

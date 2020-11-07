@@ -28,8 +28,10 @@ public class SmartfarmInterceptorConfig extends WebMvcConfigurerAdapter {
     @Value("${smartfarm.gsm-key}")
     public String GSM_KEY;
     @Value("${smartfarm.system.type}")
+    public String systemType;
+
     static String SYSTEM_TYPE;
-    public static String getSystemType() {
+    public static String getSystemTypeGlobal() {
         return SYSTEM_TYPE;
     }
     @Value("${smartfarm.system.type}")
@@ -45,9 +47,11 @@ public class SmartfarmInterceptorConfig extends WebMvcConfigurerAdapter {
 //    private String pass;
     @Resource(name="gsmEnvMapper")
     GsmEnvMapper gsmMapper;
-
+    public String getSystemType() {
+        return systemType;
+    }
     public Boolean isSmartfarmSystem() {
-        return SystemType.SYSTEM_TYPE_SMARTFARM.equalsIgnoreCase(SYSTEM_TYPE);
+        return SystemType.SYSTEM_TYPE_SMARTFARM.equalsIgnoreCase(systemType);
     }
 
     @Profile("dev")

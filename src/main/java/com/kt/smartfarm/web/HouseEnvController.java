@@ -377,7 +377,8 @@ public class HouseEnvController {
 
     @RequestMapping(value = "/weather_cast", method = RequestMethod.GET)
     @ResponseBody
-    public Result weatherCast(@RequestParam(value = "house_id", required = false) Long houseId, @RequestParam(value = "from_date", required = false) String fromDate,
+    public Result weatherCast(@RequestParam(value = "house_id", required = false) Long houseId,
+                              @RequestParam(value = "from_date", required = false) String fromDate,
                               @RequestParam(value = "to_date", required = false) String toDate) {
         try {
             if (!authCheckService.authCheck(null, houseId, null, null)) {
@@ -478,10 +479,7 @@ public class HouseEnvController {
     }
 
     // CCTV UPDATE
-    @RequestMapping(value = "/ccls" +
-            "" +
-            "" +
-            "/minivms", method = RequestMethod.PUT)
+    @RequestMapping(value = "/cctv/minivms", method = RequestMethod.PUT)
     @ResponseBody
     @InterceptLog
     public Result<CCTVSettingVO> updateCctvMiniVms(@PathVariable("gsm_key") Long gsmKey, @RequestBody List<CCTVMiniVMSVO> miniVmsList) {
