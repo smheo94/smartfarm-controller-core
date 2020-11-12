@@ -15,11 +15,11 @@
 
 	<insert id="insert" useGeneratedKeys="true" parameterType="houseEnvVO">
 		INSERT INTO green_house( 
-       		product_method_id, green_house_type_id, house_name, latitude, longitude, description, build_date, last_update, addr_1, addr_2, zip, nutrient_common_id, change_gh, change_temperature, floor_space, house_horizontal, house_vertical, house_height, plant_spacing, crop_cnt, house_direction, select_temp_sensor, select_hum_sensor, gsm_key, house_name_i18n
-		,id
+       	product_method_id, green_house_type_id, house_name, latitude, longitude, description, build_date, last_update, addr_1, addr_2, zip,
+		gsm_key, house_name_i18n,id
 		)
 		VALUES (
-			#{productMethodId},#{greenHouseTypeId},#{houseName},#{latitude},#{longitude},#{description},now(),now(),#{addr1},#{addr2},#{zip},1,1,1,#{floorSpace},#{houseHorizontal},#{houseVertical},#{houseHeight},#{plantSpacing},#{cropCnt},#{houseDirection},#{selectTempSensor},#{selectHumSensor},#{gsmKey},#{houseNameI18n}
+			#{productMethodId},#{greenHouseTypeId},#{houseName},#{latitude},#{longitude},#{description},now(),now(),#{addr1},#{addr2},#{zip},#{gsmKey}
 		<if test="id != null and id != -1">
 			,#{id}
 		</if>
@@ -109,21 +109,7 @@
 			<if test="addr1 != null">,	addr_1 = #{addr1}</if>
 			<if test="addr2 != null">,	addr_2 = #{addr2}</if>
 			<if test="zip != null">,	zip = #{zip}</if>
-			<if test="nutrientCommonId">, nutrient_common_id =#{nutrientCommonId}</if> 
-			<if test="changeGh != null">,	change_gh = #{changeGh}</if>
-			<if test="changeTemperature">,change_temperature =#{changeTemperature}</if>
-			<if test="floorSpace != null">,	floor_space = #{floorSpace}</if>
-			<if test="houseHorizontal">, house_horizontal =#{houseHorizontal}</if>
-			<if test="houseVertical != null">,	house_vertical = #{houseVertical}</if>
-			<if test="houseHeight">, house_height=#{houseHeight}</if>
-			<if test="plantSpacing != null">,	plant_spacing = #{plantSpacing}</if>
-			<if test="cropCnt != null">,	crop_cnt = #{cropCnt}</if>
-			<if test="houseDirection != null">,	house_direction = #{houseDirection}</if>
-			<if test="selectTempSensor != null">,select_temp_sensor = #{selectTempSensor}</if>
-			<if test="selectHumSensor != null">,select_hum_sensor = #{selectHumSensor}</if>	
-			<if test="houseNameI18n != null">,	house_name_i18n = #{houseNameI18n}</if>
 		    <if test="properties != null">,	properties = '${@com.kt.cmmn.util.MapUtils@toJson(properties)}'</if>
-
 		WHERE gsm_key = #{gsmKey} AND id = #{id};
 	</update>
 	
@@ -138,11 +124,6 @@
 			id, gsm_key, product_method_id, green_house_type_id, house_name,
 			latitude, longitude, description, build_date, last_update, addr_1,
 			addr_2, zip, properties
-			/*, nutrient_common_id, change_gh, change_temperature,
-			floor_space, house_horizontal, house_vertical, house_height,
-			plant_spacing, crop_cnt, house_direction, select_temp_sensor,
-			select_hum_sensor, house_name_i18n
-			*/
 		FROM green_house
 		WHERE
 		 gsm_key = #{gsm_key}
@@ -154,11 +135,6 @@
 		id, gsm_key,product_method_id, green_house_type_id, house_name,
 		latitude, longitude, description, build_date, last_update, addr_1,
 		addr_2, zip, properties
-		/*, nutrient_common_id, change_gh, change_temperature,
-		floor_space, house_horizontal, house_vertical, house_height,
-		plant_spacing, crop_cnt, house_direction, select_temp_sensor,
-		select_hum_sensor,  house_name_i18n
-		*/
 		FROM green_house
 		WHERE 1=1
 		<if test="gsm_key != null">AND  gsm_key = #{gsm_key}</if>
@@ -204,11 +180,6 @@
 			id,  gsm_key as gsmKey,product_method_id AS productMethodId, green_house_type_id as greenHouseTypeId, house_name as houseName,
 			latitude, longitude, description, build_date as buildDate, last_update as lastUpdate, addr_1 as addr1,
 			addr_2 as addr2, zip, properties, IF( A.data_time > DATE_SUB(NOW(), INTERVAL 1 WEEK),  A.data_time, NULL) AS data_time
-		    /*, change_gh as changeGh, change_temperature as changeTemperature,
-			floor_space as floorSpace, house_horizontal as houseHorizontal, house_vertical as houseVertical, house_height as houseHeight,
-			plant_spacing as plantSpacing, crop_cnt as cropCnt, house_direction as houseDirection, select_temp_sensor as selectTempSensor,
-			select_hum_sensor as selectHumSensor, house_name_i18n as houseNameI18n
-		    */
 		FROM green_house A
 		WHERE 1=1
 		<if test="gsm_key != null">AND  gsm_key = #{gsm_key}</if>
@@ -380,11 +351,6 @@
 		SELECT id,gsm_key as gsmKey, product_method_id AS productMethodId, green_house_type_id as greenHouseTypeId, house_name as houseName,
 			latitude, longitude, description, build_date as buildDate, last_update as lastUpdate, addr_1 as addr1,
 			addr_2 as addr2, zip
-			/*, nutrient_common_id as nutrientCommonId, change_gh as changeGh, change_temperature as changeTemperature,
-			floor_space as floorSpace, house_horizontal as houseHorizontal, house_vertical as houseVertical, house_height as houseHeight,
-			plant_spacing as plantSpacing, crop_cnt as cropCnt, house_direction as houseDirection, select_temp_sensor as selectTempSensor,
-			select_hum_sensor as selectHumSensor,  house_name_i18n as houseNameI18n
-			*/
 		FROM green_house
 	</select>
 	
@@ -477,15 +443,9 @@
 		INSERT INTO green_house(
 		product_method_id, green_house_type_id, house_name, latitude, longitude, description, build_date, last_update, addr_1, addr_2, zip,
 		gsm_key, id
-			/*,nutrient_common_id, change_gh, change_temperature, floor_space,
-		    house_horizontal, house_vertical, house_height, plant_spacing, crop_cnt, house_direction, select_temp_sensor, select_hum_sensor,
-		    house_name_i18n*/
 		)
 		SELECT product_method_id, green_house_type_id, house_name, latitude, longitude, description, build_date, last_update, addr_1, addr_2, zip,
 		 #{to_gsm_key}, (${to_gsm_key}  * 1000000000) + (id %  1000000000) AS id
-		       /*nutrient_common_id, change_gh, change_temperature, floor_space,
-		       house_horizontal, house_vertical, house_height, plant_spacing, crop_cnt, house_direction, select_temp_sensor, select_hum_sensor,
-		        house_name_i18n*/
 		FROM green_house
         WHERE gsm_key = #{from_gsm_key}
 	</insert>
