@@ -192,7 +192,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 			param.put("gsm_key", gsmKey);
 		}
 		if( gsmKeyList != null) {
-			param.put("gsm_key_llist", gsmKeyList);
+			param.put("gsm_key_list", gsmKeyList);
 		}
 		param.put("green_house_id", houseId);
 		List<HashMap<String,Object>> diaryList =houseDiaryMapper.getMonthlyHouseDiaryList(param);

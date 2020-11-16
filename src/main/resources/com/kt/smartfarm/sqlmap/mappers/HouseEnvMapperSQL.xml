@@ -15,8 +15,9 @@
 
 	<insert id="insert" useGeneratedKeys="true" parameterType="houseEnvVO">
 		INSERT INTO green_house( 
-       	product_method_id, green_house_type_id, house_name, latitude, longitude, description, build_date, last_update, addr_1, addr_2, zip,
-		gsm_key, house_name_i18n,id
+       	product_method_id, green_house_type_id, house_name, latitude, longitude,
+		description, build_date, last_update, addr_1, addr_2, zip,
+		gsm_key, id
 		)
 		VALUES (
 			#{productMethodId},#{greenHouseTypeId},#{houseName},#{latitude},#{longitude},#{description},now(),now(),#{addr1},#{addr2},#{zip},#{gsmKey}
@@ -179,7 +180,7 @@
 		SELECT 
 			id,  gsm_key as gsmKey,product_method_id AS productMethodId, green_house_type_id as greenHouseTypeId, house_name as houseName,
 			latitude, longitude, description, build_date as buildDate, last_update as lastUpdate, addr_1 as addr1,
-			addr_2 as addr2, zip, properties, IF( A.data_time > DATE_SUB(NOW(), INTERVAL 1 WEEK),  A.data_time, NULL) AS data_time
+			addr_2 as addr2, zip, properties, IF( A.data_time > DATE_SUB(NOW(), INTERVAL 1 WEEK),  A.data_time, NULL) AS dataTime
 		FROM green_house A
 		WHERE 1=1
 		<if test="gsm_key != null">AND  gsm_key = #{gsm_key}</if>

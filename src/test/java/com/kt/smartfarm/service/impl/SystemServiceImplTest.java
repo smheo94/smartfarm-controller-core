@@ -70,39 +70,16 @@ public class SystemServiceImplTest {
 
     }
 
-
-    @Test
-    public void selectAny() {
-        anyQueryTestList(QUERY_TYPE.select.name(),
-//"SELECT * FROM event WHERE green_house_id = '630005000000001'"
-//"SELECT * From control_setting_device WHERE gsm_key = 630015 ORDER BY logic_id, device_num, device_insert_order",
-//"SELECT * From control_setting_device WHERE gsm_key = 630003 ORDER BY logic_id, device_num, device_insert_order"
-//"SELECT * From controller WHERE gsm_key = 630015",
-//"SELECT * From control_setting WHERE gsm_key = 630015",
-//"SELECT * From device WHERE gsm_key = 630015",
-//"SELECT * From green_house WHERE gsm_key = 630015"
-            //"SELECT * FROM weather_cast ORDER BY id DESC LIMIT 100"
-        //        "SELECT * FROM user_info where phone LIKE '%819'",
-           //     "SELECT * FROM phone_setting where phone_number LIKE '%819'"
-                //"SELECT * FROM user_info WHERE user_id IN ( 'smheo94', 'dhback', 'syhwang3')"
-//                "SELECT * FROM SDK_SMS_SEND   ORDER BY MSG_ID DESC LIMIT 10\n",
-//                        "SELECT * FROM SDK_SMS_REPORT_DETAIL ORDER BY MSG_ID DESC LIMIT 10" );
-                //"SELECT * FROM user_loging ORDER BY login_time DESC LIMIT 100" );
-                //"SELECT * FROM control_properties"
-                "\t\tSELECT \n" +
-                        "\t\t* FROM \n" +
-                        "\t\tuser\n" +
-                        "\t\tORDER BY id DESC LIMIT 100\n" +
-                        "\t\t"
-        //"SELECT * FROM alarm_setting where phone_number = '01034496214'"
-        );
-        assertTrue(true);
-    }
     @Test
     public void updateAny() {
         anyQueryTestList(QUERY_TYPE.update.name(),
-        "INSERT INTO `user_info` (`idx`, `user_id`, `user_name`, `pwd`, `level`, `email`, `phone`, `create_date`, `update_date`, `pwd_update_date`, `zip`, `addr_1`, `addr_2`, `keep_session`, `encrypt_pwd`, `pin_code`, `pin_update_date`, `is_deleted`, `old_pwd1`, `old_pwd2`, `old_pwd_update1`, `old_pwd_update2`, `rsa_key`) \n" +
-        "VALUES (NULL, 'jeju-sfarm-api', 'Test', 'b6d9bcbf2306ca9a03d8bba7938e5ed6d8a20a4388a2b070c24d8239a023956816f48bb72e2142a3d6422ee02c22caec7e4e543005c994a08ceb5d198155fb1e', '0', NULL, '01072371525', NULL, '2020-09-17 20:52:49', '2019-02-28 16:30:52', NULL, NULL, NULL, '0', NULL, '5c0ef02ffec77b651e9c2cd1ee15613af401cc69e35daa3bb5f280668844b256a034be7b55674b1db3ff3162f1f24db249c95a0ea4e455549cb63e1e1626e557', '2019-02-28 20:42:02', NULL, NULL, NULL, NULL, NULL, NULL);"
+                "INSERT INTO pest_degree_days (   nx, ny) VALUES (    1, 1   )"
+
+//            (\n" +
+//                        "        167250,175086,146722,147082,160641,162017,164688,164030,163739,161441,169865,163066,161508,163108,175838,151697,158854\n" +
+//                        ",167920,161162,157021,173314,163167,160667,146473,171925,173672,173291,172606,170905,172678,173842,173885,173807\n" +
+//                        ",173246,174631,175859,151687,175972,146686,169730,153998,156128,175758,173936        )"
+
 
                 //"DELETE FROM  control_setting WHERE gsm_key = 630015"
                 //"UPDATE `control_logic_device` SET `device_param_name` = '컴프레셔밸브/펌프' , `able_array` = '1' WHERE `id` = '67003'; "
@@ -111,8 +88,114 @@ public class SystemServiceImplTest {
     }
 
     @Test
+    public void selectAny2() {
+        anyQueryTestList(QUERY_TYPE.select.name(),
+
+//"SELECT * FROM event WHERE green_house_id = '630005000000001'"
+//"SELECT * From control_setting_device WHERE gsm_key = 630015 ORDER BY logic_id, device_num, device_insert_order",
+//"SELECT * From control_setting_device WHERE gsm_key = 630003 ORDER BY logic_id, device_num, device_insert_order"
+//"SELECT * From controller WHERE gsm_key = 630015",
+//"SELECT * From control_setting WHERE gsm_key = 630015",
+//"SELECT * From device WHERE gsm_key = 630015",
+//"SELECT * From green_house WHERE gsm_key = 630015"
+                //"SELECT * FROM weather_cast ORDER BY id DESC LIMIT 100"
+                //        "SELECT * FROM user_info where phone LIKE '%819'",
+                //     "SELECT * FROM phone_setting where phone_number LIKE '%819'"
+                //"SELECT * FROM user_info WHERE user_id IN ( 'smheo94', 'dhback', 'syhwang3')"
+//                "SELECT * FROM SDK_SMS_SEND   ORDER BY MSG_ID DESC LIMIT 10\n",
+//                        "SELECT * FROM SDK_SMS_REPORT_DETAIL ORDER BY MSG_ID DESC LIMIT 10" );
+                //"SELECT * FROM user_loging ORDER BY login_time DESC LIMIT 100" );
+                //"SELECT * FROM SDK_SMS_REPORT WHERE NOW_DATE DESC LIMIT 100"\
+                //"SELECT *  FROM cctv where id = 245"
+//                "SELECT * FROM house_diary ORDER BY id DESC LIMIT 100"
+"\t\tSELECT\n" +
+        "\t\t\thd.id,\n" +
+        "\t\t\thd.green_house_id,\n" +
+        "\t\t\thdm.green_house_id AS house_id_list,\n" +
+        "\t\t\thd.title,\n" +
+        "\t\t\thd.content,\n" +
+        "\t\t\thd.work,\n" +
+        "\t\t\thd.etc,\n" +
+        "\t\t\thd.start_date,\n" +
+        "\t\t\thd.diary_type_id,\n" +
+        "\t\t\thd.diary_data,\n" +
+        "\t\t\thd.end_date,\n" +
+        "\t\t\thd.crops,\n" +
+        "\t\t\thd.harvest,\n" +
+        "\t\t\thd.income,\n" +
+        "\t\t\thd.spend,\n" +
+        "\t\t\thd.content_type,\n" +
+        "\t\t\thd.work_time,\n" +
+        "\t\t\thd.cctv_image_url,\n" +
+        "\t\t\thd.weather\n" +
+        "\t\tFROM house_diary AS hd\n" +
+        "\t\tINNER JOIN house_diary_map AS hdm ON hdm.diary_id = hd.id\n" +
+        "\t\tINNER JOIN green_house AS gh ON gh.id = hdm.green_house_id\n" +
+        "\t\tWHERE gh.gsm_key = 1401\t\t\n" +
+        "\t\tAND start_date BETWEEN '2020-11-01 00:00:00' AND '2020-11-30 23:59:59'\n" +
+        "\t\tAND end_date BETWEEN '2020-11-01 00:00:00'AND '2020-11-30 23:59:59'",
+                        "\t\tSELECT\n" +
+                                "\t\t\thd.id,\n" +
+                                "\t\t\thd.green_house_id,\n" +
+                                "\t\t\thdm.green_house_id AS house_id_list,\n" +
+                                "\t\t\thd.title,\n" +
+                                "\t\t\thd.content,\n" +
+                                "\t\t\thd.work,\n" +
+                                "\t\t\thd.etc,\n" +
+                                "\t\t\thd.start_date,\n" +
+                                "\t\t\thd.diary_type_id,\n" +
+                                "\t\t\thd.diary_data,\n" +
+                                "\t\t\thd.end_date,\n" +
+                                "\t\t\thd.crops,\n" +
+                                "\t\t\thd.harvest,\n" +
+                                "\t\t\thd.income,\n" +
+                                "\t\t\thd.spend,\n" +
+                                "\t\t\thd.content_type,\n" +
+                                "\t\t\thd.work_time,\n" +
+                                "\t\t\thd.cctv_image_url,\n" +
+                                "\t\t\thd.weather\n" +
+                                "\t\tFROM house_diary AS hd\n" +
+                                "\t\tINNER JOIN house_diary_map AS hdm ON hdm.diary_id = hd.id\n" +
+                                "\t\tINNER JOIN green_house AS gh ON gh.id = hdm.green_house_id\n" +
+                                "\t\tWHERE gh.id = 1401000000001\t\t\n" +
+                                "\t\tAND start_date BETWEEN '2020-11-01 00:00:00' AND '2020-11-30 23:59:59'\n" +
+                                "\t\tAND end_date BETWEEN '2020-11-01 00:00:00'AND '2020-11-30 23:59:59'",
+                        "SELECT HM.green_house_id AS A,       id, diary_type_id,     start_date, end_date    \n" +
+                                "FROM house_diary A \n" +
+                                "LEFT JOIN house_diary_map HM ON A.id = HM.diary_id\n" +
+                                "ORDER BY id DESC LIMIT 100"
+
+//                "\n" +
+//                        "SELECT A.id,\n" +
+//                        "            A.base_date,\n" +
+//                        "            A.base_time,\n" +
+//                        "            A.fcst_date,\n" +
+//                        "            A.fcst_time,\n" +
+//                        "            A.nx,\n" +
+//                        "            A.ny,\n" +
+//                        "\t        (SELECT fcst_value FROM weather_cast WHERE  fcst_date =CURDATE()  AND category = \"TMN\" AND nx=51 AND ny=64 AND house_id = 6300002000000001 GROUP BY nx, ny) AS TMN,\n" +
+//                        "            (SELECT fcst_value FROM weather_cast WHERE  fcst_date=CURDATE()  AND category = \"TMX\" AND nx=51 AND ny=64 AND house_id = 6300002000000001 GROUP BY nx, ny) AS TMX\n" +
+//                        "        FROM weather_cast A WHERE fcst_date=CURDATE()\n" +
+//                        "        AND nx=51 AND ny=64  AND house_id = 6300002000000001 GROUP BY nx, ny"
+//                        "SELECT\n" +
+//                                "\t\t\tgsm_info.gsm_key as gsmKey, gsm_info.user_info_id as userInfoId, is_mine as isMine, area_code as areaCode,\n" +
+//                                " \t\t\tfarm_nickname as farmNickname, gsm_info.update_date as updateDate, /*owner_user_info_id as ownerUserInfoId,*/ master_system_host as masterSystemHost,\n" +
+//                                " \t\t\tmaster_system_port as masterSystemPort, system_host as systemHost, system_port as systemPort,\n" +
+//                                " \t\t\tmqtt_broker_host as mqttbrokerHost, mqtt_broker_port as mqttBrokerPort, server_read_time as serverReadTime, product_interval as productInterval,\n" +
+//                                " \t\t\tmonitoring_interval as monitoringInterval, history_save_db_interval as historySaveDbInterval,\n" +
+//                                " \t\t\tdelay_auto_control_start as delayAutoControlStart, package_version as packageVersion, schema_version as schemaVersion, nutrient_monitoring_interval as nutrientMonitoringInterval,\n" +
+//                                " \t\t\tfarm_nickname_i18n as farmNicknameI18n, farm_db_id as farmDbId, category_id as categoryId, properties,\n" +
+//                                "\t\t\tUNIX_TIMESTAMP(NOW()) AS readTime\n" +
+//                                "\t\tFROM gsm_info\n" +
+//                                "where gsm_info.gsm_key IN ( SELECT VGA.gsm_key FROM vw_gsm_user_auth VGA WHERE VGA.user_idx = 99615850 )"
+
+        );
+        assertTrue(true);
+    }
+
+    @Test
     public void getPhoneInfo() {
-        String number = "965";
+        String number = "2917";
         anyQueryTestList(QUERY_TYPE.select.name(),
                 //"SELECT * FROM weather_cast ORDER BY id DESC LIMIT 100"
                 "SELECT * FROM user_info where phone LIKE '%" + number + "'",
@@ -123,7 +206,7 @@ public class SystemServiceImplTest {
 
     @Test
     public void selectUser() {
-        String userName = "김상" ;
+        String userName = "Tester5" ;
         String phone_num = "9961" ;
         anyQueryTest(QUERY_TYPE.select.name(), "SELECT * FROM user_info WHERE user_name LIKE '%" + userName + "%'");
         anyQueryTest(QUERY_TYPE.select.name(), "SELECT PS.* FROM user_info UI INNER JOIN phone_setting PS ON PS.user_idx = UI.idx WHERE user_name LIKE '%" + userName + "%'");
@@ -133,17 +216,17 @@ public class SystemServiceImplTest {
 
     @Test
     public void updatePhoneInfo() {
-        String userIdx = "99615994";
-        String phoneNumber = "010-5485-6929";
-//        anyQueryTestList(QUERY_TYPE.update.name(),
-//                String.format("UPDATE user_info set phone ='%s' WHERE idx = '%s'", phoneNumber, userIdx),
-//                String.format("UPDATE phone_setting set phone_number ='%s' WHERE user_idx = '%s' ", phoneNumber, userIdx)
-//        );
-
+        String userIdx = "99615954";
+        String phoneNumber = "01054010910";
         anyQueryTestList(QUERY_TYPE.update.name(),
                 String.format("UPDATE user_info set phone ='%s' WHERE idx = '%s'", phoneNumber, userIdx),
-                String.format("INSERT INTO phone_setting (user_idx, imei, token, phone_number)  VALUES        (%s, '', '', '%s' )", userIdx,  phoneNumber)
+                String.format("UPDATE phone_setting set phone_number ='%s' WHERE user_idx = '%s' ", phoneNumber, userIdx)
         );
+
+//        anyQueryTestList(QUERY_TYPE.update.name(),
+//                String.format("UPDATE user_info set phone ='%s' WHERE idx = '%s'", phoneNumber, userIdx),
+//                String.format("INSERT INTO phone_setting (user_idx, imei, token, phone_number)  VALUES        (%s, '', '', '%s' )", userIdx,  phoneNumber)
+//        );
     }
     @Test
     public void updatePhoneInfo2() {
@@ -261,6 +344,19 @@ public class SystemServiceImplTest {
         anyQueryTest(QUERY_TYPE.update.name(), "DELETE FROM `event` WHERE ( device_id != 0 AND device_id NOT IN ( SELECT device_id FROM map_green_house_device ) )");
         assertTrue(true);
     }
+
+    @Test
+    public void deleteDuplicateEventList() {
+        anyQueryTest(QUERY_TYPE.update.name(),
+                "DELETE FROM `event`  WHERE id IN (" +
+                " SELECT MIN(id) FROM `event`" +
+                " WHERE event_check=0  AND restore_date IS NULL AND event_date > '2020-09-01'" +
+                " AND event_sub_type_id IN ( 201, 202 )" +
+                " GROUP BY gsm_key, event_type_id, event_sub_type_id, device_id, event_check" +
+                " HAVING COUNT(id) > 1\n" +
+                " )");
+        assertTrue(true);
+    }
     @Test
     public void getGSMStatus() {
         anyQueryTest(QUERY_TYPE.select.name(), "SELECT gsm_key, system_version, FROM_UNIXTIME(update_date/1000000) AS onTime FROM gsm_status ");
@@ -297,7 +393,7 @@ public class SystemServiceImplTest {
         //String oAuthserver = "http://test.oauthsmartfarm.kt.co.kr";
         //String apiUrl = "http://dev1705.vivans.net:47100/env/system/data/";
         String apiUrl = "https://apismartfarm.kt.co.kr/env/system/data/";
-        //String apiUrl = "http://test.apismartfarm.kt.co.kr/env/system/data/";
+        //String apiUrl = "http://127.0.0.1:48801/system/data/";
         //RestClientUtil client = new RestClientUtil(oAuthserver, "kt-gsm-controller", "05dc8fbd5e01a6625e8a6eb1ddf482c9");//"51724690439c3e4e89a9efc5e2ca567d5e4b09e6fa69a06bd65e7597418737cc");
         RestClientUtil client = new RestClientUtil(oAuthserver, "kt-gsm-controller", "05dc8fbd5e01a6625e8a6eb1ddf482c9");//"51724690439c3e4e89a9efc5e2ca567d5e4b09e6fa69a06bd65e7597418737cc");
 
