@@ -98,7 +98,7 @@ public class SystemController {
     @PreAuthorize("hasRole('ROLE_SYS')")
     @ResponseBody
     @RequestMapping(value = "/run_schedule/", method = RequestMethod.GET)
-    public void RunSchedule(@RequestParam("schedulerName") String schedulerName)  {
+    public void runSchedule(@RequestParam("schedulerName") String schedulerName)  {
         if( "UltraWeather".equalsIgnoreCase(schedulerName)) {
             try {
                 taskScheduler.runUltraShortWeatherSchedule();

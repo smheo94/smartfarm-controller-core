@@ -138,7 +138,7 @@ public class HouseDiaryController {
      */
     @RequestMapping(value = "/list/{greenHouseId}", method = RequestMethod.GET)
     @ResponseBody
-    public Result MonthlyHouseDiaryList(@PathVariable("greenHouseId") Long greenHouseId,
+    public Result monthlyHouseDiaryList(@PathVariable("greenHouseId") Long greenHouseId,
                                         @RequestParam(value = "year", required = false) Integer year, @RequestParam(value = "month", required = false) Integer month) {
         try {
             return new Result(houseDiaryService.getMonthlyHouseDiaryList(null, null, greenHouseId, year, month));
@@ -156,7 +156,7 @@ public class HouseDiaryController {
      */
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody
-    public Result MonthlyHouseDiaryListByGSM(@RequestParam(value = "gsmKey", required = false) Long gsmKey,
+    public Result monthlyHouseDiaryListByGSM(@RequestParam(value = "gsmKey", required = false) Long gsmKey,
                                              @RequestParam(value = "gsmKeyList", required = false) List<Long> gsmKeyList,
                                              @RequestParam(value = "year", required = false) Integer year, @RequestParam(value = "month", required = false) Integer month) {
         try {
@@ -192,7 +192,7 @@ public class HouseDiaryController {
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseBody
-    public Result DeleteHouseDiary(@PathVariable("id") Integer id) {
+    public Result deleteHouseDiary(@PathVariable("id") Integer id) {
         try {
             return new Result(houseDiaryService.deleteHouseDiary(id));
         } catch (Exception e) {
@@ -223,7 +223,7 @@ public class HouseDiaryController {
      */
     @RequestMapping(value = "/categoryList", method = RequestMethod.GET)
     @ResponseBody
-    public Result CategoryList() {
+    public Result categoryList() {
         try {
             return new Result(houseDiaryService.getCategoryList());
         } catch (Exception e) {

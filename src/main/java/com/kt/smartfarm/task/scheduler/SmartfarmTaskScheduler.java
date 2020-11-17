@@ -66,7 +66,7 @@ public class SmartfarmTaskScheduler {
 	public void runWeatherSchedule(){
 		List<HashMap<String,Object>> houseList = new ArrayList<>();
 		//시간계산이 복잡하여 단순화함
-		//if(SYSTEM_TYPE.equalsIgnoreCase("supervisor")){
+		if(SYSTEM_TYPE.equalsIgnoreCase("supervisor")){
 			Calendar c = Calendar.getInstance();
 			int h = c.get(Calendar.HOUR_OF_DAY);
 			c.add(Calendar.HOUR_OF_DAY, -(h%3+1));
@@ -94,7 +94,7 @@ public class SmartfarmTaskScheduler {
 					}
 				}
 			}
-		//}
+		}
 	}
 
 	private void getWeatherCastData(String regDay, String regTimeString, String nx, String ny, Long houseId) {
@@ -164,9 +164,7 @@ public class SmartfarmTaskScheduler {
 			hm.put("fcst_value", item.get("fcstValue"));//카테고리에 해당하는 예보 값
 			hm.put("category", item.get("category"));
 			hm.put(item.get("category").toString(), item.get("fcstValue"));
-			if(SYSTEM_TYPE.equalsIgnoreCase("supervisor")) {
-				houseEnvService.insertForecastData(hm);
-			}
+			houseEnvService.insertForecastData(hm);
 		}
 		for(Map.Entry<String, LinkedHashMap<String,Object>> hmEntry : simpleForecastMap.entrySet()) {
 			houseEnvService.insertForecastV2Data(hmEntry.getValue());

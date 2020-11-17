@@ -27,4 +27,14 @@ ALTER TABLE `gsm_category_view` CHANGE `category_id` `category_id` INT(11) NOT N
 ALTER TABLE `cd_liquid` ADD PRIMARY KEY (`liquid_id`);
   
  
+```
+
+
+# 생육관리
+```sql
+UPDATE cd_diary_properties
+SET properties_json = JSON_INSERT( properties_json, '$.crops_data',  1) 
+WHERE property_data_type = 'number' AND id NOT IN ( 501010, 501020, 501071,  501072,  501073, 200030, 500100, 500110, 501412, 600020);
+
+UPDATE cd_diary_properties SET display_text = '작물' WHERE  ui_class_name = 'crops'; 
 ``` 
