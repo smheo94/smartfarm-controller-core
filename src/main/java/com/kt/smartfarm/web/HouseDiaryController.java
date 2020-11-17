@@ -140,9 +140,9 @@ public class HouseDiaryController {
     @RequestMapping(value = "/type/{diaryTypeId}/list", method = RequestMethod.GET)
     @ResponseBody
     public Result getHouseDiaryListWithType(@PathVariable("diaryTypeId") Integer diaryTypeId,
-                                            @RequestParam(value = "gsmKey", required = true) Long gsmKey,
-                                            @RequestParam(value = "gsmKey", required = false) String startDate,
-                                            @RequestParam(value = "gsmKey", required = false) String endDate) {
+                                            @RequestParam(value = "gsmKey") Long gsmKey,
+                                            @RequestParam(value = "startDate", required = false) String startDate,
+                                            @RequestParam(value = "endDate", required = false) String endDate) {
         HashMap<String,Object> param = new HashMap<>();
         try {
             param.put("diary_type_id", diaryTypeId);
