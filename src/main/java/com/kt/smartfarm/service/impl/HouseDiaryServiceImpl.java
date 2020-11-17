@@ -180,11 +180,19 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 		return result;
 	}
 
+	@Override
+	public HashMap<String,Object> getHouseDiaryList(HashMap<String,Object> param) {
+		HashMap<String,Object> result = new HashMap<>();
+		List<HashMap<String,Object>> diaryList =houseDiaryMapper.getHouseDiaryList(param);
+		List<HashMap<String,Object>> cropsDiaryList =houseDiaryMapper.getCropsDiaryList(param);
+		result.put("houseDiary", diaryList);
+		result.put("cropsDiary", cropsDiaryList);
+		return result;
+	}
 
 	@Override
 	public HashMap<String,Object> getMonthlyHouseDiaryList(List<Long> gsmKeyList,  Long gsmKey, Long houseId,Integer year, Integer month) {
 		HashMap<String,Object> param = new HashMap<>();
-		HashMap<String,Object> result = new HashMap<>();
 		if(year != null && month != null){
 			param = getMonthDate(year,month);	
 		}
@@ -195,12 +203,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 			param.put("gsm_key_list", gsmKeyList);
 		}
 		param.put("green_house_id", houseId);
-		List<HashMap<String,Object>> diaryList =houseDiaryMapper.getMonthlyHouseDiaryList(param);
-		List<HashMap<String,Object>> cropsDiaryList =houseDiaryMapper.getMonthlyCropsDiaryList(param);
-		result.put("houseDiary", diaryList);
-		result.put("cropsDiary", cropsDiaryList);
-		return result;
-		
+		return this.getHouseDiaryList(param);
 	}
 
 /*
