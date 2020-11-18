@@ -141,12 +141,16 @@ public class HouseDiaryController {
     @ResponseBody
     public Result getHouseDiaryListWithType(@PathVariable("baseDiaryTypeId") Integer baseDiaryTypeId,
                                             @RequestParam(value = "gsmKey") Long gsmKey,
+                                            @RequestParam(value = "diaryTypeId", required = false) Integer diaryTypeId,
                                             @RequestParam(value = "startDate", required = false) String startDate,
                                             @RequestParam(value = "endDate", required = false) String endDate) {
         HashMap<String,Object> param = new HashMap<>();
         try {
             param.put("base_diary_type_id", baseDiaryTypeId);
             param.put("gsm_key", gsmKey);
+            if ( diaryTypeId != null ) {
+                param.put("diary_type_id", diaryTypeId);
+            }
             if ( startDate != null ) {
                 param.put("start_date", DateUtil.parse(startDate));
             }
