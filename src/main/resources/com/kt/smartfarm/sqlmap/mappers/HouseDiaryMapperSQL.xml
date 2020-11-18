@@ -168,7 +168,6 @@
 			hd.work,
 			hd.etc,
 			hd.start_date,
-			hd.diary_type_id,
 			hd.diary_data,
 			hd.end_date,
 			hd.crops,
@@ -178,10 +177,14 @@
 			hd.content_type,
 			hd.work_time,
 			hd.cctv_image_url,
-			hd.weather
+			hd.weather,
+			dt.diary_type_id,
+			IFNULL(dt.base_diary_type_id, dt.diary_type_id) base_diary_type_id,
+			dt.is_base_diary
 		FROM house_diary as hd
 		INNER JOIN house_diary_map AS hdm on hdm.diary_id = hd.id
 		INNER JOIN green_house AS gh ON gh.id = hdm.green_house_id
+		INNER JOIN cd_diary_type AS dt ON dt.id = hd.diary_type_id
 		<where>
 			<if test="gsm_key != null">gh.gsm_key = #{gsm_key}</if>
 			<if test="gsm_key_list != null">
@@ -190,7 +193,9 @@
 				</foreach>
 			</if>
 			<if test="green_house_id != null">AND gh.id = #{green_house_id}</if>
-			<if test="diary_type_id != null">AND hd.diary_type_id = #{diary_type_id}</if>
+			<if test="diary_type_id != null">AND dt.diary_type_id = #{diary_type_id}</if>
+			<if test="base_diary_type_id != null">AND (dt.base_diary_type_id = #{base_diary_type_id} OR dt.diary_type_id = #{base_diary_type_id})</if>
+			<if test="is_base_diary != null">AND dt.is_base_diary = #{is_base_diary}</if>
 			<if test="start_date != null and end_date != null">
 				AND ( start_date BETWEEN #{start_date} AND #{end_date} OR end_date BETWEEN #{start_date} AND #{end_date} )
 			</if>

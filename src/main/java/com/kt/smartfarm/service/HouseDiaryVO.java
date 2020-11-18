@@ -32,6 +32,7 @@ public class HouseDiaryVO {
 	byte[] file;
 	String fileName;
 	String diaryTypeId;
+	String baseDiaryTypeId;
 	//String diaryData;
 	HashMap<String, Object> diaryData;
 	List<HashMap<String,Object>> houseDiaryFile;

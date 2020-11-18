@@ -137,15 +137,15 @@ public class HouseDiaryController {
      * @return
      * @description 작업일지, 가계부 월별,전체 리스트
      */
-    @RequestMapping(value = "/type/{diaryTypeId}/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/type/{baseDiaryTypeId}/list", method = RequestMethod.GET)
     @ResponseBody
-    public Result getHouseDiaryListWithType(@PathVariable("diaryTypeId") Integer diaryTypeId,
+    public Result getHouseDiaryListWithType(@PathVariable("baseDiaryTypeId") Integer baseDiaryTypeId,
                                             @RequestParam(value = "gsmKey") Long gsmKey,
                                             @RequestParam(value = "startDate", required = false) String startDate,
                                             @RequestParam(value = "endDate", required = false) String endDate) {
         HashMap<String,Object> param = new HashMap<>();
         try {
-            param.put("diary_type_id", diaryTypeId);
+            param.put("base_diary_type_id", baseDiaryTypeId);
             param.put("gsm_key", gsmKey);
             if ( startDate != null ) {
                 param.put("start_date", DateUtil.parse(startDate));
@@ -155,7 +155,7 @@ public class HouseDiaryController {
             }
             return new Result(houseDiaryService.getHouseDiaryList(param));
         } catch (Exception e) {
-            log.warn("getHouseDiaryListWithType :{}, {}, {}, {}, {}", diaryTypeId, gsmKey, startDate, endDate, e);
+            log.warn("getHouseDiaryListWithType :{}, {}, {}, {}, {}", baseDiaryTypeId, gsmKey, startDate, endDate, e);
             return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, "오류가 발생했습니다. 관리자에게 문의해 주세요"); /*e.getMessage());*/
         }
     }
