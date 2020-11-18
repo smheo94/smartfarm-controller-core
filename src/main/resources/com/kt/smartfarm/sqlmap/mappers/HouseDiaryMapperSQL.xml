@@ -178,8 +178,8 @@
 			hd.work_time,
 			hd.cctv_image_url,
 			hd.weather,
-			dt.diary_type_id,
-			IFNULL(dt.base_diary_type_id, dt.diary_type_id) base_diary_type_id,
+			dt.id diary_type_id,
+			IFNULL(dt.base_diary_type_id, dt.id) base_diary_type_id,
 			dt.is_base_diary
 		FROM house_diary as hd
 		INNER JOIN house_diary_map AS hdm on hdm.diary_id = hd.id
@@ -193,8 +193,8 @@
 				</foreach>
 			</if>
 			<if test="green_house_id != null">AND gh.id = #{green_house_id}</if>
-			<if test="diary_type_id != null">AND dt.diary_type_id = #{diary_type_id}</if>
-			<if test="base_diary_type_id != null">AND (dt.base_diary_type_id = #{base_diary_type_id} OR dt.diary_type_id = #{base_diary_type_id})</if>
+			<if test="diary_type_id != null">AND dt.id = #{diary_type_id}</if>
+			<if test="base_diary_type_id != null">AND (dt.base_diary_type_id = #{base_diary_type_id} OR dt.id = #{base_diary_type_id})</if>
 			<if test="is_base_diary != null">AND dt.is_base_diary = #{is_base_diary}</if>
 			<if test="start_date != null and end_date != null">
 				AND ( start_date BETWEEN #{start_date} AND #{end_date} OR end_date BETWEEN #{start_date} AND #{end_date} )
