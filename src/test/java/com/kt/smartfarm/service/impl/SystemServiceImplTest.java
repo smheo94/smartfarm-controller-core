@@ -73,7 +73,7 @@ public class SystemServiceImplTest {
     @Test
     public void updateAny() {
         anyQueryTestList(QUERY_TYPE.update.name(),
-                "INSERT INTO pest_degree_days (   nx, ny) VALUES (    1, 1   )"
+                "insert into `oauth_client_details` (`client_id`, `resource_ids`, `client_secret`, `scope`, `authorized_grant_types`, `web_server_redirect_uri`, `authorities`, `access_token_validity`, `refresh_token_validity`, `additional_information`, `autoapprove`) values ('jeju-sfarm-api', NULL, 'dcb33de0d5986dde786f5abaf1ee3703', 'read,write', 'client_credentials,implicit,refresh_token', NULL, 'ROLE_JEJU', '36000', '2592000', NULL, NULL)"
 
 //            (\n" +
 //                        "        167250,175086,146722,147082,160641,162017,164688,164030,163739,161441,169865,163066,161508,163108,175838,151697,158854\n" +
@@ -90,7 +90,7 @@ public class SystemServiceImplTest {
     @Test
     public void selectAny2() {
         anyQueryTestList(QUERY_TYPE.select.name(),
-
+"SELECT  *   FROM user_info_roles where user_idx = '99616230'"
 //"SELECT * FROM event WHERE green_house_id = '630005000000001'"
 //"SELECT * From control_setting_device WHERE gsm_key = 630015 ORDER BY logic_id, device_num, device_insert_order",
 //"SELECT * From control_setting_device WHERE gsm_key = 630003 ORDER BY logic_id, device_num, device_insert_order"
@@ -107,63 +107,63 @@ public class SystemServiceImplTest {
                 //"SELECT * FROM user_loging ORDER BY login_time DESC LIMIT 100" );
                 //"SELECT * FROM SDK_SMS_REPORT WHERE NOW_DATE DESC LIMIT 100"\
                 //"SELECT *  FROM cctv where id = 245"
-//                "SELECT * FROM house_diary ORDER BY id DESC LIMIT 100"
-"\t\tSELECT\n" +
-        "\t\t\thd.id,\n" +
-        "\t\t\thd.green_house_id,\n" +
-        "\t\t\thdm.green_house_id AS house_id_list,\n" +
-        "\t\t\thd.title,\n" +
-        "\t\t\thd.content,\n" +
-        "\t\t\thd.work,\n" +
-        "\t\t\thd.etc,\n" +
-        "\t\t\thd.start_date,\n" +
-        "\t\t\thd.diary_type_id,\n" +
-        "\t\t\thd.diary_data,\n" +
-        "\t\t\thd.end_date,\n" +
-        "\t\t\thd.crops,\n" +
-        "\t\t\thd.harvest,\n" +
-        "\t\t\thd.income,\n" +
-        "\t\t\thd.spend,\n" +
-        "\t\t\thd.content_type,\n" +
-        "\t\t\thd.work_time,\n" +
-        "\t\t\thd.cctv_image_url,\n" +
-        "\t\t\thd.weather\n" +
-        "\t\tFROM house_diary AS hd\n" +
-        "\t\tINNER JOIN house_diary_map AS hdm ON hdm.diary_id = hd.id\n" +
-        "\t\tINNER JOIN green_house AS gh ON gh.id = hdm.green_house_id\n" +
-        "\t\tWHERE gh.gsm_key = 1401\t\t\n" +
-        "\t\tAND start_date BETWEEN '2020-11-01 00:00:00' AND '2020-11-30 23:59:59'\n" +
-        "\t\tAND end_date BETWEEN '2020-11-01 00:00:00'AND '2020-11-30 23:59:59'",
-                        "\t\tSELECT\n" +
-                                "\t\t\thd.id,\n" +
-                                "\t\t\thd.green_house_id,\n" +
-                                "\t\t\thdm.green_house_id AS house_id_list,\n" +
-                                "\t\t\thd.title,\n" +
-                                "\t\t\thd.content,\n" +
-                                "\t\t\thd.work,\n" +
-                                "\t\t\thd.etc,\n" +
-                                "\t\t\thd.start_date,\n" +
-                                "\t\t\thd.diary_type_id,\n" +
-                                "\t\t\thd.diary_data,\n" +
-                                "\t\t\thd.end_date,\n" +
-                                "\t\t\thd.crops,\n" +
-                                "\t\t\thd.harvest,\n" +
-                                "\t\t\thd.income,\n" +
-                                "\t\t\thd.spend,\n" +
-                                "\t\t\thd.content_type,\n" +
-                                "\t\t\thd.work_time,\n" +
-                                "\t\t\thd.cctv_image_url,\n" +
-                                "\t\t\thd.weather\n" +
-                                "\t\tFROM house_diary AS hd\n" +
-                                "\t\tINNER JOIN house_diary_map AS hdm ON hdm.diary_id = hd.id\n" +
-                                "\t\tINNER JOIN green_house AS gh ON gh.id = hdm.green_house_id\n" +
-                                "\t\tWHERE gh.id = 1401000000001\t\t\n" +
-                                "\t\tAND start_date BETWEEN '2020-11-01 00:00:00' AND '2020-11-30 23:59:59'\n" +
-                                "\t\tAND end_date BETWEEN '2020-11-01 00:00:00'AND '2020-11-30 23:59:59'",
-                        "SELECT HM.green_house_id AS A,       id, diary_type_id,     start_date, end_date    \n" +
-                                "FROM house_diary A \n" +
-                                "LEFT JOIN house_diary_map HM ON A.id = HM.diary_id\n" +
-                                "ORDER BY id DESC LIMIT 100"
+//                "SELECT * FROM crops_diary LIMIT 10 "
+//"\t\tSELECT\n" +
+//        "\t\t\thd.id,\n" +
+//        "\t\t\thd.green_house_id,\n" +
+//        "\t\t\thdm.green_house_id AS house_id_list,\n" +
+//        "\t\t\thd.title,\n" +
+//        "\t\t\thd.content,\n" +
+//        "\t\t\thd.work,\n" +
+//        "\t\t\thd.etc,\n" +
+//        "\t\t\thd.start_date,\n" +
+//        "\t\t\thd.diary_type_id,\n" +
+//        "\t\t\thd.diary_data,\n" +
+//        "\t\t\thd.end_date,\n" +
+//        "\t\t\thd.crops,\n" +
+//        "\t\t\thd.harvest,\n" +
+//        "\t\t\thd.income,\n" +
+//        "\t\t\thd.spend,\n" +
+//        "\t\t\thd.content_type,\n" +
+//        "\t\t\thd.work_time,\n" +
+//        "\t\t\thd.cctv_image_url,\n" +
+//        "\t\t\thd.weather\n" +
+//        "\t\tFROM house_diary AS hd\n" +
+//        "\t\tINNER JOIN house_diary_map AS hdm ON hdm.diary_id = hd.id\n" +
+//        "\t\tINNER JOIN green_house AS gh ON gh.id = hdm.green_house_id\n" +
+//        "\t\tWHERE gh.gsm_key = 1401\t\t\n" +
+//        "\t\tAND start_date BETWEEN '2020-11-01 00:00:00' AND '2020-11-30 23:59:59'\n" +
+//        "\t\tAND end_date BETWEEN '2020-11-01 00:00:00'AND '2020-11-30 23:59:59'",
+//                        "\t\tSELECT\n" +
+//                                "\t\t\thd.id,\n" +
+//                                "\t\t\thd.green_house_id,\n" +
+//                                "\t\t\thdm.green_house_id AS house_id_list,\n" +
+//                                "\t\t\thd.title,\n" +
+//                                "\t\t\thd.content,\n" +
+//                                "\t\t\thd.work,\n" +
+//                                "\t\t\thd.etc,\n" +
+//                                "\t\t\thd.start_date,\n" +
+//                                "\t\t\thd.diary_type_id,\n" +
+//                                "\t\t\thd.diary_data,\n" +
+//                                "\t\t\thd.end_date,\n" +
+//                                "\t\t\thd.crops,\n" +
+//                                "\t\t\thd.harvest,\n" +
+//                                "\t\t\thd.income,\n" +
+//                                "\t\t\thd.spend,\n" +
+//                                "\t\t\thd.content_type,\n" +
+//                                "\t\t\thd.work_time,\n" +
+//                                "\t\t\thd.cctv_image_url,\n" +
+//                                "\t\t\thd.weather\n" +
+//                                "\t\tFROM house_diary AS hd\n" +
+//                                "\t\tINNER JOIN house_diary_map AS hdm ON hdm.diary_id = hd.id\n" +
+//                                "\t\tINNER JOIN green_house AS gh ON gh.id = hdm.green_house_id\n" +
+//                                "\t\tWHERE gh.id = 1401000000001\t\t\n" +
+//                                "\t\tAND start_date BETWEEN '2020-11-01 00:00:00' AND '2020-11-30 23:59:59'\n" +
+//                                "\t\tAND end_date BETWEEN '2020-11-01 00:00:00'AND '2020-11-30 23:59:59'",
+//                        "SELECT HM.green_house_id AS A,       id, diary_type_id,     start_date, end_date    \n" +
+//                                "FROM house_diary A \n" +
+//                                "LEFT JOIN house_diary_map HM ON A.id = HM.diary_id\n" +
+//                                "ORDER BY id DESC LIMIT 100"
 
 //                "\n" +
 //                        "SELECT A.id,\n" +
@@ -195,9 +195,8 @@ public class SystemServiceImplTest {
 
     @Test
     public void getPhoneInfo() {
-        String number = "2917";
+        String number = "7740";
         anyQueryTestList(QUERY_TYPE.select.name(),
-                //"SELECT * FROM weather_cast ORDER BY id DESC LIMIT 100"
                 "SELECT * FROM user_info where phone LIKE '%" + number + "'",
                 "SELECT * FROM phone_setting where phone_number LIKE '%" + number + "'"
         );
@@ -206,18 +205,16 @@ public class SystemServiceImplTest {
 
     @Test
     public void selectUser() {
-        String userName = "Tester5" ;
-        String phone_num = "9961" ;
+        String userName = "연례" ;
         anyQueryTest(QUERY_TYPE.select.name(), "SELECT * FROM user_info WHERE user_name LIKE '%" + userName + "%'");
         anyQueryTest(QUERY_TYPE.select.name(), "SELECT PS.* FROM user_info UI INNER JOIN phone_setting PS ON PS.user_idx = UI.idx WHERE user_name LIKE '%" + userName + "%'");
-        //anyQueryTest(QUERY_TYPE.select.name(), "SELECT * FROM user_info WHERE user_id = 'parkos'");
         assertTrue(true);
     }
 
     @Test
     public void updatePhoneInfo() {
-        String userIdx = "99615954";
-        String phoneNumber = "01054010910";
+        String userIdx = "99616078";
+        String phoneNumber = "01089555892";
         anyQueryTestList(QUERY_TYPE.update.name(),
                 String.format("UPDATE user_info set phone ='%s' WHERE idx = '%s'", phoneNumber, userIdx),
                 String.format("UPDATE phone_setting set phone_number ='%s' WHERE user_idx = '%s' ", phoneNumber, userIdx)

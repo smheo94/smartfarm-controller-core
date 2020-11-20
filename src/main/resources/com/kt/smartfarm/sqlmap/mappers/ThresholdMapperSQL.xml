@@ -22,7 +22,7 @@
 
 	<delete id="delete" parameterType="map">
 		DELETE
-		FROM sf_main.gsm_threshold
+		FROM gsm_threshold
 		WHERE gsm_key = #{gsmKey} AND green_house_id = #{greenHouseId};
 	</delete>
 

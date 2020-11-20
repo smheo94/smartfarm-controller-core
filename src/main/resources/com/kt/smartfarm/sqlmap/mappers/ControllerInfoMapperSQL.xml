@@ -9,7 +9,7 @@
 
 	<select id="list" resultMap="controllerInfo">		
 		SELECT id, model, NAME, homepage, email, phone, last_update, name_i18n
-		FROM sf_main.cd_controller_info
+		FROM cd_controller_info
 		<where>
 		<if test="controller_info_id != null" >
 			id = #{controller_info_id}
