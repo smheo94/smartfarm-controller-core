@@ -22,9 +22,11 @@
 	 	, GROUP_CONCAT(DR.depend_type) AS user_role_depend_type
 	FROM cd_diary_type DT
 	LEFT JOIN cd_diary_depend_mclass DPM ON DPM.diary_type_id = DT.id
-		AND DPM.depend_mclasscode IN  ( SELECT prd_code FROM green_house GH INNER JOIN green_house_product GHP ON GH.id = GHP.green_house_id  WHERE
-		                                                                                                                                            (#{houseId} IS NULL OR
-		                                                                                                                                            GH.id = #{houseId} ) AND GH.gsm_key = #{gsmKey} )
+		AND DPM.depend_mclasscode IN  (
+			SELECT prd_code
+			FROM green_house GH
+			INNER JOIN green_house_product GHP ON GH.id = GHP.green_house_id
+			WHERE   (#{houseId} IS NULL OR GH.id = #{houseId} ) AND GH.gsm_key = #{gsmKey} )
 	LEFT JOIN cd_diary_depend_role DR ON DR.diary_type_id = DT.id
 	LEFT JOIN user_info_roles UIR ON UIR.roles_id = DR.depend_role_id  AND UIR.user_idx = #{userIdx}
 	WHERE ( DR.depend_type  IS NULL OR DR.depend_type  != 'DENY'  )   AND ( DPM.depend_type IS NULL OR DPM.depend_type != 'DENY' )
@@ -33,6 +35,7 @@
 	ORDER BY DT.diary_view_order
 	;
 	</select>
+
 
 	<select id="getDiaryTypePropertyList" resultMap="diaryTypeProperties" parameterType="map" >
 		SELECT

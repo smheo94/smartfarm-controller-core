@@ -22,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 
 import java.util.Map;
@@ -39,7 +40,7 @@ public class DiaryTypeServiceImpl extends EgovAbstractServiceImpl implements Dia
 	@Override
 	public List<DiaryTypeVO> getDiaryTypeList(Long gsmKey, Long houseId, Long userIdx) {
 		final List<DiaryTypeVO> diaryTypeList = mapper.getDiaryTypeList(gsmKey, houseId, userIdx);
-		final List<DiaryTypePropertiesVO> diaryTypePropertyList = mapper.getDiaryTypePropertyList((Long)null);
+		final List<DiaryTypePropertiesVO> diaryTypePropertyList = mapper.getDiaryTypePropertyList(null);
 		diaryTypeList.forEach( cl ->{
 			try {
 				cl.setPropertyList(diaryTypePropertyList.stream().filter(m -> Objects.equals(m.getDiaryTypeId(), cl.getId())).collect(Collectors.toList()));
@@ -53,7 +54,9 @@ public class DiaryTypeServiceImpl extends EgovAbstractServiceImpl implements Dia
 
 	@Override
 	public List<DiaryTypePropertiesVO> getDiaryTypePropertyList(Long diaryTypeId) {
-		return  mapper.getDiaryTypePropertyList(diaryTypeId);
+		Map<String, Object> param = new HashMap<>();
+		param.put("diaryTypeId", diaryTypeId);
+		return  mapper.getDiaryTypePropertyList(param);
 	}
 
 	@Override
