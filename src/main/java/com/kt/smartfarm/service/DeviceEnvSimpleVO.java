@@ -22,15 +22,14 @@ public class DeviceEnvSimpleVO {
 	Integer deviceTypeId;
 	Integer deviceTypeIdx;
 	String nickname;
-
 	Integer autoManualMode;
-
 	String deviceType;
     String deviceTypeGroup;
     String kind;
     String dcac;
 	String valueMod;
 	Integer valueType;
+	String controlUnit;
 	Map<String,Object> properties;
 
 	public String getDeviceTypeKey() {

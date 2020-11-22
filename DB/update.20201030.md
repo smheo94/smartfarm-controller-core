@@ -38,3 +38,13 @@ WHERE property_data_type = 'number' AND id NOT IN ( 501010, 501020, 501071,  501
 
 UPDATE cd_diary_properties SET display_text = '작물' WHERE  ui_class_name = 'crops'; 
 ``` 
+
+# 프로퍼티 누락분 작성
+```sql
+UPDATE `control_properties` SET `description` = '열림시간조건' WHERE `id` = '146'; 
+UPDATE `control_properties` SET `description` = '열림시간' WHERE `id` = '147'; 
+UPDATE `control_properties` SET `description` = '닫힘시간조건' WHERE `id` = '62'; 
+UPDATE `control_properties` SET `description` = '닫힘시간' WHERE `id` = '64'; 
+
+
+```

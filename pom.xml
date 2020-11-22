@@ -492,16 +492,16 @@
                      </configuration>
                  </execution>
 
-                    <execution>
-                        <id>push-image-version</id>
-                        <phase>install</phase>
-                        <goals>
-                            <goal>push</goal>
-                        </goals>
-                        <configuration>
-                            <tag>${project.version}</tag>
-                        </configuration>
-                    </execution>
+                <execution>
+                    <id>push-image-version</id>
+                    <phase>install</phase>
+                    <goals>
+                        <goal>push</goal>
+                    </goals>
+                    <configuration>
+                        <tag>${project.version}</tag>
+                    </configuration>
+                </execution>
                 </executions>
                 <configuration> 
                     <username>argos</username>

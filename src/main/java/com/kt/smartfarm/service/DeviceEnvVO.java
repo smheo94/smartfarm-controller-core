@@ -41,7 +41,7 @@ public class DeviceEnvVO extends DeviceEnvSimpleVO {
 	Integer accumH; //deprecated
 	Integer accumD; //deprecated
 	Integer opTime; //deprecated
-
+	String controlUnit;
 	List<VDeviceEnvVO> relationDeviceList; //deprecated
 	List<EDeviceEnvVO> electricDeviceList; //deprecated
 }
