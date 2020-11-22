@@ -27,7 +27,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 //import io.swagger.annotations.ApiOperation;
 
@@ -71,6 +73,24 @@ public class DiaryTypeController {
             return new Result(service.getDiaryTypePropertyList(diaryTypeId));
         } catch (Exception e) {
             log.warn("Exception :{}", diaryTypeId, e);
+            return new Result(msg.getMessage("errors.ask_to_admin"), HttpStatus.CONFLICT, null);
+        }
+    }
+
+    /**
+     * @return
+     * @description 제어로직 프로퍼티 조회
+     */
+    @RequestMapping(value = "/mclasscode/{mclasscode}/property", method = RequestMethod.GET)
+    //@ApiOperation("특정 제어로직에 사용될 프로퍼티 목록을 조회합니다.")
+    @ResponseBody
+    public Result<List<DiaryTypePropertiesVO>> getDiaryTypePropertyListForMclass(@PathVariable("mclasscode") String mclasscode) {
+        try {
+            Map param = new HashMap<>();
+            param.put("mclasscode", mclasscode);
+            return new Result(service.getDiaryTypePropertyList(param));
+        } catch (Exception e) {
+            log.warn("Exception :{}", mclasscode, e);
             return new Result(msg.getMessage("errors.ask_to_admin"), HttpStatus.CONFLICT, null);
         }
     }

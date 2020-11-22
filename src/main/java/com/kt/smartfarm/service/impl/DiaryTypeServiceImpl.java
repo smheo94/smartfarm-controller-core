@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
 
+import java.util.Map;
 import java.util.Objects;
 
 import java.util.stream.Collectors;
@@ -38,7 +39,7 @@ public class DiaryTypeServiceImpl extends EgovAbstractServiceImpl implements Dia
 	@Override
 	public List<DiaryTypeVO> getDiaryTypeList(Long gsmKey, Long houseId, Long userIdx) {
 		final List<DiaryTypeVO> diaryTypeList = mapper.getDiaryTypeList(gsmKey, houseId, userIdx);
-		final List<DiaryTypePropertiesVO> diaryTypePropertyList = mapper.getDiaryTypePropertyList(null);
+		final List<DiaryTypePropertiesVO> diaryTypePropertyList = mapper.getDiaryTypePropertyList((Long)null);
 		diaryTypeList.forEach( cl ->{
 			try {
 				cl.setPropertyList(diaryTypePropertyList.stream().filter(m -> Objects.equals(m.getDiaryTypeId(), cl.getId())).collect(Collectors.toList()));
@@ -53,5 +54,10 @@ public class DiaryTypeServiceImpl extends EgovAbstractServiceImpl implements Dia
 	@Override
 	public List<DiaryTypePropertiesVO> getDiaryTypePropertyList(Long diaryTypeId) {
 		return  mapper.getDiaryTypePropertyList(diaryTypeId);
+	}
+
+	@Override
+	public List<DiaryTypePropertiesVO> getDiaryTypePropertyList(Map param) {
+		return  mapper.getDiaryTypePropertyList(param);
 	}
 }
