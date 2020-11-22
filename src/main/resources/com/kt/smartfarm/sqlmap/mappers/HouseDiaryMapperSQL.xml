@@ -273,7 +273,34 @@
 		</set>
 		WHERE id = #{id}
 	</update>
-	
+
+	<select id="existsImageDiaryImageUrl" resultType="java.lang.Integer">
+		SELECT COUNT(hd.id)  AS VALUE
+		FROM house_diary hd
+		INNER JOIN house_diary_map hdm ON hd.id = hdm.diary_id
+		<where>
+			hd.diary_type_id = 4 AND DATE(hd.start_date) = CURRENT_DATE()
+			AND JSON_SEARCH( diary_data, 'one',  #{cctvImageUrl}) IS NOT NULL
+			<foreach collection="houseIdList" item="hid" separator="," open=" AND hdm.green_house_id IN (" close=")">
+				#{hid}
+			</foreach>
+
+		</where>
+	</select>
+
+	<update id="updateImageDiary">
+		UPDATE house_diary hd
+			INNER JOIN house_diary_map hdm ON hd.id = hdm.diary_id
+		SET hd.diary_data = JSON_ARRAY_APPEND( hd.diary_data, '$.imageUrl', #{cctvImageUrl})
+		<where>
+			hd.diary_type_id = 4 AND DATE(hd.start_date) = CURRENT_DATE()
+			AND  JSON_SEARCH( hd.diary_data, 'one',  #{cctvImageUrl}) IS NULL
+			<foreach collection="houseIdList" item="hid" separator="," open=" AND hdm.green_house_id IN (" close=")">
+				#{hid}
+			</foreach>
+		</where>
+	</update>
+
 	<delete id="deleteCropsDiary" parameterType="map">
 		DELETE
 		FROM crops_diary
@@ -379,7 +406,6 @@
 		</if>
 		<!-- push_type이 9인경우는 cctv daily 인 case -->
 	</select>
-
 
 
 </mapper>

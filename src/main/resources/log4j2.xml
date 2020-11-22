@@ -1,16 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
 	<Appenders>
+		<Property name="service_id">${smartfarm.service.id}</Property>
 		<Console name="console" target="SYSTEM_OUT">
 			<PatternLayout pattern="%d %5p [%c] %m%n" />
 		</Console>
+		<File name="FileLog" fileName="./log/app.log">
+			<PatternLayout>
+				<pattern>%m%n</pattern>
+			</PatternLayout>
+		</File>
+		<Appender type="File" name="LampLogFile2" fileName="./log/app.%d{HHmm}.log">
+			<Layout type="PatternLayout">
+				<Pattern>%m%n</Pattern>
+			</Layout>
+		</Appender>
 	</Appenders>
 	<Loggers>
 		<Logger name="java.sql" level="INFO" additivity="false">
 			<AppenderRef ref="console" />
+			<AppenderRef ref="FileLog" />
 		</Logger>
 		<Logger name="com.kt" level="INFO" additivity="false">
 			<AppenderRef ref="console" />
+			<AppenderRef ref="FileLog" />
 		</Logger>
 		<Logger name="jdbc.sqltiming" level="INFO" additivity="false">
 			<AppenderRef ref="console" />
@@ -18,9 +31,11 @@
 		<Logger name="org.springframework" level="INFO"
 			additivity="false">
 			<AppenderRef ref="console" />
+			<AppenderRef ref="FileLog" />
 		</Logger>
 		<Root level="INFO">
 			<AppenderRef ref="console" />
+			<AppenderRef ref="FileLog" />
 		</Root>
 	</Loggers>
 </Configuration>

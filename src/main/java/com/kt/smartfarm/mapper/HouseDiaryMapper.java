@@ -15,13 +15,12 @@
  */
 package com.kt.smartfarm.mapper;
 
-import java.util.HashMap;
-import java.util.List;
-
 import com.kt.smartfarm.service.HouseCropsDiaryVO;
 import com.kt.smartfarm.service.HouseDiaryVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
-import org.springframework.stereotype.Repository;
+
+import java.util.HashMap;
+import java.util.List;
 
 
 @Mapper("houseDiaryMapper")
@@ -55,4 +54,8 @@ public interface HouseDiaryMapper {
 	List<HashMap<String, Object>> getCategoryList22();
 	
 	List<HashMap<String, Object>> getImageDiaryList(HashMap<String,Object> param);
+
+	Integer existsImageDiaryImageUrl(HouseDiaryVO houseDiaryVO);
+
+	Integer updateImageDiary(HouseDiaryVO houseDiaryVO);
 }

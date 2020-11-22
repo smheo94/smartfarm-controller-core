@@ -48,3 +48,31 @@ UPDATE `control_properties` SET `description` = '닫힘시간' WHERE `id` = '64'
 
 
 ```
+
+
+
+```sql
+UPDATE `cd_device_type` SET `control_unit` = 'Minute' WHERE `id` = '17'; 
+UPDATE `cd_device_type` SET `control_unit` = 'Minute' WHERE `id` = '18'; 
+UPDATE `cd_device_type` SET `control_unit` = 'Minute' WHERE `id` = '23'; 
+UPDATE `cd_device_type` SET `control_unit` = 'Minute' WHERE `id` = '24'; 
+ALTER TABLE `cd_diary_type` 
+ADD COLUMN `diary_view_order` DOUBLE DEFAULT 1 NOT NULL AFTER `base_diary_type_id`; 
+UPDATE `cd_diary_type` SET `diary_view_order` = '10' WHERE `id` = '8'; 
+UPDATE `cd_diary_type` SET `diary_view_order` = '9' WHERE `id` = '7'; 
+UPDATE `cd_diary_type` SET `diary_view_order` = '15' WHERE `id` = '6'; 
+UPDATE `cd_diary_type` SET `diary_view_order` = '2' WHERE `id` = '5'; 
+UPDATE `cd_diary_type` SET `diary_view_order` = '4' WHERE `id` = '3'; 
+UPDATE `cd_diary_type` SET `diary_view_order` = '5' WHERE `id` = '4'; 
+UPDATE `cd_diary_type` SET `diary_view_order` = '3' WHERE `id` = '2'; 
+UPDATE `cd_diary_type` SET `diary_view_order` = '2' WHERE `id` = '5010'; 
+UPDATE `cd_diary_type` SET `diary_view_order` = '2' WHERE `id` = '5011'; 
+UPDATE `cd_diary_type` SET `diary_view_order` = '2' WHERE `id` = '5012'; 
+UPDATE `cd_diary_type` SET `diary_view_order` = '2' WHERE `id` = '5013'; 
+UPDATE `cd_diary_type` SET `diary_view_order` = '2' WHERE `id` = '5014'; 
+UPDATE `cd_diary_type` SET `diary_view_order` = '2' WHERE `id` = '5016'; 
+UPDATE `cd_diary_type` SET `diary_view_order` = '2' WHERE `id` = '5015'; 
+UPDATE `cd_diary_type` SET `diary_view_order` = '2' WHERE `id` = '5017'; 
+UPDATE `cd_diary_type` SET `diary_view_order` = '2' WHERE `id` = '5018'; 
+UPDATE `cd_diary_type` SET `diary_view_order` = '2' WHERE `id` = '5019'; 
+```

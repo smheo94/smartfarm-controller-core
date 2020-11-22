@@ -1,14 +1,16 @@
 
 package com.kt.smartfarm.service.impl;
 
+import com.kt.smartfarm.mapper.HouseDiaryMapper;
 import com.kt.smartfarm.service.HouseCropsDiaryVO;
 import com.kt.smartfarm.service.HouseDiaryService;
 import com.kt.smartfarm.service.HouseDiaryVO;
-import com.kt.smartfarm.mapper.HouseDiaryMapper;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -24,11 +26,27 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 
 
 	@Override
+	@Transactional
+	@EventListener
 	public HouseDiaryVO insertHouseDiary(HouseDiaryVO houseDiaryVO) {
 		try{
             if( houseDiaryVO.getGreenHouseId() != null && ( houseDiaryVO.getHouseIdList() == null  || houseDiaryVO.getHouseIdList().size() == 0 ) )  {
                 houseDiaryVO.setHouseIdList(Arrays.asList(houseDiaryVO.getGreenHouseId()));
             }
+            if( "4".equalsIgnoreCase(houseDiaryVO.getDiaryTypeId())) {
+				Map<String,Object> diaryData = houseDiaryVO.getDiaryData();
+				List<String> imageUrl = (List<String>)diaryData.getOrDefault("imageUrl", new ArrayList<String>());
+				if( imageUrl != null && imageUrl.size() > 0 ) {
+					houseDiaryVO.setCctvImageUrl(imageUrl.get(0));
+					if (houseDiaryMapper.existsImageDiaryImageUrl(houseDiaryVO) > 0) {
+						log.info("Already Exist Image Url : {}", houseDiaryVO);
+						return houseDiaryVO;
+					} else if (houseDiaryMapper.updateImageDiary(houseDiaryVO) > 0) {
+						log.info("Exists House Diary,   so Update : {}", houseDiaryVO);
+						return houseDiaryVO;
+					}
+				}
+			}
 			houseDiaryMapper.insertHouseDiary(houseDiaryVO);
 			houseDiaryMapper.insertHouseDiaryHouseMap(houseDiaryVO);
 

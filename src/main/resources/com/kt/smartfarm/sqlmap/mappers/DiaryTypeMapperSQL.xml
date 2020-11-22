@@ -29,7 +29,9 @@
 	LEFT JOIN user_info_roles UIR ON UIR.roles_id = DR.depend_role_id  AND UIR.user_idx = #{userIdx}
 	WHERE ( DR.depend_type  IS NULL OR DR.depend_type  != 'DENY'  )   AND ( DPM.depend_type IS NULL OR DPM.depend_type != 'DENY' )
 		AND ( DT.is_base_diary = 1 OR DR.depend_type = 'ACCESS'  OR DR.depend_type = 'READ'  OR DPM.depend_type = 'ACCESS' )
-	GROUP BY DT.id, DT.diary_type;
+	GROUP BY DT.id, DT.diary_type
+	ORDER BY DT.diary_view_order
+	;
 	</select>
 
 	<select id="getDiaryTypePropertyList" resultMap="diaryTypeProperties" >
