@@ -32,16 +32,22 @@
 	GROUP BY DT.id, DT.diary_type;
 	</select>
 
-	<select id="getDiaryTypePropertyList" resultMap="diaryTypeProperties" >
+	<select id="getDiaryTypePropertyList" resultMap="diaryTypeProperties" parameterType="map" >
 		SELECT
 			L.diary_type_id, L.properties_id, P.ui_class_name, P.properties_json, P.display_text, P.support_stt, P.input_help_text, P.input_help_waiting,
 			P.valid_text, P.valid_waiting, P.valid_button_type, P.detail_help_text, P.property_data_type, P.property_data_length,
 		    L.is_array, L.data_level, L.priority
 		FROM cd_diary_properties P
 		INNER JOIN cd_diary_properties_lnk L ON L.properties_id = P.id
+		<if test="mclasscode != null">
+			INNER JOIN cd_diary_depend_mclass ddm ON ddm.diary_type_id = L.diary_type_id
+		</if>
 		<where>
 			<if test="diaryTypeId != null">
 				AND L.diary_type_id = #{diaryTypeId}
+			</if>
+			<if test="mclasscode != null">
+				AND ddm.depend_mclasscode = #{mclasscode}
 			</if>
 		</where>
 		ORDER BY L.diary_type_id, L.priority
