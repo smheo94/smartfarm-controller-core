@@ -370,10 +370,18 @@
 	</select>
 	
 	<select id="getHouseCropsInfo" resultType="map" parameterType="map">
-		SELECT cp.product_species FROM green_house
-		INNER JOIN cd_product_method cpm ON cpm.id = green_house.product_method_id
-		INNER JOIN cd_product cp ON cp.id = cpm.product_id
-		WHERE green_house.id = #{green_house_id} 
+		SELECT CPM.mclassname, CPM.mclassname AS product_species
+		FROM green_house GH
+		INNER JOIN green_house_product GHP ON GHP.green_house_id= GH.id
+		INNER JOIN cd_prd_mclass CPM ON CPM.mclasscode = GHP.prd_code
+		WHERE GH.id = #{green_house_id} AND GHP.is_deleted != 1
+		ORDER BY
+		ABS(DATEDIFF(  DATE(NOW()), DATE( CONCAT( YEAR(NOW()), '-', MONTH(start_date), '-',  DAYOFMONTH(start_date) ) ))) >
+		ABS(DATEDIFF(  DATE(NOW()), DATE( CONCAT( YEAR(NOW()), '-', MONTH(end_date), '-',  DAYOFMONTH(end_date) ) ))) ,
+		ABS(DATEDIFF(  DATE(NOW()), DATE( CONCAT( YEAR(NOW()), '-', MONTH(end_date), '-',  DAYOFMONTH(end_date) ) ))),
+		ABS(DATEDIFF(  DATE(NOW()), DATE( CONCAT( YEAR(NOW()), '-', MONTH(start_date), '-',  DAYOFMONTH(start_date) ) )))
+		ASC
+		LIMIT 1
 	</select>
 	
 	<select id="getImageDiaryList" parameterType="map" resultType="map">
