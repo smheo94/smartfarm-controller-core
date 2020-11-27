@@ -128,6 +128,7 @@
 		FROM green_house
 		WHERE
 		 gsm_key = #{gsm_key}
+		ORDER BY house_name ASC
 		;
 	</select>
 

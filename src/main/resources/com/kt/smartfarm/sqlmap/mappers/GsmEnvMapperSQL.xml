@@ -167,6 +167,7 @@
 			<if test="categoryId != null"> AND gsm_info.category_id = #{categoryId}</if>
 			<if test="farmName != null"> AND gsm_info.farm_nickname LIKE CONCAT('%', #{farmName}, '%')</if>
 		</where>
+		ORDER BY farmNickname ASC
 	</select>
 
 	<select id="notMappedList" resultMap="gsmEnvVOMap">
@@ -182,6 +183,7 @@
 			gsm_info
 		WHERE 
 			user_info_id IS NULL
+		ORDER BY farmNickname ASC
 	</select>
 	
 	<update id="userRegistGSM" parameterType="map">

@@ -91,7 +91,8 @@
 			<if test="device_type_id != null">AND device_type_id=#{device_type_id}</if>
 			<if test="house_id != null">AND mghd.green_house_id = #{house_id}</if>
 			<if test="green_house_id != null">AND mghd.green_house_id = #{green_house_id}</if>
-	</where>
+		</where>
+		ORDER BY nickname ASC
 	</select>
 
 
