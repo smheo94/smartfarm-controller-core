@@ -76,3 +76,39 @@ UPDATE `cd_diary_type` SET `diary_view_order` = '2' WHERE `id` = '5017';
 UPDATE `cd_diary_type` SET `diary_view_order` = '2' WHERE `id` = '5018'; 
 UPDATE `cd_diary_type` SET `diary_view_order` = '2' WHERE `id` = '5019'; 
 ```
+
+
+```sql
+ALTER TABLE `cd_device_type` ADD COLUMN `graph_color` VARCHAR(40) NULL COMMENT '그래프컬러' AFTER `control_unit`;
+UPDATE `cd_device_type` SET `graph_color` = '#b2df8a' WHERE `id` = '12401'; 
+UPDATE `cd_device_type` SET `graph_color` = '#b2df8a' WHERE `id` = '12402'; 
+UPDATE `cd_device_type` SET `graph_color` = '#b2df8a' WHERE `id` = '12403'; 
+UPDATE `cd_device_type` SET `graph_color` = '#b2df8a' WHERE `id` = '12404'; 
+UPDATE `cd_device_type` SET `graph_color` = '#b2df8a' WHERE `id` = '20501'; 
+UPDATE `cd_device_type` SET `graph_color` = '#e41a1c' WHERE `id` = '902'; 
+UPDATE `cd_device_type` SET `graph_color` = '#e41a1c' WHERE `id` = '10001'; 
+UPDATE `cd_device_type` SET `graph_color` = '#e41a1c' WHERE `id` = '20201'; 
+UPDATE `cd_device_type` SET `graph_color` = '#984ea3' WHERE `id` = '905'; 
+UPDATE `cd_device_type` SET `graph_color` = '#984ea3' WHERE `id` = '10101'; 
+UPDATE `cd_device_type` SET `graph_color` = '#984ea3' WHERE `id` = '20301'; 
+UPDATE `cd_device_type` SET `graph_color` = '#1f78b4' WHERE `id` = '20601'; 
+UPDATE `cd_device_type` SET `graph_color` = '#1f78b4' WHERE `id` = '10401'; 
+UPDATE `cd_device_type` SET `graph_color` = '#fc8d62' WHERE `id` = '1021'; 
+UPDATE `cd_device_type` SET `graph_color` = '#fc8d62' WHERE `id` = '10501'; 
+UPDATE `cd_device_type` SET `graph_color` = '#fc8d62' WHERE `id` = '10801'; 
+UPDATE `cd_device_type` SET `graph_color` = '#fc8d62' WHERE `id` = '10802'; 
+UPDATE `cd_device_type` SET `graph_color` = '#fc8d62' WHERE `id` = '12601'; 
+UPDATE `cd_device_type` SET `graph_color` = '#fc8d62' WHERE `id` = '12602'; 
+UPDATE `cd_device_type` SET `graph_color` = '#fc8d62' WHERE `id` = '12603'; 
+UPDATE `cd_device_type` SET `graph_color` = '#fc8d62' WHERE `id` = '12604'; 
+UPDATE `cd_device_type` SET `graph_color` = '#fc8d62' WHERE `id` = '22201'; 
+UPDATE `cd_device_type` SET `graph_color` = '#377eb8' WHERE `id` = '906'; 
+UPDATE `cd_device_type` SET `graph_color` = '#a6cee3' WHERE `id` = '21201'; 
+UPDATE `cd_device_type` SET `graph_color` = '#66c2a5' WHERE `id` = '21202'; 
+UPDATE `cd_device_type` SET `graph_color` = '#4daf4a' WHERE `id` = '15'; 
+UPDATE `cd_device_type` SET `graph_color` = '#4daf4a' WHERE `id` = '903'; 
+UPDATE `cd_device_type` SET `graph_color` = '#4daf4a' WHERE `id` = '11701'; 
+UPDATE `cd_device_type` SET `graph_color` = '#4daf4a' WHERE `id` = '21301'; 
+UPDATE `cd_device_type` SET `graph_color` = '#70794c' WHERE `id` = '12801'; 
+UPDATE `cd_device_type` SET `graph_color` = '#89674a' WHERE `id` = '12701';  
+```
