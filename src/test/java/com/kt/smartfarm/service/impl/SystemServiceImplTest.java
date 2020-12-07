@@ -73,7 +73,24 @@ public class SystemServiceImplTest {
     @Test
     public void updateAny() {
         anyQueryTestList(QUERY_TYPE.update.name(),
-                "insert into `oauth_client_details` (`client_id`, `resource_ids`, `client_secret`, `scope`, `authorized_grant_types`, `web_server_redirect_uri`, `authorities`, `access_token_validity`, `refresh_token_validity`, `additional_information`, `autoapprove`) values ('jeju-sfarm-api', NULL, 'dcb33de0d5986dde786f5abaf1ee3703', 'read,write', 'client_credentials,implicit,refresh_token', NULL, 'ROLE_JEJU', '36000', '2592000', NULL, NULL)"
+                //"DELETE FROM otp_detail where id IN ( 878, 877, 876, 876, 874)"
+//                "UPDATE cctv ",
+//                        "SET properties = JSON_SET( properties, '$.daily_capture[0].exec_sec_on_day',  ( 9 * 60 +0  + 0) * 60 ",
+//                        ", '$.daily_capture[1].exec_sec_on_day',  ( 9 * 60 + 0 + 4) * 60
+
+                        "UPDATE cd_diary_properties\n" +
+                        "SET ui_class_name = REPLACE(ui_class_name, 'fruit_', 'sugar_')\n" +
+                        ", valid_text = REPLACE(valid_text, 'fruit_', 'sugar_')\n" +
+                        "WHERE ui_class_name LIKE 'fruit_content%'"
+
+//                "UPDATE house_diary",
+//                        "\t\tSET diary_data = REPLACE( diary_data, 'http://apismartfarm.kt.co.kr',  'https://apismartfarm.kt.co.kr')"
+//                "UPDATE cctv \n" +
+//                        "SET properties = JSON_SET( properties, '$.daily_capture[0].exec_sec_on_day',  ( HOUR(NOW()) * 60 + MINUTE(NOW())  + 2) * 60 \n" +
+//                        ",'$.daily_capture[0].pos_z',  0\n" +
+//                        ",'$.daily_capture[0].capture_type',  1" +
+//                        ",'$.daily_capture[1].exec_sec_on_day',  ( HOUR(NOW()) * 60 + MINUTE(NOW() ) + 4) * 60\n" +
+//                        ",'$.daily_capture[1].pos_z',  1.0)"
 
 //            (\n" +
 //                        "        167250,175086,146722,147082,160641,162017,164688,164030,163739,161441,169865,163066,161508,163108,175838,151697,158854\n" +
@@ -87,10 +104,25 @@ public class SystemServiceImplTest {
         assertTrue(true);
     }
 
+
     @Test
     public void selectAny2() {
         anyQueryTestList(QUERY_TYPE.select.name(),
-"SELECT  *   FROM user_info_roles where user_idx = '99616230'"
+                //"SELECT * FROM SDK_SMS_REPORT ORDER BY MSG_ID DESC LIMIT 20"
+//                "SELECT C.farm_nickname, B.house_name, A.* FROM cctv A INNER JOIN green_house B ON A.house_id = B.id " +
+//                        "INNER JOIN gsm_info C ON C.gsm_key= B.gsm_key"
+
+                "SELECT COUNT(id) as id from house_diary WHERE diary_type_id = 8"
+//                        "SELECT D.gsm_key, farm_nickname,  COUNT(A.id) data_count\n" +
+//                                "FROM cctv  A\n" +
+//                                "INNER JOIN cctv_record B  ON A.id = B.cctv_id\n" +
+//                                "INNER JOIN green_house C ON  C.id = A.house_id\n" +
+//                                "INNER JOIN gsm_info D ON D.gsm_key = C.gsm_key\n" +
+//                                "WHERE green_house_type_id = 95\n" +
+//                                "GROUP BY D.gsm_key"
+                //"select * from cd_diary_type "
+               //"SELECT * FROM otp_detail ORDER BY id DESC LIMIT 20"
+
 //"SELECT * FROM event WHERE green_house_id = '630005000000001'"
 //"SELECT * From control_setting_device WHERE gsm_key = 630015 ORDER BY logic_id, device_num, device_insert_order",
 //"SELECT * From control_setting_device WHERE gsm_key = 630003 ORDER BY logic_id, device_num, device_insert_order"
@@ -134,36 +166,6 @@ public class SystemServiceImplTest {
 //        "\t\tWHERE gh.gsm_key = 1401\t\t\n" +
 //        "\t\tAND start_date BETWEEN '2020-11-01 00:00:00' AND '2020-11-30 23:59:59'\n" +
 //        "\t\tAND end_date BETWEEN '2020-11-01 00:00:00'AND '2020-11-30 23:59:59'",
-//                        "\t\tSELECT\n" +
-//                                "\t\t\thd.id,\n" +
-//                                "\t\t\thd.green_house_id,\n" +
-//                                "\t\t\thdm.green_house_id AS house_id_list,\n" +
-//                                "\t\t\thd.title,\n" +
-//                                "\t\t\thd.content,\n" +
-//                                "\t\t\thd.work,\n" +
-//                                "\t\t\thd.etc,\n" +
-//                                "\t\t\thd.start_date,\n" +
-//                                "\t\t\thd.diary_type_id,\n" +
-//                                "\t\t\thd.diary_data,\n" +
-//                                "\t\t\thd.end_date,\n" +
-//                                "\t\t\thd.crops,\n" +
-//                                "\t\t\thd.harvest,\n" +
-//                                "\t\t\thd.income,\n" +
-//                                "\t\t\thd.spend,\n" +
-//                                "\t\t\thd.content_type,\n" +
-//                                "\t\t\thd.work_time,\n" +
-//                                "\t\t\thd.cctv_image_url,\n" +
-//                                "\t\t\thd.weather\n" +
-//                                "\t\tFROM house_diary AS hd\n" +
-//                                "\t\tINNER JOIN house_diary_map AS hdm ON hdm.diary_id = hd.id\n" +
-//                                "\t\tINNER JOIN green_house AS gh ON gh.id = hdm.green_house_id\n" +
-//                                "\t\tWHERE gh.id = 1401000000001\t\t\n" +
-//                                "\t\tAND start_date BETWEEN '2020-11-01 00:00:00' AND '2020-11-30 23:59:59'\n" +
-//                                "\t\tAND end_date BETWEEN '2020-11-01 00:00:00'AND '2020-11-30 23:59:59'",
-//                        "SELECT HM.green_house_id AS A,       id, diary_type_id,     start_date, end_date    \n" +
-//                                "FROM house_diary A \n" +
-//                                "LEFT JOIN house_diary_map HM ON A.id = HM.diary_id\n" +
-//                                "ORDER BY id DESC LIMIT 100"
 
 //                "\n" +
 //                        "SELECT A.id,\n" +
@@ -192,7 +194,17 @@ public class SystemServiceImplTest {
         );
         assertTrue(true);
     }
+    @Test
+    public void copyData() {
+        anyQueryTestList(QUERY_TYPE.select.name(),
+                "SELECT * FROM monitoring_nighttime WHERE green_house_id = '1401000000001' AND event_date >=  DATE_SUB( NOW(), INTERVAL 7 DAY)         "
+                        + " AND event_date <= NOW()",
+                "SELECT * FROM monitoring_daytime WHERE green_house_id = '1401000000001' AND event_date >=  DATE_SUB( NOW(), INTERVAL 7 DAY)         "
+                        + " AND event_date <= NOW()",
+                "SELECT * FROM house_diary WHERE gsm_key = '1401'",
+                "SELECT * FROM house_diary_map WHERE green_house_id = '1401000000001'");
 
+    }
     @Test
     public void getPhoneInfo() {
         String number = "7740";
@@ -205,7 +217,7 @@ public class SystemServiceImplTest {
 
     @Test
     public void selectUser() {
-        String userName = "연례" ;
+        String userName = "용연" ;
         anyQueryTest(QUERY_TYPE.select.name(), "SELECT * FROM user_info WHERE user_name LIKE '%" + userName + "%'");
         anyQueryTest(QUERY_TYPE.select.name(), "SELECT PS.* FROM user_info UI INNER JOIN phone_setting PS ON PS.user_idx = UI.idx WHERE user_name LIKE '%" + userName + "%'");
         assertTrue(true);

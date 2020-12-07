@@ -200,6 +200,7 @@
 				AND ( start_date BETWEEN #{start_date} AND #{end_date} OR end_date BETWEEN #{start_date} AND #{end_date} )
 			</if>
 		</where>
+		ORDER BY start_date DESC;
 	</select>
 	
 	
