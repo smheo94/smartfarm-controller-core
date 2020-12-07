@@ -108,8 +108,9 @@ public class LampLogService
             File f = new File(logFile);
             try {
                 if (!f.exists()) {
-                    f.createNewFile();
-                    f.setReadable(true, false);
+                    if( f.createNewFile() ) {
+                        f.setReadable(true, false);
+                    }
                 }
             } catch (Exception e) {
                 log.warn("File Permission Error : ", e);

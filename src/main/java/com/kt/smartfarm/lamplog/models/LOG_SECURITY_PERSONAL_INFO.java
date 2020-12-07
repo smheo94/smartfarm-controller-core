@@ -1,5 +1,7 @@
 package com.kt.smartfarm.lamplog.models;
 
+import lombok.Getter;
+
 public enum LOG_SECURITY_PERSONAL_INFO {
     id("아이디"),
     password("비밀번호"),
@@ -20,7 +22,8 @@ public enum LOG_SECURITY_PERSONAL_INFO {
     bankAccountNumber("계좌번호"),
     locationInfo("위치정보"),
     subscriptionDate("(청약일) 그 외 필요 시 협의 후 추가");
-    public String value;
+    @Getter
+    private String value;
     LOG_SECURITY_PERSONAL_INFO(String value) {
         this.value = value;
     }

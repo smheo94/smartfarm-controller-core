@@ -270,7 +270,7 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 			}
 			Integer count = idCount.getOrDefault(sd.getId(),null);
 			if( count == null ) {
-				idCount.put(sd.getId(), new Integer(1));
+				idCount.put(sd.getId(), Integer.valueOf(1));
 			} else {
 				//TODO : 꼭 고쳐
 				return;

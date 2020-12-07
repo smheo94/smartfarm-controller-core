@@ -98,8 +98,7 @@ public class SmartFarmDataInterceptor extends HandlerInterceptorAdapter {
 ////                }
 //            } else
             if (postIntercept) {
-                AuthorityChecker authChecker = new AuthorityChecker();
-                //System.out.printf( "DB 트렌젝션을 시작하세요. 롤백을 할 수 있어야 합니다.");
+//                AuthorityChecker authChecker = new AuthorityChecker();
                 //TODO : DB 트렌젝션을 시작하세요. 롤백을 할 수 있어야 합니다.
                 startTran = true;
             }

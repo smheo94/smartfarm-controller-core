@@ -143,7 +143,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 		return list(gsmKey, all, detail, isSmartfarmSystem, false);
 	}
 	public List<HashMap<String, Object>> list(Long gsmKey, boolean all, boolean detail, Boolean isSmartfarmSystem, Boolean isCCTVOnly) {
-		List<HashMap<String,Object>> result = new ArrayList<HashMap<String,Object>>();
+		List<HashMap<String,Object>> result; //= new ArrayList<HashMap<String,Object>>();
 		Map<String, Object> map = new HashMap<>();
 		if(gsmKey == null){
 			result = houseEnvMapper.getHouseDetail(map);
@@ -306,7 +306,7 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 
 	@Override
 	public List<HashMap<String,Object>> groundDeviceList(Long houseId) {
-		List<HashMap<String,Object>> tempDeviceList = new ArrayList<>();
+		List<HashMap<String,Object>> tempDeviceList; //= new ArrayList<>();
 		List<HashMap<String,Object>> deviceList = new ArrayList<>();
 		tempDeviceList = houseEnvMapper.getGroundDeviceList(houseId);
 		for(HashMap<String,Object> device : tempDeviceList){
@@ -353,16 +353,11 @@ public class HouseEnvServiceImpl extends EgovAbstractServiceImpl implements Hous
 	public List<HashMap<String, Object>> getWeatherCast(Long houseId, String fromDate, String toDate, Boolean isSmartfarmSystem) {
 		HashMap<String,Object> param = new HashMap<>();
 		try{			
-			HashMap<String,Object> houseInfo = new HashMap<>();
-			List<HashMap<String,Object>> houseDetail = new ArrayList<>();
-			HashMap<String,Object> gridXY = new HashMap<>();
-			houseInfo = get(null, houseId, isSmartfarmSystem);
-			houseDetail = (List<HashMap<String, Object>>) houseInfo.get("houseDetail");
+			HashMap<String,Object> houseInfo = get(null, houseId, isSmartfarmSystem);
+			List<HashMap<String,Object>> houseDetail= (List<HashMap<String, Object>>) houseInfo.get("houseDetail");
 			Double latitude = Double.parseDouble(houseDetail.get(0).get("latitude").toString());
 			Double longitude = Double.parseDouble(houseDetail.get(0).get("longitude").toString());
-//			latitude = Math.ceil(latitude);
-//			longitude = Math.ceil(longitude);
-			gridXY= WeatherCastGPSUtil.getGridxy(latitude,longitude);
+			HashMap<String,Object> gridXY = WeatherCastGPSUtil.getGridxy(latitude,longitude);
 			param.put("house_id", houseId);
 			param.put("from_date", fromDate);
 			param.put("to_date", toDate);
