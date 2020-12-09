@@ -30,6 +30,8 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -172,9 +174,24 @@ public class HouseDiaryController {
     @RequestMapping(value = "/list/{greenHouseId}", method = RequestMethod.GET)
     @ResponseBody
     public Result monthlyHouseDiaryList(@PathVariable("greenHouseId") Long greenHouseId,
-                                        @RequestParam(value = "year", required = false) Integer year, @RequestParam(value = "month", required = false) Integer month) {
+                                        @RequestParam(value = "year", required = false) Integer year,
+                                        @RequestParam(value = "month", required = false) Integer month,
+                                        @RequestParam(value = "startDate", required = false) String startDate,
+                                        @RequestParam(value = "endDate", required = false) String endDate
+                                        ) {
         try {
-            return new Result(houseDiaryService.getMonthlyHouseDiaryList(null, null, greenHouseId, year, month));
+            HashMap<String,Object> param = new HashMap<>();
+            if(year != null && month != null){
+                this.setMonthPeriod(param, year, month);
+            }
+            if ( startDate != null ) {
+                param.put("start_date", DateUtil.parse(startDate));
+            }
+            if ( endDate != null ) {
+                param.put("end_date", DateUtil.parse(endDate));
+            }
+            param.put("green_house_id", greenHouseId);
+            return new Result(houseDiaryService.getHouseDiaryList(param));
         } catch (Exception e) {
             log.warn("Exception :{}, {}, {}", greenHouseId,year, month, e);
             return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, "오류가 발생했습니다. 관리자에게 문의해 주세요"); /*e.getMessage());*/
@@ -191,13 +208,34 @@ public class HouseDiaryController {
     @ResponseBody
     public Result monthlyHouseDiaryListByGSM(@RequestParam(value = "gsmKey", required = false) Long gsmKey,
                                              @RequestParam(value = "gsmKeyList", required = false) List<Long> gsmKeyList,
-                                             @RequestParam(value = "year", required = false) Integer year, @RequestParam(value = "month", required = false) Integer month) {
+                                             @RequestParam(value = "year", required = false) Integer year,
+                                             @RequestParam(value = "month", required = false) Integer month) {
         try {
-            return new Result(houseDiaryService.getMonthlyHouseDiaryList(gsmKeyList, gsmKey, null, year, month));
+            HashMap<String,Object> param = new HashMap<>();
+            if(year != null && month != null){
+                this.setMonthPeriod(param, year, month);
+            }
+            if( gsmKey != null) {
+                param.put("gsm_key", gsmKey);
+            }
+            if( gsmKeyList != null) {
+                param.put("gsm_key_list", gsmKeyList);
+            }
+            return new Result(houseDiaryService.getHouseDiaryList(param));
         } catch (Exception e) {
             log.warn("MonthlyHouseDiaryListByGSM :{}, {}, {}, {}", gsmKey, gsmKeyList, year, month, e);
             return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, "오류가 발생했습니다. 관리자에게 문의해 주세요"); /*e.getMessage());*/
         }
+    }
+
+    private void setMonthPeriod(HashMap param, int year, int month) {
+        Calendar sd = Calendar.getInstance();
+        month = month - 1;
+        sd.set(year, month, 1, 0,0,0);
+        param.put("start_date", sd.getTime());
+        sd.add(Calendar.MONTH, 1);
+        sd.add(Calendar.MILLISECOND, -1);
+        param.put("end_date", sd.getTime());
     }
 
     /**
