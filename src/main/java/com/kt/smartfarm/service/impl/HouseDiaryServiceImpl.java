@@ -209,35 +209,6 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 	}
 
 	@Override
-	public HashMap<String,Object> getMonthlyHouseDiaryList(List<Long> gsmKeyList,  Long gsmKey, Long houseId,Integer year, Integer month) {
-		HashMap<String,Object> param = new HashMap<>();
-		if(year != null && month != null){
-			param = getMonthDate(year,month);	
-		}
-		if( gsmKey != null) {
-			param.put("gsm_key", gsmKey);
-		}
-		if( gsmKeyList != null) {
-			param.put("gsm_key_list", gsmKeyList);
-		}
-		param.put("green_house_id", houseId);
-		return this.getHouseDiaryList(param);
-	}
-
-/*
- 	//하나로 통합 
-	@Override
-	public List<HouseCropsDiaryVO> getMonthlyCropsDiaryList(Long greenHouseId, Integer year, Integer month) {
-	 	HashMap<String,Object> param = new HashMap<>();
-	 	if(year != null && month != null){
-	 		param = getMonthDate(year,month);	
-	 	}
-		param.put("house_id", greenHouseId);
-		List<HouseCropsDiaryVO> list =houseDiaryMapper.getMonthlyCropsDiaryList(param); 
-		return list;
-	}
-*/
-	@Override
 	public HashMap<String, Object> getHouseCropsInfo(Long greenHouseId) {
 		HashMap<String,Object> param = new HashMap<>();
 		param.put("green_house_id", greenHouseId);
@@ -276,28 +247,6 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 //		return houseDiaryMapper.deleteCropsDiaryFile(param);
 //	}
 	
-	private HashMap<String,Object> getMonthDate(Integer year,Integer month){
-		HashMap<String,Object> result = new HashMap<>();
-		Calendar startDateCal = Calendar.getInstance();
-		startDateCal.set(Calendar.YEAR, year);
-		startDateCal.set(Calendar.MONTH, month - 1);
-		startDateCal.set(Calendar.DAY_OF_MONTH, 1);
-		startDateCal.set(Calendar.HOUR_OF_DAY, 0);
-		startDateCal.set(Calendar.MINUTE, 0);
-		startDateCal.set(Calendar.SECOND, 0);
-		startDateCal.set(Calendar.MILLISECOND, 0);
-		
-		// 종료날을 다음달 1일로 셋팅
-		Calendar endDateCal = (Calendar)startDateCal.clone();
-		endDateCal.add(Calendar.MONTH, 1);
-		endDateCal.add(Calendar.MILLISECOND, -1);
-		
-		Date startDate = startDateCal.getTime();
-		Date endDate = endDateCal.getTime();		
-		result.put("start_date", startDate);
-		result.put("end_date", endDate);
-		return result;
-	}
 	@Override
 	public List<HashMap<String, Object>> getImageDiaryList(Long houseId) {
 		List<HashMap<String,Object>> imageDiaryList = new ArrayList<>();

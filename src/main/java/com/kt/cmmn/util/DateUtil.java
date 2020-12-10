@@ -45,6 +45,14 @@ public class DateUtil {
 
 	public static Date parseForString(String dateStr) {
 		try {
+			Long longValue = Long.parseLong(dateStr);
+			if( longValue > 0 ) {
+				return new Date(longValue);
+			}
+		} catch (Exception e) {
+
+		}
+		try {
 			DateTime dateTime =  org.joda.time.DateTime.parse(dateStr);
 			return dateTime.toDate();
 		} catch (Exception e) {
