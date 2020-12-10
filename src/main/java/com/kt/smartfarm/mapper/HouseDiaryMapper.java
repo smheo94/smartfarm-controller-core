@@ -15,9 +15,10 @@
  */
 package com.kt.smartfarm.mapper;
 
-import com.kt.smartfarm.service.HouseCropsDiaryVO;
 import com.kt.smartfarm.service.HouseDiaryVO;
+import com.kt.smartfarm.service.SweetContentVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.HashMap;
 import java.util.List;
@@ -36,26 +37,31 @@ public interface HouseDiaryMapper {
 	
 	HouseDiaryVO getHouseDiaryDetail(HashMap<String, Object> param);
 	List<HashMap<String,Object>> getHouseDiaryFile(HashMap<String, Object> param);
-	HouseCropsDiaryVO getCropsDiaryDetail(HashMap<String, Object> param);
-	List<HashMap<String,Object>> getCropsDiaryFile(HashMap<String, Object> param);
+//	HouseCropsDiaryVO getCropsDiaryDetail(HashMap<String, Object> param);
+//	List<HashMap<String,Object>> getCropsDiaryFile(HashMap<String, Object> param);
 	List<HashMap<String,Object>> getHouseDiaryList(HashMap<String, Object> param);
 
-	Integer insertCropsDiary(HouseCropsDiaryVO houseCropsVO);
-	Integer insertCropsDiaryHouseMap(HouseCropsDiaryVO houseDiaryVO);
-	Integer deleteCropsDiaryHouseMap(HashMap<String,Object> param);
-	Integer insertCropsDiaryFile(HouseCropsDiaryVO houseCropsVO);
-	void updateCropsDiary(HouseCropsDiaryVO houseCropsVO);
-	Integer deleteCropsDiary(HashMap<String, Object> param);
-	Integer deleteCropsDiaryFile(HashMap<String,Object> param);
+//	Integer insertCropsDiary(HouseCropsDiaryVO houseCropsVO);
+//	Integer insertCropsDiaryHouseMap(HouseCropsDiaryVO houseDiaryVO);
+//	Integer deleteCropsDiaryHouseMap(HashMap<String,Object> param);
+//	Integer insertCropsDiaryFile(HouseCropsDiaryVO houseCropsVO);
+//	void updateCropsDiary(HouseCropsDiaryVO houseCropsVO);
+//	Integer deleteCropsDiary(HashMap<String, Object> param);
+//	Integer deleteCropsDiaryFile(HashMap<String,Object> param);
 	
-	List<HashMap<String,Object>> getCropsDiaryList(HashMap<String, Object> param);
+//	List<HashMap<String,Object>> getCropsDiaryList(HashMap<String, Object> param);
 	HashMap<String, Object> getHouseCropsInfo(HashMap<String, Object> param);
 	
-	List<HashMap<String, Object>> getCategoryList22();
+//	List<HashMap<String, Object>> getCategoryList22();
 	
 	List<HashMap<String, Object>> getImageDiaryList(HashMap<String,Object> param);
 
 	Integer existsImageDiaryImageUrl(HouseDiaryVO houseDiaryVO);
 
 	Integer updateImageDiary(HouseDiaryVO houseDiaryVO);
+
+	List<SweetContentVO> getSweetContentLastList(@Param(value = "gsmKey") Long gsmKey,
+												 @Param(value = "houseId") Long houseId,
+												 @Param(value = "fromDate") String fromDate,
+												 @Param(value = "toDate") String toDate);
 }

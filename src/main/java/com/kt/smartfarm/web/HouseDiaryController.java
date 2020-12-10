@@ -80,6 +80,9 @@ public class HouseDiaryController {
 //	public Result insertDiary(@RequestPart(value="houseDiary", required=false) HouseDiaryVO houseDiaryVO, @RequestPart(value="file", required=false) MultipartFile[] file){
     public Result insert(@RequestBody HouseDiaryVO houseDiaryVO) {
         try {
+            if (!authCheckService.authCheck(null, null, null, houseDiaryVO.getHouseIdList())) {
+                return new Result("Not Allowed", HttpStatus.FORBIDDEN, houseDiaryVO);
+            }
             return new Result(houseDiaryService.insertHouseDiary(houseDiaryVO));
         } catch (Exception e) {
             log.warn("Exception :{}", houseDiaryVO, e);
@@ -174,6 +177,9 @@ public class HouseDiaryController {
     public Result monthlyHouseDiaryList(@PathVariable("greenHouseId") Long greenHouseId,
                                         @RequestParam(value = "year", required = false) Integer year, @RequestParam(value = "month", required = false) Integer month) {
         try {
+            if (!authCheckService.authCheck(null, greenHouseId)) {
+                return new Result("Not Allowed", HttpStatus.FORBIDDEN, greenHouseId);
+            }
             return new Result(houseDiaryService.getMonthlyHouseDiaryList(null, null, greenHouseId, year, month));
         } catch (Exception e) {
             log.warn("Exception :{}, {}, {}", greenHouseId,year, month, e);
@@ -193,6 +199,9 @@ public class HouseDiaryController {
                                              @RequestParam(value = "gsmKeyList", required = false) List<Long> gsmKeyList,
                                              @RequestParam(value = "year", required = false) Integer year, @RequestParam(value = "month", required = false) Integer month) {
         try {
+            if (!authCheckService.authCheck(gsmKey, null, gsmKeyList, null)) {
+                return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
+            }
             return new Result(houseDiaryService.getMonthlyHouseDiaryList(gsmKeyList, gsmKey, null, year, month));
         } catch (Exception e) {
             log.warn("MonthlyHouseDiaryListByGSM :{}, {}, {}, {}", gsmKey, gsmKeyList, year, month, e);
@@ -241,7 +250,8 @@ public class HouseDiaryController {
     @Deprecated
     public Result cropsDiaryDetail(@PathVariable Integer id) {
         try {
-            return new Result(houseDiaryService.getCropsDiaryDetail(id));
+            return new Result(null);
+            //return new Result(houseDiaryService.getCropsDiaryDetail(id));
         } catch (Exception e) {
             log.warn("cropsDiaryDetail :{}", id, e);
 
@@ -258,7 +268,8 @@ public class HouseDiaryController {
     @ResponseBody
     public Result categoryList() {
         try {
-            return new Result(houseDiaryService.getCategoryList());
+            return new Result(null);
+            //return new Result(houseDiaryService.getCategoryList());
         } catch (Exception e) {
             log.warn("CategoryList GET", e);
 
@@ -272,7 +283,8 @@ public class HouseDiaryController {
 //	public Result insertCropsDiary(@RequestPart(value="cropsDiary", required=false) HouseCropsDiaryVO houseCropsVO, @RequestPart(value="file", required=false) MultipartFile[] file){
     public Result insertCropsDiary(@RequestBody HouseCropsDiaryVO houseCropsVO) {
         try {
-            return new Result(houseDiaryService.insertCropsDiary(houseCropsVO));
+            return new Result(houseCropsVO);
+            //return new Result(houseDiaryService.insertCropsDiary(houseCropsVO));
         } catch (Exception e) {
             log.warn("insertCropsDiary :{}", houseCropsVO, e);
 
@@ -290,7 +302,8 @@ public class HouseDiaryController {
     @Deprecated
     public Result updateCropsDiary(@RequestBody HouseCropsDiaryVO houseCropsVO) {
         try {
-            return new Result(houseDiaryService.updateCropsDiary(houseCropsVO));
+            return new Result(houseCropsVO);
+            //return new Result(houseDiaryService.updateCropsDiary(houseCropsVO));
         } catch (Exception e) {
             log.warn("cropsDiary UPDATE :{}", houseCropsVO, e);
 
@@ -308,7 +321,8 @@ public class HouseDiaryController {
     @Deprecated
     public Result deleteCropsDiary(@PathVariable("id") Integer id) {
         try {
-            return new Result(houseDiaryService.deleteCropsDiary(id));
+            return new Result(id);
+            //return new Result(houseDiaryService.deleteCropsDiary(id));
         } catch (Exception e) {
             log.warn("cropsDiary DELETE:{}", id, e);
 
@@ -368,5 +382,25 @@ public class HouseDiaryController {
 			log.warn("getImageDiaryListCount :{}, {}, {}, {}", gsmKey, houseIdList, fromDate, toDate, e);
 			return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, "오류가 발생했습니다. 관리자에게 문의해 주세요"); /*e.getMessage());*/
 		}
+    }
+
+    @RequestMapping(value = "/sweet/graph", method = RequestMethod.GET)
+    @ResponseBody
+    public Result<List<SweetContentVO>> getSweetContentGraphList(
+            @RequestParam(required = false, name = "gsmKey") Long gsmKey,
+            @RequestParam(required = false, name = "houseId") Long houseId,
+            @RequestParam(required = false, name = "fromDate") String fromDate,
+            @RequestParam(required = false, name = "toDate") String toDate
+    ) throws HttpStatusCodeException {
+        try {
+            if (!authCheckService.authCheck(gsmKey, houseId)) {
+                return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
+            }
+            return new Result(houseDiaryService.getSweetContentGraphList(gsmKey, houseId,
+                    fromDate, toDate));
+        } catch (Exception e) {
+            log.warn("getSweetContentGraphList :{}, {}, {}, {}", gsmKey, houseId, fromDate, toDate,  e);
+            return new Result("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, "오류가 발생했습니다. 관리자에게 문의해 주세요"); /*e.getMessage());*/
+        }
     }
 }

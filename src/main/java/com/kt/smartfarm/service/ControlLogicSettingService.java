@@ -33,4 +33,6 @@ public interface ControlLogicSettingService {
 	int updateControlSettingLiquid(ControlSettingLiquidVO param);
 	int deleteControlSettingLiquid(Long id, Integer ownerUserIdx);
 	void updateLogicSettingDeviceList(Long gsmkey, Long controlSettingId,List<ControlLogicSettingDeviceVO> voList);
+
+	ControlLogicSettingVO updateLogicSettingOnly(ControlLogicSettingVO vo);
 }

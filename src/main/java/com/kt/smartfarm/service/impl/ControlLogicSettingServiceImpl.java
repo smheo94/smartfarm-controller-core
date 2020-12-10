@@ -199,6 +199,20 @@ public class ControlLogicSettingServiceImpl extends EgovAbstractServiceImpl impl
 	}
 
 	@Override
+	public ControlLogicSettingVO updateLogicSettingOnly(ControlLogicSettingVO vo) {
+		if (vo != null) {
+			vo.logicPeriodEnv = periodSort(vo.logicPeriodEnv);
+		}
+		if (vo.getControlSettingId() == null) {
+			log.info("setting ID is null {}", vo);
+			return vo;
+		}
+		final HouseEnvVO houseEnvVO = houseEnvMapper.get(null, vo.greenHouseId);
+		vo.setTmpGsmKey(houseEnvVO.getGsmKey());
+		mapper.updateControlSetting(vo);
+		return vo;
+	}
+	@Override
 	public ControlLogicSettingVO updateLogicSetting(ControlLogicSettingVO vo) {
         if( vo != null ) {
             vo.logicPeriodEnv = periodSort(vo.logicPeriodEnv);

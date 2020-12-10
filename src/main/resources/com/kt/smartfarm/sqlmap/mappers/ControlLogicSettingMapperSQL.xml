@@ -395,8 +395,7 @@
                     CONCAT( '$.', #{logic_env_column} ) , #{logic_env_value}
                 </foreach>
             </if>
-            <if test="logic_env_column != null">
-                ,
+            <if test="logic_period_env_column != null">                ,
                 <foreach collection="logic_period_env_column" open="JSON_REPLACE(logic_period_env, " separator="," close=")" index="logic_period_env_column"
                          item="logic_period_env_column">
                     CONCAT( '$.', #{logic_period_env_column} ) , #{logic_period_env_value}

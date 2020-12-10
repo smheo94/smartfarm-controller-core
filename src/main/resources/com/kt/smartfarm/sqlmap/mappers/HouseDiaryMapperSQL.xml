@@ -51,14 +51,14 @@
 		)
 	</insert>
 
-	<insert id="insertCropsDiaryFile" parameterType="cropsDiaryVO">
-		INSERT INTO crops_diary_file(
-			crops_diary_idx,file_name,file,update_date
-		)
-		VALUES(
-			#{id},#{fileName},#{file},NOW()
-		)
-	</insert>
+<!--	<insert id="insertCropsDiaryFile" parameterType="cropsDiaryVO">-->
+<!--		INSERT INTO crops_diary_file(-->
+<!--			crops_diary_idx,file_name,file,update_date-->
+<!--		)-->
+<!--		VALUES(-->
+<!--			#{id},#{fileName},#{file},NOW()-->
+<!--		)-->
+<!--	</insert>-->
 	<update id="updateHouseDiary" parameterType="houseDiaryVO">
 		UPDATE house_diary
 		<set>
@@ -106,7 +106,7 @@
 		WHERE hd.id = #{id}					
 	</select>
 
-	<select id="getHouseDiaryFile" parameterType="map" resultType="map">
+	<select id="getHouseDiaryFile" parameterType="map" resultType="java.util.HashMap">
 		SELECT
 			file_idx,
 			file_name,
@@ -116,47 +116,47 @@
 		WHERE house_diary_idx = #{id}
 	</select>
 
-	<select id="getCropsDiaryFile" parameterType="map" resultType="map">
-		SELECT
-			file_idx,
-			file_name,
-			file,
-			update_date
-		FROM crops_diary_file
-		WHERE crops_diary_idx = #{id}
-	</select>
-	
-	<select id="getCropsDiaryDetail" parameterType="map" resultMap="cropsDiaryMap">
-		SELECT 
-			cd.id, 
-			cd.green_house_id,
-			cdm.green_house_id AS house_id_list,
-			cd.leaf_width, 
-			cd.stem, 
-			cd.harvest, 
-			cd.fruit_set, 
-			cd.gether_set, 
-			cd.fruit_height, 
-			cd.bloom, 
-			cd.fruit_number, 
-			cd.aver_weight, 
-			cd.grow_length, 
-			cd.leaf_size, 
-			cd.leaf_num, 
-			cd.start_date, 
-			cd.upload_file, 
-			cd.content, 
-			cd.title, 
-			cd.crops,
-			cd.content_type,
-			cd.cctv_image_url,
-			cd.weather			
-		FROM crops_diary as cd
-		INNER JOIN crops_diary_map AS cdm on cdm.diary_id = cd.id
-		<!-- LEFT OUTER JOIN crops_diary_file AS cdf ON cdf.crops_diary_idx = cd.id -->
-		WHERE cd.id = #{id}
+<!--	<select id="getCropsDiaryFile" parameterType="map" resultType="map">-->
+<!--		SELECT-->
+<!--			file_idx,-->
+<!--			file_name,-->
+<!--			file,-->
+<!--			update_date-->
+<!--		FROM crops_diary_file-->
+<!--		WHERE crops_diary_idx = #{id}-->
+<!--	</select>-->
+<!--	-->
+<!--	<select id="getCropsDiaryDetail" parameterType="map" resultMap="cropsDiaryMap">-->
+<!--		SELECT -->
+<!--			cd.id, -->
+<!--			cd.green_house_id,-->
+<!--			cdm.green_house_id AS house_id_list,-->
+<!--			cd.leaf_width, -->
+<!--			cd.stem, -->
+<!--			cd.harvest, -->
+<!--			cd.fruit_set, -->
+<!--			cd.gether_set, -->
+<!--			cd.fruit_height, -->
+<!--			cd.bloom, -->
+<!--			cd.fruit_number, -->
+<!--			cd.aver_weight, -->
+<!--			cd.grow_length, -->
+<!--			cd.leaf_size, -->
+<!--			cd.leaf_num, -->
+<!--			cd.start_date, -->
+<!--			cd.upload_file, -->
+<!--			cd.content, -->
+<!--			cd.title, -->
+<!--			cd.crops,-->
+<!--			cd.content_type,-->
+<!--			cd.cctv_image_url,-->
+<!--			cd.weather			-->
+<!--		FROM crops_diary as cd-->
+<!--		INNER JOIN crops_diary_map AS cdm on cdm.diary_id = cd.id-->
+<!--		&lt;!&ndash; LEFT OUTER JOIN crops_diary_file AS cdf ON cdf.crops_diary_idx = cd.id &ndash;&gt;-->
+<!--		WHERE cd.id = #{id}-->
 
-	</select>
+<!--	</select>-->
 
 	<select id="getHouseDiaryList" parameterType="map" resultMap="houseDiaryMap">
 		SELECT
@@ -225,55 +225,55 @@
 		</if>
 	</delete>
 
-	<insert id="insertCropsDiaryHouseMap" useGeneratedKeys="true" parameterType="cropsDiaryVO">
-		INSERT INTO crops_diary_map ( diary_id, green_house_id )
-			VALUES
-			<foreach collection="houseIdList" separator="," item="itemHouseId">
-				( #{id}, #{itemHouseId} )
-			</foreach>
-	</insert>
+<!--	<insert id="insertCropsDiaryHouseMap" useGeneratedKeys="true" parameterType="cropsDiaryVO">-->
+<!--		INSERT INTO crops_diary_map ( diary_id, green_house_id )-->
+<!--			VALUES-->
+<!--			<foreach collection="houseIdList" separator="," item="itemHouseId">-->
+<!--				( #{id}, #{itemHouseId} )-->
+<!--			</foreach>-->
+<!--	</insert>-->
 
-	<delete id="deleteCropsDiaryHouseMap" parameterType="map">
-		DELETE FROM crops_diary_map WHERE diary_id = #{id};
-	</delete>
+<!--	<delete id="deleteCropsDiaryHouseMap" parameterType="map">-->
+<!--		DELETE FROM crops_diary_map WHERE diary_id = #{id};-->
+<!--	</delete>-->
 
-	<insert id="insertCropsDiary" useGeneratedKeys="true" parameterType="cropsDiaryVO">
-		INSERT INTO crops_diary(
-				green_house_id, leaf_width, stem, harvest, fruit_set, gether_set, fruit_height, bloom, fruit_number, aver_weight, grow_length, leaf_size, leaf_num, start_date, upload_file, content, title, crops, content_type,cctv_image_url,weather
-			)
-		VALUES(
-			#{greenHouseId},#{leafWidth},#{stem},#{harvest},#{fruitSet},#{getherSet},#{fruitHeight},#{bloom},#{fruitNumber},#{averWeight},#{growLength},#{leafSize},#{leafNum},#{startDate},#{uploadFile},#{content},#{title},#{crops}, #{contentType}, #{cctvImageUrl},#{weather}
-		)
-		<selectKey keyProperty="id" resultType="int">
-		SELECT LAST_INSERT_ID() AS id;
-		</selectKey>
-	</insert>
+<!--	<insert id="insertCropsDiary" useGeneratedKeys="true" parameterType="cropsDiaryVO">-->
+<!--		INSERT INTO crops_diary(-->
+<!--				green_house_id, leaf_width, stem, harvest, fruit_set, gether_set, fruit_height, bloom, fruit_number, aver_weight, grow_length, leaf_size, leaf_num, start_date, upload_file, content, title, crops, content_type,cctv_image_url,weather-->
+<!--			)-->
+<!--		VALUES(-->
+<!--			#{greenHouseId},#{leafWidth},#{stem},#{harvest},#{fruitSet},#{getherSet},#{fruitHeight},#{bloom},#{fruitNumber},#{averWeight},#{growLength},#{leafSize},#{leafNum},#{startDate},#{uploadFile},#{content},#{title},#{crops}, #{contentType}, #{cctvImageUrl},#{weather}-->
+<!--		)-->
+<!--		<selectKey keyProperty="id" resultType="int">-->
+<!--		SELECT LAST_INSERT_ID() AS id;-->
+<!--		</selectKey>-->
+<!--	</insert>-->
 
-	<update id="updateCropsDiary" parameterType="cropsDiaryVO">
-		UPDATE
-		crops_diary
-		<set>
-		<if test="leafWidth != null">leaf_width = #{leafWidth},</if>
-		<if test="stem != null">stem = #{stem},</if>
-		<if test="harvest != null">harvest = #{harvest},</if>
-		<if test="fruitSet != null">fruit_set = #{fruitSet},</if>
-		<if test="getherSet != null">gether_set = #{getherSet},</if>
-		<if test="fruitHeight != null">fruit_height = #{fruitHeight},</if>
-		<if test="bloom != null">bloom = #{bloom},</if>
-		<if test="fruitNumber != null">fruit_number = #{fruitNumber},</if>
-		<if test="averWeight != null">aver_weight = #{averWeight},</if>
-		<if test="growLength != null">grow_length = #{growLength},</if>
-		<if test="leafSize != null">leaf_size = #{leafSize},</if>
-		<if test="leafNum != null">leaf_num = #{leafNum},</if>
-		<if test="startDate != null">start_date = #{startDate},</if>
-		<if test="uploadFile != null">upload_file = #{uploadFile},</if>
-		<if test="content != null">content = #{content},</if>
-		<if test="title != null">title = #{title},</if>
-		<if test="crops != null">crops = #{crops},</if>
-		<if test="contentType != null">content_type = #{contentType}</if>
-		</set>
-		WHERE id = #{id}
-	</update>
+<!--	<update id="updateCropsDiary" parameterType="cropsDiaryVO">-->
+<!--		UPDATE-->
+<!--		crops_diary-->
+<!--		<set>-->
+<!--		<if test="leafWidth != null">leaf_width = #{leafWidth},</if>-->
+<!--		<if test="stem != null">stem = #{stem},</if>-->
+<!--		<if test="harvest != null">harvest = #{harvest},</if>-->
+<!--		<if test="fruitSet != null">fruit_set = #{fruitSet},</if>-->
+<!--		<if test="getherSet != null">gether_set = #{getherSet},</if>-->
+<!--		<if test="fruitHeight != null">fruit_height = #{fruitHeight},</if>-->
+<!--		<if test="bloom != null">bloom = #{bloom},</if>-->
+<!--		<if test="fruitNumber != null">fruit_number = #{fruitNumber},</if>-->
+<!--		<if test="averWeight != null">aver_weight = #{averWeight},</if>-->
+<!--		<if test="growLength != null">grow_length = #{growLength},</if>-->
+<!--		<if test="leafSize != null">leaf_size = #{leafSize},</if>-->
+<!--		<if test="leafNum != null">leaf_num = #{leafNum},</if>-->
+<!--		<if test="startDate != null">start_date = #{startDate},</if>-->
+<!--		<if test="uploadFile != null">upload_file = #{uploadFile},</if>-->
+<!--		<if test="content != null">content = #{content},</if>-->
+<!--		<if test="title != null">title = #{title},</if>-->
+<!--		<if test="crops != null">crops = #{crops},</if>-->
+<!--		<if test="contentType != null">content_type = #{contentType}</if>-->
+<!--		</set>-->
+<!--		WHERE id = #{id}-->
+<!--	</update>-->
 
 	<select id="existsImageDiaryImageUrl" resultType="java.lang.Integer">
 		SELECT COUNT(hd.id)  AS VALUE
@@ -302,74 +302,74 @@
 		</where>
 	</update>
 
-	<delete id="deleteCropsDiary" parameterType="map">
-		DELETE
-		FROM crops_diary
-		WHERE id = #{id};
-	</delete>
+<!--	<delete id="deleteCropsDiary" parameterType="map">-->
+<!--		DELETE-->
+<!--		FROM crops_diary-->
+<!--		WHERE id = #{id};-->
+<!--	</delete>-->
 
-	<delete id="deleteCropsDiaryFile" parameterType="map">
-		DELETE FROM  crops_diary_file
-		WHERE crops_diary_idx = #{id}
-		<if test="file_all == null">
-		AND
-		<if test="file_idx_list == null"> 1 = 2	</if>
-		<if test="file_idx_list != null">
-			<foreach collection="file_idx_list" open="file_idx IN (" close=")" item="file_idx_list" index="file_idx_list" separator=",">
-				#{file_idx_list}
-			</foreach>
-		</if>
-		</if>
-	</delete>
-	<select id="getCropsDiaryList" parameterType="map" resultMap="cropsDiaryMap">
-		SELECT
-			cd.id,
-			cd.green_house_id,
-			cdm.green_house_id AS house_id_list,
-			cd.leaf_width,
-			cd.stem,
-			cd.harvest,
-			cd.fruit_set,
-			cd.gether_set,
-			cd.fruit_height,
-			cd.bloom,
-			cd.fruit_number,
-			cd.aver_weight,
-			cd.grow_length,
-			cd.leaf_size,
-			cd.leaf_num,
-			cd.start_date,
-			cd.upload_file,
-			cd.content,
-			cd.title,
-			cd.crops,
-			cd.content_type,
-			cd.cctv_image_url,
-			cd.weather
-		FROM crops_diary as cd
-		INNER JOIN crops_diary_map AS cdm on cdm.diary_id = cd.id
-		INNER JOIN green_house AS gh ON gh.id = cdm.green_house_id
-		<where>
-			<if test="gsm_key !=null">gh.gsm_key = #{gsm_key}</if>
-			<if test="gsm_key_list !=null">
-				<foreach collection="gsm_key_list" item="item" separator="," open="AND gh.gsm_key IN (" close=")">
-					#{item}
-				</foreach>
-			</if>
-			<if test="green_house_id !=null">AND cdm.green_house_id = #{green_house_id}</if>
-			<if test="start_date!=null and end_date!=null">
-				AND start_date BETWEEN #{start_date} AND #{end_date}
-			</if>
-		</where>
-	</select>
+<!--	<delete id="deleteCropsDiaryFile" parameterType="map">-->
+<!--		DELETE FROM  crops_diary_file-->
+<!--		WHERE crops_diary_idx = #{id}-->
+<!--		<if test="file_all == null">-->
+<!--		AND-->
+<!--		<if test="file_idx_list == null"> 1 = 2	</if>-->
+<!--		<if test="file_idx_list != null">-->
+<!--			<foreach collection="file_idx_list" open="file_idx IN (" close=")" item="file_idx_list" index="file_idx_list" separator=",">-->
+<!--				#{file_idx_list}-->
+<!--			</foreach>-->
+<!--		</if>-->
+<!--		</if>-->
+<!--	</delete>-->
+<!--	<select id="getCropsDiaryList" parameterType="map" resultMap="cropsDiaryMap">-->
+<!--		SELECT-->
+<!--			cd.id,-->
+<!--			cd.green_house_id,-->
+<!--			cdm.green_house_id AS house_id_list,-->
+<!--			cd.leaf_width,-->
+<!--			cd.stem,-->
+<!--			cd.harvest,-->
+<!--			cd.fruit_set,-->
+<!--			cd.gether_set,-->
+<!--			cd.fruit_height,-->
+<!--			cd.bloom,-->
+<!--			cd.fruit_number,-->
+<!--			cd.aver_weight,-->
+<!--			cd.grow_length,-->
+<!--			cd.leaf_size,-->
+<!--			cd.leaf_num,-->
+<!--			cd.start_date,-->
+<!--			cd.upload_file,-->
+<!--			cd.content,-->
+<!--			cd.title,-->
+<!--			cd.crops,-->
+<!--			cd.content_type,-->
+<!--			cd.cctv_image_url,-->
+<!--			cd.weather-->
+<!--		FROM crops_diary as cd-->
+<!--		INNER JOIN crops_diary_map AS cdm on cdm.diary_id = cd.id-->
+<!--		INNER JOIN green_house AS gh ON gh.id = cdm.green_house_id-->
+<!--		<where>-->
+<!--			<if test="gsm_key !=null">gh.gsm_key = #{gsm_key}</if>-->
+<!--			<if test="gsm_key_list !=null">-->
+<!--				<foreach collection="gsm_key_list" item="item" separator="," open="AND gh.gsm_key IN (" close=")">-->
+<!--					#{item}-->
+<!--				</foreach>-->
+<!--			</if>-->
+<!--			<if test="green_house_id !=null">AND cdm.green_house_id = #{green_house_id}</if>-->
+<!--			<if test="start_date!=null and end_date!=null">-->
+<!--				AND start_date BETWEEN #{start_date} AND #{end_date}-->
+<!--			</if>-->
+<!--		</where>-->
+<!--	</select>-->
 		
-	<select id="getCategoryList22" resultType="map">
-		SELECT 
-			id,category_type,category_name
-		FROM cd_diary_category_info
-		ORDER BY id;
-	</select>
-	
+<!--		<select id="getCategoryList22" resultType="map">-->
+<!--			SELECT-->
+<!--				id,category_type,category_name-->
+<!--			FROM cd_diary_category_info-->
+<!--			ORDER BY id;-->
+<!--		</select>-->
+<!--	-->
 	<select id="getHouseCropsInfo" resultType="map" parameterType="map">
 		SELECT CPM.mclassname, CPM.mclassname AS product_species
 		FROM green_house GH
@@ -385,7 +385,7 @@
 		LIMIT 1
 	</select>
 	
-	<select id="getImageDiaryList" parameterType="map" resultType="map">
+	<select id="getImageDiaryList" parameterType="map" resultType="java.util.HashMap">
 		SELECT
 		<if test="total_count == true" >
 		COUNT(ph.id) AS total_count
@@ -416,5 +416,28 @@
 		<!-- push_type이 9인경우는 cctv daily 인 case -->
 	</select>
 
+	<select id="getSweetContentLastList" resultType="com.kt.smartfarm.service.SweetContentVO" >
+		SELECT  B.start_date  , CAST( B.sign_number AS INTEGER) AS sign_number,
+		       ROUND(AVG(JSON_VALUE( diary_data, '$.sugar_content') ), 1)  AS sugar_content
+		FROM house_diary A
+				 INNER JOIN  (
+			SELECT
+				MAX(DATE(start_date)) AS start_date,
+				JSON_VALUE( diary_data, '$.sign_number') AS sign_number
+			FROM house_diary A
+					 INNER JOIN house_diary_map HM ON A.id = HM.diary_id
+			WHERE A.diary_type_id = 8
+			<if test="houseId != null">AND HM.green_house_id = #{houseId}</if>
+			<if test="houseId == null and gsmKey != null">AND HM.green_house_id IN ( SELECT id FROM green_house WHERE gsm_key = #{gsmKey})</if>
+			AND A.start_date BETWEEN #{fromDate} AND #{toDate}
+			GROUP BY JSON_VALUE( diary_data, '$.sign_number')
+		) B ON DATE(A.start_date) = B.start_date  AND  JSON_VALUE(A.diary_data, '$.sign_number')  = B.sign_number
+		INNER JOIN house_diary_map HM ON A.id = HM.diary_id
+		WHERE A.diary_type_id = 8
+			<if test="houseId != null">AND HM.green_house_id = #{houseId}</if>
+			<if test="houseId == null and gsmKey != null">AND HM.green_house_id IN ( SELECT id FROM green_house WHERE gsm_key = #{gsmKey})</if>
+		  	 AND A.start_date BETWEEN #{fromDate} AND #{toDate}
+		GROUP BY B.start_date , B.sign_number
+	</select>
 
 </mapper>

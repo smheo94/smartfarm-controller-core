@@ -2,9 +2,9 @@
 package com.kt.smartfarm.service.impl;
 
 import com.kt.smartfarm.mapper.HouseDiaryMapper;
-import com.kt.smartfarm.service.HouseCropsDiaryVO;
 import com.kt.smartfarm.service.HouseDiaryService;
 import com.kt.smartfarm.service.HouseDiaryVO;
+import com.kt.smartfarm.service.SweetContentVO;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,20 +55,20 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 		}
 		return houseDiaryVO;
 	}
-	@Override
-	public HouseCropsDiaryVO insertCropsDiary(HouseCropsDiaryVO houseCropsVO) {
-		try{
-			log.info("Insert Crops Diary : {}", houseCropsVO);
-            if( houseCropsVO.getGreenHouseId() != null && ( houseCropsVO.getHouseIdList() == null  || houseCropsVO.getHouseIdList().size() == 0 ) )  {
-                houseCropsVO.setHouseIdList(Arrays.asList(houseCropsVO.getGreenHouseId()));
-            }
-			houseDiaryMapper.insertCropsDiary(houseCropsVO);
-			houseDiaryMapper.insertCropsDiaryHouseMap(houseCropsVO);
-		}catch(Exception e){
-			log.warn("insertCropsDiary" , e);
-		}
-		return houseCropsVO;
-	}
+//	@Override
+//	public HouseCropsDiaryVO insertCropsDiary(HouseCropsDiaryVO houseCropsVO) {
+//		try{
+//			log.info("Insert Crops Diary : {}", houseCropsVO);
+//            if( houseCropsVO.getGreenHouseId() != null && ( houseCropsVO.getHouseIdList() == null  || houseCropsVO.getHouseIdList().size() == 0 ) )  {
+//                houseCropsVO.setHouseIdList(Arrays.asList(houseCropsVO.getGreenHouseId()));
+//            }
+//			houseDiaryMapper.insertCropsDiary(houseCropsVO);
+//			houseDiaryMapper.insertCropsDiaryHouseMap(houseCropsVO);
+//		}catch(Exception e){
+//			log.warn("insertCropsDiary" , e);
+//		}
+//		return houseCropsVO;
+//	}
 	@Override
 	public Integer deleteDiaryFileList(String contentType, Integer id, List<Integer> fileIdList) {
 		try {
@@ -151,20 +151,20 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 		}		
 		return houseDiaryVO;
 	}
-	@Override
-	public HouseCropsDiaryVO updateCropsDiary(HouseCropsDiaryVO houseCropsVO) {
-		try{
-			log.info("Update Crops Diary : {}", houseCropsVO);
-			houseDiaryMapper.updateCropsDiary(houseCropsVO);
-			HashMap<String,Object> param = new HashMap<>();
-			param.put("id", houseCropsVO.getId());
-			houseDiaryMapper.deleteCropsDiaryHouseMap(param);
-			houseDiaryMapper.insertCropsDiaryHouseMap(houseCropsVO);
-		}catch(Exception e){
-			log.warn("updateCropsDiary" , e);
-		}		
-		return houseCropsVO;
-	}
+//	@Override
+//	public HouseCropsDiaryVO updateCropsDiary(HouseCropsDiaryVO houseCropsVO) {
+//		try{
+//			log.info("Update Crops Diary : {}", houseCropsVO);
+//			houseDiaryMapper.updateCropsDiary(houseCropsVO);
+//			HashMap<String,Object> param = new HashMap<>();
+//			param.put("id", houseCropsVO.getId());
+//			houseDiaryMapper.deleteCropsDiaryHouseMap(param);
+//			houseDiaryMapper.insertCropsDiaryHouseMap(houseCropsVO);
+//		}catch(Exception e){
+//			log.warn("updateCropsDiary" , e);
+//		}
+//		return houseCropsVO;
+//	}
 
 	
 	
@@ -183,28 +183,28 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 		return result;
 	}
 	
-	@Override
-	public HouseCropsDiaryVO getCropsDiaryDetail(Integer id) {
-		HouseCropsDiaryVO result = null;
-		try{			
-			HashMap<String,Object> param = new HashMap<>();			
-			param.put("id", id);
-			result = houseDiaryMapper.getCropsDiaryDetail(param);
-			result.setHouseDiaryFile( houseDiaryMapper.getCropsDiaryFile(param));
-		}catch(Exception e){
-			log.debug(e.getMessage());
-			log.debug("getCropsDiaryDetail Exception : " + e);
-		}		
-		return result;
-	}
+//	@Override
+//	public HouseCropsDiaryVO getCropsDiaryDetail(Integer id) {
+//		HouseCropsDiaryVO result = null;
+//		try{
+//			HashMap<String,Object> param = new HashMap<>();
+//			param.put("id", id);
+//			result = houseDiaryMapper.getCropsDiaryDetail(param);
+//			result.setHouseDiaryFile( houseDiaryMapper.getCropsDiaryFile(param));
+//		}catch(Exception e){
+//			log.debug(e.getMessage());
+//			log.debug("getCropsDiaryDetail Exception : " + e);
+//		}
+//		return result;
+//	}
 
 	@Override
 	public HashMap<String,Object> getHouseDiaryList(HashMap<String,Object> param) {
 		HashMap<String,Object> result = new HashMap<>();
 		List<HashMap<String,Object>> diaryList =houseDiaryMapper.getHouseDiaryList(param);
-		List<HashMap<String,Object>> cropsDiaryList =houseDiaryMapper.getCropsDiaryList(param);
+		//List<HashMap<String,Object>> cropsDiaryList =houseDiaryMapper.getCropsDiaryList(param);
 		result.put("houseDiary", diaryList);
-		result.put("cropsDiary", cropsDiaryList);
+		result.put("cropsDiary", new ArrayList<HashMap<String,Object>>());
 		return result;
 	}
 
@@ -245,10 +245,10 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 	}
 	
 	
-	@Override
-	public List<HashMap<String, Object>> getCategoryList() {
-		return houseDiaryMapper.getCategoryList22();		
-	}
+//	@Override
+//	public List<HashMap<String, Object>> getCategoryList() {
+//		return houseDiaryMapper.getCategoryList22();
+//	}
 	
 	@Override
 	public Integer deleteHouseDiary(Integer id) {
@@ -265,16 +265,16 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 			return null;
 		}
 	}
-	@Override
-	public Integer deleteCropsDiary(Integer id) {
-		log.info("Delete Crops Diary : {}", id);
-		HashMap<String,Object> param = new HashMap<>();
-		param.put("id", id);
-		param.put("file_all", true);
-		houseDiaryMapper.deleteCropsDiary(param);
-		houseDiaryMapper.deleteCropsDiaryHouseMap(param);
-		return houseDiaryMapper.deleteCropsDiaryFile(param);
-	}
+//	@Override
+//	public Integer deleteCropsDiary(Integer id) {
+//		log.info("Delete Crops Diary : {}", id);
+//		HashMap<String,Object> param = new HashMap<>();
+//		param.put("id", id);
+//		param.put("file_all", true);
+//		houseDiaryMapper.deleteCropsDiary(param);
+//		houseDiaryMapper.deleteCropsDiaryHouseMap(param);
+//		return houseDiaryMapper.deleteCropsDiaryFile(param);
+//	}
 	
 	private HashMap<String,Object> getMonthDate(Integer year,Integer month){
 		HashMap<String,Object> result = new HashMap<>();
@@ -300,7 +300,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 	}
 	@Override
 	public List<HashMap<String, Object>> getImageDiaryList(Long houseId) {
-		List<HashMap<String,Object>> imageDiaryList = new ArrayList<HashMap<String,Object>>();
+		List<HashMap<String,Object>> imageDiaryList = new ArrayList<>();
 		try{			
 			HashMap<String,Object> param = new HashMap<>();
 			param.put("house_id", houseId);
@@ -313,7 +313,7 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
 
 	@Override
 	public List<HashMap<String, Object>>  getImageDiaryListV2(Long gsmKey, List<Long> houseIdList, Long fromDate, Long toDate, Integer page, Integer size, Boolean total_count) {
-        List<HashMap<String,Object>> imageDiaryList = new ArrayList<HashMap<String,Object>>();
+        List<HashMap<String,Object>> imageDiaryList = new ArrayList<>();
         try{
             HashMap<String,Object> param = new HashMap<>();
             param.put("gsm_key", gsmKey);
@@ -334,6 +334,13 @@ public class HouseDiaryServiceImpl extends EgovAbstractServiceImpl implements Ho
             log.debug("getImageDiaryList Error = " + e.getMessage());
         }
         return imageDiaryList;
+	}
+
+	@Override
+	public List<SweetContentVO> getSweetContentGraphList(Long gsmKey, Long houseId,
+														 String fromDate, String toDate) {
+		List<SweetContentVO> lastSweetContentLastList = houseDiaryMapper.getSweetContentLastList(gsmKey, houseId, fromDate, toDate);
+		return lastSweetContentLastList;
 	}
 
 

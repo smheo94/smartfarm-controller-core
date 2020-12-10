@@ -17,23 +17,23 @@
 		</Appender>
 	</Appenders>
 	<Loggers>
-		<Logger name="java.sql" level="INFO" additivity="false">
+		<Logger name="java.sql" level="DEBUG" additivity="false">
 			<AppenderRef ref="console" />
 			<AppenderRef ref="FileLog" />
 		</Logger>
-		<Logger name="com.kt" level="INFO" additivity="false">
+		<Logger name="com.kt" level="DEBUG" additivity="false">
 			<AppenderRef ref="console" />
 			<AppenderRef ref="FileLog" />
 		</Logger>
-		<Logger name="jdbc.sqltiming" level="INFO" additivity="false">
+		<Logger name="jdbc.sqltiming" level="DEBUG" additivity="false">
 			<AppenderRef ref="console" />
 		</Logger>
-		<Logger name="org.springframework" level="INFO"
+		<Logger name="org.springframework" level="DEBUG"
 			additivity="false">
 			<AppenderRef ref="console" />
 			<AppenderRef ref="FileLog" />
 		</Logger>
-		<Root level="INFO">
+		<Root level="DEBUG">
 			<AppenderRef ref="console" />
 			<AppenderRef ref="FileLog" />
 		</Root>

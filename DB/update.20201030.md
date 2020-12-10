@@ -196,3 +196,14 @@ UPDATE cd_diary_properties
 SET ui_class_name = REPLACE(ui_class_name, 'fruit_', 'sugar_')
 , valid_text = REPLACE(valid_text, 'fruit_', 'sugar_')
 WHERE ui_class_name LIKE 'fruit_content%';
+
+
+INSERT INTO `control_properties` (`id`, `ui_class_name`, `description`, `ui_help`, `properties_json`, `min_value`, `max_value`, `display_unit`, `default_value`, `default_min_value`, `default_max_value`, `bootstrap_size`, `dep_class_comp_up`, `dep_class_comp_down`, `last_update`) 
+VALUES ('410060', 'scheduled_time', '예약공급일자', NULL, '{\"type\":\"datetime\"}', NULL, NULL, NULL, NULL, NULL, NULL, '12', NULL, NULL, '2020-12-08 22:05:12'); 
+INSERT INTO `control_logic_property_lnk` (`logic_id`, `properties_id`, `is_period`, `priority`, `on_pc`, `on_mobile`, `on_panel`, `manual_command_num`, `last_update`, `depend_device`, `parent_property_id`) 
+VALUES ('41', '410060', '-1', '1', '1', '1', '1', '1', '2020-09-04 20:39:22', NULL, NULL); 
+
+ALTER TABLE `sf_main`.`house_diary`   
+  ADD  INDEX `idx_house_diary_start_date` (`green_house_id`, `start_date`, `diary_type_id`) COMMENT "농가,날짜,다이어리타입 인덱스";
+
+
