@@ -31,7 +31,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -183,6 +182,9 @@ public class HouseDiaryController {
                                         @RequestParam(value = "endDate", required = false) String endDate
                                         ) {
         try {
+            if (!authCheckService.authCheck(null, greenHouseId)) {
+                return new Result("Not Allowed", HttpStatus.FORBIDDEN, greenHouseId);
+            }
             HashMap<String,Object> param = new HashMap<>();
             if(year != null && month != null){
                 this.setMonthPeriod(param, year, month);
@@ -195,10 +197,6 @@ public class HouseDiaryController {
             }
             param.put("green_house_id", greenHouseId);
             return new Result(houseDiaryService.getHouseDiaryList(param));
-            if (!authCheckService.authCheck(null, greenHouseId)) {
-                return new Result("Not Allowed", HttpStatus.FORBIDDEN, greenHouseId);
-            }
-            return new Result(houseDiaryService.getMonthlyHouseDiaryList(null, null, greenHouseId, year, month));
         } catch (Exception e) {
             log.warn("Exception :{}, {}, {}", greenHouseId,year, month, e);
             return new Result<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR, "오류가 발생했습니다. 관리자에게 문의해 주세요"); /*e.getMessage());*/
@@ -221,7 +219,6 @@ public class HouseDiaryController {
             if (!authCheckService.authCheck(gsmKey, null, gsmKeyList, null)) {
                 return new Result("Not Allowed", HttpStatus.FORBIDDEN, gsmKey);
             }
-            return new Result(houseDiaryService.getMonthlyHouseDiaryList(gsmKeyList, gsmKey, null, year, month));
             HashMap<String,Object> param = new HashMap<>();
             if(year != null && month != null){
                 this.setMonthPeriod(param, year, month);
